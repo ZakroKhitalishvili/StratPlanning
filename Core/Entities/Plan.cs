@@ -6,6 +6,13 @@ namespace Core.Entities
 {
     public class Plan
     {
+        public Plan()
+        {
+            UsersToPlans = new HashSet<UserToPlan>();
+
+            Introductions = new HashSet<Introduction>();
+        }
+
         public int Id { get; set; }
 
         public string Name { get; set; }
@@ -14,9 +21,9 @@ namespace Core.Entities
 
         public DateTime StartDate { get; set; }
 
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
-        public bool IsWithActionPlan { get; set; }
+        public bool? IsWithActionPlan { get; set; }
 
         public bool IsCompleted { get; set; }
 
@@ -27,5 +34,9 @@ namespace Core.Entities
         public int CreatedBy { get; set; }
 
         public int UpdatedBy { get; set; }
+
+        public virtual ICollection<UserToPlan> UsersToPlans { get; set; }
+
+        public virtual ICollection<Introduction> Introductions { get; set; }
     }
 }

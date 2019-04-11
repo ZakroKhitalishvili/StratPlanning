@@ -20,5 +20,7 @@ namespace Core.Entities
         public int CreatedBy { get; set; }
 
         public virtual ICollection<IssueOptionAnswerToResource> IssueOptionAnswers { get; set; }
+
+        public virtual BooleanAnswer BooleanAnswer { get; set; }
     }
 }

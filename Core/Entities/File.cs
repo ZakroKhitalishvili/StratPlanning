@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Core.Entities
 {
@@ -21,5 +19,7 @@ namespace Core.Entities
         public int CreatedBy { get; set; }
 
         public virtual Question Question { get; set; }
+
+        public virtual Introduction Introduction { get; set; }
     }
 }

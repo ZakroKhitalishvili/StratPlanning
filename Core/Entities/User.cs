@@ -6,6 +6,11 @@ namespace Core.Entities
 {
     public class User
     {
+        public User()
+        {
+            UsersToPlans = new HashSet<UserToPlan>();
+        }
+
         public int Id { get; set; }
 
         public int PositionId { get; set; }
@@ -29,6 +34,8 @@ namespace Core.Entities
         public int UpdatedBy { get; set; }
 
         public virtual Dictionary Position { get; set; }
-        
+
+        public virtual ICollection<UserToPlan> UsersToPlans { get; set; }
+
     }
 }

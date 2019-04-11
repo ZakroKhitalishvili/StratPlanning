@@ -6,6 +6,13 @@ namespace Core.Entities
 {
     public class Dictionary
     {
+        public Dictionary()
+        {
+            Users = new HashSet<User>();
+
+            StakeholderRatingAnswersToDictionaries = new HashSet<StakeholderRatingAnswerToDictionary>();
+        }
+
         public int Id { get; set; }
 
         public string Title { get; set; }
@@ -21,6 +28,10 @@ namespace Core.Entities
         public int CreatedBy { get; set; }
 
         public int UpdatedBy { get; set; }
+
+        public virtual ICollection<User> Users { get; set; }
+
+        public virtual ICollection<StakeholderRatingAnswerToDictionary> StakeholderRatingAnswersToDictionaries { get; set; }
 
     }
 }

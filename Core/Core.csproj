@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AssemblyName>Core</AssemblyName>
+    <RootNamespace>Core</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.4" />
+  </ItemGroup>
 
 </Project>

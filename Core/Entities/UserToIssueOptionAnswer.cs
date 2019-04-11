@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Core.Entities
 {
-    public class UsetToIssueOptionAnswer
+    public class UserToIssueOptionAnswer
     {
         public int Id { get; set; }
 
