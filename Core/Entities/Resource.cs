@@ -8,7 +8,7 @@ namespace Core.Entities
     {
         public Resource()
         {
-            IssueOptionAnswers = new HashSet<IssueOptionAnswerToResource>();
+            IssueOptionAnswersToResources = new HashSet<IssueOptionAnswerToResource>();
         }
 
         public int Id { get; set; }
@@ -19,7 +19,7 @@ namespace Core.Entities
 
         public int CreatedBy { get; set; }
 
-        public virtual ICollection<IssueOptionAnswerToResource> IssueOptionAnswers { get; set; }
+        public virtual ICollection<IssueOptionAnswerToResource> IssueOptionAnswersToResources { get; set; }
 
         public virtual BooleanAnswer BooleanAnswer { get; set; }
     }

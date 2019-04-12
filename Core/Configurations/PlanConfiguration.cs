@@ -29,6 +29,7 @@ namespace Core.Configurations
             builder.Property(x => x.IsCompleted)
                 .IsRequired()
                 .HasDefaultValue(false);
+
             builder.Property(x => x.CreatedAt)
               .IsRequired();
 
@@ -40,12 +41,6 @@ namespace Core.Configurations
 
             builder.Property(x => x.UpdatedBy)
                 .IsRequired();
-
-            builder.HasMany(x => x.UsersToPlans)
-                .WithOne(s => s.Plan)
-                .HasForeignKey(s => s.PlanId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
 
         }
 

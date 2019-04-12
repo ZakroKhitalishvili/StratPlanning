@@ -4,11 +4,13 @@ using System.Text;
 
 namespace Core.Constants
 {
-    public static class EntityConfigs
+    public class EntityConfigs
     {
-        public static int TextMaxLength = 50;
+        public const int TextMaxLength = 50;
 
-        public static int TextAreaMaxLength = 500;
+        public const int TextAreaMaxLength = 500;
+
+        public const int HashMaxLength = 100;
 
     }
 }

@@ -8,22 +8,29 @@ using System.Text;
 
 namespace Core.Configurations
 {
-    class IntroductionConfiguration : IEntityTypeConfiguration<Introduction>
+    class QuestionConfiguration : IEntityTypeConfiguration<Question>
     {
-        public void Configure(EntityTypeBuilder<Introduction> builder)
+        public void Configure(EntityTypeBuilder<Question> builder)
         {
-
             builder.Property(x => x.Title)
                 .IsRequired()
                 .HasMaxLength(EntityConfigs.TextMaxLength);
 
-            builder.Property(x => x.Step)
-              .IsRequired()
-              .HasMaxLength(EntityConfigs.TextMaxLength);
-
             builder.Property(x => x.Description)
+                .IsRequired(false)
+                .HasMaxLength(EntityConfigs.TextAreaMaxLength);
+
+            builder.Property(x => x.Type)
+                .IsRequired()
+                .HasMaxLength(EntityConfigs.TextMaxLength);
+
+            builder.Property(x => x.HasOptions)
+               .IsRequired()
+               .HasDefaultValue(false);
+
+            builder.Property(x => x.HasOptions)
               .IsRequired()
-              .HasMaxLength(EntityConfigs.TextAreaMaxLength);
+              .HasDefaultValue(false);
 
             builder.Property(x => x.CreatedAt)
                 .IsRequired();
@@ -37,17 +44,11 @@ namespace Core.Configurations
             builder.Property(x => x.UpdatedBy)
                 .IsRequired();
 
-            builder.HasOne(x => x.Plan)
-                .WithMany(s => s.Introductions)
-                .HasForeignKey(s => s.PlanId)
+            builder.HasOne(x => x.StepBlock)
+                .WithMany(s => s.Questions)
+                .HasForeignKey(x => x.StepBlockId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasOne(x => x.Video)
-                .WithOne(s => s.Introduction)
-                .HasForeignKey<Introduction>(x => x.VideoId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
 
         }
     }

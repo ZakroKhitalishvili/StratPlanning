@@ -9,17 +9,21 @@ namespace Core.Entities
         public User()
         {
             UsersToPlans = new HashSet<UserToPlan>();
+
+            UsersToIssueOptionAnswers = new HashSet<UserToIssueOptionAnswer>();
         }
 
         public int Id { get; set; }
 
-        public int PositionId { get; set; }
+        public int? PositionId { get; set; }
 
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
 
         public string UserName { get; set; }
+
+        public string Password { get; set; }
 
         public string Email { get; set; }
 
@@ -36,6 +40,8 @@ namespace Core.Entities
         public virtual Dictionary Position { get; set; }
 
         public virtual ICollection<UserToPlan> UsersToPlans { get; set; }
+
+        public virtual ICollection<UserToIssueOptionAnswer> UsersToIssueOptionAnswers { get; set; }
 
     }
 }

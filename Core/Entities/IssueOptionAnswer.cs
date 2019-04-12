@@ -8,9 +8,9 @@ namespace Core.Entities
     {
         public IssueOptionAnswer()
         {
-            UserActors = new HashSet<UserToIssueOptionAnswer>();
+            UsersToIssueOptionAnswers = new HashSet<UserToIssueOptionAnswer>();
 
-            Resources = new HashSet<IssueOptionAnswerToResource>();
+            IssueOptionAnswersToResources = new HashSet<IssueOptionAnswerToResource>();
         }
 
         public int IssueId { get; set; }
@@ -21,10 +21,12 @@ namespace Core.Entities
 
         public string Actors { get; set; }
 
-        public virtual ICollection<UserToIssueOptionAnswer> UserActors { get; set; }
+        public virtual ICollection<UserToIssueOptionAnswer> UsersToIssueOptionAnswers { get; set; }
 
-        public virtual ICollection<IssueOptionAnswerToResource> Resources { get; set; }
+        public virtual ICollection<IssueOptionAnswerToResource> IssueOptionAnswersToResources { get; set; }
 
         public virtual TextAnswer Issue { get; set; }
+
+        public virtual PreparingAnswer PreparingAnswer { get; set; }
     }
 }

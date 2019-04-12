@@ -8,22 +8,18 @@ using System.Text;
 
 namespace Core.Configurations
 {
-    class IntroductionConfiguration : IEntityTypeConfiguration<Introduction>
+    class OptionConfiguration : IEntityTypeConfiguration<Option>
     {
-        public void Configure(EntityTypeBuilder<Introduction> builder)
+        public void Configure(EntityTypeBuilder<Option> builder)
         {
 
             builder.Property(x => x.Title)
                 .IsRequired()
                 .HasMaxLength(EntityConfigs.TextMaxLength);
 
-            builder.Property(x => x.Step)
-              .IsRequired()
-              .HasMaxLength(EntityConfigs.TextMaxLength);
-
             builder.Property(x => x.Description)
-              .IsRequired()
-              .HasMaxLength(EntityConfigs.TextAreaMaxLength);
+                .IsRequired(false)
+                .HasMaxLength(EntityConfigs.TextAreaMaxLength);
 
             builder.Property(x => x.CreatedAt)
                 .IsRequired();
@@ -37,17 +33,11 @@ namespace Core.Configurations
             builder.Property(x => x.UpdatedBy)
                 .IsRequired();
 
-            builder.HasOne(x => x.Plan)
-                .WithMany(s => s.Introductions)
-                .HasForeignKey(s => s.PlanId)
+            builder.HasOne(x => x.Question)
+                .WithMany(s => s.Options)
+                .HasForeignKey(x => x.QuestionId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasOne(x => x.Video)
-                .WithOne(s => s.Introduction)
-                .HasForeignKey<Introduction>(x => x.VideoId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
 
         }
     }

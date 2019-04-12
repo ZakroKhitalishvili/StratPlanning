@@ -14,10 +14,23 @@ namespace Core.Configurations
             builder.HasOne(x => x.Resource)
                 .WithOne(s => s.BooleanAnswer)
                 .HasForeignKey<BooleanAnswer>(x => x.ResourceId)
-                .IsRequired(false);
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Property(x => x.Answer)
                 .IsRequired();
+
+            builder.HasOne(x => x.UserToPlan)
+                .WithMany(s => s.BooleanAnswers)
+                .HasForeignKey(x => x.UserToPlanId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(x => x.Question)
+                .WithMany(s => s.BooleanAnswers)
+                .HasForeignKey(x => x.QuestionId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

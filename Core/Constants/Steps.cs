@@ -4,33 +4,33 @@ using System.Text;
 
 namespace Core.Constants
 {
-    public static class Steps
+    public class Steps
     {
-        public static string Dredeparture = "Predeparture";
+        public const string Dredeparture = "Predeparture";
 
-        public static string Mission = "Mission";
+        public const string Mission = "Mission";
 
-        public static string Vision = "Vision";
+        public const string Vision = "Vision";
 
-        public static string Values = "Values";
+        public const string Values = "Values";
 
-        public static string StakeholdersIdentify = "StakeholdersIdentify";
+        public const string StakeholdersIdentify = "StakeholdersIdentify";
 
-        public static string SWOT = "SWOT";
+        public const string SWOT = "SWOT";
 
-        public static string StakeholdersAnalysis = "StakeholdersAnalysis";
+        public const string StakeholdersAnalysis = "StakeholdersAnalysis";
 
-        public static string IssuesDistinguish = "IssuesDistinguish";
+        public const string IssuesDistinguish = "IssuesDistinguish";
 
-        public static string StrategicIssues = "StrategicIssues";
+        public const string StrategicIssues = "StrategicIssues";
 
-        public static string ActionPlanKeyQuestions = "ActionPlanKeyQuestions";
+        public const string ActionPlanKeyQuestions = "ActionPlanKeyQuestions";
 
-        public static string ActionPlanDetailed = "ActionPlanDetailed";
+        public const string ActionPlanDetailed = "ActionPlanDetailed";
 
-        public static string Review = "Review";
+        public const string Review = "Review";
 
-        public static string Evalution = "Evalution";
+        public const string Evalution = "Evalution";
 
     }
 }

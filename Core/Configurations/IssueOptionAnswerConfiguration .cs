@@ -2,7 +2,9 @@
 using Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Core.Configurations.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Core.Configurations
 {
@@ -10,8 +12,6 @@ namespace Core.Configurations
     {
         public void Configure(EntityTypeBuilder<IssueOptionAnswer> builder)
         {
-
-            builder.AnswersBaseConfigure();
 
             builder.Property(x => x.Option)
                 .IsRequired()
@@ -26,12 +26,22 @@ namespace Core.Configurations
                 .HasMaxLength(EntityConfigs.TextAreaMaxLength);
 
             builder.HasOne(x => x.Issue)
+                .WithMany(x => x.IssueOptionAnswers)
+                .HasForeignKey(x => x.IssueId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(x => x.UserToPlan)
                 .WithMany(s => s.IssueOptionAnswers)
-                .HasForeignKey(s => s.IssueId)
-                .IsRequired();
+                .HasForeignKey(x => x.UserToPlanId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
 
-
-
+            builder.HasOne(x => x.Question)
+                .WithMany(s => s.IssueOptionAnswers)
+                .HasForeignKey(x => x.QuestionId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
 
         }
     }

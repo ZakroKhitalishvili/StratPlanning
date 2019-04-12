@@ -12,7 +12,7 @@ namespace Core.Entities
 
         public int QuestionId { get; set; }
 
-        public bool IsFinal { get; set; }
+        public bool? IsFinal { get; set; }
 
         public DateTime CreatedAt { get; set; }
 

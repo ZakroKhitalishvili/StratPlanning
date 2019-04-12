@@ -31,6 +31,11 @@ namespace Core.Configurations
             builder.Property(x => x.CreatedBy)
                 .IsRequired();
 
+            builder.HasOne(x => x.Question)
+                .WithMany(s => s.Files)
+                .HasForeignKey(x => x.QuestionId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Cascade);
 
         }
     }

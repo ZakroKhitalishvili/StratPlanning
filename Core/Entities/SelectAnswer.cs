@@ -13,5 +13,7 @@ namespace Core.Entities
         public string AltOption { get; set; }
 
         public virtual Option Option { get; set; }
+
+        public virtual TextAnswer Issue { get; set; }
     }
 }

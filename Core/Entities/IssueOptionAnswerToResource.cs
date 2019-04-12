@@ -6,8 +6,6 @@ namespace Core.Entities
 {
     public class IssueOptionAnswerToResource
     {
-        public int Id { get; set; }
-
         public int IssueOptionAnswerId { get; set; }
 
         public int ResourceId { get; set; }

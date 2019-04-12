@@ -9,6 +9,7 @@ namespace Core.Entities
         public Question()
         {
             Files = new HashSet<File>();
+            Options = new HashSet<Option>();
             SelectAnswers = new HashSet<SelectAnswer>();
             BooleanAnswers = new HashSet<BooleanAnswer>();
             IssueOptionAnswers = new HashSet<IssueOptionAnswer>();
@@ -42,6 +43,8 @@ namespace Core.Entities
         public int UpdatedBy { get; set; }
 
         public virtual StepBlock  StepBlock { get; set; }
+
+        public virtual ICollection<Option> Options { get; set; }
 
         public virtual ICollection<File> Files { get; set; }
 

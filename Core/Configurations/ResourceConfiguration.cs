@@ -2,15 +2,12 @@
 using Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Core.Configurations
 {
-    class DictionaryConfiguration : IEntityTypeConfiguration<Dictionary>
+    class ResourceConfiguration : IEntityTypeConfiguration<Resource>
     {
-        public void Configure(EntityTypeBuilder<Dictionary> builder)
+        public void Configure(EntityTypeBuilder<Resource> builder)
         {
 
             builder.Property(x => x.Title)
@@ -20,13 +17,7 @@ namespace Core.Configurations
             builder.Property(x => x.CreatedAt)
                 .IsRequired();
 
-            builder.Property(x => x.UpdatedAt)
-                .IsRequired();
-
             builder.Property(x => x.CreatedBy)
-                .IsRequired();
-
-            builder.Property(x => x.UpdatedBy)
                 .IsRequired();
 
         }

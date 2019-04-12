@@ -28,6 +28,10 @@ namespace Core.Entities
 
         public virtual Plan Plan { get; set; }
 
+        public virtual DateTime CreatedAt { get; set; }
+
+        public virtual DateTime CreatedBy { get; set; }
+
         public virtual ICollection<BooleanAnswer> BooleanAnswers { get; set; }
 
         public virtual ICollection<IssueOptionAnswer> IssueOptionAnswers { get; set; }
