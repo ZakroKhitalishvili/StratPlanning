@@ -15,7 +15,7 @@ namespace Core.Configurations
                 .WithOne(s => s.BooleanAnswer)
                 .HasForeignKey<BooleanAnswer>(x => x.ResourceId)
                 .IsRequired(false)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Property(x => x.Answer)
                 .IsRequired();

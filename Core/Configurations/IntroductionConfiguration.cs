@@ -41,7 +41,7 @@ namespace Core.Configurations
                 .WithMany(s => s.Introductions)
                 .HasForeignKey(s => s.PlanId)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(x => x.Video)
                 .WithOne(s => s.Introduction)

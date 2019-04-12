@@ -5,7 +5,7 @@ using Core.Configurations;
 
 namespace Core.Context
 {
-    class PlanningDbContext : DbContext
+    public class PlanningDbContext : DbContext
     {
 
         public PlanningDbContext(DbContextOptions<PlanningDbContext> options)
