@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <AssemblyName>Web</AssemblyName>
+    <RootNamespace>Web</RootNamespace>
+    <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\lib\bootstrap\.github\CODEOWNERS" />
+    <None Include="wwwroot\lib\bootstrap\.github\CONTRIBUTING.md" />
+    <None Include="wwwroot\lib\bootstrap\.github\ISSUE_TEMPLATE\bug.md" />
+    <None Include="wwwroot\lib\bootstrap\.github\ISSUE_TEMPLATE\bug_report.md" />
+    <None Include="wwwroot\lib\bootstrap\.github\ISSUE_TEMPLATE\feature.md" />
+    <None Include="wwwroot\lib\bootstrap\.github\ISSUE_TEMPLATE\feature_request.md" />
+    <None Include="wwwroot\lib\bootstrap\.github\SUPPORT.md" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\Application\Application.csproj" />
+    <ProjectReference Include="..\Core\Core.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Content Update="nlog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="wwwroot\js\" />
+  </ItemGroup>
+
+</Project>
