@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Contracts.Repositories;
+using Application.Interfaces.Repositories;
 using Core.Context;
 
 namespace Application.Repositories

@@ -34,13 +34,13 @@ namespace Core.Configurations
                 .WithMany(s => s.PreparingAnswers)
                 .HasForeignKey(x => x.UserToPlanId)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(x => x.Question)
                 .WithMany(s => s.PreparingAnswers)
                 .HasForeignKey(x => x.QuestionId)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
         }
     }

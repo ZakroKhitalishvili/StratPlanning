@@ -1,6 +1,6 @@
 ﻿using Core.Entities;
 
-namespace Contracts.Repositories
+namespace Application.Interfaces.Repositories
 {
     public interface IPlanRepository:IRepositoryBase<Plan>
     {

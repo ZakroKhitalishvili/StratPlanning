@@ -1,9 +1,7 @@
-﻿using Contracts.Repositories;
-using Core.Context;
+﻿using Core.Context;
 using Core.Entities;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using Application.Interfaces.Repositories;
 
 namespace Application.Repositories
 {

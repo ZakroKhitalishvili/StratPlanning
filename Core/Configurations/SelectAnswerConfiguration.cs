@@ -26,20 +26,20 @@ namespace Core.Configurations
                 .WithMany(s => s.SelectAnswers)
                 .HasForeignKey(x => x.IssueId)
                 .IsRequired(false)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Restrict);
 
 
             builder.HasOne(x => x.UserToPlan)
                 .WithMany(s => s.SelectAnswers)
                 .HasForeignKey(x => x.UserToPlanId)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(x => x.Question)
                 .WithMany(s => s.SelectAnswers)
                 .HasForeignKey(x => x.QuestionId)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
         }
     }

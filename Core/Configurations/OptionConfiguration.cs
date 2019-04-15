@@ -37,7 +37,7 @@ namespace Core.Configurations
                 .WithMany(s => s.Options)
                 .HasForeignKey(x => x.QuestionId)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
         }
     }
