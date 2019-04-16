@@ -6,7 +6,7 @@ namespace Core.Constants
 {
     public class Steps
     {
-        public const string Dredeparture = "Predeparture";
+        public const string Predeparture = "Predeparture";
 
         public const string Mission = "Mission";
 

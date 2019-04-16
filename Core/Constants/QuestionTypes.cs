@@ -14,6 +14,8 @@ namespace Core.Constants
 
         public const string DetailedSelect = "DetailedSelect";
 
+        public const string PlanTypeSelect = "PlanTypeSelect";
 
+        public const string StepTable = "StepTable";
     }
 }

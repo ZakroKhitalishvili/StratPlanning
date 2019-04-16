@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Core.Migrations
 {
     [DbContext(typeof(PlanningDbContext))]
-    [Migration("20190415114828_Initial")]
+    [Migration("20190416121641_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,7 +31,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<int?>("CreatedBy");
 
                     b.Property<bool?>("IsFinal")
                         .ValueGeneratedOnAdd()
@@ -43,7 +43,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("UpdatedAt");
 
-                    b.Property<int>("UpdatedBy");
+                    b.Property<int?>("UpdatedBy");
 
                     b.Property<int>("UserToPlanId");
 
@@ -68,7 +68,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<int?>("CreatedBy");
 
                     b.Property<bool>("HasCriterion");
 
@@ -80,7 +80,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("UpdatedAt");
 
-                    b.Property<int>("UpdatedBy");
+                    b.Property<int?>("UpdatedBy");
 
                     b.HasKey("Id");
 
@@ -95,7 +95,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<int?>("CreatedBy");
 
                     b.Property<string>("Ext")
                         .IsRequired()
@@ -126,7 +126,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<int?>("CreatedBy");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -144,7 +144,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("UpdatedAt");
 
-                    b.Property<int>("UpdatedBy");
+                    b.Property<int?>("UpdatedBy");
 
                     b.Property<int>("VideoId");
 
@@ -169,7 +169,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<int?>("CreatedBy");
 
                     b.Property<bool>("IsBestOption")
                         .ValueGeneratedOnAdd()
@@ -187,7 +187,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("UpdatedAt");
 
-                    b.Property<int>("UpdatedBy");
+                    b.Property<int?>("UpdatedBy");
 
                     b.Property<int>("UserToPlanId");
 
@@ -229,7 +229,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<int?>("CreatedBy");
 
                     b.Property<string>("Description")
                         .HasMaxLength(500);
@@ -242,7 +242,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("UpdatedAt");
 
-                    b.Property<int>("UpdatedBy");
+                    b.Property<int?>("UpdatedBy");
 
                     b.HasKey("Id");
 
@@ -259,7 +259,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<int?>("CreatedBy");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -281,7 +281,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("UpdatedAt");
 
-                    b.Property<int>("UpdatedBy");
+                    b.Property<int?>("UpdatedBy");
 
                     b.HasKey("Id");
 
@@ -296,7 +296,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<int?>("CreatedBy");
 
                     b.Property<DateTime>("Date");
 
@@ -318,7 +318,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("UpdatedAt");
 
-                    b.Property<int>("UpdatedBy");
+                    b.Property<int?>("UpdatedBy");
 
                     b.Property<int>("UserToPlanId");
 
@@ -342,7 +342,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<int?>("CreatedBy");
 
                     b.Property<string>("Description")
                         .HasMaxLength(500);
@@ -357,7 +357,7 @@ namespace Core.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(50);
+                        .HasMaxLength(500);
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -365,7 +365,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("UpdatedAt");
 
-                    b.Property<int>("UpdatedBy");
+                    b.Property<int?>("UpdatedBy");
 
                     b.HasKey("Id");
 
@@ -382,7 +382,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<int?>("CreatedBy");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -404,7 +404,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<int?>("CreatedBy");
 
                     b.Property<bool?>("IsFinal")
                         .ValueGeneratedOnAdd()
@@ -418,7 +418,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("UpdatedAt");
 
-                    b.Property<int>("UpdatedBy");
+                    b.Property<int?>("UpdatedBy");
 
                     b.Property<int>("UserToPlanId");
 
@@ -443,7 +443,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<int?>("CreatedBy");
 
                     b.Property<int?>("Grade");
 
@@ -459,7 +459,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("UpdatedAt");
 
-                    b.Property<int>("UpdatedBy");
+                    b.Property<int?>("UpdatedBy");
 
                     b.Property<int>("UserToPlanId");
 
@@ -503,7 +503,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<int?>("CreatedBy");
 
                     b.Property<DateTime>("Date");
 
@@ -525,7 +525,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("UpdatedAt");
 
-                    b.Property<int>("UpdatedBy");
+                    b.Property<int?>("UpdatedBy");
 
                     b.Property<int>("UserToPlanId");
 
@@ -546,7 +546,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<int?>("CreatedBy");
 
                     b.Property<string>("Description")
                         .HasMaxLength(500);
@@ -566,7 +566,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("UpdatedAt");
 
-                    b.Property<int>("UpdatedBy");
+                    b.Property<int?>("UpdatedBy");
 
                     b.HasKey("Id");
 
@@ -581,7 +581,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<int?>("CreatedBy");
 
                     b.Property<string>("Goal")
                         .IsRequired()
@@ -607,7 +607,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("UpdatedAt");
 
-                    b.Property<int>("UpdatedBy");
+                    b.Property<int?>("UpdatedBy");
 
                     b.Property<int>("UserToPlanId");
 
@@ -634,7 +634,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<int?>("CreatedBy");
 
                     b.Property<bool?>("IsFinal")
                         .ValueGeneratedOnAdd()
@@ -656,7 +656,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("UpdatedAt");
 
-                    b.Property<int>("UpdatedBy");
+                    b.Property<int?>("UpdatedBy");
 
                     b.Property<int>("UserToPlanId");
 
@@ -677,7 +677,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<int?>("CreatedBy");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -693,7 +693,7 @@ namespace Core.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(100);
+                        .HasMaxLength(128);
 
                     b.Property<int?>("PositionId");
 
@@ -703,7 +703,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("UpdatedAt");
 
-                    b.Property<int>("UpdatedBy");
+                    b.Property<int?>("UpdatedBy");
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -743,7 +743,7 @@ namespace Core.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<DateTime>("CreatedBy");
+                    b.Property<int?>("CreatedBy");
 
                     b.Property<int>("PlanId");
 

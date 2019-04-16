@@ -16,7 +16,7 @@ namespace Core.Entities
 
         public DateTime CreatedAt { get; set; }
 
-        public int CreatedBy { get; set; }
+        public int? CreatedBy { get; set; }
 
         public virtual Question Question { get; set; }
 

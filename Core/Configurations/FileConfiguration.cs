@@ -29,7 +29,7 @@ namespace Core.Configurations
                 .IsRequired();
 
             builder.Property(x => x.CreatedBy)
-                .IsRequired();
+                .IsRequired(false);
 
             builder.HasOne(x => x.Question)
                 .WithMany(s => s.Files)

@@ -12,6 +12,8 @@ using Core.Context;
 using Application.Interfaces;
 using Application.Logger;
 using Microsoft.EntityFrameworkCore;
+using Application.Interfaces.Repositories;
+using Application.Repositories;
 
 namespace StratPlanning
 {
@@ -40,6 +42,7 @@ namespace StratPlanning
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddScoped<ILoggerManager, LoggerManager>();
+            services.AddScoped<IPlanRepository, PlanRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

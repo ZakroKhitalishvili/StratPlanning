@@ -1,0 +1,15 @@
+﻿@model Application.DTOs.QuestionDTO
+
+<div class="form-group m-form__group">
+    <label for="exampleSelect1">
+        @Model.Title
+    </label>
+
+    <select asp-items="@Model.Options.Select(o=>new SelectListItem {Text= o.Title ,Value=o.Id.ToString()})" class="form-control m-select2"></select>
+    @if (!string.IsNullOrEmpty(Model.Description))
+    {
+        <span class="m-form__help">
+            @Model.Description
+        </span>
+    }
+</div>

@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using System;
+using Application.Interfaces;
 using NLog;
 
 namespace Application.Logger
@@ -23,6 +24,11 @@ namespace Application.Logger
         public void Error(string message)
         {
             _logger.Error(message);
+        }
+
+        public void Error(string message, Exception exception)
+        {
+            _logger.Error(exception, message);
         }
 
         public void Info(string message)

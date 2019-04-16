@@ -14,7 +14,7 @@ namespace Core.Configurations
         {
             builder.Property(x => x.Title)
                 .IsRequired()
-                .HasMaxLength(EntityConfigs.TextMaxLength);
+                .HasMaxLength(EntityConfigs.TextAreaMaxLength);
 
             builder.Property(x => x.Description)
                 .IsRequired(false)
@@ -39,10 +39,10 @@ namespace Core.Configurations
                 .IsRequired();
 
             builder.Property(x => x.CreatedBy)
-                .IsRequired();
+                .IsRequired(false);
 
             builder.Property(x => x.UpdatedBy)
-                .IsRequired();
+                .IsRequired(false);
 
             builder.HasOne(x => x.StepBlock)
                 .WithMany(s => s.Questions)

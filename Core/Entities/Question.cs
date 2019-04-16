@@ -38,9 +38,9 @@ namespace Core.Entities
 
         public DateTime UpdatedAt { get; set; }
 
-        public int CreatedBy { get; set; }
+        public int? CreatedBy { get; set; }
 
-        public int UpdatedBy { get; set; }
+        public int? UpdatedBy { get; set; }
 
         public virtual StepBlock  StepBlock { get; set; }
 

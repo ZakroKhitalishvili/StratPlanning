@@ -19,8 +19,8 @@ namespace Core.Migrations
                     HasCriterion = table.Column<bool>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<int>(nullable: false),
-                    UpdatedBy = table.Column<int>(nullable: false)
+                    CreatedBy = table.Column<int>(nullable: true),
+                    UpdatedBy = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -41,8 +41,8 @@ namespace Core.Migrations
                     IsCompleted = table.Column<bool>(nullable: false, defaultValue: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<int>(nullable: false),
-                    UpdatedBy = table.Column<int>(nullable: false)
+                    CreatedBy = table.Column<int>(nullable: true),
+                    UpdatedBy = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -57,7 +57,7 @@ namespace Core.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Title = table.Column<string>(maxLength: 50, nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<int>(nullable: false)
+                    CreatedBy = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -77,8 +77,8 @@ namespace Core.Migrations
                     Order = table.Column<int>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<int>(nullable: false),
-                    UpdatedBy = table.Column<int>(nullable: false)
+                    CreatedBy = table.Column<int>(nullable: true),
+                    UpdatedBy = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -95,13 +95,13 @@ namespace Core.Migrations
                     FirstName = table.Column<string>(maxLength: 50, nullable: false),
                     LastName = table.Column<string>(maxLength: 50, nullable: false),
                     UserName = table.Column<string>(maxLength: 50, nullable: false),
-                    Password = table.Column<string>(maxLength: 100, nullable: false),
+                    Password = table.Column<string>(maxLength: 128, nullable: false),
                     Email = table.Column<string>(maxLength: 50, nullable: false),
                     Role = table.Column<string>(maxLength: 50, nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<int>(nullable: false),
-                    UpdatedBy = table.Column<int>(nullable: false)
+                    CreatedBy = table.Column<int>(nullable: true),
+                    UpdatedBy = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -121,15 +121,15 @@ namespace Core.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     StepBlockId = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(maxLength: 50, nullable: false),
+                    Title = table.Column<string>(maxLength: 500, nullable: false),
                     Description = table.Column<string>(maxLength: 500, nullable: true),
                     Type = table.Column<string>(maxLength: 50, nullable: false),
                     HasOptions = table.Column<bool>(nullable: false, defaultValue: false),
                     HasFiles = table.Column<bool>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<int>(nullable: false),
-                    UpdatedBy = table.Column<int>(nullable: false)
+                    CreatedBy = table.Column<int>(nullable: true),
+                    UpdatedBy = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -151,7 +151,7 @@ namespace Core.Migrations
                     UserId = table.Column<int>(nullable: false),
                     PlanId = table.Column<int>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<DateTime>(nullable: false)
+                    CreatedBy = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -181,7 +181,7 @@ namespace Core.Migrations
                     Ext = table.Column<string>(maxLength: 50, nullable: false),
                     QuestionId = table.Column<int>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<int>(nullable: false)
+                    CreatedBy = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -205,8 +205,8 @@ namespace Core.Migrations
                     Description = table.Column<string>(maxLength: 500, nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<int>(nullable: false),
-                    UpdatedBy = table.Column<int>(nullable: false)
+                    CreatedBy = table.Column<int>(nullable: true),
+                    UpdatedBy = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -230,8 +230,8 @@ namespace Core.Migrations
                     IsFinal = table.Column<bool>(nullable: true, defaultValue: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<int>(nullable: false),
-                    UpdatedBy = table.Column<int>(nullable: false),
+                    CreatedBy = table.Column<int>(nullable: true),
+                    UpdatedBy = table.Column<int>(nullable: true),
                     ResourceId = table.Column<int>(nullable: true),
                     Answer = table.Column<bool>(nullable: false)
                 },
@@ -269,8 +269,8 @@ namespace Core.Migrations
                     IsFinal = table.Column<bool>(nullable: true, defaultValue: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<int>(nullable: false),
-                    UpdatedBy = table.Column<int>(nullable: false),
+                    CreatedBy = table.Column<int>(nullable: true),
+                    UpdatedBy = table.Column<int>(nullable: true),
                     Step = table.Column<string>(maxLength: 50, nullable: false),
                     Date = table.Column<DateTime>(nullable: false),
                     Remind = table.Column<int>(nullable: false),
@@ -304,8 +304,8 @@ namespace Core.Migrations
                     IsFinal = table.Column<bool>(nullable: true, defaultValue: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<int>(nullable: false),
-                    UpdatedBy = table.Column<int>(nullable: false),
+                    CreatedBy = table.Column<int>(nullable: true),
+                    UpdatedBy = table.Column<int>(nullable: true),
                     Text = table.Column<string>(maxLength: 500, nullable: false),
                     IsIssue = table.Column<bool>(nullable: false, defaultValue: false),
                     IsStakeholder = table.Column<bool>(nullable: false, defaultValue: false)
@@ -340,8 +340,8 @@ namespace Core.Migrations
                     Description = table.Column<string>(maxLength: 500, nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<int>(nullable: false),
-                    UpdatedBy = table.Column<int>(nullable: false)
+                    CreatedBy = table.Column<int>(nullable: true),
+                    UpdatedBy = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -371,8 +371,8 @@ namespace Core.Migrations
                     IsFinal = table.Column<bool>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<int>(nullable: false),
-                    UpdatedBy = table.Column<int>(nullable: false),
+                    CreatedBy = table.Column<int>(nullable: true),
+                    UpdatedBy = table.Column<int>(nullable: true),
                     IssueId = table.Column<int>(nullable: false),
                     Option = table.Column<string>(maxLength: 50, nullable: false),
                     IsBestOption = table.Column<bool>(nullable: false, defaultValue: false),
@@ -412,8 +412,8 @@ namespace Core.Migrations
                     IsFinal = table.Column<bool>(nullable: true, defaultValue: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<int>(nullable: false),
-                    UpdatedBy = table.Column<int>(nullable: false),
+                    CreatedBy = table.Column<int>(nullable: true),
+                    UpdatedBy = table.Column<int>(nullable: true),
                     OptionId = table.Column<int>(nullable: true),
                     IssueId = table.Column<int>(nullable: true),
                     AltOption = table.Column<string>(maxLength: 50, nullable: true)
@@ -458,8 +458,8 @@ namespace Core.Migrations
                     IsFinal = table.Column<bool>(nullable: true, defaultValue: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<int>(nullable: false),
-                    UpdatedBy = table.Column<int>(nullable: false),
+                    CreatedBy = table.Column<int>(nullable: true),
+                    UpdatedBy = table.Column<int>(nullable: true),
                     StakeholderId = table.Column<int>(nullable: false),
                     Grade = table.Column<int>(nullable: true),
                     Priority = table.Column<int>(nullable: false)
@@ -498,8 +498,8 @@ namespace Core.Migrations
                     IsFinal = table.Column<bool>(nullable: true, defaultValue: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<int>(nullable: false),
-                    UpdatedBy = table.Column<int>(nullable: false),
+                    CreatedBy = table.Column<int>(nullable: true),
+                    UpdatedBy = table.Column<int>(nullable: true),
                     IssueId = table.Column<int>(nullable: false),
                     Why = table.Column<string>(maxLength: 500, nullable: false),
                     Result = table.Column<string>(maxLength: 500, nullable: false),
@@ -567,8 +567,8 @@ namespace Core.Migrations
                     IsFinal = table.Column<bool>(nullable: true, defaultValue: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<int>(nullable: false),
-                    UpdatedBy = table.Column<int>(nullable: false),
+                    CreatedBy = table.Column<int>(nullable: true),
+                    UpdatedBy = table.Column<int>(nullable: true),
                     IssueOptionAnswerId = table.Column<int>(nullable: false),
                     Date = table.Column<DateTime>(nullable: false),
                     HowItWillBeDone = table.Column<string>(maxLength: 500, nullable: false),

@@ -30,7 +30,7 @@ namespace Core.Entities
 
         public virtual DateTime CreatedAt { get; set; }
 
-        public virtual DateTime CreatedBy { get; set; }
+        public virtual int? CreatedBy { get; set; }
 
         public virtual ICollection<BooleanAnswer> BooleanAnswers { get; set; }
 

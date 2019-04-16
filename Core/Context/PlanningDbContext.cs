@@ -75,8 +75,5 @@ namespace Core.Context
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(PlanningDbContext).Assembly);
         }
 
-
-
-
     }
 }

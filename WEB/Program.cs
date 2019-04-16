@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Core.Context;
 using Microsoft.EntityFrameworkCore;
+using Application.Interfaces;
 
 namespace StratPlanning
 {
@@ -23,14 +24,16 @@ namespace StratPlanning
             {
                 try
                 {
-                    var context = scope.ServiceProvider.GetService<PlanningDbContext>();
-                    context.Database.Migrate();
-                    DatabaseInitializer.Initialize(context);
+                    using (var context = scope.ServiceProvider.GetService<PlanningDbContext>())
+                    {
+                        context.Database.Migrate();
+                        DatabaseInitializer.Initialize(context);
+                    }
                 }
                 catch (Exception ex)
                 {
-                    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occurred while migrating or initializing the database.");
+                    var logger = scope.ServiceProvider.GetRequiredService<ILoggerManager>();
+                    logger.Error( "An error occurred while migrating or initializing the database.", ex);
                 }
             }
 

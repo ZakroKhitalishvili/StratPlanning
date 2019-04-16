@@ -11,7 +11,7 @@ namespace StratPlanning.Controllers
 {
     public class HomeController : Controller
     {
-        private ILoggerManager _loggerManager;
+        private readonly ILoggerManager _loggerManager;
 
         public HomeController(ILoggerManager loggerManager)
         {

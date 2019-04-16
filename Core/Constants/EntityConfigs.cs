@@ -10,7 +10,7 @@ namespace Core.Constants
 
         public const int TextAreaMaxLength = 500;
 
-        public const int HashMaxLength = 100;
+        public const int HashMaxLength = 128;
 
     }
 }

@@ -40,10 +40,10 @@ namespace Core.Configurations
                 .IsRequired();
 
             builder.Property(x => x.CreatedBy)
-                .IsRequired();
+                .IsRequired(false);
 
             builder.Property(x => x.UpdatedBy)
-                .IsRequired();
+                .IsRequired(false);
 
             builder.HasOne(x => x.Position)
                 .WithMany(s => s.Users)
