@@ -5,6 +5,9 @@ using Application.Interfaces.Repositories;
 using Application.DTOs;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using Core.Constants;
+using AutoMapper;
 
 namespace Application.Repositories
 {
@@ -18,32 +21,21 @@ namespace Application.Repositories
             throw new NotImplementedException();
         }
 
+        public IEnumerable<PlanDTO> GetPlanList()
+        {
+            return FindAll().Select(p => Mapper.Map<PlanDTO>(p));
+        }
+
         public PlanStepDTO GetStep(string stepIndex)
         {
-            var blocks = Context.StepBlocks.Where(x => x.Step == stepIndex)
+            var blocksS = Context.StepBlocks.Where(x => x.Step == stepIndex)
                 .Include(x => x.Questions)
-                .OrderBy(x => x.Order)
-                .Select(x => new StepBlockDTO
-                {
-                    Title = x.Title,
-                    Description = x.Description,
-                    Instruction = x.Instruction,
-                    Order = x.Order,
-                    Questions = x.Questions.Select(q => new QuestionDTO
-                    {
-                        Id = q.Id,
-                        Title = q.Title,
-                        Description = q.Description,
-                        Type = q.Type,
-                        Options = q.HasOptions ? q.Options.Select(o => new OptionDTO()
-                        {
-                            Id = o.Id,
-                            Title = o.Title,
-                            Description = o.Description
-                        }).ToList() : null
-                    }).ToList()
+                .ThenInclude(x => x.Options)
+                .OrderBy(x => x.Order);
 
-                }).ToList();
+
+            var blocks = blocksS.Select(x => Mapper.Map<StepBlockDTO>(x)).ToList();
+
 
             var stepDTO = new PlanStepDTO
             {
@@ -55,5 +47,10 @@ namespace Application.Repositories
 
         }
 
+        public IEnumerable<PlanStepDTO> GetStepList()
+        {
+            var members = typeof(Steps).GetMembers().Where(x => x.MemberType == System.Reflection.MemberTypes.Field);
+            return members.Select(member => new PlanStepDTO { Step = member.Name });
+        }
     }
 }

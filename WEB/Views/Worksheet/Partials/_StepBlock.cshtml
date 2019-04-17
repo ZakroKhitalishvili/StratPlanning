@@ -29,6 +29,21 @@
             {
                 <partial name="~/Views/Worksheet/Partials/Questions/_SelectQuestion.cshtml" model="question" />
             }
+
+            if (question.Type == QuestionTypes.MultiSelect)
+            {
+                <partial name="~/Views/Worksheet/Partials/Questions/_MultiSelectQuestion.cshtml" model="question" />
+            }
+
+            if (question.Type == QuestionTypes.PlanTypeSelect)
+            {
+                <partial name="~/Views/Worksheet/Partials/Questions/_PlanTypeSelectQuestion.cshtml" model="question" />
+            }
+
+            if (question.Type == QuestionTypes.StepTable)
+            {
+                <partial name="~/Views/Worksheet/Partials/Questions/_StepTableQuestion.cshtml" model="question" />
+            }
         }
     </div>
 </div>

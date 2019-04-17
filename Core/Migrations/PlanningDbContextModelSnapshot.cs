@@ -351,6 +351,8 @@ namespace Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(false);
 
+                    b.Property<int>("Order");
+
                     b.Property<int>("StepBlockId");
 
                     b.Property<string>("Title")

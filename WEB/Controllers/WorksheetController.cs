@@ -21,12 +21,21 @@ namespace Web.Controllers
         {
             var stepDTO = _planRepository.GetStep(stepIndex);
 
+            ViewBag.Steps = _planRepository.GetStepList();
+
             return View("Step", stepDTO);
         }
 
         public IActionResult Index()
         {
             return RedirectToAction("GetStep", new { stepIndex = Steps.Predeparture });
+        }
+
+        public IActionResult GetPlanList()
+        {
+            var planList = _planRepository.GetPlanList();
+
+            return View("PlanList",planList);
         }
     }
 }

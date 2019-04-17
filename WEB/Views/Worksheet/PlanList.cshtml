@@ -1,0 +1,69 @@
+﻿@model IEnumerable<Application.DTOs.PlanDTO>
+@{
+    ViewData["Title"] = "Plans";
+}
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-portlet m-portlet--full-height m-portlet--tabs">
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <div class="m-portlet__head-title">
+                    <h3 class="m-portlet__head-text"></h3>
+                </div>
+            </div>
+        </div>
+        <div class="m-portlet__body">
+            <div class="m-scrollable " data-scrollable="true" data-axis="xy">
+
+                <table class="table m-table  table-bordered m--margin-top-10">
+                    <thead>
+                        <tr>
+                            <th>
+                                Plan
+                            </th>
+                            <th>
+                                Persons / groups involved
+                            </th>
+                            <th>
+                                Schedule
+                            </th>
+                            <th>
+                                Remind in (days)
+                            </th>
+                            <th>
+                                Completed
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(var plan in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @plan.Name
+                                </td>
+                                <td>
+                                    @plan.Description
+                                </td>
+                                <td>
+                                    @plan.StartDate
+                                </td>
+                                <td>
+                                    @(plan.IsCompleted?plan.EndDate?.ToString("dd/mm/YYYY"):"In progress")
+                                </td>
+                                <td>
+                                    <a href="#" class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill">
+                                        <i class="la la-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

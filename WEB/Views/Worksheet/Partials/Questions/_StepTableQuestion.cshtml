@@ -1,0 +1,79 @@
+﻿@model Application.DTOs.QuestionDTO
+@using Resources
+
+@using Web.Helpers
+
+@{
+    var stepList = Stephelper.GetStepList(Context);
+}
+<div class="form-group m-form__group">
+    <div class="row">
+        <label class="col-form-label col-sm-12">
+            @(Model.Order). @Model.Title
+        </label>
+    </div>
+    <div class="m-scrollable " data-scrollable="true" data-axis="xy">
+
+        <table class="table m-table  table-bordered m--margin-top-10">
+            <thead>
+                <tr>
+                    <th>
+                        Steps / tasks
+                    </th>
+                    <th>
+                        Persons / groups involved
+                    </th>
+                    <th>
+                        Schedule
+                    </th>
+                    <th>
+                        Remind in (days)
+                    </th>
+                    <th>
+                        Completed
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var step in stepList)
+                {
+                    <tr>
+                        <td>
+                            @steps.ResourceManager.GetString(step.Step)
+                        </td>
+                        <td>
+                            <select multiple class="form-control m-select2">
+                                <option>
+                                    Mariam Merabishvili
+                                </option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control datepicker"/>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" min="1"/>
+                        </td>
+                        <td>
+                            <label class="m-checkbox checkbox-sp m-checkbox--solid">
+                                <input type="checkbox">
+                                <span></span>
+                            </label>
+                        </td>
+                        <td>
+                            <span class="fa fa-check m--font-success">
+                            </span>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <span class="m-form__help">
+        @Model.Description
+    </span>
+</div>

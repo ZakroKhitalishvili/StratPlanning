@@ -14,6 +14,8 @@ using Application.Logger;
 using Microsoft.EntityFrameworkCore;
 using Application.Interfaces.Repositories;
 using Application.Repositories;
+using Web;
+using Application.Mappers;
 
 namespace StratPlanning
 {
@@ -36,13 +38,14 @@ namespace StratPlanning
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<PlanningDbContext>(options =>
-               options.UseSqlServer(Configuration.GetConnectionString("PlanningDatabase")));
+            services.ConfigureDatabase(Configuration);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddScoped<ILoggerManager, LoggerManager>();
-            services.AddScoped<IPlanRepository, PlanRepository>();
+            services.AddLocalServices();
+
+            MapperInitializer.Initialize();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

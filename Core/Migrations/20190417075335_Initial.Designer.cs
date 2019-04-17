@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Core.Migrations
 {
     [DbContext(typeof(PlanningDbContext))]
-    [Migration("20190416121641_Initial")]
+    [Migration("20190417075335_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -352,6 +352,8 @@ namespace Core.Migrations
                     b.Property<bool>("HasOptions")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(false);
+
+                    b.Property<int>("Order");
 
                     b.Property<int>("StepBlockId");
 

@@ -1,4 +1,9 @@
 ﻿@model Application.DTOs.PlanStepDTO
+@using Resources
+
+@{
+    ViewData["Title"] = "Worksheet";
+}
 
 <partial name="~/Views/Worksheet/Partials/_SideMenu.cshtml" />
 
@@ -20,7 +25,7 @@
                 <div class="m-subheader">
                     <div class="d-flex align-items-center">
                         <div class="mr-auto">
-                            <h2>Pre-Departure Checklist</h2>
+                            <h2>@steps.ResourceManager.GetString(Model.Step)</h2>
                         </div>
                     </div>
                 </div>
@@ -48,7 +53,6 @@
                      style="">
                     <div class="m-accordion__item-content">
                         <video width="100%" controls>
-
                             Your browser does not support the video tag.
                         </video>
                     </div>
@@ -58,372 +62,23 @@
         </div>
         <form class="m-form m-form--fit m-form--label-align-left">
 
-            @foreach(var stepBlock in Model.StepBlocks)
+            @foreach (var stepBlock in Model.StepBlocks)
             {
-                <partial name="~/Views/Worksheet/Partials/_StepBlock.cshtml" model="stepBlock"/>
+                <partial name="~/Views/Worksheet/Partials/_StepBlock.cshtml" model="stepBlock" />
             }
 
-            @*<div class="m-portlet m-portlet--bordered m-portlet--unair m--margin-top-30">
-                <div class="m-portlet__head">
-                    <div class="m-portlet__head-caption">
-                        <div class="row no-gutters justify-content-md-center">
-                            <div class="col">
-                                <h3 class="m-portlet__head-text">
-                                    Planning the planning
-                                </h3>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="#" data-target="#help_modal" data-toggle="modal"
-                       class="m-portlet__nav-link btn btn-lg btn-secondary  m-btn m-btn--icon m-btn--icon-only m-btn--pill  m-dropdown__toggle m-intro__help">
-                        <i class="fa fa-question"></i>
-                    </a>
-                </div>
-                <div class="m-portlet__body">
-                    <div class="form-group m-form__group">
-                        <label for="exampleSelect1">
-                            1. Whose plan is it?
-                        </label>
-                        <select class="form-control m-select2">
-                            <option>
-                                Party
-                            </option>
-                            <option>
-                                Regional unit
-                            </option>
-                            <option>
-                                Sectorial Unit
-                            </option>
-                            <option>
-                                Other please
-                            </option>
-                            <option>
-                                specify
-                            </option>
-                        </select>
-                    </div>
-                    <div class="form-group m-form__group">
-                        <label for="exampleSelect1">
-                            2. What period of time will the plan cover
-                        </label>
-                        <select class="form-control m-select2">
-                            <option>
-                                1 Year
-                            </option>
-                            <option>
-                                2 Year
-                            </option>
-                            <option>
-                                3 Year
-                            </option>
-                            <option>
-                                4 Year
-                            </option>
-                            <option>
-                                5 Year
-                            </option>
-                        </select>
-                        <span class="m-form__help">
-                            It is recommended to develop a plan for 2 to 5 years.
-                        </span>
-                    </div>
-                    <div class="form-group m-form__group">
-                        <label for="exampleSelect1">
-                            3. Who is in the working group?
-                        </label>
-                        <select class="form-control m-select2" multiple>
-                            <option>
-                                Senior leadership
-                            </option>
-                            <option>
-                                Middle leadership
-                            </option>
-                            <option>
-                                Regional branches
-                            </option>
-                            <option>
-                                Members
-                            </option>
-                        </select>
-                    </div>
-
-
-
-                    <div class="form-group m-form__group">
-                        <label for="exampleSelect1">
-                            4. What type of written plan do we envision?
-                        </label>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <label class="m-option">
-                                    <span class="m-option__control">
-                                        <span class="m-radio radio-sp m-radio--check-bold">
-                                            <input type="radio" name="m_option_1" value="1">
-                                            <span></span>
-                                        </span>
-                                    </span>
-                                    <span class="m-option__label">
-                                        <span class="m-option__head">
-                                            <span class="m-option__title">
-                                                Strategic plan with action plan(s)
-                                            </span>
-                                        </span>
-                                        <span class="m-option__body">
-                                            This is a longer version where besides the strategic direction
-                                            the party should adhere to several action plans are elaborated
-                                            that aim at achieving specific objectives.
-                                        </span>
-                                    </span>
-                                </label>
-                            </div>
-                            <div class="col-lg-6">
-                                <label class="m-option">
-                                    <span class="m-option__control">
-                                        <span class="m-radio radio-sp m-radio--check-bold">
-                                            <input type="radio" name="m_option_1" value="1">
-                                            <span></span>
-                                        </span>
-                                    </span>
-                                    <span class="m-option__label">
-                                        <span class="m-option__head">
-                                            <span class="m-option__title">
-                                                Strategic plan without action plan(s)
-                                            </span>
-                                        </span>
-                                        <span class="m-option__body">
-                                            This is a shorter version that could serve as a general guide
-                                            for strategic development
-                                        </span>
-                                    </span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group m-form__group">
-                        <label for="exampleSelect1">
-                            5. What is the time frame for the planning process?
-                        </label>
-                        <select class="form-control m-select2">
-                            <option>
-                                3 months
-                            </option>
-                            <option>
-                                6 months
-                            </option>
-                            <option>
-                                Other
-                            </option>
-                        </select>
-                        <span class="m-form__help">
-                            On overage, depending on the type of a strategic plan, the process takes 2-4
-                            months.
-                        </span>
-                    </div>
-
-
-                    <div class="form-group m-form__group">
-                        <div class="row">
-                            <label class="col-form-label col-md-9 col-sm-12">
-                                6. What steps will you use in your planning process?
-                            </label>
-                            <div class="col-md-3 col-sm-12">
-                                <a href="" class="btn btn-sp m-btn m-btn--pill m--pull-right"
-                                   data-toggle="modal" data-target="#m_question8_modal">
-                                    Add
-                                </a>
-                            </div>
-                        </div>
-                        <div class="m-scrollable " data-scrollable="true" data-axis="xy">
-
-                            <table class="table m-table  table-bordered m--margin-top-10" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            Steps / tasks
-                                        </th>
-                                        <th>
-                                            Persons / groups involved
-                                        </th>
-                                        <th>
-                                            Schedule
-                                        </th>
-                                        <th>
-                                            Remind in (days)
-                                        </th>
-                                        <th>
-                                            Completed
-                                        </th>
-                                        <th>
-                                            Status
-                                        </th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            Step 1
-                                        </td>
-                                        <td>
-                                            <div class="m-list-badge m-list-badge--light-bg">
-                                                <div class="m-list-badge__items">
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        Mariam Merabishvili
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            22/01/2019
-                                        </td>
-                                        <td>
-                                            10
-                                        </td>
-                                        <td>
-                                            <label class="m-checkbox checkbox-sp m-checkbox--solid">
-                                                <input type="checkbox">
-                                                <span></span>
-                                            </label>
-                                        </td>
-                                        <td>
-                                            <span class="fa fa-check m--font-success">
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="table-row-actions">
-                                                <a href="#"
-                                                   class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
-                                                   title="Delete">
-                                                    <i class="la la-trash"></i>
-                                                </a>
-
-                                                <a href="#"
-                                                   class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
-                                                   title="Edit" data-toggle="modal"
-                                                   data-target="#m_question8_modal">
-                                                    <i class="la la-edit"></i>
-                                                </a>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Step 2
-                                        </td>
-                                        <td>
-                                            <div class="m-list-badge m-list-badge--light-bg">
-                                                <div class="m-list-badge__items">
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        ia mgeladze
-                                                    </span>
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        Giorgi Giorganashvili
-                                                    </span>
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        isidore mgaloblishvili
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                        </td>
-                                        <td>
-                                            12/02/2019
-                                        </td>
-                                        <td>
-                                            10
-                                        </td>
-                                        <td>
-                                            <label class="m-checkbox checkbox-sp m-checkbox--solid">
-                                                <input type="checkbox">
-                                                <span></span>
-                                            </label>
-                                        </td>
-                                        <td>
-                                            <span class="fa fa-remove m--font-danger">
-                                            </span>
-                                        </td>
-                                        <td>
-
-                                            <span class="table-row-actions">
-                                                <a href="#"
-                                                   class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
-                                                   title="Delete">
-                                                    <i class="la la-trash"></i>
-                                                </a>
-
-                                                <a href="#"
-                                                   class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
-                                                   title="Edit" data-toggle="modal"
-                                                   data-target="#m_question8_modal">
-                                                    <i class="la la-edit"></i>
-                                                </a>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Step 3
-                                        </td>
-                                        <td>
-                                            <div class="m-list-badge m-list-badge--light-bg">
-                                                <div class="m-list-badge__items">
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        Mariam Merabishvili
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                        </td>
-                                        <td>
-                                            22/02/2019
-                                        </td>
-                                        <td>
-                                            20
-                                        </td>
-                                        <td>
-                                            <label class="m-checkbox checkbox-sp m-checkbox--solid">
-                                                <input type="checkbox" checked>
-                                                <span></span>
-                                            </label>
-                                        </td>
-                                        <td>
-                                            <span class="fa fa-warning m--font-warning">
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="table-row-actions">
-                                                <a href="#"
-                                                   class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
-                                                   title="Delete">
-                                                    <i class="la la-trash"></i>
-                                                </a>
-
-                                                <a href="#"
-                                                   class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
-                                                   title="Edit" data-toggle="modal"
-                                                   data-target="#m_question8_modal">
-                                                    <i class="la la-edit"></i>
-                                                </a>
-                                            </span>
-
-                                        </td>
-
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <span class="m-form__help">
-                            Review these steps with the people who are involved, and refine them as needed.
-                        </span>
-                    </div>
-                    <div class="form-group m-form__group m--img-centered">
-                        <button type="button" class="btn m-btn--pill    btn-sp">
-                            Submit
-                        </button>
-                    </div>
-                </div>
-            </div>*@
+            <div class="form-group m-form__group m--img-centered">
+                <button type="button" class="btn m-btn--pill    btn-sp">
+                    Submit
+                </button>
+            </div>
         </form>
     </div>
 </div>
+
+
+@section scripts{
+    <script>
+        $('#menu_worksheet').addClass('m-menu__item--active');
+    </script>
+}

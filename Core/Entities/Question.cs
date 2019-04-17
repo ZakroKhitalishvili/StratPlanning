@@ -34,6 +34,8 @@ namespace Core.Entities
 
         public bool HasFiles { get; set; }
 
+        public int Order { get; set; }
+
         public DateTime CreatedAt { get; set; }
 
         public DateTime UpdatedAt { get; set; }

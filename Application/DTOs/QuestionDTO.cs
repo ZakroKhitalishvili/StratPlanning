@@ -14,6 +14,8 @@ namespace Application.DTOs
         
         public string Type { get; set; }
 
+        public int Order { get; set; }
+
         public IList<OptionDTO> Options { get; set; }
 
     }

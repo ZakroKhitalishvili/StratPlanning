@@ -126,6 +126,7 @@ namespace Core.Migrations
                     Type = table.Column<string>(maxLength: 50, nullable: false),
                     HasOptions = table.Column<bool>(nullable: false, defaultValue: false),
                     HasFiles = table.Column<bool>(nullable: false),
+                    Order = table.Column<int>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<int>(nullable: true),

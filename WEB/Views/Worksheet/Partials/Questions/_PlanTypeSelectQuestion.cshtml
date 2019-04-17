@@ -1,0 +1,52 @@
+﻿@model Application.DTOs.QuestionDTO
+
+<div class="form-group m-form__group">
+    <label for="exampleSelect1">
+        @(Model.Order). @Model.Title
+    </label>
+    <div class="row">
+        <div class="col-lg-6">
+            <label class="m-option">
+                <span class="m-option__control">
+                    <span class="m-radio radio-sp m-radio--check-bold">
+                        <input type="radio" name="m_option_1" value="1">
+                        <span></span>
+                    </span>
+                </span>
+                <span class="m-option__label">
+                    <span class="m-option__head">
+                        <span class="m-option__title">
+                            Strategic plan with action plan(s)
+                        </span>
+                    </span>
+                    <span class="m-option__body">
+                        This is a longer version where besides the strategic direction
+                        the party should adhere to several action plans are elaborated
+                        that aim at achieving specific objectives.
+                    </span>
+                </span>
+            </label>
+        </div>
+        <div class="col-lg-6">
+            <label class="m-option">
+                <span class="m-option__control">
+                    <span class="m-radio radio-sp m-radio--check-bold">
+                        <input type="radio" name="m_option_1" value="1">
+                        <span></span>
+                    </span>
+                </span>
+                <span class="m-option__label">
+                    <span class="m-option__head">
+                        <span class="m-option__title">
+                            Strategic plan without action plan(s)
+                        </span>
+                    </span>
+                    <span class="m-option__body">
+                        This is a shorter version that could serve as a general guide
+                        for strategic development
+                    </span>
+                </span>
+            </label>
+        </div>
+    </div>
+</div>
