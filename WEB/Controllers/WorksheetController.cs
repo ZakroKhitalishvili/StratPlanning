@@ -28,14 +28,19 @@ namespace Web.Controllers
 
         public IActionResult Index()
         {
-            return RedirectToAction("GetStep", new { stepIndex = Steps.Predeparture });
+            return RedirectToAction("GetPlanList");
         }
 
         public IActionResult GetPlanList()
         {
             var planList = _planRepository.GetPlanList();
 
-            return View("PlanList",planList);
+            return View("PlanList", planList);
+        }
+
+        public IActionResult GetPlan(int id)
+        {
+            return RedirectToAction("GetStep", new { stepIndex = Steps.Predeparture });
         }
     }
 }

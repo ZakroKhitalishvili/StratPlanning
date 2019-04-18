@@ -4,10 +4,24 @@
     <i class="la la-close"></i>
 </button>
 <div id="m_aside_left" class="m-grid__item m-aside-left ">
+
     <!-- BEGIN: Aside Menu -->
     <div id="m_ver_menu" class="m-aside-menu  m-aside-menu--skin-light m-aside-menu--submenu-skin-light "
          data-menu-vertical="true" data-menu-scrollable="false" data-menu-dropdown-timeout="500">
         <ul class="m-menu__nav  m-menu__nav--dropdown-submenu-arrow ">
+            <li>
+                <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+                    <li class="m-nav__item">
+                        <a asp-action="GetPlanList" class="m-nav__link">
+                            <i class="m-nav__link-icon la la-list"></i>
+                            <span class="m-nav__link-text">
+                                Plan list
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
             <li class="m-menu__section m--padding-left-5">
                 <h4 class="m-menu__section-text ">
                     Worksheets

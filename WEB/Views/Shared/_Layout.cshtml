@@ -107,7 +107,7 @@
                                                                     </span>
                                                                 </li>
                                                                 <li class="m-nav__item">
-                                                                    <a href="profile.html" class="m-nav__link">
+                                                                    <a asp-controller="User" asp-action="GetMyProfile" class="m-nav__link">
                                                                         <i class="m-nav__link-icon flaticon-profile-1"></i>
                                                                         <span class="m-nav__link-title">
                                                                             <span class="m-nav__link-wrap">
@@ -119,7 +119,7 @@
                                                                     </a>
                                                                 </li>
                                                                 <li class="m-nav__item">
-                                                                    <a href="profile.html" class="m-nav__link">
+                                                                    <a asp-controller="User" asp-action="GetActivity" class="m-nav__link">
                                                                         <i class="m-nav__link-icon flaticon-share"></i>
                                                                         <span class="m-nav__link-text">
                                                                             Activity
@@ -177,8 +177,8 @@
                                         </a>
                                     </li>
 
-                                    <li class="m-menu__item " aria-haspopup="true" id="menu_profile">
-                                        <a href="profile.html" class="m-menu__link ">
+                                    <li class="m-menu__item" aria-haspopup="true" id="menu_profile">
+                                        <a asp-controller="User" asp-action="GetMyProfile" class="m-menu__link ">
                                             <span class="m-menu__item-here"></span>
                                             <span class="m-menu__link-text">
                                                 My Account

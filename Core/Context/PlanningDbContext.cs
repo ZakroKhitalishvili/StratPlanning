@@ -1,7 +1,5 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Core.Entities;
-using Core.Configurations;
 
 namespace Core.Context
 {

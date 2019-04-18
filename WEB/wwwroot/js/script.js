@@ -23,7 +23,7 @@ $(document).ready(function () {
             return $('input', td).val();
         });
     };
-    
+
     $('.dropzone-sp').dropzone(
         {
             addRemoveLinks: true,
@@ -189,6 +189,23 @@ $(document).ready(function () {
         });
 
     });
+
+
+    ///////////
+    //// selects speficy-other event
+    //////////////
+
+    $('select.select-specify').on('change', function (e) {
+        let value = $(this).val();
+        let specifyInput = $(this).parent().find('input.select-specify-input');
+
+        if (value.toLowerCase() == 'other') {
+            specifyInput.show();
+        }
+        else {
+            specifyInput.hide();
+        }
+    }).trigger('change');
 
 
 

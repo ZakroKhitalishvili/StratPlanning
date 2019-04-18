@@ -115,7 +115,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reviewing strategies &amp;amp; implementation plans.
+        ///   Looks up a localized string similar to Reviewing strategies &amp; implementation plans.
         /// </summary>
         public static string Review {
             get {

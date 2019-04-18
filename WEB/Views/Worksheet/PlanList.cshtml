@@ -6,64 +6,86 @@
 <div class="m-grid__item m-grid__item--fluid m-wrapper">
     <div class="m-portlet m-portlet--full-height m-portlet--tabs">
         <div class="m-portlet__head">
-            <div class="m-portlet__head-caption">
-                <div class="m-portlet__head-title">
-                    <h3 class="m-portlet__head-text"></h3>
+            <div class="m-subheader">
+                <div class="d-flex align-items-center">
+                    <div class="mr-auto">
+                        <h2>Plans</h2>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="m-portlet__body">
-            <div class="m-scrollable " data-scrollable="true" data-axis="xy">
-
-                <table class="table m-table  table-bordered m--margin-top-10">
-                    <thead>
-                        <tr>
-                            <th>
-                                Plan
-                            </th>
-                            <th>
-                                Persons / groups involved
-                            </th>
-                            <th>
-                                Schedule
-                            </th>
-                            <th>
-                                Remind in (days)
-                            </th>
-                            <th>
-                                Completed
-                            </th>
-                            <th>
-                                Status
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach(var plan in Model)
-                        {
-                            <tr>
-                                <td>
-                                    @plan.Name
-                                </td>
-                                <td>
-                                    @plan.Description
-                                </td>
-                                <td>
-                                    @plan.StartDate
-                                </td>
-                                <td>
-                                    @(plan.IsCompleted?plan.EndDate?.ToString("dd/mm/YYYY"):"In progress")
-                                </td>
-                                <td>
-                                    <a href="#" class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill">
-                                        <i class="la la-edit"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+            <div class="list-group">
+                @foreach (var plan in Model)
+                {
+                    <a asp-controller="Worksheet" asp-action="GetPlan" asp-route-id="@plan.Id" class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">@plan.Name</h5>
+                            <small>@plan.StartDate.ToString("dd/MM/yyyy")</small>
+                        </div>
+                        <p class="mb-1">@plan.Description</p>
+                        <small>
+                            @(plan.IsCompleted ? plan.EndDate?.ToString("dd/MM/yyyy") : "In progress")
+                        </small>
+                    </a>
+                }
             </div>
+            @*<div class="m-scrollable " data-scrollable="true" data-axis="xy">
+
+                    <table class="table m-table  table-bordered m--margin-top-10">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Plan name
+                                </th>
+                                <th>
+                                    Description
+                                </th>
+                                <th>
+                                    Started
+                                </th>
+                                <th>
+                                    Ended
+                                </th>
+                                <th>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var plan in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @plan.Name
+                                    </td>
+                                    <td>
+                                        @plan.Description
+                                    </td>
+                                    <td>
+                                        @plan.StartDate.ToString("dd/MM/yyyy")
+                                    </td>
+                                    <td>
+                                        @(plan.IsCompleted ? plan.EndDate?.ToString("dd/MM/yyyy") : "In progress")
+                                    </td>
+                                    <td>
+                                        <a href="#" class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill">
+                                            <i class="la la-edit"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>*@
         </div>
     </div>
 </div>
+
+
+
+@section scripts{
+    <script>
+        $('#menu_worksheet').addClass('m-menu__item--active');
+    </script>
+}
+

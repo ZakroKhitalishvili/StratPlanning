@@ -338,6 +338,10 @@ namespace Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("CanSpecifyOther")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
+
                     b.Property<DateTime>("CreatedAt");
 
                     b.Property<int?>("CreatedBy");

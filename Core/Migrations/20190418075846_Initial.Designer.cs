@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Core.Migrations
 {
     [DbContext(typeof(PlanningDbContext))]
-    [Migration("20190417075335_Initial")]
+    [Migration("20190418075846_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -339,6 +339,10 @@ namespace Core.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("CanSpecifyOther")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime>("CreatedAt");
 

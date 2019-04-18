@@ -35,6 +35,10 @@ namespace Core.Configurations
             builder.Property(x => x.Order)
                 .IsRequired();
 
+            builder.Property(x => x.CanSpecifyOther)
+               .IsRequired()
+               .HasDefaultValue(false);
+
             builder.Property(x => x.CreatedAt)
                 .IsRequired();
 

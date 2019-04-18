@@ -36,6 +36,8 @@ namespace Core.Entities
 
         public int Order { get; set; }
 
+        public bool CanSpecifyOther { get; set; }
+
         public DateTime CreatedAt { get; set; }
 
         public DateTime UpdatedAt { get; set; }

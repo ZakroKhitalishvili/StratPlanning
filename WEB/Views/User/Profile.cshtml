@@ -1,0 +1,166 @@
+﻿<button class="m-aside-left-close m-aside-left-close--skin-light" id="m_aside_left_close_btn">
+    <i class="la la-close"></i>
+</button>
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <!-- BEGIN: Subheader -->
+    <div class="m-subheader ">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto">
+                <h3 class="m-subheader__title ">
+                    My Profile
+                </h3>
+            </div>
+        </div>
+    </div>
+    <!-- END: Subheader -->
+    <div class="m-content">
+        <div class="row">
+            <div class="col-lg-4">
+                <partial name="~/Views/User/Partials/_UserView.cshtml" />
+            </div>
+            <div class="col-lg-8">
+                <div class="m-portlet m-portlet--full-height m-portlet--tabs  ">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-tools">
+                            <ul class="nav nav-tabs m-tabs m-tabs-line   m-tabs-line--left m-tabs-line--primary"
+                                role="tablist">
+                                <li class="nav-item m-tabs__item">
+                                    <a class="nav-link m-tabs__link active" data-toggle="tab"
+                                       href="#m_user_profile_tab_1" role="tab">
+                                        <i class="flaticon-share m--hide"></i>
+                                        Personal Details
+                                    </a>
+                                </li>
+                                <li class="nav-item m-tabs__item">
+                                    <a class="nav-link m-tabs__link" data-toggle="tab"
+                                       href="#m_user_profile_tab_2" role="tab">
+                                        Authentication
+                                    </a>
+                                </li>
+                                <li class="nav-item m-tabs__item">
+                                    <a class="nav-link m-tabs__link" data-toggle="tab"
+                                       href="#m_user_profile_tab_3" role="tab">
+                                        Settings
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="m_user_profile_tab_1">
+                            <form class="m-form m-form--fit m-form--label-align-right">
+                                <div class="m-portlet__body">
+                                    <div class="form-group m-form__group row">
+                                        <label for="example-text-input" class="col-2 col-form-label">
+                                            Name
+                                        </label>
+                                        <div class="col-7">
+                                            <input class="form-control m-input" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="form-group m-form__group row">
+                                        <label for="example-text-input" class="col-2 col-form-label">
+                                            Last Name
+                                        </label>
+                                        <div class="col-7">
+                                            <input class="form-control m-input" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="form-group m-form__group row">
+                                        <label for="example-text-input" class="col-2 col-form-label">
+                                            Position
+                                        </label>
+                                        <div class="col-7">
+                                            <input class="form-control m-input" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="form-group m-form__group row">
+                                        <label for="example-text-input" class="col-2 col-form-label">
+                                            Email
+                                        </label>
+                                        <div class="col-7">
+                                            <input class="form-control m-input" type="email">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-portlet__foot m-portlet__foot--fit">
+                                    <div class="m-form__actions">
+                                        <div class="row">
+                                            <div class="col-2"></div>
+                                            <div class="col-7">
+                                                <button type="reset" class="btn btn-sp m-btn m-btn--icon">
+                                                    <span>
+                                                        <i class="fa fa-save"></i>
+                                                        <span>
+                                                            Save changes
+                                                        </span>
+                                                    </span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="tab-pane " id="m_user_profile_tab_2">
+                            <form class="m-form m-form--fit m-form--label-align-right">
+                                <div class="m-portlet__body">
+                                    <div class="form-group m-form__group row">
+                                        <label for="example-text-input" class="col-2 col-form-label">
+                                            User name
+                                        </label>
+                                        <div class="col-7">
+                                            <input readonly class="form-control m-input" type="text"
+                                                   value="readonly">
+                                        </div>
+                                    </div>
+                                    <div class="form-group m-form__group row">
+                                        <label for="example-text-input" class="col-2 col-form-label">
+                                            Password
+                                        </label>
+                                        <div class="col-7">
+                                            <input class="form-control m-input" type="password">
+                                        </div>
+                                    </div>
+                                    <div class="form-group m-form__group row">
+                                        <label for="example-text-input" class="col-2 col-form-label">
+                                            Confirme Password
+                                        </label>
+                                        <div class="col-7">
+                                            <input class="form-control m-input" type="password">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-portlet__foot m-portlet__foot--fit">
+                                    <div class="m-form__actions">
+                                        <div class="row">
+                                            <div class="col-2"></div>
+                                            <div class="col-7">
+                                                <button type="reset" class="btn btn-sp m-btn m-btn--icon">
+                                                    <span>
+                                                        <i class="fa fa-save"></i>
+                                                        <span>
+                                                            Save changes
+                                                        </span>
+                                                    </span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="tab-pane " id="m_user_profile_tab_3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        $('#menu_profile').addClass('m-menu__item--active');
+    </script>
+}

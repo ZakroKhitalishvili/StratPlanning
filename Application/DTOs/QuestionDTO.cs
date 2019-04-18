@@ -16,6 +16,8 @@ namespace Application.DTOs
 
         public int Order { get; set; }
 
+        public bool CanSpecifyOther { get; set; }
+
         public IList<OptionDTO> Options { get; set; }
 
     }

@@ -4,8 +4,17 @@
     <label for="exampleSelect1">
         @(Model.Order). @Model.Title
     </label>
+    @{
+        var items = Model.Options.Select(o => new SelectListItem { Text = o.Title, Value = o.Id.ToString() })
+            .Prepend(new SelectListItem { Text = "-- Specify --", Value = string.Empty });
 
-    <select asp-items="Model.Options.Select(o=>new SelectListItem {Text= o.Title ,Value=o.Id.ToString()})" class="form-control m-select2"></select>
+        if (Model.CanSpecifyOther)
+        {
+            items = items.Append(new SelectListItem { Text = "Other", Value = "other" });
+        }
+    }
+    <select asp-items="items" class="form-control m-select2 @(Model.CanSpecifyOther?"select-specify":"")"></select>
+    <input type="text" class="select-specify-input form-control m--margin-top-10 hidden" placeholder="specify..." />
     @if (!string.IsNullOrEmpty(Model.Description))
     {
         <span class="m-form__help">

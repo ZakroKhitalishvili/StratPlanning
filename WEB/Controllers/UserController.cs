@@ -8,9 +8,24 @@ namespace Web.Controllers
 {
     public class UserController : Controller
     {
-        public IActionResult Index()
+        public IActionResult GetProfile(int userId)
         {
-            return View();
+            return View("Profile");
+        }
+
+        public IActionResult GetMyProfile()
+        {
+            return RedirectToAction("GetProfile", new { userId = 0 });
+        }
+
+        public IActionResult GetActivity(int userId)
+        {
+            return View("Activity");
+        }
+
+        public IActionResult GetMyActivity()
+        {
+            return RedirectToAction("GetActivity", new { userId = 0 });
         }
     }
 }
