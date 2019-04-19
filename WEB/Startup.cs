@@ -39,13 +39,6 @@ namespace Web
 
             });
 
-            services.AddSession(opts =>
-            {
-                opts.Cookie.Expiration = TimeSpan.FromMinutes(20);
-                opts.IdleTimeout = TimeSpan.FromMinutes(20);
-            }
-                );
-
             services.ConfigureDatabase(Configuration);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
