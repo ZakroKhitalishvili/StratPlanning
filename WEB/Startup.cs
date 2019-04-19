@@ -17,7 +17,7 @@ using Application.Repositories;
 using Web;
 using Application.Mappers;
 
-namespace StratPlanning
+namespace Web
 {
     public class Startup
     {
@@ -36,7 +36,15 @@ namespace StratPlanning
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
+
             });
+
+            services.AddSession(opts =>
+            {
+                opts.Cookie.Expiration = TimeSpan.FromMinutes(20);
+                opts.IdleTimeout = TimeSpan.FromMinutes(20);
+            }
+                );
 
             services.ConfigureDatabase(Configuration);
 

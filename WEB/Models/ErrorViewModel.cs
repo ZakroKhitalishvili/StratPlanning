@@ -1,6 +1,6 @@
 using System;
 
-namespace StratPlanning.Models
+namespace Web.Models
 {
     public class ErrorViewModel
     {

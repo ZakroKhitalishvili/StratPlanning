@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Core.Constants;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
 {
-    public class WorksheetController : Controller
+    public class WorksheetController : AbstractController
     {
         public readonly IPlanRepository _planRepository;
 
-        public WorksheetController(IPlanRepository planRepository)
+        public WorksheetController(IPlanRepository planRepository, ILoggerManager loggerManager) : base(loggerManager)
         {
             _planRepository = planRepository;
         }

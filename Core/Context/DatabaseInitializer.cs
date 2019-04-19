@@ -27,6 +27,26 @@ namespace Core.Context
                 SeedPlans(context);
             }
 
+            if (!context.Users.Any())
+            {
+                SeedUsers(context);
+            }
+
+        }
+
+        private void SeedUsers(PlanningDbContext context)
+        {
+            var users = new User[]
+            {
+                new User
+                {
+                  UserName="admin",Email="admin@sp.com", Password="8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",FirstName=string.Empty,LastName=string.Empty,PositionId=null,Role=Roles.Admin, CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,CreatedBy=null, UpdatedBy=null
+                }
+            };
+
+            context.Users.AddRange(users);
+
+            context.SaveChanges();
         }
 
         private void SeedPlans(PlanningDbContext context)

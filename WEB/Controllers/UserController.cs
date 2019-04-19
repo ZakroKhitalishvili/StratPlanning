@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
 {
-    public class UserController : Controller
+    public class UserController : AbstractController
     {
+        public UserController(ILoggerManager loggerManager) : base(loggerManager)
+        {
+        }
+
         public IActionResult GetProfile(int userId)
         {
             return View("Profile");

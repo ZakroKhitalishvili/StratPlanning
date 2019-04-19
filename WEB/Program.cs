@@ -12,7 +12,7 @@ using Core.Context;
 using Microsoft.EntityFrameworkCore;
 using Application.Interfaces;
 
-namespace StratPlanning
+namespace Web
 {
     public class Program
     {

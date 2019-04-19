@@ -4,18 +4,15 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using StratPlanning.Models;
 using Application.Interfaces;
+using Web.Models;
 
-namespace StratPlanning.Controllers
+namespace Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : AbstractController
     {
-        private readonly ILoggerManager _loggerManager;
-
-        public HomeController(ILoggerManager loggerManager)
+        public HomeController(ILoggerManager loggerManager):base(loggerManager)
         {
-            _loggerManager = loggerManager;
         }
 
         public IActionResult Index()
