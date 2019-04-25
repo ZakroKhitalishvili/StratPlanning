@@ -6,26 +6,36 @@ using Core.Configurations.Extensions;
 
 namespace Core.Configurations
 {
-    class StepAnswerConfiguration : IEntityTypeConfiguration<StepAnswer>
+    class StepTaskAnswerConfiguration : IEntityTypeConfiguration<StepTaskAnswer>
     {
-        public void Configure(EntityTypeBuilder<StepAnswer> builder)
+        public void Configure(EntityTypeBuilder<StepTaskAnswer> builder)
         {
 
-            builder.Property(x => x.Step)
+            builder.Property(x => x.Email)
                 .IsRequired()
                 .HasMaxLength(EntityConfigs.TextMaxLength);
 
-            builder.Property(x => x.IsSubmitted)
+            builder.Property(x => x.FirstName)
                .IsRequired()
-               .HasDefaultValue(false);
+               .HasMaxLength(EntityConfigs.TextMaxLength);
+
+            builder.Property(x => x.LastName)
+               .IsRequired()
+               .HasMaxLength(EntityConfigs.TextMaxLength);
 
             builder.Property(x => x.IsFinal)
                .IsRequired()
                .HasDefaultValue(false);
 
             builder.HasOne(x => x.UserToPlan)
-               .WithMany(s => s.StepAnswers)
+               .WithMany(s => s.StepTaskAnswers)
                .HasForeignKey(x => x.UserToPlanId)
+               .IsRequired()
+               .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(x => x.StepTask)
+               .WithMany(s => s.StepTaskAnswers)
+               .HasForeignKey(x => x.StepTaskId)
                .IsRequired()
                .OnDelete(DeleteBehavior.Restrict);
 

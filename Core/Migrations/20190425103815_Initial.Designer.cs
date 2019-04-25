@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Core.Migrations
 {
     [DbContext(typeof(PlanningDbContext))]
-    [Migration("20190418075846_Initial")]
+    [Migration("20190425103815_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,19 +33,15 @@ namespace Core.Migrations
 
                     b.Property<int?>("CreatedBy");
 
-                    b.Property<bool?>("IsFinal")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(false);
-
                     b.Property<int>("QuestionId");
 
                     b.Property<int?>("ResourceId");
 
+                    b.Property<int>("StepAnswerId");
+
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int?>("UpdatedBy");
-
-                    b.Property<int>("UserToPlanId");
 
                     b.HasKey("Id");
 
@@ -55,7 +51,7 @@ namespace Core.Migrations
                         .IsUnique()
                         .HasFilter("[ResourceId] IS NOT NULL");
 
-                    b.HasIndex("UserToPlanId");
+                    b.HasIndex("StepAnswerId");
 
                     b.ToTable("BooleanAnswers");
                 });
@@ -124,15 +120,9 @@ namespace Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<int?>("CreatedBy");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(500);
-
-                    b.Property<int>("PlanId");
 
                     b.Property<string>("Step")
                         .IsRequired()
@@ -149,8 +139,6 @@ namespace Core.Migrations
                     b.Property<int>("VideoId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PlanId");
 
                     b.HasIndex("VideoId")
                         .IsUnique();
@@ -175,8 +163,6 @@ namespace Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(false);
 
-                    b.Property<bool?>("IsFinal");
-
                     b.Property<int>("IssueId");
 
                     b.Property<string>("Option")
@@ -185,11 +171,11 @@ namespace Core.Migrations
 
                     b.Property<int>("QuestionId");
 
+                    b.Property<int>("StepAnswerId");
+
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int?>("UpdatedBy");
-
-                    b.Property<int>("UserToPlanId");
 
                     b.HasKey("Id");
 
@@ -197,7 +183,7 @@ namespace Core.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.HasIndex("UserToPlanId");
+                    b.HasIndex("StepAnswerId");
 
                     b.ToTable("IssueOptionAnswers");
                 });
@@ -308,19 +294,15 @@ namespace Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(false);
 
-                    b.Property<bool?>("IsFinal")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(false);
-
                     b.Property<int>("IssueOptionAnswerId");
 
                     b.Property<int>("QuestionId");
 
+                    b.Property<int>("StepAnswerId");
+
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int?>("UpdatedBy");
-
-                    b.Property<int>("UserToPlanId");
 
                     b.HasKey("Id");
 
@@ -329,7 +311,7 @@ namespace Core.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.HasIndex("UserToPlanId");
+                    b.HasIndex("StepAnswerId");
 
                     b.ToTable("PreparingAnswers");
                 });
@@ -412,21 +394,17 @@ namespace Core.Migrations
 
                     b.Property<int?>("CreatedBy");
 
-                    b.Property<bool?>("IsFinal")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(false);
-
                     b.Property<int?>("IssueId");
 
                     b.Property<int?>("OptionId");
 
                     b.Property<int>("QuestionId");
 
+                    b.Property<int>("StepAnswerId");
+
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int?>("UpdatedBy");
-
-                    b.Property<int>("UserToPlanId");
 
                     b.HasKey("Id");
 
@@ -436,7 +414,7 @@ namespace Core.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.HasIndex("UserToPlanId");
+                    b.HasIndex("StepAnswerId");
 
                     b.ToTable("SelectAnswers");
                 });
@@ -453,21 +431,17 @@ namespace Core.Migrations
 
                     b.Property<int?>("Grade");
 
-                    b.Property<bool?>("IsFinal")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(false);
-
                     b.Property<int>("Priority");
 
                     b.Property<int>("QuestionId");
 
                     b.Property<int>("StakeholderId");
 
+                    b.Property<int>("StepAnswerId");
+
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int?>("UpdatedBy");
-
-                    b.Property<int>("UserToPlanId");
 
                     b.HasKey("Id");
 
@@ -475,7 +449,7 @@ namespace Core.Migrations
 
                     b.HasIndex("StakeholderId");
 
-                    b.HasIndex("UserToPlanId");
+                    b.HasIndex("StepAnswerId");
 
                     b.ToTable("StakeholderRatingAnswers");
                 });
@@ -511,22 +485,17 @@ namespace Core.Migrations
 
                     b.Property<int?>("CreatedBy");
 
-                    b.Property<DateTime>("Date");
-
-                    b.Property<bool>("IsCompleted")
+                    b.Property<bool>("IsFinal")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(false);
 
-                    b.Property<bool?>("IsFinal")
+                    b.Property<bool>("IsSubmitted")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(false);
 
-                    b.Property<int>("QuestionId");
+                    b.Property<int?>("QuestionId");
 
-                    b.Property<int>("Remind");
-
-                    b.Property<string>("Step")
-                        .IsRequired()
+                    b.Property<int>("Step")
                         .HasMaxLength(50);
 
                     b.Property<DateTime>("UpdatedAt");
@@ -579,6 +548,81 @@ namespace Core.Migrations
                     b.ToTable("StepBlocks");
                 });
 
+            modelBuilder.Entity("Core.Entities.StepTask", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<int?>("CreatedBy");
+
+                    b.Property<bool>("IsCompleted");
+
+                    b.Property<int>("PlanId");
+
+                    b.Property<int?>("Remind");
+
+                    b.Property<DateTime?>("Schedule");
+
+                    b.Property<int>("Step")
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime>("UpdatedAt");
+
+                    b.Property<int?>("UpdatedBy");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlanId");
+
+                    b.ToTable("StepTask");
+                });
+
+            modelBuilder.Entity("Core.Entities.StepTaskAnswer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<int?>("CreatedBy");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<bool>("IsFinal")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<int>("StepTaskId");
+
+                    b.Property<DateTime>("UpdatedAt");
+
+                    b.Property<int?>("UpdatedBy");
+
+                    b.Property<int>("UserToPlanId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StepTaskId");
+
+                    b.HasIndex("UserToPlanId");
+
+                    b.ToTable("StepTaskAnswer");
+                });
+
             modelBuilder.Entity("Core.Entities.StrategicIssueAnswer", b =>
                 {
                     b.Property<int>("Id")
@@ -592,10 +636,6 @@ namespace Core.Migrations
                     b.Property<string>("Goal")
                         .IsRequired()
                         .HasMaxLength(500);
-
-                    b.Property<bool?>("IsFinal")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(false);
 
                     b.Property<int>("IssueId");
 
@@ -611,11 +651,11 @@ namespace Core.Migrations
                         .IsRequired()
                         .HasMaxLength(500);
 
+                    b.Property<int>("StepAnswerId");
+
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int?>("UpdatedBy");
-
-                    b.Property<int>("UserToPlanId");
 
                     b.Property<string>("Why")
                         .IsRequired()
@@ -627,7 +667,7 @@ namespace Core.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.HasIndex("UserToPlanId");
+                    b.HasIndex("StepAnswerId");
 
                     b.ToTable("StrategicIssueAnswers");
                 });
@@ -642,10 +682,6 @@ namespace Core.Migrations
 
                     b.Property<int?>("CreatedBy");
 
-                    b.Property<bool?>("IsFinal")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(false);
-
                     b.Property<bool>("IsIssue")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(false);
@@ -656,6 +692,8 @@ namespace Core.Migrations
 
                     b.Property<int>("QuestionId");
 
+                    b.Property<int>("StepAnswerId");
+
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasMaxLength(500);
@@ -664,13 +702,11 @@ namespace Core.Migrations
 
                     b.Property<int?>("UpdatedBy");
 
-                    b.Property<int>("UserToPlanId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("QuestionId");
 
-                    b.HasIndex("UserToPlanId");
+                    b.HasIndex("StepAnswerId");
 
                     b.ToTable("TextAnswers");
                 });
@@ -711,10 +747,6 @@ namespace Core.Migrations
 
                     b.Property<int?>("UpdatedBy");
 
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
                     b.HasKey("Id");
 
                     b.HasIndex("PositionId");
@@ -753,11 +785,15 @@ namespace Core.Migrations
 
                     b.Property<int>("PlanId");
 
+                    b.Property<int?>("PositionId");
+
                     b.Property<int>("UserId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PlanId");
+
+                    b.HasIndex("PositionId");
 
                     b.HasIndex("UserId");
 
@@ -776,9 +812,9 @@ namespace Core.Migrations
                         .HasForeignKey("Core.Entities.BooleanAnswer", "ResourceId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Core.Entities.UserToPlan", "UserToPlan")
+                    b.HasOne("Core.Entities.StepAnswer", "StepAnswer")
                         .WithMany("BooleanAnswers")
-                        .HasForeignKey("UserToPlanId")
+                        .HasForeignKey("StepAnswerId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -792,11 +828,6 @@ namespace Core.Migrations
 
             modelBuilder.Entity("Core.Entities.Introduction", b =>
                 {
-                    b.HasOne("Core.Entities.Plan", "Plan")
-                        .WithMany("Introductions")
-                        .HasForeignKey("PlanId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Core.Entities.File", "Video")
                         .WithOne("Introduction")
                         .HasForeignKey("Core.Entities.Introduction", "VideoId")
@@ -815,9 +846,9 @@ namespace Core.Migrations
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Core.Entities.UserToPlan", "UserToPlan")
+                    b.HasOne("Core.Entities.StepAnswer", "StepAnswer")
                         .WithMany("IssueOptionAnswers")
-                        .HasForeignKey("UserToPlanId")
+                        .HasForeignKey("StepAnswerId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -854,9 +885,9 @@ namespace Core.Migrations
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Core.Entities.UserToPlan", "UserToPlan")
+                    b.HasOne("Core.Entities.StepAnswer", "StepAnswer")
                         .WithMany("PreparingAnswers")
-                        .HasForeignKey("UserToPlanId")
+                        .HasForeignKey("StepAnswerId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -885,9 +916,9 @@ namespace Core.Migrations
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Core.Entities.UserToPlan", "UserToPlan")
+                    b.HasOne("Core.Entities.StepAnswer", "StepAnswer")
                         .WithMany("SelectAnswers")
-                        .HasForeignKey("UserToPlanId")
+                        .HasForeignKey("StepAnswerId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -903,9 +934,9 @@ namespace Core.Migrations
                         .HasForeignKey("StakeholderId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Core.Entities.UserToPlan", "UserToPlan")
+                    b.HasOne("Core.Entities.StepAnswer", "StepAnswer")
                         .WithMany("StakeholderRatingAnswers")
-                        .HasForeignKey("UserToPlanId")
+                        .HasForeignKey("StepAnswerId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -924,13 +955,33 @@ namespace Core.Migrations
 
             modelBuilder.Entity("Core.Entities.StepAnswer", b =>
                 {
-                    b.HasOne("Core.Entities.Question", "Question")
+                    b.HasOne("Core.Entities.Question")
                         .WithMany("StepAnswers")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("QuestionId");
 
                     b.HasOne("Core.Entities.UserToPlan", "UserToPlan")
                         .WithMany("StepAnswers")
+                        .HasForeignKey("UserToPlanId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Core.Entities.StepTask", b =>
+                {
+                    b.HasOne("Core.Entities.Plan", "Plan")
+                        .WithMany()
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Core.Entities.StepTaskAnswer", b =>
+                {
+                    b.HasOne("Core.Entities.StepTask", "StepTask")
+                        .WithMany("StepTaskAnswers")
+                        .HasForeignKey("StepTaskId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Core.Entities.UserToPlan", "UserToPlan")
+                        .WithMany("StepTaskAnswers")
                         .HasForeignKey("UserToPlanId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
@@ -947,9 +998,9 @@ namespace Core.Migrations
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Core.Entities.UserToPlan", "UserToPlan")
+                    b.HasOne("Core.Entities.StepAnswer", "StepAnswer")
                         .WithMany("StrategicIssueAnswers")
-                        .HasForeignKey("UserToPlanId")
+                        .HasForeignKey("StepAnswerId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -960,9 +1011,9 @@ namespace Core.Migrations
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Core.Entities.UserToPlan", "UserToPlan")
+                    b.HasOne("Core.Entities.StepAnswer", "StepAnswer")
                         .WithMany("TextAnswers")
-                        .HasForeignKey("UserToPlanId")
+                        .HasForeignKey("StepAnswerId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -993,6 +1044,11 @@ namespace Core.Migrations
                         .WithMany("UsersToPlans")
                         .HasForeignKey("PlanId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Core.Entities.Dictionary", "Position")
+                        .WithMany("UsersToPlans")
+                        .HasForeignKey("PositionId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Core.Entities.User", "User")
                         .WithMany("UsersToPlans")

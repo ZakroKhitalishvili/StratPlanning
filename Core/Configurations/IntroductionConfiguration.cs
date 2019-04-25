@@ -25,23 +25,12 @@ namespace Core.Configurations
               .IsRequired()
               .HasMaxLength(EntityConfigs.TextAreaMaxLength);
 
-            builder.Property(x => x.CreatedAt)
-                .IsRequired();
-
             builder.Property(x => x.UpdatedAt)
                 .IsRequired();
-
-            builder.Property(x => x.CreatedBy)
-                .IsRequired(false);
 
             builder.Property(x => x.UpdatedBy)
                 .IsRequired(false);
 
-            builder.HasOne(x => x.Plan)
-                .WithMany(s => s.Introductions)
-                .HasForeignKey(s => s.PlanId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(x => x.Video)
                 .WithOne(s => s.Introduction)

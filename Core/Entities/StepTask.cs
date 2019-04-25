@@ -4,24 +4,22 @@ using System.Text;
 
 namespace Core.Entities
 {
-    public class Plan
+    public class StepTask
     {
-        public Plan()
+        public StepTask()
         {
-            UsersToPlans = new HashSet<UserToPlan>();
+            StepTaskAnswers = new HashSet<StepTaskAnswer>();
         }
 
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public int Step { get; set; }
 
-        public string Description { get; set; }
+        public int PlanId { get; set; }
 
-        public DateTime StartDate { get; set; }
+        public DateTime? Schedule { get; set; }
 
-        public DateTime? EndDate { get; set; }
-
-        public bool? IsWithActionPlan { get; set; }
+        public int? Remind { get; set; }
 
         public bool IsCompleted { get; set; }
 
@@ -33,7 +31,9 @@ namespace Core.Entities
 
         public int? UpdatedBy { get; set; }
 
-        public virtual ICollection<UserToPlan> UsersToPlans { get; set; }
+        public virtual Plan Plan { get; set; }
+
+        public virtual ICollection<StepTaskAnswer> StepTaskAnswers { get; set; }
 
     }
 }

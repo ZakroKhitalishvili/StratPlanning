@@ -11,6 +11,8 @@ namespace Core.Entities
             Users = new HashSet<User>();
 
             StakeholderRatingAnswersToDictionaries = new HashSet<StakeholderRatingAnswerToDictionary>();
+
+            UsersToPlans = new HashSet<UserToPlan>();
         }
 
         public int Id { get; set; }
@@ -33,5 +35,6 @@ namespace Core.Entities
 
         public virtual ICollection<StakeholderRatingAnswerToDictionary> StakeholderRatingAnswersToDictionaries { get; set; }
 
+        public virtual ICollection<UserToPlan> UsersToPlans { get; set; }
     }
 }

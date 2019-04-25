@@ -8,14 +8,9 @@ namespace Core.Entities
     {
         public UserToPlan()
         {
-            SelectAnswers = new HashSet<SelectAnswer>();
-            BooleanAnswers = new HashSet<BooleanAnswer>();
-            IssueOptionAnswers = new HashSet<IssueOptionAnswer>();
-            PreparingAnswers = new HashSet<PreparingAnswer>();
-            StakeholderRatingAnswers = new HashSet<StakeholderRatingAnswer>();
             StepAnswers = new HashSet<StepAnswer>();
-            StrategicIssueAnswers = new HashSet<StrategicIssueAnswer>();
-            TextAnswers = new HashSet<TextAnswer>();
+
+            StepTaskAnswers = new HashSet<StepTaskAnswer>();
         }
 
         public int Id { get; set; }
@@ -23,6 +18,8 @@ namespace Core.Entities
         public int UserId { get; set; }
 
         public int PlanId { get; set; }
+
+        public int? PositionId { get; set; }
 
         public virtual User User { get; set; }
 
@@ -32,21 +29,11 @@ namespace Core.Entities
 
         public virtual int? CreatedBy { get; set; }
 
-        public virtual ICollection<BooleanAnswer> BooleanAnswers { get; set; }
-
-        public virtual ICollection<IssueOptionAnswer> IssueOptionAnswers { get; set; }
-
-        public virtual ICollection<PreparingAnswer> PreparingAnswers { get; set; }
-
-        public virtual ICollection<StakeholderRatingAnswer> StakeholderRatingAnswers { get; set; }
-
         public virtual ICollection<StepAnswer> StepAnswers { get; set; }
 
-        public virtual ICollection<StrategicIssueAnswer> StrategicIssueAnswers { get; set; }
+        public virtual Dictionary Position { get; set; }
 
-        public virtual ICollection<TextAnswer> TextAnswers { get; set; }
-
-        public virtual ICollection<SelectAnswer> SelectAnswers { get; set; }
+        public virtual ICollection<StepTaskAnswer> StepTaskAnswers { get; set; }
 
     }
 }

@@ -28,6 +28,13 @@ namespace Core.Configurations
                .IsRequired()
                .OnDelete(DeleteBehavior.Cascade);
 
+
+            builder.HasOne(x => x.Position)
+               .WithMany(s => s.UsersToPlans)
+               .HasForeignKey(x => x.PositionId)
+               .IsRequired(false)
+               .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

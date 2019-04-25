@@ -2,32 +2,30 @@
 using Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Core.Configurations.Extensions;
+
 
 namespace Core.Configurations
 {
-    class StepAnswerConfiguration : IEntityTypeConfiguration<StepAnswer>
+    class StepTaskConfiguration : IEntityTypeConfiguration<StepTask>
     {
-        public void Configure(EntityTypeBuilder<StepAnswer> builder)
+        public void Configure(EntityTypeBuilder<StepTask> builder)
         {
+            builder.Property(x => x.Step)
+                .IsRequired()
+                .HasMaxLength(EntityConfigs.TextMaxLength);
+
+            builder.Property(x => x.Schedule)
+                .IsRequired(false);
 
             builder.Property(x => x.Step)
                 .IsRequired()
                 .HasMaxLength(EntityConfigs.TextMaxLength);
 
-            builder.Property(x => x.IsSubmitted)
-               .IsRequired()
-               .HasDefaultValue(false);
+            builder.Property(x => x.Remind)
+               .IsRequired(false);
 
-            builder.Property(x => x.IsFinal)
-               .IsRequired()
-               .HasDefaultValue(false);
-
-            builder.HasOne(x => x.UserToPlan)
-               .WithMany(s => s.StepAnswers)
-               .HasForeignKey(x => x.UserToPlanId)
-               .IsRequired()
-               .OnDelete(DeleteBehavior.Restrict);
+            builder.Property(x => x.IsCompleted)
+              .IsRequired();
 
             builder.Property(x => x.CreatedAt)
                 .IsRequired();

@@ -8,11 +8,9 @@ namespace Core.Entities
     {
         public int Id { get; set; }
 
-        public int UserToPlanId { get; set; }
-
         public int QuestionId { get; set; }
 
-        public bool? IsFinal { get; set; }
+        public int StepAnswerId { get; set; }
 
         public DateTime CreatedAt { get; set; }
 
@@ -22,9 +20,9 @@ namespace Core.Entities
 
         public int? UpdatedBy { get; set; }
 
-        public virtual UserToPlan UserToPlan { get; set; }
-
         public virtual Question Question { get; set; }
+
+        public StepAnswer StepAnswer { get; set; }
 
     }
 }

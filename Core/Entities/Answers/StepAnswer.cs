@@ -1,15 +1,55 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Core.Entities
 {
-    public class StepAnswer : AbstractAnswer
+    public class StepAnswer
     {
-        public string Step { get; set; }
 
-        public DateTime Date { get; set; }
+        public StepAnswer()
+        {
+            SelectAnswers = new HashSet<SelectAnswer>();
+            BooleanAnswers = new HashSet<BooleanAnswer>();
+            IssueOptionAnswers = new HashSet<IssueOptionAnswer>();
+            PreparingAnswers = new HashSet<PreparingAnswer>();
+            StakeholderRatingAnswers = new HashSet<StakeholderRatingAnswer>();
+            StrategicIssueAnswers = new HashSet<StrategicIssueAnswer>();
+            TextAnswers = new HashSet<TextAnswer>();
+        }
 
-        public int Remind { get; set; }
+        public int Id { get; set; }
 
-        public bool IsCompleted { get; set; }
+        public int UserToPlanId { get; set; }
+
+        public int Step { get; set; }
+
+        public bool IsSubmitted { get; set; }
+
+        public bool IsFinal { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+
+        public DateTime UpdatedAt { get; set; }
+
+        public int? CreatedBy { get; set; }
+
+        public int? UpdatedBy { get; set; }
+
+        public virtual UserToPlan UserToPlan { get; set; }
+
+        public virtual ICollection<BooleanAnswer> BooleanAnswers { get; set; }
+
+        public virtual ICollection<IssueOptionAnswer> IssueOptionAnswers { get; set; }
+
+        public virtual ICollection<PreparingAnswer> PreparingAnswers { get; set; }
+
+        public virtual ICollection<StakeholderRatingAnswer> StakeholderRatingAnswers { get; set; }
+
+        public virtual ICollection<StrategicIssueAnswer> StrategicIssueAnswers { get; set; }
+
+        public virtual ICollection<TextAnswer> TextAnswers { get; set; }
+
+        public virtual ICollection<SelectAnswer> SelectAnswers { get; set; }
     }
 }

@@ -10,9 +10,6 @@ namespace Core.Configurations.Extensions
     {
         public static void  AnswersBaseConfigure<T> (this EntityTypeBuilder<T> builder) where T:AbstractAnswer
         {
-            builder.Property(x => x.IsFinal)
-               .IsRequired(false)
-               .HasDefaultValue(false);
 
             builder.Property(x => x.CreatedAt)
                 .IsRequired();

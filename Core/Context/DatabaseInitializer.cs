@@ -9,6 +9,10 @@ namespace Core.Context
 {
     public class DatabaseInitializer
     {
+        private User[] Users { get; set; }
+        private Plan[] Plans { get; set; }
+        private StepBlock[] Blocks { get; set; }
+
         public static void Initialize(PlanningDbContext context)
         {
             var initializer = new DatabaseInitializer();
@@ -17,6 +21,11 @@ namespace Core.Context
 
         private void Seed(PlanningDbContext context)
         {
+            if (!context.Users.Any())
+            {
+                SeedUsers(context);
+            }
+
             if (!context.StepBlocks.Any())
             {
                 SeedPredepartureStep(context);
@@ -27,46 +36,51 @@ namespace Core.Context
                 SeedPlans(context);
             }
 
-            if (!context.Users.Any())
-            {
-                SeedUsers(context);
-            }
+            context.SaveChanges();
 
         }
 
         private void SeedUsers(PlanningDbContext context)
         {
-            var users = new User[]
+            Users = new User[]
             {
                 new User
                 {
-                  UserName="admin",Email="admin@sp.com", Password="8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",FirstName=string.Empty,LastName=string.Empty,PositionId=null,Role=Roles.Admin, CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,CreatedBy=null, UpdatedBy=null
+                 Email="admin@sp.com", Password="8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",FirstName=string.Empty,LastName=string.Empty,PositionId=null,Role=Roles.Admin, CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,CreatedBy=null, UpdatedBy=null
                 }
             };
 
-            context.Users.AddRange(users);
+            context.Users.AddRange(Users);
 
-            context.SaveChanges();
         }
 
         private void SeedPlans(PlanningDbContext context)
         {
-            var plans = new Plan[]
+            Plans = new Plan[]
             {
                 new Plan
                 {
-                    Name="Initial",Description="Initially generated plan",CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,CreatedBy=null, UpdatedBy=null,EndDate=null,IsCompleted=false,IsWithActionPlan=null,StartDate=DateTime.Now
+                    Name="Initial",Description="Initially generated plan",CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,CreatedBy=null, UpdatedBy=null,EndDate=null,IsCompleted=false,IsWithActionPlan=null,StartDate=DateTime.Now,
+                },
+                 new Plan
+                {
+                    Name="Party Goals Planning",Description="Initially generated plan",CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,CreatedBy=null, UpdatedBy=null,EndDate=null,IsCompleted=false,IsWithActionPlan=null,StartDate=DateTime.Now,
                 }
             };
 
-            context.Plans.AddRange(plans);
+            foreach (var plan in Plans)
+            {
+                foreach (var user in Users)
+                    plan.UsersToPlans.Add(new UserToPlan { User = user });
+            }
 
-            context.SaveChanges();
+            context.Plans.AddRange(Plans);
+
         }
 
         private void SeedPredepartureStep(PlanningDbContext context)
         {
-            var blocks = new StepBlock[]
+            Blocks = new StepBlock[]
             {
                 new StepBlock{
                     Title ="Ready for takeoff?",
@@ -138,9 +152,8 @@ namespace Core.Context
 
             };
 
-            context.StepBlocks.AddRange(blocks);
+            context.StepBlocks.AddRange(Blocks);
 
-            context.SaveChanges();
         }
     }
 }

@@ -17,10 +17,6 @@ namespace Core.Configurations
                .IsRequired()
                .HasMaxLength(EntityConfigs.TextMaxLength);
 
-            builder.Property(x => x.UserName)
-               .IsRequired()
-               .HasMaxLength(EntityConfigs.TextMaxLength);
-
             builder.Property(x => x.Email)
                .IsRequired()
                .HasMaxLength(EntityConfigs.TextMaxLength);
