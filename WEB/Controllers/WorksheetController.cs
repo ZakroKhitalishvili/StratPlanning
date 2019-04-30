@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Core.Constants;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers

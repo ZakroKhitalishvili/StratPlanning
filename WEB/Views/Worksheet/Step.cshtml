@@ -1,5 +1,5 @@
 ﻿@model Application.DTOs.PlanStepDTO
-@using Resources
+@using Core.Constants
 
 @{
     ViewData["Title"] = "Worksheet";
@@ -63,13 +63,23 @@
         </div>
         <form class="m-form m-form--fit m-form--label-align-left">
 
+
             @foreach (var stepBlock in Model.StepBlocks)
             {
                 <partial name="~/Views/Worksheet/Partials/_StepBlock.cshtml" model="stepBlock" />
             }
 
+
+            @if (Model.Step == Steps.Predeparture)
+            {
+                <partial name="~/Views/Worksheet/Partials/_StepTasks.cshtml" />
+            }
+
             <div class="form-group m-form__group m--img-centered">
-                <button type="button" class="btn m-btn--pill    btn-sp">
+                <button type="button" class="btn m-btn--pill    btn-sp m--margin-right-10">
+                    Save
+                </button>
+                <button type="button" class="btn m-btn--pill    btn-sp user-submit-btn">
                     Submit
                 </button>
             </div>

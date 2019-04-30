@@ -12,7 +12,7 @@
             Sign In
         </h3>
     </div>
-    <form asp-action="Login" class="m-login__form m-form" method="post">
+    <form asp-controller="Auth" asp-action="Login" class="m-login__form m-form" method="post">
         <input asp-for="ReturnUrl" type="hidden">
         <div class="form-group m-form__group">
             <div class="text-danger" asp-validation-summary="ModelOnly"></div>
@@ -31,13 +31,13 @@
         <div class="row m-login__form-sub">
             <div class="col m--align-left m-login__form-left">
                 <label class="m-checkbox checkbox-sp  m-checkbox--solid">
-                    <input type="checkbox" name="remember">
+                    <input asp-for="RememberMe" type="checkbox">
                     Remember me
                     <span></span>
                 </label>
             </div>
             <div class="col m--align-right m-login__form-right">
-                <a href="javascript:;" id="m_login_forget_password" class="m-link">
+                <a asp-controller="Auth" asp-action="ForgotPassword" class="m-link">
                     Forget Password ?
                 </a>
             </div>

@@ -6,8 +6,7 @@ using Core.Constants;
 namespace Application.DTOs
 {
     public class UserLoginDTO
-    {
-        
+    {    
         [Required]
         [EmailAddress]
         [MaxLength(EntityConfigs.TextMaxLength)]
@@ -16,6 +15,8 @@ namespace Application.DTOs
         [Required]
         [MaxLength(EntityConfigs.TextMaxLength)]
         public string Password { get; set; }
+
+        public bool RememberMe { get; set; }
 
         public string ReturnUrl { get; set; }
     }

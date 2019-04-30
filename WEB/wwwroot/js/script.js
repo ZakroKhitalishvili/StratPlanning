@@ -4,9 +4,20 @@ $(document).ready(function () {
     ///////
     //shared
     //
+    $('form').on('keyup keypress', function (e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
     $('.datepicker').datepicker();
 
     $('.m-select2').select2();
+
+    $('.sp-tooltip').tooltip();
+
 
     $('.select2-without-search').select2({
         minimumResultsForSearch: Infinity
@@ -23,6 +34,9 @@ $(document).ready(function () {
             return $('input', td).val();
         });
     };
+
+    $('.user-submit-btn').click(submitConfirm);
+
 
     $('.dropzone-sp').dropzone(
         {
@@ -190,6 +204,12 @@ $(document).ready(function () {
 
     });
 
+    $(".tag-select").select2({
+
+        tags: true,
+        tokenSeparators: [","]
+    });
+
 
     ///////////
     //// selects speficy-other event
@@ -220,6 +240,34 @@ function deleteConfirm() {
     return swal({
         icon: "warning",
         title: "Are you sure?",
+        buttons:
+        {
+            confirm:
+            {
+                text: "Yes",
+                value: true,
+                visible: true,
+                className: "btn btn-sp m-btn",
+                closeModal: true,
+            },
+            cancel:
+            {
+                text: "No",
+                value: false,
+                visible: true,
+                className: "btn btn-secondary m-btn",
+                closeModal: true,
+            }
+        }
+    }
+    );
+}
+
+function submitConfirm() {
+    return swal({
+        icon: "warning",
+        title: "Are you sure?",
+        text: "You won't be able to edit this step.",
         buttons:
         {
             confirm:

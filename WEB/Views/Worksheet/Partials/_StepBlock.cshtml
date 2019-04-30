@@ -35,6 +35,11 @@
                 <partial name="~/Views/Worksheet/Partials/Questions/_MultiSelectQuestion.cshtml" model="question" />
             }
 
+            if (question.Type == QuestionTypes.TagMultiSelect)
+            {
+                <partial name="~/Views/Worksheet/Partials/Questions/_TagMultiSelectQuestion.cshtml" model="question" />
+            }
+
             if (question.Type == QuestionTypes.PlanTypeSelect)
             {
                 <partial name="~/Views/Worksheet/Partials/Questions/_PlanTypeSelectQuestion.cshtml" model="question" />

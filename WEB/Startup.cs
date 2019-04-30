@@ -8,14 +8,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Core.Context;
-using Application.Interfaces;
-using Application.Logger;
-using Microsoft.EntityFrameworkCore;
-using Application.Interfaces.Repositories;
-using Application.Repositories;
-using Web;
 using Application.Mappers;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Web
 {
@@ -45,6 +39,8 @@ namespace Web
 
             services.AddLocalServices();
 
+            services.ConfigureAuthentication();
+
             MapperInitializer.Initialize();
 
         }
@@ -61,8 +57,11 @@ namespace Web
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseAuthentication();
+
+            app.UseStaticFiles();
+
 
             app.UseMvc(routes =>
             {

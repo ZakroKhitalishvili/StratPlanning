@@ -39,7 +39,7 @@
                             <div class="m-stack m-stack--ver m-stack--general m-stack--inline">
                                 <div class="m-stack__item m-stack__item--middle m-brand__logo">
                                     <a asp-controller="Home" asp-action="Index" class="m-brand__logo-wrapper">
-                                        <img alt="" src="~/img/logo_text.svg" />
+                                        <img alt="" src="~/img/strat_planning_logo.svg" />
                                     </a>
                                 </div>
                                 <div class="m-stack__item m-stack__item--middle m-brand__tools">
@@ -66,79 +66,83 @@
                                     <ul class="m-topbar__nav m-nav m-nav--inline">
                                         <li class="m-nav__item m-topbar__user-profile m-topbar__user-profile--img  m-dropdown m-dropdown--medium m-dropdown--arrow m-dropdown--header-bg-fill m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light"
                                             data-dropdown-toggle="click">
-                                            <a href="#" class="m-nav__link m-dropdown__toggle">
-                                                <span class="m-topbar__userpic m--hide">
-                                                    <img src="~/img/user4.jpg"
-                                                         class="m--img-rounded m--marginless m--img-centered" alt="" />
-                                                </span>
-                                                <span class="m-topbar__welcome">
-                                                    Hello,&nbsp;
-                                                </span>
-                                                <span class="m-topbar__username">
-                                                    Mark
-                                                </span>
-                                            </a>
-                                            <div class="m-dropdown__wrapper">
-                                                <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
-                                                <div class="m-dropdown__inner">
-                                                    <div class="m-dropdown__header m--align-center">
-                                                        <div class="m-card-user m-card-user--skin-light">
-                                                            <div class="m-card-user__pic">
-                                                                <img src="~/img/user4.jpg"
-                                                                     class="m--img-rounded m--marginless" alt="" />
-                                                            </div>
-                                                            <div class="m-card-user__details">
-                                                                <span class="m-card-user__name m--font-weight-500">
-                                                                    Mark Andre
-                                                                </span>
-                                                                <a href=""
-                                                                   class="m-card-user__email m--font-weight-300 m-link">
-                                                                    mark.andre@gmail.com
-                                                                </a>
+                                            @if (!User.Identity.IsAuthenticated)
+                                            {
+                                                <a asp-controller="Auth" asp-action="Login" class="m-nav__link">Login</a>
+                                            }
+                                            else
+                                            {
+                                                <a href="#" class="m-nav__link m-dropdown__toggle">
+                                                    <span class="m-topbar__welcome">
+                                                        Hello,&nbsp;
+                                                    </span>
+                                                    <span class="m-topbar__username">
+                                                        @User.Identity.Name
+                                                    </span>
+                                                </a>
+
+                                                <div class="m-dropdown__wrapper">
+                                                    <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
+                                                    <div class="m-dropdown__inner">
+                                                        <div class="m-dropdown__header m--align-center">
+                                                            <div class="m-card-user m-card-user--skin-light">
+                                                                @*<div class="m-card-user__pic">
+                                                                    <img src="~/img/user4.jpg"
+                                                                         class="m--img-rounded m--marginless" alt="" />
+                                                                </div>*@
+                                                                <div class="m-card-user__details">
+                                                                    <span class="m-card-user__name m--font-weight-500">
+                                                                       @User.Identity.Name
+                                                                    </span>
+                                                                    <span
+                                                                       class="m-card-user__email m--font-weight-300 m-link">
+                                                                        @User.FindFirst(System.Security.Claims.ClaimTypes.Email).Value
+                                                                    </span>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="m-dropdown__body">
-                                                        <div class="m-dropdown__content">
-                                                            <ul class="m-nav m-nav--skin-light">
-                                                                <li class="m-nav__section m--hide">
-                                                                    <span class="m-nav__section-text">
-                                                                        Section
-                                                                    </span>
-                                                                </li>
-                                                                <li class="m-nav__item">
-                                                                    <a asp-controller="User" asp-action="GetMyProfile" class="m-nav__link">
-                                                                        <i class="m-nav__link-icon flaticon-profile-1"></i>
-                                                                        <span class="m-nav__link-title">
-                                                                            <span class="m-nav__link-wrap">
-                                                                                <span class="m-nav__link-text">
-                                                                                    My Profile
+                                                        <div class="m-dropdown__body">
+                                                            <div class="m-dropdown__content">
+                                                                <ul class="m-nav m-nav--skin-light">
+                                                                    <li class="m-nav__section m--hide">
+                                                                        <span class="m-nav__section-text">
+                                                                            Section
+                                                                        </span>
+                                                                    </li>
+                                                                    <li class="m-nav__item">
+                                                                        <a asp-controller="User" asp-action="GetMyProfile" class="m-nav__link">
+                                                                            <i class="m-nav__link-icon flaticon-profile-1"></i>
+                                                                            <span class="m-nav__link-title">
+                                                                                <span class="m-nav__link-wrap">
+                                                                                    <span class="m-nav__link-text">
+                                                                                        My Profile
+                                                                                    </span>
                                                                                 </span>
                                                                             </span>
-                                                                        </span>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="m-nav__item">
-                                                                    <a asp-controller="User" asp-action="GetActivity" class="m-nav__link">
-                                                                        <i class="m-nav__link-icon flaticon-share"></i>
-                                                                        <span class="m-nav__link-text">
-                                                                            Activity
-                                                                        </span>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="m-nav__separator m-nav__separator--fit"></li>
-                                                                <li class="m-nav__separator m-nav__separator--fit"></li>
-                                                                <li class="m-nav__item">
-                                                                    <a href="login.html"
-                                                                       class="btn m-btn--pill m-btn m-btn--custom  m-btn--bolder btn-sp--secondary">
-                                                                        Logout
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="m-nav__item">
+                                                                        <a asp-controller="User" asp-action="GetActivity" class="m-nav__link">
+                                                                            <i class="m-nav__link-icon flaticon-share"></i>
+                                                                            <span class="m-nav__link-text">
+                                                                                Activity
+                                                                            </span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="m-nav__separator m-nav__separator--fit"></li>
+                                                                    <li class="m-nav__separator m-nav__separator--fit"></li>
+                                                                    <li class="m-nav__item">
+                                                                        <a asp-controller="Auth" asp-action="Logout"
+                                                                           class="btn m-btn--pill m-btn m-btn--custom  m-btn--bolder btn-sp--secondary">
+                                                                            Logout
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            }
                                         </li>
                                     </ul>
                                 </div>
@@ -250,6 +254,11 @@
                                 </a>
                             </span>
                         </div>
+                        <div class="m-stack__item m-stack__item--middle m-brand__logo text-center">
+                            <a href="index.html" class="m-brand__logo-wrapper">
+                                <img alt="" src="~/img/logo_text.svg" />
+                            </a>
+                        </div>
                         <div class="m-stack__item m-stack__item--right m-stack__item--middle m-stack__item--first">
                             <ul class="m-footer__nav m-nav m-nav--inline m--pull-right">
                                 <li class="m-nav__item">
@@ -285,7 +294,7 @@
     <!--begin::Base Scripts -->
     <script src="~/lib/jquery/jquery-3.3.1.min.js" type="text/javascript"></script>
     <script src="~/lib/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" type="text/javascript"></script>
     <script src="~/lib/bootstrap-notify/bootstrap-notify.min.js" type="text/javascript"></script>
     <script src="~/lib/sweetalert/sweetalert.min.js" type="text/javascript"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>

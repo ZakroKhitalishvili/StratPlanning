@@ -1,5 +1,7 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.DTOs;
+using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
+using AutoMapper;
 using Core.Context;
 using Core.Entities;
 using System;
@@ -18,11 +20,13 @@ namespace Application.Repositories
             _hashService = hashService;
         }
 
-        public bool AuthenticateUser(string email, string password)
+        public bool TryAuthentication(string email, string password,out UserDTO userDTO)
         {
             var hashedpassword = _hashService.Hash(password);
 
             var user = FindByCondition(x => x.Email == email && x.Password == hashedpassword).FirstOrDefault();
+
+            userDTO = Mapper.Map<UserDTO>(user);
 
             return user != null;
         }

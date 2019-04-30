@@ -12,6 +12,8 @@ namespace Core.Constants
 
         public const string MultiSelect = "MultiSelect";
 
+        public const string TagMultiSelect = "TagMultiSelect";
+
         public const string DetailedSelect = "DetailedSelect";
 
         public const string PlanTypeSelect = "PlanTypeSelect";
