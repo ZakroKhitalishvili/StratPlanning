@@ -63,12 +63,15 @@
         </div>
         <form class="m-form m-form--fit m-form--label-align-left">
 
+            @if (Model.Step == Steps.Predeparture)
+            {
+                <partial name="~/Views/Worksheet/Partials/_PlanningTeam.cshtml" model="Model"/>
+            }
 
             @foreach (var stepBlock in Model.StepBlocks)
             {
                 <partial name="~/Views/Worksheet/Partials/_StepBlock.cshtml" model="stepBlock" />
             }
-
 
             @if (Model.Step == Steps.Predeparture)
             {
@@ -92,4 +95,46 @@
     <script>
         $('#menu_worksheet').addClass('m-menu__item--active');
     </script>
+
+    @if(Model.Step==Steps.Predeparture)
+    {
+        <script>
+
+            $("form#add_user_to_plan_new").on('submit', function (e) {
+                e.preventDefault();
+
+                let formData = new FormData(document.querySelector('form#add_user_to_plan_new'));
+
+                //for (var pair of formData.entries()) {
+                //    console.log(pair[0] + ', ' + pair[1]);
+                //}
+
+                var formObject = {};
+                formData.forEach(function (value, key) {
+                    formObject[key] = value;
+                });
+
+                $.ajax(
+                    {
+                        url:'@Url.Action("AddNewUser","User")',
+                        method:"post",
+                        data: formObject,
+                        success: function (data, statusText, xhr) {
+                            if (xhr.status == 201) {
+                                alert("Sucessfully added");
+                            }
+
+                            $('form#add_user_to_plan_new').html(data);
+                        },
+                        error: function (xhr, statusText, error) {
+                            alert(xhr.statusText);
+                            console.log(error);
+                            console.log(statusText);
+                            console.log(xhr);
+                        }
+                    })
+            })
+
+        </script>
+    }
 }

@@ -16,6 +16,6 @@ namespace Application.DTOs
 
         public string Role { get; set; }
 
-        public string Position { get; set; }
+        public PositionDTO Position { get; set; }
     }
 }

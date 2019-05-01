@@ -20,16 +20,67 @@ namespace Application.Repositories
             _hashService = hashService;
         }
 
-        public bool TryAuthentication(string email, string password,out UserDTO userDTO)
+        public UserDTO AddNew(NewUserDTO newUser)
         {
-            var hashedpassword = _hashService.Hash(password);
+            var user = Mapper.Map<User>(newUser);
 
-            var user = FindByCondition(x => x.Email == email && x.Password == hashedpassword).FirstOrDefault();
+            user.Password = _hashService.Hash(user.Password);
+
+            if (FindByCondition(u => u.Email == user.Email).Any())
+            {
+                return null;
+            }
+
+            try
+            {
+                Create(user);
+                Save();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+            return Mapper.Map<UserDTO>(user);
+
+        }
+
+        public string GeneratePassword()
+        {
+            var random = new Random();
+
+            var length = 40;
+
+            var stringBuilder = new StringBuilder();
+
+            for (int i = 0; i < length; i++)
+            {
+                var sym=((char)random.Next('a', 'z' + 1)).ToString();
+                
+                if(random.Next(0,2)==0)
+                {
+                    sym = sym.ToUpper();
+                }
+
+                stringBuilder.Append(sym);
+            }
+
+            return stringBuilder.ToString();
+
+        }
+
+        public bool TryAuthentication(string email, string password, out UserDTO userDTO)
+        {
+            var hashedPassword = _hashService.Hash(password);
+
+            var user = FindByCondition(x => x.Email == email && x.Password == hashedPassword).FirstOrDefault();
 
             userDTO = Mapper.Map<UserDTO>(user);
 
             return user != null;
         }
+
+
 
     }
 }

@@ -9,5 +9,9 @@ namespace Application.Interfaces.Repositories
     public interface IUserRepository : IRepositoryBase<User>
     {
         bool TryAuthentication(string email, string password,out UserDTO user);
+
+        UserDTO AddNew(NewUserDTO user);
+
+        string GeneratePassword();
     }
 }

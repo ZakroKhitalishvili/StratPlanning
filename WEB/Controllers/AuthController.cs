@@ -44,7 +44,7 @@ namespace Web.Controllers
                         new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
                         new Claim(ClaimTypes.Role, user.Role),
                         new Claim(ClaimTypes.Email, user.Email),
-                        new Claim(CustomClaimTypes.Position, user.Position??string.Empty),
+                        new Claim(CustomClaimTypes.Position, user.Position?.Title??string.Empty),
                         new Claim(CustomClaimTypes.Id, user.Id.ToString())
                 };
 

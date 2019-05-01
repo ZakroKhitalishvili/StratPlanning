@@ -30,7 +30,7 @@ namespace Application.Mappers
                  .ForMember(
                       dest => dest.Position,
                          opt => opt.MapFrom(src =>
-                             src.Position.Title));
+                             src.Position));
 
             });
         }

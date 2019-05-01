@@ -26,7 +26,9 @@ namespace Web
             services.AddScoped<ILoggerManager, LoggerManager>();
             services.AddScoped<IPlanRepository, PlanRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IDictionaryRepository, DictionaryRepository>();
             services.AddScoped<IHashService, SHA256Service>();
+            services.AddScoped<IEmailService, EmailService>();
 
             return services;
         }
@@ -35,14 +37,13 @@ namespace Web
         {
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                    .AddCookie(options =>
-                   {
-                       options.SlidingExpiration = true;
-                       options.ReturnUrlParameter = "returnUrl";
+                   {      
                        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+                       options.SlidingExpiration = true;
                        options.LoginPath = "/Auth/Login";
-                       options.Cookie.IsEssential = true;
+                       options.ReturnUrlParameter = "returnUrl";
                        options.AccessDeniedPath = "/Auth/AccessDenied";
-
+                       options.Cookie.IsEssential = true;
                    });
 
             return services;

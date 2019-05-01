@@ -1,0 +1,44 @@
+﻿@model Application.DTOs.ExistingUserAddDTO
+@using Web.Helpers
+
+@{
+Layout=null;
+}
+
+
+<form class="m-form m-form--fit m-form--label-align-right" id="add_user_to_plan_existing">
+    <div class="m-portlet__body">
+        <div class="form-group m-form__group">
+            <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+        </div>
+        <div class="form-group m-form__group row">
+            <label for="example-text-input" class="col-2 col-form-label">
+                User
+            </label>
+            <div class="col-10">
+                <select asp-items="UserHelper.GetUsersSelectList(Context)" asp-for="Id" class="form-control m-select2" style="width:100%">
+                    <option value="">-- Specify --</option>
+                </select>
+            </div>
+            <span class="text-danger" asp-validation-for="Id"></span>
+        </div>
+        <div class="form-group m-form__group row">
+            <label for="example-text-input" class="col-2 col-form-label">
+                Position
+            </label>
+            <div class="col-10">
+                <select asp-items="UserHelper.GetPositionsSelectList(Context)" asp-for="PositionId" class="form-control m-select2" style="width:100%">
+                    <option value="">-- Specify --</option>
+                </select>
+            </div>
+            <span class="text-danger" asp-validation-for="PositionId"></span>
+        </div>
+    </div>
+    <div class="m-portlet__foot m-portlet__foot--fit">
+        <div class="m-form__actions pull-right">
+            <button type="submit" class="btn btn-sp m-btn m-btn--icon">
+                Add
+            </button>
+        </div>
+    </div>
+</form>

@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Web.Helpers
 {
-    public class Stephelper
+    public class StepHelper
     {
 
         public static IEnumerable<PlanStepDTO> GetStepList(HttpContext context)

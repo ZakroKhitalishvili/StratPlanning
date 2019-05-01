@@ -8,10 +8,12 @@ namespace Application.Interfaces.Repositories
     {
         void CreatePlan(Plan plan);
 
-        PlanStepDTO GetStep(string stepIndex);
+        PlanStepDTO GetStep(string stepIndex, int planId);
 
         IEnumerable<PlanStepDTO> GetStepList();
 
         IEnumerable<PlanDTO> GetPlanList();
+
+        bool AddUserToPlan(int userId, int planId,int positionId);
     }
 }

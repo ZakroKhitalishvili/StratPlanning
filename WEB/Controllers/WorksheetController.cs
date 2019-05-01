@@ -15,9 +15,9 @@ namespace Web.Controllers
             _planRepository = planRepository;
         }
 
-        public IActionResult GetStep(string stepIndex)
+        public IActionResult GetStep(string stepIndex,int planId)
         {
-            var stepDTO = _planRepository.GetStep(stepIndex);
+            var stepDTO = _planRepository.GetStep(stepIndex, planId);
 
             ViewBag.Steps = _planRepository.GetStepList();
 
@@ -38,7 +38,7 @@ namespace Web.Controllers
 
         public IActionResult GetPlan(int id)
         {
-            return RedirectToAction("GetStep", new { stepIndex = Steps.Predeparture });
+            return RedirectToAction("GetStep", new { stepIndex = Steps.Predeparture, planId=id });
         }
     }
 }
