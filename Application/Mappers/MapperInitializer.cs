@@ -32,6 +32,23 @@ namespace Application.Mappers
                          opt => opt.MapFrom(src =>
                              src.Position));
 
+                cfg.CreateMap<NewUserDTO, User>()
+                .ForMember(
+                     dest => dest.Id,
+                        opt => opt.Ignore())
+                .ForMember(
+                     dest => dest.CreatedAt,
+                        opt => opt.Ignore())
+                .ForMember(
+                     dest => dest.CreatedBy,
+                        opt => opt.Ignore())
+                .ForMember(
+                     dest => dest.UpdatedAt,
+                        opt => opt.Ignore())
+               .ForMember(
+                     dest => dest.UpdatedBy,
+                        opt => opt.Ignore());
+
             });
         }
     }

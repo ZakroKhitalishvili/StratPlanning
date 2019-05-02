@@ -15,5 +15,10 @@ namespace Application.Interfaces.Repositories
         IEnumerable<PlanDTO> GetPlanList();
 
         bool AddUserToPlan(int userId, int planId,int positionId);
+
+        bool RemoveUserFromPlan(int userId, int planId);
+
+        IEnumerable<UserPlanningMemberDTO> GetPlanningTeam(int planId);
+     
     }
 }

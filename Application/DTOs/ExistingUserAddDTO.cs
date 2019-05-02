@@ -8,10 +8,10 @@ namespace Application.DTOs
     public class ExistingUserAddDTO
     {
         [Required]
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         [Required]
-        public int PositionId { get; set; }
+        public int? PositionId { get; set; }
 
         [Required]
         public int PlanId { get; set; }

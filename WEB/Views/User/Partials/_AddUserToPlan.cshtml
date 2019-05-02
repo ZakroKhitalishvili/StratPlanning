@@ -1,4 +1,5 @@
-﻿
+﻿@model Application.DTOs.AddUserToPlanDTO
+  
 @{
     Layout = null;
 }
@@ -22,10 +23,10 @@
     </div>
     <div class="tab-content">
         <div class="tab-pane active show" id="add_user_to_plan_existing_tab">
-            <partial name="~/Views/User/Partials/_AddExistingUser.cshtml" view-data="ViewData" model="new ExistingUserAddDTO()"/>
+            <partial name="~/Views/User/Partials/_AddExistingUser.cshtml" view-data="ViewData" model="Model"/>
         </div>
         <div class="tab-pane" id="add_user_to_plan_new_tab">
-            <partial name="~/Views/User/Partials/_AddNewUser.cshtml" view-data="ViewData" model="new NewUserDTO()"/>
+            <partial name="~/Views/User/Partials/_AddNewUser.cshtml" view-data="ViewData" model="Model"/>
         </div>
     </div>
 </div>

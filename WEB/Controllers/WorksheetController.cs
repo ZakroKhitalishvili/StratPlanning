@@ -1,8 +1,11 @@
-﻿using Application.Interfaces;
+﻿using Application.DTOs;
+using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Core.Constants;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace Web.Controllers
 {
@@ -39,6 +42,21 @@ namespace Web.Controllers
         public IActionResult GetPlan(int id)
         {
             return RedirectToAction("GetStep", new { stepIndex = Steps.Predeparture, planId=id });
+        }
+
+        [HttpPost]
+        public IActionResult GetPlanningTeam(int planId)
+        {
+            if(planId<=0)
+            {
+                Response.StatusCode = StatusCodes.Status400BadRequest;
+
+                return PartialView("~/Views/Worksheet/Partials/_PlanningTeam.cshtml",Enumerable.Empty<UserPlanningMemberDTO>());
+            }
+
+            var planningTeam = _planRepository.GetPlanningTeam(planId);
+
+            return PartialView("~/Views/Worksheet/Partials/_PlanningTeam.cshtml", planningTeam);
         }
     }
 }

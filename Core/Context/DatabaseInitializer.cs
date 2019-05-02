@@ -12,6 +12,8 @@ namespace Core.Context
         private User[] Users { get; set; }
         private Plan[] Plans { get; set; }
         private StepBlock[] Blocks { get; set; }
+        private Dictionary[] Positions { get; set; }
+        private PlanningDbContext Context { get; set; }
 
         public static void Initialize(PlanningDbContext context)
         {
@@ -21,26 +23,49 @@ namespace Core.Context
 
         private void Seed(PlanningDbContext context)
         {
-            if (!context.Users.Any())
+            Context = context;
+            if (!Context.Users.Any())
             {
-                SeedUsers(context);
+                SeedUsers();
             }
 
-            if (!context.StepBlocks.Any())
+            if (!Context.StepBlocks.Any())
             {
-                SeedPredepartureStep(context);
+                SeedPredepartureStep();
             }
 
-            if (!context.Plans.Any())
+            if (!Context.Plans.Any())
             {
-                SeedPlans(context);
+                SeedPlans();
             }
 
-            context.SaveChanges();
+            if (!Context.Dictionaries.Any(x => x.HasPosition))
+            {
+                SeedPositions();
+            }
+
+            Context.SaveChanges();
 
         }
 
-        private void SeedUsers(PlanningDbContext context)
+        private void SeedPositions()
+        {
+            Positions = new Dictionary[]
+            {
+                new Dictionary
+                {
+                    HasPosition=true,Title="Chairman",CreatedAt=DateTime.Now, CreatedBy=null,UpdatedAt=DateTime.Now,UpdatedBy=null
+                },
+                new Dictionary
+                {
+                    HasPosition=true,Title="Advisor",CreatedAt=DateTime.Now, CreatedBy=null,UpdatedAt=DateTime.Now,UpdatedBy=null
+                }
+            };
+
+            Context.Dictionaries.AddRange(Positions);
+        }
+
+        private void SeedUsers()
         {
             Users = new User[]
             {
@@ -50,11 +75,11 @@ namespace Core.Context
                 }
             };
 
-            context.Users.AddRange(Users);
+            Context.Users.AddRange(Users);
 
         }
 
-        private void SeedPlans(PlanningDbContext context)
+        private void SeedPlans()
         {
             Plans = new Plan[]
             {
@@ -74,11 +99,11 @@ namespace Core.Context
                     plan.UsersToPlans.Add(new UserToPlan { User = user });
             }
 
-            context.Plans.AddRange(Plans);
+            Context.Plans.AddRange(Plans);
 
         }
 
-        private void SeedPredepartureStep(PlanningDbContext context)
+        private void SeedPredepartureStep()
         {
             Blocks = new StepBlock[]
             {
@@ -151,7 +176,7 @@ namespace Core.Context
 
             };
 
-            context.StepBlocks.AddRange(Blocks);
+            Context.StepBlocks.AddRange(Blocks);
 
         }
     }

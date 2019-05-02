@@ -12,5 +12,7 @@ namespace Application.DTOs
 
         public IList<StepBlockDTO> StepBlocks { get; set; }
 
+        public IEnumerable<UserPlanningMemberDTO> PlanningTeam { get; set; }
+
     }
 }

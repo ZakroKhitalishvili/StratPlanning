@@ -47,6 +47,14 @@ namespace Application.Repositories
             return FindAll().Select(p => Mapper.Map<PlanDTO>(p));
         }
 
+        public IEnumerable<UserPlanningMemberDTO> GetPlanningTeam(int planId)
+        {
+            return Context.UsersToPlans
+                .Where(x => x.PlanId == planId).Include(x => x.User).Include(x => x.Position)
+                .Select(x => new UserPlanningMemberDTO { Id = x.User.Id, FullName = $"{x.User.FirstName} {x.User.LastName}", Position = x.Position.Title })
+                .AsEnumerable();
+        }
+
         public PlanStepDTO GetStep(string stepIndex, int planId)
         {
             var blocks = Context.StepBlocks.Where(x => x.Step == stepIndex)
@@ -56,11 +64,14 @@ namespace Application.Repositories
 
             var blocksDTO = blocks.Select(x => Mapper.Map<StepBlockDTO>(x)).ToList();
 
+
+
             var stepDTO = new PlanStepDTO
             {
                 PlanId = planId,
                 Step = stepIndex,
-                StepBlocks = blocksDTO
+                StepBlocks = blocksDTO,
+                PlanningTeam = GetPlanningTeam(planId)
             };
 
             return stepDTO;
@@ -71,6 +82,30 @@ namespace Application.Repositories
         {
             var members = typeof(Steps).GetMembers().Where(x => x.MemberType == System.Reflection.MemberTypes.Field);
             return members.Select(member => new PlanStepDTO { Step = member.Name });
+        }
+
+        public bool RemoveUserFromPlan(int userId, int planId)
+        {
+            var userToPlan = Context.UsersToPlans.Where(x => x.UserId == userId && x.PlanId == planId).FirstOrDefault();
+
+            if (userToPlan == null)
+            {
+                return false;
+            }
+
+            Context.UsersToPlans.Remove(userToPlan);
+
+            try
+            {
+                Save();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+
         }
     }
 }

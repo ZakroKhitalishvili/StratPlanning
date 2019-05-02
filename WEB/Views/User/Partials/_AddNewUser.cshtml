@@ -1,10 +1,9 @@
-﻿@model Application.DTOs.NewUserDTO
+﻿@model Application.DTOs.AddUserToPlanDTO
 @using Web.Helpers
 
-@{Layout = null;
+@{
+    Layout = null;
 }
-
-
 <form class="m-form m-form--fit m-form--label-align-right" id="add_user_to_plan_new">
     <div class="m-portlet__body">
         <div class="form-group m-form__group">
@@ -15,38 +14,42 @@
                 Firstname
             </label>
             <div class="col-10">
-                <input asp-for="FirstName" class="form-control m-input" />
+                <input asp-for="NewUser.FirstName" class="form-control m-input" />
+                <span class="text-danger" asp-validation-for="NewUser.FirstName"></span>
             </div>
-            <span class="text-danger" asp-validation-for="FirstName"></span>
+
         </div>
         <div class="form-group m-form__group row">
             <label for="example-text-input" class="col-2 col-form-label">
                 Lastname
             </label>
             <div class="col-10">
-                <input asp-for="LastName" class="form-control m-input" />
+                <input asp-for="NewUser.LastName" class="form-control m-input" />
+                <span class="text-danger" asp-validation-for="NewUser.LastName"></span>
             </div>
-            <span class="text-danger" asp-validation-for="LastName"></span>
+
         </div>
         <div class="form-group m-form__group row">
-            <label asp-for="Email" class="col-2 col-form-label">
+            <label asp-for="NewUser.Email" class="col-2 col-form-label">
                 Email
             </label>
             <div class="col-10">
-                <input asp-for="Email" class="form-control m-input" />
+                <input asp-for="NewUser.Email" class="form-control m-input" />
+                <span class="text-danger" asp-validation-for="NewUser.Email"></span>
             </div>
-            <span class="text-danger" asp-validation-for="Email"></span>
+
         </div>
         <div class="form-group m-form__group row">
-            <label asp-for="PositionId" class="col-2 col-form-label">
+            <label asp-for="NewUser.PositionId" class="col-2 col-form-label">
                 Position
             </label>
             <div class="col-10">
-                <select asp-items="UserHelper.GetPositionsSelectList(Context)" asp-for="PositionId" class="form-control m-input">
+                <select asp-items="UserHelper.GetPositionsSelectList(Context)" asp-for="NewUser.PositionId" class="form-control m-select2" style="width:100%">
                     <option value="">-- Specify --</option>
                 </select>
+                <span class="text-danger" asp-validation-for="NewUser.PositionId"></span>
             </div>
-            <span class="text-danger" asp-validation-for="PositionId"></span>
+
         </div>
     </div>
     <div class="m-portlet__foot m-portlet__foot--fit">

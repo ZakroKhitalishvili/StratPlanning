@@ -1,8 +1,8 @@
-﻿@model Application.DTOs.ExistingUserAddDTO
+﻿@model Application.DTOs.AddUserToPlanDTO
 @using Web.Helpers
 
 @{
-Layout=null;
+    Layout = null;
 }
 
 
@@ -16,22 +16,24 @@ Layout=null;
                 User
             </label>
             <div class="col-10">
-                <select asp-items="UserHelper.GetUsersSelectList(Context)" asp-for="Id" class="form-control m-select2" style="width:100%">
+                <select asp-items="UserHelper.GetUsersSelectList(Context)" asp-for="ExistingUser.Id" class="form-control m-select2" style="width:100%">
                     <option value="">-- Specify --</option>
                 </select>
+                <span class="text-danger" asp-validation-for="ExistingUser.Id"></span>
             </div>
-            <span class="text-danger" asp-validation-for="Id"></span>
+
         </div>
         <div class="form-group m-form__group row">
             <label for="example-text-input" class="col-2 col-form-label">
                 Position
             </label>
             <div class="col-10">
-                <select asp-items="UserHelper.GetPositionsSelectList(Context)" asp-for="PositionId" class="form-control m-select2" style="width:100%">
+                <select asp-items="UserHelper.GetPositionsSelectList(Context)" asp-for="ExistingUser.PositionId" class="form-control m-select2" style="width:100%">
                     <option value="">-- Specify --</option>
                 </select>
+                <span class="text-danger" asp-validation-for="ExistingUser.PositionId"></span>
             </div>
-            <span class="text-danger" asp-validation-for="PositionId"></span>
+
         </div>
     </div>
     <div class="m-portlet__foot m-portlet__foot--fit">

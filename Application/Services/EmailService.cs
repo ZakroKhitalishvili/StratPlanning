@@ -65,7 +65,7 @@ namespace Application.Services
         {
             var subject = "Welcome to Strategic Planning";
 
-            var body = $"Hello, {user.FirstName} {user.LastName} <br> Now you can log in our system using Password: <b>${password}</b>";
+            var body = $"Hello, {user.FirstName} {user.LastName} <br> Now you can log in our system using Password: <b>{password}</b>";
 
             return Send(user.Email, subject, body);
         }

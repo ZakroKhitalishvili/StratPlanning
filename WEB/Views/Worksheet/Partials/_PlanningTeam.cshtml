@@ -1,4 +1,4 @@
-﻿@model Application.DTOs.PlanStepDTO
+﻿@model IEnumerable<Application.DTOs.UserPlanningMemberDTO>
 
 <div class="m-portlet m-portlet--bordered m-portlet--unair m--margin-top-30">
     <div class="m-portlet__head">
@@ -44,55 +44,33 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>
-                            Mariam Merabishvili
-                        </td>
-                        <td>
-                            Chairman
-                        </td>
-                        <td>
-                            <span class="table-row-actions">
-                                <a href="#"
-                                   class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
-                                   title="Delete">
-                                    <i class="la la-trash"></i>
-                                </a>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>
+                                @user.FullName
+                            </td>
+                            <td>
+                                @user.Position
+                            </td>
+                            <td>
+                                <span class="table-row-actions">
+                                    <a href="#"
+                                       class="remove-user-from-plan m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
+                                       title="Delete" data-id="@user.Id">
+                                        <i class="la la-trash"></i>
+                                    </a>
 
-                                <a href="#"
-                                   class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
-                                   title="Edit" data-toggle="modal"
-                                   data-target="#m_select2_modal">
-                                    <i class="la la-edit"></i>
-                                </a>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Giorgi Kelaptrishvili
-                        </td>
-                        <td>
-                            Advisor
-                        </td>
-                        <td>
-                            <span class="table-row-actions">
-                                <a href="#"
-                                   class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
-                                   title="Delete">
-                                    <i class="la la-trash"></i>
-                                </a>
-
-                                <a href="#"
-                                   class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
-                                   title="Edit" data-toggle="modal"
-                                   data-target="#m_select2_modal">
-                                    <i class="la la-edit"></i>
-                                </a>
-                            </span>
-                        </td>
-                    </tr>
-
+                                    @*<a href="#"
+                                           class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
+                                           title="Edit" data-toggle="modal"
+                                           data-target="#m_select2_modal">
+                                            <i class="la la-edit"></i>
+                                        </a>*@
+                                </span>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
             <span class="m-form__help">
@@ -195,10 +173,7 @@
                 </button>
             </div>
 
-            @{ ViewData["PlanId"] = Model.PlanId; }
-
-
-            <partial name="~/Views/User/Partials/_AddUserToPlan.cshtml" view-data="ViewData" />
+            <partial name="~/Views/User/Partials/_AddUserToPlan.cshtml" view-data="ViewData" model="new AddUserToPlanDTO()" />
 
         </div>
     </div>

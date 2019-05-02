@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Threading.Tasks;
+using System;
 
 namespace Web.Controllers
 {
@@ -36,7 +37,7 @@ namespace Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (_userRepository.TryAuthentication(login.Email, login.Password, out UserDTO user))
+                if (_userRepository.TryAuthentication(login.Email.Trim(), login.Password, out UserDTO user))
                 {
                     _loggerManager.Info("Authentication attempt was successfull");
                     var claims = new List<Claim>
@@ -51,17 +52,25 @@ namespace Web.Controllers
                     var claimsIdentity = new ClaimsIdentity(
                         claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
+                    DateTimeOffset? expiresUtc = null;
+                    bool isPersistent = false;
+                    if (login.RememberMe)
+                    {
+                        expiresUtc = DateTimeOffset.UtcNow.AddDays(7);
+                        isPersistent = true;
+                    }
+
                     var authProperties = new AuthenticationProperties
                     {
                         //AllowRefresh = <bool>,
                         // Refreshing the authentication session should be allowed.
 
-                        //ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                        ExpiresUtc = expiresUtc,
                         // The time at which the authentication ticket expires. A 
                         // value set here overrides the ExpireTimeSpan option of 
                         // CookieAuthenticationOptions set with AddCookie.
 
-                        IsPersistent = login.RememberMe,
+                        IsPersistent = isPersistent,
                         // Whether the authentication session is persisted across 
                         // multiple requests. When used with cookies, controls
                         // whether the cookie's lifetime is absolute (matching the

@@ -22,6 +22,6 @@ namespace Application.DTOs
         public string Role { get; set; }
 
         [Required]
-        public int PositionId { get; set; }
+        public int? PositionId { get; set; }
     }
 }

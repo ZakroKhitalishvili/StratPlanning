@@ -49,7 +49,7 @@ namespace Application.Repositories
         {
             var random = new Random();
 
-            var length = 40;
+            var length = 6;
 
             var stringBuilder = new StringBuilder();
 
