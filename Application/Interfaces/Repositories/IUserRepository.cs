@@ -13,5 +13,20 @@ namespace Application.Interfaces.Repositories
         UserDTO AddNew(NewUserDTO user);
 
         string GeneratePassword();
+
+        string GetRecoveryToken(string email);
+
+        bool ValidateToken(string token);
+
+        bool RecoverPassword(RecoverPasswordDTO recoverPassword);
+
+        UserDTO GetUserById(int id);
+
+        UserDTO GetUserByEmail(string email);
+
+        bool UpdateProfile(UserProfileDTO user);
+
+        bool ChangePassword(ChangePasswordDTO changePassword);
+
     }
 }

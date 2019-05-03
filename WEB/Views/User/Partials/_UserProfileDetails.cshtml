@@ -1,0 +1,53 @@
+﻿@model Application.DTOs.UserProfileDTO
+
+<form id="user_profile_details" class="m-form m-form--fit m-form--label-align-right">
+    <div class="m-portlet__body">
+        <div class="form-group m-form__group">
+            <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+        </div>
+        <div class="form-group m-form__group row">
+            <label for="example-text-input" class="col-2 col-form-label">
+                First name
+            </label>
+            <div class="col-7">
+                <input asp-for="FirstName" class="form-control m-input" type="text">
+                <span class="text-danger" asp-validation-for="FirstName"></span>
+            </div>
+        </div>
+        <div class="form-group m-form__group row">
+            <label for="example-text-input" class="col-2 col-form-label">
+                Last name
+            </label>
+            <div class="col-7">
+                <input asp-for="LastName" class="form-control m-input" type="text">
+                <span class="text-danger" asp-validation-for="LastName"></span>
+            </div>
+        </div>
+        <div class="form-group m-form__group row">
+            <label for="example-text-input" class="col-2 col-form-label">
+                Email
+            </label>
+            <div class="col-7">
+                <input asp-for="Email" class="form-control m-input" type="text">
+                <span class="text-danger" asp-validation-for="Email"></span>
+            </div>
+        </div>
+    </div>
+    <div class="m-portlet__foot m-portlet__foot--fit">
+        <div class="m-form__actions">
+            <div class="row">
+                <div class="col-2"></div>
+                <div class="col-7">
+                    <button type="submit" class="btn btn-sp m-btn m-btn--icon">
+                        <span>
+                            <i class="fa fa-save"></i>
+                            <span>
+                                Save changes
+                            </span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

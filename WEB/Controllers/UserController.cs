@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Application.DTOs;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Core.Constants;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,12 +35,21 @@ namespace Web.Controllers
 
         public IActionResult GetProfile(int userId)
         {
-            return View("Profile");
+            var user = _userRepository.GetUserById(userId);
+
+            return View("Profile", new UserProfileDTO
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email
+            });
         }
 
         public IActionResult GetMyProfile()
         {
-            return RedirectToAction("GetProfile", new { userId = 0 });
+            var id = int.Parse(User.FindFirst(CustomClaimTypes.Id).Value);
+
+            return RedirectToAction("GetProfile", new { userId = id });
         }
 
         public IActionResult GetActivity(int userId)
@@ -153,5 +165,96 @@ namespace Web.Controllers
             return new JsonResult(new { result });
 
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateProfile(UserProfileDTO userProfile)
+        {
+            Response.StatusCode = StatusCodes.Status202Accepted;
+
+            if (ModelState.IsValid)
+            {
+                var id = int.Parse(User.FindFirst(CustomClaimTypes.Id).Value);
+                userProfile.Id = id;
+
+
+                if (_userRepository.FindByCondition(u => u.Email == userProfile.Email && u.Id != id).Any())
+                {
+                    ModelState.AddModelError(nameof(userProfile.Email), "An user with the email existes");
+
+                    return PartialView("~/Views/User/Partials/_UserProfileDetails.cshtml");
+                }
+
+                if (!_userRepository.UpdateProfile(userProfile))
+                {
+                    ModelState.AddModelError(string.Empty, "Profile is not updated");
+
+                    return PartialView("~/Views/User/Partials/_UserProfileDetails.cshtml");
+                }
+
+                var claimsIdentity = User.Identity as ClaimsIdentity;
+                var emailClaim = claimsIdentity.FindFirst(ClaimTypes.Email);
+                var nameClaim = claimsIdentity.FindFirst(ClaimTypes.Name);
+
+                claimsIdentity.RemoveClaim(emailClaim);
+                claimsIdentity.RemoveClaim(nameClaim);
+
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Email, userProfile.Email));
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, $"{ userProfile.FirstName } {userProfile.LastName}" ));
+
+                var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+                var authProperties = result.Properties;
+
+                await HttpContext.SignOutAsync(
+                     CookieAuthenticationDefaults.AuthenticationScheme);
+
+                await HttpContext.SignInAsync(
+                       CookieAuthenticationDefaults.AuthenticationScheme,
+                       new ClaimsPrincipal(claimsIdentity),
+                        
+                       authProperties);
+
+                Response.StatusCode = StatusCodes.Status200OK;
+
+            }
+
+            return PartialView("~/Views/User/Partials/_UserProfileDetails.cshtml");
+        }
+
+        [HttpPost]
+        public IActionResult ChangePassword(ChangePasswordDTO changePassword)
+        {
+
+            Response.StatusCode = StatusCodes.Status202Accepted;
+
+            if (ModelState.IsValid)
+            {
+                var id = int.Parse(User.FindFirst(CustomClaimTypes.Id).Value);
+                var email = User.FindFirst(ClaimTypes.Email).Value;
+
+
+                if (!_userRepository.TryAuthentication(email, changePassword.Password, out UserDTO user))
+                {
+                    ModelState.AddModelError(nameof(changePassword.Password), "Authentication failed: password is wrong");
+
+                    return PartialView("~/Views/User/Partials/_ChangePassword.cshtml");
+                }
+
+                changePassword.Id = id;
+
+                if (!_userRepository.ChangePassword(changePassword))
+                {
+                    ModelState.AddModelError(string.Empty, "Password was not updated");
+
+                    return PartialView("~/Views/User/Partials/_ChangePassword.cshtml");
+                }
+
+                Response.StatusCode = StatusCodes.Status200OK;
+
+            }
+
+            return PartialView("~/Views/User/Partials/_ChangePassword.cshtml");
+        }
+
     }
 }

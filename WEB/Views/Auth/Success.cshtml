@@ -1,0 +1,19 @@
+﻿@model Web.ViewModels.ResultVM
+
+@{
+    ViewData["Title"] = "Success";
+    Layout = "_LoginLayout";
+}
+
+<div class="container">
+    <div class="row text-center">
+        <div class="col-sm-12 col-sm-offset-3">
+            <br><br> <h2 class="text-success">@Model.Title</h2>
+            <p>
+                @Model.Text
+            </p>
+        </div>
+    </div>
+</div>
+
+

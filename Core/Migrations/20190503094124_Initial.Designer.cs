@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Core.Migrations
 {
     [DbContext(typeof(PlanningDbContext))]
-    [Migration("20190425103815_Initial")]
+    [Migration("20190503094124_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -742,6 +742,11 @@ namespace Core.Migrations
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasMaxLength(50);
+
+                    b.Property<string>("Token")
+                        .HasMaxLength(128);
+
+                    b.Property<DateTime?>("TokenExpiration");
 
                     b.Property<DateTime>("UpdatedAt");
 

@@ -1,4 +1,8 @@
-﻿<button class="m-aside-left-close m-aside-left-close--skin-light" id="m_aside_left_close_btn">
+﻿@model Application.DTOs.UserProfileDTO
+@{
+    ViewData["Title"] = "Profile";
+}
+<button class="m-aside-left-close m-aside-left-close--skin-light" id="m_aside_left_close_btn">
     <i class="la la-close"></i>
 </button>
 <div class="m-grid__item m-grid__item--fluid m-wrapper">
@@ -34,123 +38,26 @@
                                 <li class="nav-item m-tabs__item">
                                     <a class="nav-link m-tabs__link" data-toggle="tab"
                                        href="#m_user_profile_tab_2" role="tab">
-                                        Authentication
+                                        Password
                                     </a>
                                 </li>
-                                <li class="nav-item m-tabs__item">
-                                    <a class="nav-link m-tabs__link" data-toggle="tab"
-                                       href="#m_user_profile_tab_3" role="tab">
-                                        Settings
-                                    </a>
-                                </li>
+                                @*<li class="nav-item m-tabs__item">
+                                        <a class="nav-link m-tabs__link" data-toggle="tab"
+                                           href="#m_user_profile_tab_3" role="tab">
+                                            Settings
+                                        </a>
+                                    </li>*@
                             </ul>
                         </div>
                     </div>
                     <div class="tab-content">
                         <div class="tab-pane active" id="m_user_profile_tab_1">
-                            <form class="m-form m-form--fit m-form--label-align-right">
-                                <div class="m-portlet__body">
-                                    <div class="form-group m-form__group row">
-                                        <label for="example-text-input" class="col-2 col-form-label">
-                                            Name
-                                        </label>
-                                        <div class="col-7">
-                                            <input class="form-control m-input" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="form-group m-form__group row">
-                                        <label for="example-text-input" class="col-2 col-form-label">
-                                            Last Name
-                                        </label>
-                                        <div class="col-7">
-                                            <input class="form-control m-input" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="form-group m-form__group row">
-                                        <label for="example-text-input" class="col-2 col-form-label">
-                                            Position
-                                        </label>
-                                        <div class="col-7">
-                                            <input class="form-control m-input" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="form-group m-form__group row">
-                                        <label for="example-text-input" class="col-2 col-form-label">
-                                            Email
-                                        </label>
-                                        <div class="col-7">
-                                            <input class="form-control m-input" type="email">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="m-portlet__foot m-portlet__foot--fit">
-                                    <div class="m-form__actions">
-                                        <div class="row">
-                                            <div class="col-2"></div>
-                                            <div class="col-7">
-                                                <button type="reset" class="btn btn-sp m-btn m-btn--icon">
-                                                    <span>
-                                                        <i class="fa fa-save"></i>
-                                                        <span>
-                                                            Save changes
-                                                        </span>
-                                                    </span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+                            <partial name="~/Views/User/Partials/_UserProfileDetails.cshtml" model="Model" />
                         </div>
                         <div class="tab-pane " id="m_user_profile_tab_2">
-                            <form class="m-form m-form--fit m-form--label-align-right">
-                                <div class="m-portlet__body">
-                                    <div class="form-group m-form__group row">
-                                        <label for="example-text-input" class="col-2 col-form-label">
-                                            User name
-                                        </label>
-                                        <div class="col-7">
-                                            <input readonly class="form-control m-input" type="text"
-                                                   value="readonly">
-                                        </div>
-                                    </div>
-                                    <div class="form-group m-form__group row">
-                                        <label for="example-text-input" class="col-2 col-form-label">
-                                            Password
-                                        </label>
-                                        <div class="col-7">
-                                            <input class="form-control m-input" type="password">
-                                        </div>
-                                    </div>
-                                    <div class="form-group m-form__group row">
-                                        <label for="example-text-input" class="col-2 col-form-label">
-                                            Confirme Password
-                                        </label>
-                                        <div class="col-7">
-                                            <input class="form-control m-input" type="password">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="m-portlet__foot m-portlet__foot--fit">
-                                    <div class="m-form__actions">
-                                        <div class="row">
-                                            <div class="col-2"></div>
-                                            <div class="col-7">
-                                                <button type="reset" class="btn btn-sp m-btn m-btn--icon">
-                                                    <span>
-                                                        <i class="fa fa-save"></i>
-                                                        <span>
-                                                            Save changes
-                                                        </span>
-                                                    </span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
+                            <partial name="~/Views/User/Partials/_ChangePassword.cshtml" model="new ChangePasswordDTO()" />
                         </div>
-                        <div class="tab-pane " id="m_user_profile_tab_3"></div>
+                        @*<div class="tab-pane " id="m_user_profile_tab_3"></div>*@
                     </div>
                 </div>
             </div>
@@ -162,5 +69,74 @@
 @section scripts{
     <script>
         $('#menu_profile').addClass('m-menu__item--active');
+    </script>
+
+    <script>
+
+        $(document).on("submit", "form#user_profile_details", function (e) {
+                e.preventDefault();
+
+                let formData = new FormData(document.querySelector('form#user_profile_details'));
+
+                let formObject = {};
+                formData.forEach(function (value, key) {
+                    formObject[key] = value;
+                });
+
+                $.ajax(
+                    {
+                        url: '@Url.Action("UpdateProfile","User")',
+                        method: "post",
+                        data: formObject,
+                        success: function (data, statusText, xhr) {
+                            if (xhr.status == 200) {
+                                notify("Successfully updated", "success", 5);
+                            }
+
+                            if (xhr.status == 400) {
+                                notify("An Error occured during sending a request", "error", 5);
+                            }
+
+                            $('form#user_profile_details').html(data);
+                        },
+                        error: function (xhr, statusText, error) {
+                            notify("An Error occured during sending a request", "error", 5);
+                        }
+                    })
+        });
+
+        $(document).on("submit", "form#user_profile_change_password", function (e) {
+                e.preventDefault();
+
+            let formData = new FormData(document.querySelector('form#user_profile_change_password'));
+
+                let formObject = {};
+                formData.forEach(function (value, key) {
+                    formObject[key] = value;
+                });
+
+                $.ajax(
+                    {
+                        url: '@Url.Action("ChangePassword","User")',
+                        method: "post",
+                        data: formObject,
+                        success: function (data, statusText, xhr) {
+                            if (xhr.status == 200) {
+                                notify("Successfully updated", "success", 5);
+                            }
+
+                            if (xhr.status == 400) {
+                                notify("An Error occured during sending a request", "error", 5);
+                            }
+
+                            $('form#user_profile_change_password').html(data);
+                        },
+                        error: function (xhr, statusText, error) {
+                            notify("An Error occured during sending a request", "error", 5);
+                        }
+                    })
+            });
+
+
     </script>
 }

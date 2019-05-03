@@ -741,6 +741,11 @@ namespace Core.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
+                    b.Property<string>("Token")
+                        .HasMaxLength(128);
+
+                    b.Property<DateTime?>("TokenExpiration");
+
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int?>("UpdatedBy");

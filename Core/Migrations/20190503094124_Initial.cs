@@ -97,6 +97,8 @@ namespace Core.Migrations
                     Password = table.Column<string>(maxLength: 128, nullable: false),
                     Email = table.Column<string>(maxLength: 50, nullable: false),
                     Role = table.Column<string>(maxLength: 50, nullable: false),
+                    Token = table.Column<string>(maxLength: 128, nullable: true),
+                    TokenExpiration = table.Column<DateTime>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<int>(nullable: true),

@@ -25,6 +25,13 @@ namespace Core.Configurations
                .IsRequired()
                .HasMaxLength(EntityConfigs.TextMaxLength);
 
+            builder.Property(x => x.Token)
+               .IsRequired(false)
+               .HasMaxLength(EntityConfigs.HashMaxLength);
+
+            builder.Property(x => x.TokenExpiration)
+                .IsRequired(false);
+
             builder.Property(x => x.Password)
                .IsRequired()
                .HasMaxLength(EntityConfigs.HashMaxLength);

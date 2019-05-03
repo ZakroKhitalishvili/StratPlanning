@@ -49,7 +49,7 @@ namespace Application.Services
             {
                 client.Send(message);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return false;
             }
@@ -66,6 +66,15 @@ namespace Application.Services
             var subject = "Welcome to Strategic Planning";
 
             var body = $"Hello, {user.FirstName} {user.LastName} <br> Now you can log in our system using Password: <b>{password}</b>";
+
+            return Send(user.Email, subject, body);
+        }
+
+        public bool SendPasswordRecoveryInfo(string url, UserDTO user)
+        {
+            var subject = "Password recovery";
+
+            var body = $"Hello, {user.FirstName} {user.LastName} <br> Here is a link to password recovery page: {url}";
 
             return Send(user.Email, subject, body);
         }

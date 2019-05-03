@@ -10,6 +10,11 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Threading.Tasks;
 using System;
+using Microsoft.AspNetCore.Http;
+using System.Linq;
+using Application.Interfaces.Services;
+using Web.ViewModels;
+using Microsoft.AspNetCore.Routing;
 
 namespace Web.Controllers
 {
@@ -17,9 +22,17 @@ namespace Web.Controllers
     {
         private readonly IUserRepository _userRepository;
 
-        public AuthController(IUserRepository userRepository, ILoggerManager loggerManager) : base(loggerManager)
+        private readonly IEmailService _emailService;
+
+        private readonly LinkGenerator _linkGenerator;
+
+        public AuthController(IUserRepository userRepository, ILoggerManager loggerManager, IEmailService emailService, LinkGenerator linkGenerator) : base(loggerManager)
         {
             _userRepository = userRepository;
+
+            _emailService = emailService;
+
+            _linkGenerator = linkGenerator;
         }
 
         [HttpGet]
@@ -79,7 +92,7 @@ namespace Web.Controllers
                         //IssuedUtc = <DateTimeOffset>,
                         // The time at which the authentication ticket was issued.
 
-                        RedirectUri = login.ReturnUrl
+                        //RedirectUri = login.ReturnUrl
                         // The full path or absolute URI to be used as an http 
                         // redirect response value.
                     };
@@ -129,9 +142,79 @@ namespace Web.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult ForgotPassword(string email)
+        public IActionResult ForgotPassword(ForgotPasswordDTO forgotPassword)
         {
+            if (ModelState.IsValid)
+            {
+                var user = _userRepository.GetUserByEmail(forgotPassword.Email);
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "An user with the email does not exist");
+
+                    return View();
+                }
+
+                var token = _userRepository.GetRecoveryToken(forgotPassword.Email);
+                var url = _linkGenerator.GetUriByAction(HttpContext, "RecoverPassword", "Auth", new { token });
+
+                if (!_emailService.SendPasswordRecoveryInfo(url, user))
+                {
+                    ModelState.AddModelError(nameof(forgotPassword.Email), "It was unable to send a recovery email to the email");
+
+                    return View();
+                }
+
+                var result = new ResultVM
+                {
+                    Title = "Successfully sent",
+                    Text = $"Recovery link was sent to {forgotPassword.Email}. It will be valid within next 24 hours"
+                };
+
+
+                return View("Success", result);
+
+
+            }
+
             return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult RecoverPassword(string token)
+        {
+            if (!_userRepository.ValidateToken(token))
+            {
+                return new StatusCodeResult(StatusCodes.Status400BadRequest);
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public IActionResult RecoverPassword(RecoverPasswordDTO recoverPassword)
+        {
+            if (ModelState.IsValid)
+            {
+
+                if (_userRepository.RecoverPassword(recoverPassword))
+                {
+                    var result = new ResultVM
+                    {
+                        Title = "Successfully recovered",
+                        Text = "New password was set. You can log in now."
+                    };
+
+                    return View("Success", result);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "An error occured during updating password");
+                }
+            }
+
+            return View(); ;
         }
 
         [HttpGet]
