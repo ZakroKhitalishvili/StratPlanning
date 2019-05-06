@@ -122,9 +122,10 @@
                             if (xhr.status == 201) {
                                 notify("Successfully added", "success", 5);
                                 updatePlanningTeam();
+
                             }
                             if (xhr.status == 400) {
-                                notify("An Error occured during sending a request", "error", 5);
+                                notify("An Error occured during sending a request", "danger", 5);
                             }
 
                             $('form#add_user_to_plan_new').html(data);
@@ -132,13 +133,15 @@
                             $('form#add_user_to_plan_new').find('.m-select2').select2();
                         },
                         error: function (xhr, statusText, error) {
-                            notify("An Error occured during sending a request", "error", 5);
+                            notify("An Error occured during sending a request", "danger", 5);
                         }
                     })
             });
 
             $(document).on('submit', "form#add_user_to_plan_existing", function (e) {
                 e.preventDefault();
+
+                console.log($(this).validate());
 
                 let formData = new FormData(document.querySelector('form#add_user_to_plan_existing'));
 
@@ -158,11 +161,11 @@
                             if (xhr.status == 201) {
 
                                 notify("Successfully added", "success", 5);
-                                updatePlanningTeam();
+                                updatePlanningTeam();          
                             }
 
                             if (xhr.status == 400) {
-                                notify("An Error occured during sending a request", "error", 5);
+                                notify("An Error occured during sending a request", "danger", 5);
                             }
 
                             $('form#add_user_to_plan_existing').html(data);
@@ -170,7 +173,7 @@
                             $('form#add_user_to_plan_existing').find('.m-select2').select2();
                         },
                         error: function (xhr, statusText, error) {
-                            notify("An Error occured during sending a request", "error", 5);
+                            notify("An Error occured during sending a request", "danger", 5);
                         }
                     })
             });
@@ -193,7 +196,7 @@
                            },
                         success: function (data, statusText, xhr) {
                             if (xhr.status == 400) {
-                                notify("An Error occured during sending a request", "error", 5);
+                                notify("An Error occured during sending a request", "danger", 5);
                             }
 
                             if (data.result) {
@@ -201,12 +204,12 @@
                                 updatePlanningTeam();
                             }
                             else {
-                                notify("Removing the user failed", "error", 5);
+                                notify("Removing the user failed", "danger", 5);
                             }
 
                         },
                         error: function (xhr, statusText, error) {
-                            notify("An Error occured during sending a request", "error", 5);
+                            notify("An Error occured during sending a request", "danger", 5);
                         }
                     })
                     }
@@ -227,7 +230,7 @@
                            },
                         success: function (data, statusText, xhr) {
                             if (xhr.status == 400) {
-                                notify("Planning team update failed", "error", 5);
+                                notify("Planning team update failed", "danger", 5);
                             }
 
                             $('#planning_team_portlet').html(data);
@@ -236,7 +239,7 @@
 
                         },
                         error: function (xhr, statusText, error) {
-                            notify("An Error occured during updating the planning plan's view", "error", 5);
+                            notify("An Error occured during updating the planning plan's view", "danger", 5);
                         }
                     })
             }

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Web.Extensions;
 
 namespace Web.Controllers
 {
@@ -71,6 +72,8 @@ namespace Web.Controllers
         [HttpPost]
         public IActionResult AddExistingUserToPlan(AddUserToPlanDTO addUserToPlan, int planId)
         {
+            Response.StatusCode = StatusCodes.Status202Accepted;
+
             if (planId <= 0)
             {
                 Response.StatusCode = StatusCodes.Status400BadRequest;
@@ -100,6 +103,8 @@ namespace Web.Controllers
         [HttpPost]
         public IActionResult AddNewUserToPlan(AddUserToPlanDTO addUserToPlan, int planId)
         {
+            Response.StatusCode = StatusCodes.Status202Accepted;
+
             if (planId <= 0)
             {
                 Response.StatusCode = StatusCodes.Status400BadRequest;
@@ -144,7 +149,6 @@ namespace Web.Controllers
                     return PartialView("~/Views/User/Partials/_AddNewUser.cshtml");
                 }
 
-
                 Response.StatusCode = StatusCodes.Status201Created;
             }
 
@@ -167,17 +171,15 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateProfile(UserProfileDTO userProfile)
+        public IActionResult UpdateProfile(UserProfileDTO userProfile)
         {
             Response.StatusCode = StatusCodes.Status202Accepted;
 
             if (ModelState.IsValid)
             {
-                var id = int.Parse(User.FindFirst(CustomClaimTypes.Id).Value);
-                userProfile.Id = id;
+                userProfile.Id = HttpContext.GetUserId();
 
-
-                if (_userRepository.FindByCondition(u => u.Email == userProfile.Email && u.Id != id).Any())
+                if (_userRepository.FindByCondition(u => u.Email == userProfile.Email && u.Id != userProfile.Id).Any())
                 {
                     ModelState.AddModelError(nameof(userProfile.Email), "An user with the email existes");
 
@@ -191,28 +193,9 @@ namespace Web.Controllers
                     return PartialView("~/Views/User/Partials/_UserProfileDetails.cshtml");
                 }
 
-                var claimsIdentity = User.Identity as ClaimsIdentity;
-                var emailClaim = claimsIdentity.FindFirst(ClaimTypes.Email);
-                var nameClaim = claimsIdentity.FindFirst(ClaimTypes.Name);
+                var user = _userRepository.GetUserById(userProfile.Id);
 
-                claimsIdentity.RemoveClaim(emailClaim);
-                claimsIdentity.RemoveClaim(nameClaim);
-
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Email, userProfile.Email));
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, $"{ userProfile.FirstName } {userProfile.LastName}" ));
-
-                var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-                var authProperties = result.Properties;
-
-                await HttpContext.SignOutAsync(
-                     CookieAuthenticationDefaults.AuthenticationScheme);
-
-                await HttpContext.SignInAsync(
-                       CookieAuthenticationDefaults.AuthenticationScheme,
-                       new ClaimsPrincipal(claimsIdentity),
-                        
-                       authProperties);
+                HttpContext.UpdateUser(user);
 
                 Response.StatusCode = StatusCodes.Status200OK;
 
@@ -229,8 +212,8 @@ namespace Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var id = int.Parse(User.FindFirst(CustomClaimTypes.Id).Value);
-                var email = User.FindFirst(ClaimTypes.Email).Value;
+                var id = HttpContext.GetUserId();
+                var email = HttpContext.GetUserEmail();
 
 
                 if (!_userRepository.TryAuthentication(email, changePassword.Password, out UserDTO user))

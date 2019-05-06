@@ -3,18 +3,11 @@ using Application.DTOs;
 using Application.Interfaces.Repositories;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-using Core.Constants;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using System.Threading.Tasks;
-using System;
 using Microsoft.AspNetCore.Http;
-using System.Linq;
 using Application.Interfaces.Services;
 using Web.ViewModels;
 using Microsoft.AspNetCore.Routing;
+using Web.Extensions;
 
 namespace Web.Controllers
 {
@@ -46,61 +39,15 @@ namespace Web.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(UserLoginDTO login)
+        public IActionResult Login(UserLoginDTO login)
         {
             if (ModelState.IsValid)
             {
                 if (_userRepository.TryAuthentication(login.Email.Trim(), login.Password, out UserDTO user))
                 {
                     _loggerManager.Info("Authentication attempt was successfull");
-                    var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
-                        new Claim(ClaimTypes.Role, user.Role),
-                        new Claim(ClaimTypes.Email, user.Email),
-                        new Claim(CustomClaimTypes.Position, user.Position?.Title??string.Empty),
-                        new Claim(CustomClaimTypes.Id, user.Id.ToString())
-                };
 
-                    var claimsIdentity = new ClaimsIdentity(
-                        claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                    DateTimeOffset? expiresUtc = null;
-                    bool isPersistent = false;
-                    if (login.RememberMe)
-                    {
-                        expiresUtc = DateTimeOffset.UtcNow.AddDays(7);
-                        isPersistent = true;
-                    }
-
-                    var authProperties = new AuthenticationProperties
-                    {
-                        //AllowRefresh = <bool>,
-                        // Refreshing the authentication session should be allowed.
-
-                        ExpiresUtc = expiresUtc,
-                        // The time at which the authentication ticket expires. A 
-                        // value set here overrides the ExpireTimeSpan option of 
-                        // CookieAuthenticationOptions set with AddCookie.
-
-                        IsPersistent = isPersistent,
-                        // Whether the authentication session is persisted across 
-                        // multiple requests. When used with cookies, controls
-                        // whether the cookie's lifetime is absolute (matching the
-                        // lifetime of the authentication ticket) or session-based.
-
-                        //IssuedUtc = <DateTimeOffset>,
-                        // The time at which the authentication ticket was issued.
-
-                        //RedirectUri = login.ReturnUrl
-                        // The full path or absolute URI to be used as an http 
-                        // redirect response value.
-                    };
-
-                    await HttpContext.SignInAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme,
-                        new ClaimsPrincipal(claimsIdentity),
-                        authProperties);
+                    HttpContext.LogIn(user, login.RememberMe);
 
                     if (string.IsNullOrEmpty(login.ReturnUrl))
                     {
@@ -123,10 +70,9 @@ namespace Web.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Logout()
+        public IActionResult Logout()
         {
-            await HttpContext.SignOutAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme);
+            HttpContext.LogOut();
 
             _loggerManager.Info("Logged out");
 
@@ -159,7 +105,7 @@ namespace Web.Controllers
 
                 if (!_emailService.SendPasswordRecoveryInfo(url, user))
                 {
-                    ModelState.AddModelError(nameof(forgotPassword.Email), "It was unable to send a recovery email to the email");
+                    ModelState.AddModelError(nameof(forgotPassword.Email), "It was unable to send a recovery email to the address");
 
                     return View();
                 }
@@ -170,9 +116,7 @@ namespace Web.Controllers
                     Text = $"Recovery link was sent to {forgotPassword.Email}. It will be valid within next 24 hours"
                 };
 
-
                 return View("Success", result);
-
 
             }
 

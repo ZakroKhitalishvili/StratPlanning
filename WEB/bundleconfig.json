@@ -1,0 +1,36 @@
+[
+  {
+    "outputFileName": "wwwroot/js/script.min.js",
+    "inputFiles": [
+      "wwwroot/js/script.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/lib/lib.bundle.min.js",
+    "inputFiles": [
+      "wwwroot/lib/jquery/jquery-3.3.1.min.js",
+      "wwwroot/lib/jquery-ui/jquery-ui.min.js",
+      "wwwroot/lib/bootstrap/dist/js/bootstrap.bundle.min.js",
+      "wwwroot/lib/bootstrap-notify/bootstrap-notify.min.js",
+      "wwwroot/lib/sweetalert/sweetalert.min.js",
+      "wwwroot/lib/jquery-validation/dist/jquery.validate.min.js",
+      "wwwroot/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js",
+      "wwwroot/lib/malihu-custom-scrollbar/js/minified/jquery.mCustomScrollbar.min.js",
+      "wwwroot/lib/select2/select2.min.js",
+      "wwwroot/lib/dropzone/dropzone.js",
+      "wwwroot/lib/jqeury-timepicker/jquery.timepicker.min.js",
+      "wwwroot/lib/bootstrap-datepicker/bootstrap-datepicker.min.js",
+      "wwwroot/lib/DataTables/datatables.min.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  }
+]

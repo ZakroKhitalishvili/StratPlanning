@@ -94,13 +94,13 @@
                             }
 
                             if (xhr.status == 400) {
-                                notify("An Error occured during sending a request", "error", 5);
+                                notify("An Error occured during sending a request", "danger", 5);
                             }
 
                             $('form#user_profile_details').html(data);
                         },
                         error: function (xhr, statusText, error) {
-                            notify("An Error occured during sending a request", "error", 5);
+                            notify("An Error occured during sending a request", "danger", 5);
                         }
                     })
         });
@@ -126,13 +126,13 @@
                             }
 
                             if (xhr.status == 400) {
-                                notify("An Error occured during sending a request", "error", 5);
+                                notify("An Error occured during sending a request", "danger", 5);
                             }
 
                             $('form#user_profile_change_password').html(data);
                         },
                         error: function (xhr, statusText, error) {
-                            notify("An Error occured during sending a request", "error", 5);
+                            notify("An Error occured during sending a request", "danger", 5);
                         }
                     })
             });

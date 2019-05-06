@@ -166,7 +166,6 @@ $(document).ready(function () {
         }
     })
 
-
     $('#issues-master-list-table').on('row-reordered.dt', function (e, details, edit) {
 
         details.map(function (el, ind) {
