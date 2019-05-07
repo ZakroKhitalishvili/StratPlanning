@@ -17,6 +17,8 @@
       "wwwroot/lib/jquery-ui/jquery-ui.min.js",
       "wwwroot/lib/bootstrap/dist/js/bootstrap.bundle.min.js",
       "wwwroot/lib/bootstrap-notify/bootstrap-notify.min.js",
+      "wwwroot/lib/bootstrap-session-timeout/dist/bootstrap-session-timeout.min.js",
+      //"wwwroot/lib/session-timeout/dist/session-timeout.js",
       "wwwroot/lib/sweetalert/sweetalert.min.js",
       "wwwroot/lib/jquery-validation/dist/jquery.validate.min.js",
       "wwwroot/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js",

@@ -131,6 +131,8 @@
                             $('form#add_user_to_plan_new').html(data);
 
                             $('form#add_user_to_plan_new').find('.m-select2').select2();
+
+                            $.validator.unobtrusive.parse('form#add_user_to_plan_new');
                         },
                         error: function (xhr, statusText, error) {
                             notify("An Error occured during sending a request", "danger", 5);
@@ -140,8 +142,6 @@
 
             $(document).on('submit', "form#add_user_to_plan_existing", function (e) {
                 e.preventDefault();
-
-                console.log($(this).validate());
 
                 let formData = new FormData(document.querySelector('form#add_user_to_plan_existing'));
 
@@ -161,7 +161,7 @@
                             if (xhr.status == 201) {
 
                                 notify("Successfully added", "success", 5);
-                                updatePlanningTeam();          
+                                updatePlanningTeam();
                             }
 
                             if (xhr.status == 400) {
@@ -171,6 +171,8 @@
                             $('form#add_user_to_plan_existing').html(data);
 
                             $('form#add_user_to_plan_existing').find('.m-select2').select2();
+
+                            $.validator.unobtrusive.parse('form#add_user_to_plan_existing');
                         },
                         error: function (xhr, statusText, error) {
                             notify("An Error occured during sending a request", "danger", 5);
@@ -236,6 +238,8 @@
                             $('#planning_team_portlet').html(data);
 
                             $('#planning_team_portlet').find('.m-select2').select2();
+
+                            $.validator.unobtrusive.parse('#planning_team_portlet form');
 
                         },
                         error: function (xhr, statusText, error) {

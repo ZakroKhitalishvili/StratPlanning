@@ -1,4 +1,6 @@
-﻿<div class="m-portlet m-portlet--full-height  ">
+﻿@model Application.DTOs.UserProfileDTO
+
+<div class="m-portlet m-portlet--full-height  ">
     <div class="m-portlet__body">
         <div class="m-card-profile">
             <div class="m-card-profile__title m--hide">
@@ -11,10 +13,10 @@
             </div>
             <div class="m-card-profile__details">
                 <span class="m-card-profile__name">
-                    Mark Andre
+                    @Model.FirstName @Model.LastName
                 </span>
                 <a href="" class="m-card-profile__email m-link">
-                    mark.andre@gmail.com
+                    @Model.Email
                 </a>
             </div>
         </div>
@@ -25,8 +27,8 @@
                     Section
                 </span>
             </li>
-            <li class="m-nav__item">
-                <a asp-action="GetProfile" asp-route-userId="0" class="m-nav__link">
+            <li class="m-nav__item" id="profile_nav_details">
+                <a asp-action="GetMyProfile" class="m-nav__link">
                     <i class="m-nav__link-icon flaticon-profile-1"></i>
                     <span class="m-nav__link-title">
                         <span class="m-nav__link-wrap">
@@ -37,8 +39,8 @@
                     </span>
                 </a>
             </li>
-            <li class="m-nav__item">
-                <a asp-action="GetActivity" asp-route-userId="0" class="m-nav__link">
+            <li class="m-nav__item" id="profile_nav_activities">
+                <a asp-action="GetMyActivity" class="m-nav__link">
                     <i class="m-nav__link-icon flaticon-share"></i>
                     <span class="m-nav__link-text">
                         Activity

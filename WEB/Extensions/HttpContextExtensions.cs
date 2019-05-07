@@ -112,5 +112,15 @@ namespace Web.Extensions
                    new ClaimsPrincipal(claimsIdentity),
                    authProperties);
         }
+
+
+        public async static Task<DateTime?> GetExpiration(this HttpContext context)
+        {
+            var result = await context.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var authProperties = result.Properties;
+
+            return authProperties.ExpiresUtc?.LocalDateTime;
+        }
     }
 }

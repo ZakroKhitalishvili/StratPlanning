@@ -1,0 +1,74 @@
+{
+  "_from": "@travishorn/session-timeout",
+  "_id": "@travishorn/session-timeout@2.0.0",
+  "_inBundle": false,
+  "_integrity": "sha512-k3sf7siU9w+Mm6msEfyOPBG17pcuoyqJx+Hf5T6n+i45Ow8uSDkcmRRDraqPIEmvPqZsMBg3mpXSvfmmfRD5nQ==",
+  "_location": "/@travishorn/session-timeout",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@travishorn/session-timeout",
+    "name": "@travishorn/session-timeout",
+    "escapedName": "@travishorn%2fsession-timeout",
+    "scope": "@travishorn",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@travishorn/session-timeout/-/session-timeout-2.0.0.tgz",
+  "_shasum": "66d508d52e90dc21f17c5c5d3b25ec7339d02712",
+  "_spec": "@travishorn/session-timeout",
+  "_where": "C:\\Users\\zakro\\Desktop\\node_libraries",
+  "author": {
+    "name": "Travis Horn",
+    "email": "travis@travishorn.com",
+    "url": "https://travishorn.com"
+  },
+  "bugs": {
+    "url": "https://github.com/travishorn/session-timeout/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Warn users when their session is about to expire. Dependency-free.",
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "babel-loader": "^8.0.5",
+    "css-loader": "^2.1.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.29.5",
+    "webpack-cli": "^3.2.3"
+  },
+  "files": [
+    "dist/"
+  ],
+  "homepage": "https://github.com/travishorn/session-timeout#readme",
+  "keywords": [
+    "front-end",
+    "javascript",
+    "session",
+    "timeout",
+    "timer",
+    "ui",
+    "user interface",
+    "warning"
+  ],
+  "license": "MIT",
+  "main": "dist/session-timeout.js",
+  "name": "@travishorn/session-timeout",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/travishorn/session-timeout.git"
+  },
+  "scripts": {
+    "build": "webpack",
+    "dev": "webpack --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "2.0.0"
+}

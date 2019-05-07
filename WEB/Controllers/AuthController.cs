@@ -8,6 +8,8 @@ using Application.Interfaces.Services;
 using Web.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Web.Extensions;
+using System;
+using System.Threading.Tasks;
 
 namespace Web.Controllers
 {
@@ -32,6 +34,11 @@ namespace Web.Controllers
         [AllowAnonymous]
         public IActionResult Login(string returnUrl)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home", null);
+            }
+
             var login = new UserLoginDTO { ReturnUrl = returnUrl };
 
             return View(login);
@@ -165,6 +172,22 @@ namespace Web.Controllers
         public IActionResult AccessDenied()
         {
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Ping()
+        {
+            var expiration = await HttpContext.GetExpiration();
+
+            int expirationSeconds = 0;
+
+            if (expiration.HasValue)
+            {
+                expirationSeconds = (int)expiration.Value.Subtract(DateTime.Now).TotalSeconds;
+            }
+
+            return Json(new { expirationSeconds });
+
         }
     }
 }

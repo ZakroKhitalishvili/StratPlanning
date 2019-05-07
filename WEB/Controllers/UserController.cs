@@ -34,9 +34,14 @@ namespace Web.Controllers
             _planRepository = planRepository;
         }
 
-        public IActionResult GetProfile(int userId)
+        public IActionResult GetProfile(int? userId)
         {
-            var user = _userRepository.GetUserById(userId);
+            if(!userId.HasValue)
+            {
+                return RedirectToAction("GetMyProfile");
+            }
+
+            var user = _userRepository.GetUserById(userId.Value);
 
             return View("Profile", new UserProfileDTO
             {
@@ -48,24 +53,27 @@ namespace Web.Controllers
 
         public IActionResult GetMyProfile()
         {
-            var id = int.Parse(User.FindFirst(CustomClaimTypes.Id).Value);
+            var id = HttpContext.GetUserId();
 
             return RedirectToAction("GetProfile", new { userId = id });
         }
 
-        public IActionResult GetActivity(int userId)
+        public IActionResult GetActivity(int? userId)
         {
             return View("Activity");
         }
 
         public IActionResult GetMyActivity()
         {
-            return RedirectToAction("GetActivity", new { userId = 0 });
+            var id = HttpContext.GetUserId();
+
+            return RedirectToAction("GetActivity", new { userId = id });
         }
 
         [HttpGet]
         public IActionResult AddUserToPlan()
         {
+            
             return View();
         }
 

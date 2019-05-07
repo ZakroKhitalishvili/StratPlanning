@@ -20,7 +20,7 @@
     <div class="m-content">
         <div class="row">
             <div class="col-lg-4">
-                <partial name="~/Views/User/Partials/_UserView.cshtml" />
+                <partial name="~/Views/User/Partials/_UserView.cshtml" model="Model"/>
             </div>
             <div class="col-lg-8">
                 <div class="m-portlet m-portlet--full-height m-portlet--tabs  ">
@@ -69,6 +69,7 @@
 @section scripts{
     <script>
         $('#menu_profile').addClass('m-menu__item--active');
+        $("#profile_nav_details").addClass('m-nav__item--active');
     </script>
 
     <script>

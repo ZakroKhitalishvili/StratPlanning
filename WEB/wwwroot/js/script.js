@@ -1,5 +1,69 @@
+//function initializeSessionTimeout() {
+
+//    $.ajax(
+//        {
+//            url: '/Auth/Ping',
+//            method: "post",
+//            success: function (data, statusText, xhr) {
+//                if (xhr.status == 200) {
+
+//                }
+//                console.log(data);
+//            },
+//            error: function (xhr, statusText, error) {
+//                notify("An Error occured during an initial ping", "danger", 5);
+//            }
+//        });
+
+//}
 
 $(document).ready(function () {
+    //// session timeout .js
+    //sessionTimeout({
+    //    warnAfter: 15000,
+    //    timeOutAfter: 20000,
+    //    message: 'Are you still there?',
+    //});
+
+    //session timeout
+    /////
+    //$.sessionTimeout({
+    //    message: 'Your session will be expired in a minute.',
+    //    ignoreUserActivity: false,
+    //    ajaxType: 'post',
+    //    keepAliveUrl: '/Auth/Ping',
+    //    keepAlive: true,
+    //    keepAliveInterval: 5000,
+    //    logoutUrl: '/Auth/Logout',
+    //    redirUrl: '/Auth/Login',
+    //    warnAfter: 10000,
+    //    redirAfter: 70000,
+    //    countdownBar: true,
+    //    onStart: function (options,oth) {
+    //        console.log('onStart');
+    //        console.log(oth);
+    //        options.warnAfter = 10000;
+    //        options.redirAfter = 30000;
+    //        //$.ajax(
+    //        //    {
+    //        //        url: '/Auth/Ping',
+    //        //        method: "post",
+    //        //        success: function (data, statusText, xhr) {
+    //        //            if (xhr.status == 200) {
+    //        //                //console.log(options);
+    //        //                options.warnAfter = 10000;
+    //        //                options.redirAfter = 30000;
+    //        //            }
+    //        //            console.log(data);
+    //        //        },
+    //        //        error: function (xhr, statusText, error) {
+    //        //            notify("An Error occured during an initial ping", "danger", 5);
+    //        //        }
+    //        //    });
+    //    }
+    //});
+    //////
+    //
 
     ///////
     //shared
@@ -332,4 +396,6 @@ function notify(text, type, seconds = 5) {
             }
         });
 }
+
+
 
