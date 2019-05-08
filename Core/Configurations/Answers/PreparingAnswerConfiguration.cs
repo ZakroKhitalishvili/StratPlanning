@@ -30,9 +30,9 @@ namespace Core.Configurations
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(x => x.StepAnswer)
+            builder.HasOne(x => x.UserStepResult)
                 .WithMany(s => s.PreparingAnswers)
-                .HasForeignKey(x => x.StepAnswerId)
+                .HasForeignKey(x => x.UserStepResultId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 

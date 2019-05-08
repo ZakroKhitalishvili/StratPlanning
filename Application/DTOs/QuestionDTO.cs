@@ -20,5 +20,9 @@ namespace Application.DTOs
 
         public IList<OptionDTO> Options { get; set; }
 
+        public AnswerDTO Answer { get; set; }
+
+        public IEnumerable<AnswerDTO> OtherAnswers { get; set; }
+
     }
 }

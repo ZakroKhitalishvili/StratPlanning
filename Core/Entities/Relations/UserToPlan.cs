@@ -8,7 +8,7 @@ namespace Core.Entities
     {
         public UserToPlan()
         {
-            StepAnswers = new HashSet<StepAnswer>();
+            UserStepResults = new HashSet<UserStepResult>();
 
             StepTaskAnswers = new HashSet<StepTaskAnswer>();
         }
@@ -29,7 +29,7 @@ namespace Core.Entities
 
         public virtual int? CreatedBy { get; set; }
 
-        public virtual ICollection<StepAnswer> StepAnswers { get; set; }
+        public virtual ICollection<UserStepResult> UserStepResults { get; set; }
 
         public virtual Dictionary Position { get; set; }
 

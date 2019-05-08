@@ -10,7 +10,7 @@ namespace Core.Entities
 
         public int QuestionId { get; set; }
 
-        public int StepAnswerId { get; set; }
+        public int UserStepResultId { get; set; }
 
         public DateTime CreatedAt { get; set; }
 
@@ -22,7 +22,6 @@ namespace Core.Entities
 
         public virtual Question Question { get; set; }
 
-        public StepAnswer StepAnswer { get; set; }
-
+        public UserStepResult UserStepResult { get; set; }
     }
 }

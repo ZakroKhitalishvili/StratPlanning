@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Core.Entities
 {
-    public class StepAnswer
+    public class UserStepResult
     {
 
-        public StepAnswer()
+        public UserStepResult()
         {
             SelectAnswers = new HashSet<SelectAnswer>();
             BooleanAnswers = new HashSet<BooleanAnswer>();
@@ -20,7 +20,9 @@ namespace Core.Entities
 
         public int Id { get; set; }
 
-        public int UserToPlanId { get; set; }
+        public int? UserToPlanId { get; set; }
+
+        public int? PlanId { get; set; }
 
         public int Step { get; set; }
 
@@ -37,6 +39,8 @@ namespace Core.Entities
         public int? UpdatedBy { get; set; }
 
         public virtual UserToPlan UserToPlan { get; set; }
+
+        public virtual Plan Plan { get; set; }
 
         public virtual ICollection<BooleanAnswer> BooleanAnswers { get; set; }
 

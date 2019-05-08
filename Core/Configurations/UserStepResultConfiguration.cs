@@ -6,9 +6,9 @@ using Core.Configurations.Extensions;
 
 namespace Core.Configurations
 {
-    class StepAnswerConfiguration : IEntityTypeConfiguration<StepAnswer>
+    class UserStepResultConfiguration : IEntityTypeConfiguration<UserStepResult>
     {
-        public void Configure(EntityTypeBuilder<StepAnswer> builder)
+        public void Configure(EntityTypeBuilder<UserStepResult> builder)
         {
 
             builder.Property(x => x.Step)
@@ -24,9 +24,15 @@ namespace Core.Configurations
                .HasDefaultValue(false);
 
             builder.HasOne(x => x.UserToPlan)
-               .WithMany(s => s.StepAnswers)
+               .WithMany(s => s.UserStepResults)
                .HasForeignKey(x => x.UserToPlanId)
-               .IsRequired()
+               .IsRequired(false)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(x => x.Plan)
+               .WithMany(s => s.AdminStepResults)
+               .HasForeignKey(x => x.UserToPlanId)
+               .IsRequired(false)
                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Property(x => x.CreatedAt)

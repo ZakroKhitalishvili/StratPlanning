@@ -1,8 +1,9 @@
 [
   {
-    "outputFileName": "wwwroot/js/script.min.js",
+    "outputFileName": "wwwroot/js/scripts.min.js",
     "inputFiles": [
-      "wwwroot/js/script.js"
+      "wwwroot/js/script.js",
+      "wwwroot/js/session-timeout.js"
     ],
     "minify": {
       "enabled": true,

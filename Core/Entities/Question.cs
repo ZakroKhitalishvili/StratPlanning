@@ -15,7 +15,7 @@ namespace Core.Entities
             IssueOptionAnswers = new HashSet<IssueOptionAnswer>();
             PreparingAnswers = new HashSet<PreparingAnswer>();
             StakeholderRatingAnswers = new HashSet<StakeholderRatingAnswer>();
-            StepAnswers = new HashSet<StepAnswer>();
+            UserStepResults = new HashSet<UserStepResult>();
             StrategicIssueAnswers = new HashSet<StrategicIssueAnswer>();
             TextAnswers = new HashSet<TextAnswer>();
         }
@@ -60,7 +60,7 @@ namespace Core.Entities
 
         public virtual ICollection<StakeholderRatingAnswer> StakeholderRatingAnswers { get; set; }
 
-        public virtual ICollection<StepAnswer> StepAnswers { get; set; }
+        public virtual ICollection<UserStepResult> UserStepResults { get; set; }
 
         public virtual ICollection<StrategicIssueAnswer> StrategicIssueAnswers { get; set; }
 

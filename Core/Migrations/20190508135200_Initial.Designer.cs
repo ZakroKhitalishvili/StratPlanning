@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Core.Migrations
 {
     [DbContext(typeof(PlanningDbContext))]
-    [Migration("20190503094124_Initial")]
+    [Migration("20190508135200_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,11 +37,11 @@ namespace Core.Migrations
 
                     b.Property<int?>("ResourceId");
 
-                    b.Property<int>("StepAnswerId");
-
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int?>("UpdatedBy");
+
+                    b.Property<int>("UserStepResultId");
 
                     b.HasKey("Id");
 
@@ -51,7 +51,7 @@ namespace Core.Migrations
                         .IsUnique()
                         .HasFilter("[ResourceId] IS NOT NULL");
 
-                    b.HasIndex("StepAnswerId");
+                    b.HasIndex("UserStepResultId");
 
                     b.ToTable("BooleanAnswers");
                 });
@@ -171,11 +171,11 @@ namespace Core.Migrations
 
                     b.Property<int>("QuestionId");
 
-                    b.Property<int>("StepAnswerId");
-
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int?>("UpdatedBy");
+
+                    b.Property<int>("UserStepResultId");
 
                     b.HasKey("Id");
 
@@ -183,7 +183,7 @@ namespace Core.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.HasIndex("StepAnswerId");
+                    b.HasIndex("UserStepResultId");
 
                     b.ToTable("IssueOptionAnswers");
                 });
@@ -298,11 +298,11 @@ namespace Core.Migrations
 
                     b.Property<int>("QuestionId");
 
-                    b.Property<int>("StepAnswerId");
-
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int?>("UpdatedBy");
+
+                    b.Property<int>("UserStepResultId");
 
                     b.HasKey("Id");
 
@@ -311,7 +311,7 @@ namespace Core.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.HasIndex("StepAnswerId");
+                    b.HasIndex("UserStepResultId");
 
                     b.ToTable("PreparingAnswers");
                 });
@@ -400,11 +400,11 @@ namespace Core.Migrations
 
                     b.Property<int>("QuestionId");
 
-                    b.Property<int>("StepAnswerId");
-
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int?>("UpdatedBy");
+
+                    b.Property<int>("UserStepResultId");
 
                     b.HasKey("Id");
 
@@ -414,7 +414,7 @@ namespace Core.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.HasIndex("StepAnswerId");
+                    b.HasIndex("UserStepResultId");
 
                     b.ToTable("SelectAnswers");
                 });
@@ -437,11 +437,11 @@ namespace Core.Migrations
 
                     b.Property<int>("StakeholderId");
 
-                    b.Property<int>("StepAnswerId");
-
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int?>("UpdatedBy");
+
+                    b.Property<int>("UserStepResultId");
 
                     b.HasKey("Id");
 
@@ -449,7 +449,7 @@ namespace Core.Migrations
 
                     b.HasIndex("StakeholderId");
 
-                    b.HasIndex("StepAnswerId");
+                    b.HasIndex("UserStepResultId");
 
                     b.ToTable("StakeholderRatingAnswers");
                 });
@@ -473,44 +473,6 @@ namespace Core.Migrations
                     b.HasIndex("StakeholderRatingAnswerId");
 
                     b.ToTable("StakeholderRatingAnswersToDictionaries");
-                });
-
-            modelBuilder.Entity("Core.Entities.StepAnswer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<int?>("CreatedBy");
-
-                    b.Property<bool>("IsFinal")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(false);
-
-                    b.Property<bool>("IsSubmitted")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(false);
-
-                    b.Property<int?>("QuestionId");
-
-                    b.Property<int>("Step")
-                        .HasMaxLength(50);
-
-                    b.Property<DateTime>("UpdatedAt");
-
-                    b.Property<int?>("UpdatedBy");
-
-                    b.Property<int>("UserToPlanId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.HasIndex("UserToPlanId");
-
-                    b.ToTable("StepAnswers");
                 });
 
             modelBuilder.Entity("Core.Entities.StepBlock", b =>
@@ -651,11 +613,11 @@ namespace Core.Migrations
                         .IsRequired()
                         .HasMaxLength(500);
 
-                    b.Property<int>("StepAnswerId");
-
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int?>("UpdatedBy");
+
+                    b.Property<int>("UserStepResultId");
 
                     b.Property<string>("Why")
                         .IsRequired()
@@ -667,7 +629,7 @@ namespace Core.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.HasIndex("StepAnswerId");
+                    b.HasIndex("UserStepResultId");
 
                     b.ToTable("StrategicIssueAnswers");
                 });
@@ -692,8 +654,6 @@ namespace Core.Migrations
 
                     b.Property<int>("QuestionId");
 
-                    b.Property<int>("StepAnswerId");
-
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasMaxLength(500);
@@ -702,11 +662,13 @@ namespace Core.Migrations
 
                     b.Property<int?>("UpdatedBy");
 
+                    b.Property<int>("UserStepResultId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("QuestionId");
 
-                    b.HasIndex("StepAnswerId");
+                    b.HasIndex("UserStepResultId");
 
                     b.ToTable("TextAnswers");
                 });
@@ -757,6 +719,46 @@ namespace Core.Migrations
                     b.HasIndex("PositionId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Core.Entities.UserStepResult", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<int?>("CreatedBy");
+
+                    b.Property<bool>("IsFinal")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("IsSubmitted")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
+
+                    b.Property<int?>("PlanId");
+
+                    b.Property<int?>("QuestionId");
+
+                    b.Property<int>("Step")
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime>("UpdatedAt");
+
+                    b.Property<int?>("UpdatedBy");
+
+                    b.Property<int?>("UserToPlanId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("UserToPlanId");
+
+                    b.ToTable("UserStepResults");
                 });
 
             modelBuilder.Entity("Core.Entities.UserToIssueOptionAnswer", b =>
@@ -817,9 +819,9 @@ namespace Core.Migrations
                         .HasForeignKey("Core.Entities.BooleanAnswer", "ResourceId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Core.Entities.StepAnswer", "StepAnswer")
+                    b.HasOne("Core.Entities.UserStepResult", "UserStepResult")
                         .WithMany("BooleanAnswers")
-                        .HasForeignKey("StepAnswerId")
+                        .HasForeignKey("UserStepResultId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -851,9 +853,9 @@ namespace Core.Migrations
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Core.Entities.StepAnswer", "StepAnswer")
+                    b.HasOne("Core.Entities.UserStepResult", "UserStepResult")
                         .WithMany("IssueOptionAnswers")
-                        .HasForeignKey("StepAnswerId")
+                        .HasForeignKey("UserStepResultId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -890,9 +892,9 @@ namespace Core.Migrations
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Core.Entities.StepAnswer", "StepAnswer")
+                    b.HasOne("Core.Entities.UserStepResult", "UserStepResult")
                         .WithMany("PreparingAnswers")
-                        .HasForeignKey("StepAnswerId")
+                        .HasForeignKey("UserStepResultId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -921,9 +923,9 @@ namespace Core.Migrations
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Core.Entities.StepAnswer", "StepAnswer")
+                    b.HasOne("Core.Entities.UserStepResult", "UserStepResult")
                         .WithMany("SelectAnswers")
-                        .HasForeignKey("StepAnswerId")
+                        .HasForeignKey("UserStepResultId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -939,9 +941,9 @@ namespace Core.Migrations
                         .HasForeignKey("StakeholderId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Core.Entities.StepAnswer", "StepAnswer")
+                    b.HasOne("Core.Entities.UserStepResult", "UserStepResult")
                         .WithMany("StakeholderRatingAnswers")
-                        .HasForeignKey("StepAnswerId")
+                        .HasForeignKey("UserStepResultId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -956,18 +958,6 @@ namespace Core.Migrations
                         .WithMany("Criteria")
                         .HasForeignKey("StakeholderRatingAnswerId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Core.Entities.StepAnswer", b =>
-                {
-                    b.HasOne("Core.Entities.Question")
-                        .WithMany("StepAnswers")
-                        .HasForeignKey("QuestionId");
-
-                    b.HasOne("Core.Entities.UserToPlan", "UserToPlan")
-                        .WithMany("StepAnswers")
-                        .HasForeignKey("UserToPlanId")
-                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Core.Entities.StepTask", b =>
@@ -1003,9 +993,9 @@ namespace Core.Migrations
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Core.Entities.StepAnswer", "StepAnswer")
+                    b.HasOne("Core.Entities.UserStepResult", "UserStepResult")
                         .WithMany("StrategicIssueAnswers")
-                        .HasForeignKey("StepAnswerId")
+                        .HasForeignKey("UserStepResultId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -1016,9 +1006,9 @@ namespace Core.Migrations
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Core.Entities.StepAnswer", "StepAnswer")
+                    b.HasOne("Core.Entities.UserStepResult", "UserStepResult")
                         .WithMany("TextAnswers")
-                        .HasForeignKey("StepAnswerId")
+                        .HasForeignKey("UserStepResultId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -1027,6 +1017,23 @@ namespace Core.Migrations
                     b.HasOne("Core.Entities.Dictionary", "Position")
                         .WithMany("Users")
                         .HasForeignKey("PositionId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Core.Entities.UserStepResult", b =>
+                {
+                    b.HasOne("Core.Entities.Question")
+                        .WithMany("UserStepResults")
+                        .HasForeignKey("QuestionId");
+
+                    b.HasOne("Core.Entities.Plan", "Plan")
+                        .WithMany("AdminStepResults")
+                        .HasForeignKey("UserToPlanId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Core.Entities.UserToPlan", "UserToPlan")
+                        .WithMany("UserStepResults")
+                        .HasForeignKey("UserToPlanId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

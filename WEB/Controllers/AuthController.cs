@@ -175,6 +175,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
+        [ResponseCache(NoStore = true)]
         public async Task<IActionResult> Ping()
         {
             var expiration = await HttpContext.GetExpiration();

@@ -48,7 +48,7 @@ namespace Core.Context
 
         public DbSet<PreparingAnswer> PreparingAnswers { get; set; }
 
-        public DbSet<StepAnswer> StepAnswers { get; set; }
+        public DbSet<UserStepResult> UserStepResults { get; set; }
 
         public DbSet<TextAnswer> TextAnswers { get; set; }
 

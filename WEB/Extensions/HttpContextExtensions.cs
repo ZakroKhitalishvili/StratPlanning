@@ -37,7 +37,7 @@ namespace Web.Extensions
 
             var authProperties = new AuthenticationProperties
             {
-                //AllowRefresh = <bool>,
+                AllowRefresh = true,
                 // Refreshing the authentication session should be allowed.
 
                 ExpiresUtc = expiresUtc,
