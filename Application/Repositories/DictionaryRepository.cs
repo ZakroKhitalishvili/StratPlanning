@@ -19,7 +19,7 @@ namespace Application.Repositories
 
         public IEnumerable<PositionDTO> GetPositions()
         {
-            return FindByCondition(x => x.HasPosition).Select(p => Mapper.Map<PositionDTO>(p));
+            return FindByCondition(x => x.HasPosition).AsEnumerable().Select(p => Mapper.Map<PositionDTO>(p)).ToList();
         }
     }
 }

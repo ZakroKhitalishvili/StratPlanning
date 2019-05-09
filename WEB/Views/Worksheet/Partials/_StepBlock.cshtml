@@ -1,60 +1,73 @@
-﻿@model Application.DTOs.StepBlockDTO
+﻿@model Application.DTOs.PlanStepDTO
 @using Core.Constants;
 
+@{
+    int blockIndex = (int)ViewData["BlockIndex"];
+}
 <div class="m-portlet m-portlet--bordered m-portlet--unair m--margin-top-30">
     <div class="m-portlet__head">
         <div class="m-portlet__head-caption">
             <div class="row no-gutters justify-content-md-center">
                 <div class="col col-lg-12">
                     <h3 class="m-portlet__head-text">
-                        @Model.Title
+                        @Model.StepBlocks[blockIndex].Title
                     </h3>
                 </div>
             </div>
         </div>
-        <a href="#" data-target="#help_modal_@Model.Order" data-toggle="modal"
+        <a href="#" data-target="#help_modal_@blockIndex" data-toggle="modal"
            class="m-portlet__nav-link btn btn-lg btn-secondary  m-btn m-btn--icon m-btn--icon-only m-btn--pill  m-dropdown__toggle m-intro__help">
             <i class="fa fa-question"></i>
         </a>
     </div>
     <div class="m-portlet__body">
-        @foreach (var question in Model.Questions)
+        @{
+            var questions = Model.StepBlocks[blockIndex].Questions;
+        }
+        @for (int i = 0; i < questions.Count; i++)
         {
-            if (question.Type == QuestionTypes.Boolean)
+            if (questions[i].Type == QuestionTypes.Boolean)
             {
-                <partial name="~/Views/Worksheet/Partials/Questions/_BooleanQuestion.cshtml" model="question" />
+                <partial name="~/Views/Worksheet/Partials/Questions/_BooleanQuestion.cshtml"
+                         model="Model"
+                         view-data='new ViewDataDictionary(ViewData) {  {"QuestionIndex", i } }' />
             }
 
-            if (question.Type == QuestionTypes.Select)
+            if (questions[i].Type == QuestionTypes.Select)
             {
-                <partial name="~/Views/Worksheet/Partials/Questions/_SelectQuestion.cshtml" model="question" />
+                <partial name="~/Views/Worksheet/Partials/Questions/_SelectQuestion.cshtml"
+                         model="Model"
+                         view-data='new ViewDataDictionary(ViewData) {  {"QuestionIndex", i } }' />
             }
 
-            if (question.Type == QuestionTypes.MultiSelect)
+            if (questions[i].Type == QuestionTypes.MultiSelect)
             {
-                <partial name="~/Views/Worksheet/Partials/Questions/_MultiSelectQuestion.cshtml" model="question" />
+                <partial name="~/Views/Worksheet/Partials/Questions/_MultiSelectQuestion.cshtml"
+                         model="Model"
+                         view-data='new ViewDataDictionary(ViewData) {  {"QuestionIndex", i } }' />
             }
 
-            if (question.Type == QuestionTypes.TagMultiSelect)
+            if (questions[i].Type == QuestionTypes.TagMultiSelect)
             {
-                <partial name="~/Views/Worksheet/Partials/Questions/_TagMultiSelectQuestion.cshtml" model="question" />
+                <partial name="~/Views/Worksheet/Partials/Questions/_TagMultiSelectQuestion.cshtml"
+                         model="Model"
+                         view-data='new ViewDataDictionary(ViewData) {  {"QuestionIndex", i } }' />
             }
 
-            if (question.Type == QuestionTypes.PlanTypeSelect)
+            if (questions[i].Type == QuestionTypes.PlanTypeSelect)
             {
-                <partial name="~/Views/Worksheet/Partials/Questions/_PlanTypeSelectQuestion.cshtml" model="question" />
+                <partial name="~/Views/Worksheet/Partials/Questions/_PlanTypeSelectQuestion.cshtml"
+                         model="Model"
+                         view-data='new ViewDataDictionary(ViewData) {  {"QuestionIndex", i } }' />
             }
 
-            if (question.Type == QuestionTypes.StepTable)
-            {
-                <partial name="~/Views/Worksheet/Partials/Questions/_StepTableQuestion.cshtml" model="question" />
-            }
+
         }
     </div>
 </div>
 
 
-<div class="modal fade" id="help_modal_@Model.Order" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="help_modal_@blockIndex tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -68,7 +81,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                @Model.Instruction
+                @Model.StepBlocks[blockIndex].Instruction
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">

@@ -298,7 +298,7 @@ namespace Core.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     UserToPlanId = table.Column<int>(nullable: true),
                     PlanId = table.Column<int>(nullable: true),
-                    Step = table.Column<int>(maxLength: 50, nullable: false),
+                    Step = table.Column<string>(maxLength: 50, nullable: false),
                     IsSubmitted = table.Column<bool>(nullable: false, defaultValue: false),
                     IsFinal = table.Column<bool>(nullable: false, defaultValue: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),

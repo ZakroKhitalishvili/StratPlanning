@@ -24,7 +24,7 @@ namespace Core.Entities
 
         public int? PlanId { get; set; }
 
-        public int Step { get; set; }
+        public string Step { get; set; }
 
         public bool IsSubmitted { get; set; }
 

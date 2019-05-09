@@ -741,7 +741,8 @@ namespace Core.Migrations
 
                     b.Property<int?>("QuestionId");
 
-                    b.Property<int>("Step")
+                    b.Property<string>("Step")
+                        .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<DateTime>("UpdatedAt");

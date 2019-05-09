@@ -28,7 +28,7 @@ namespace Application.Repositories
 
         public IEnumerable<T> FindByCondition(Expression<Func<T, bool>> expression)
         {
-            return Context.Set<T>().Where(expression).AsEnumerable();
+            return Context.Set<T>().Where(expression).ToList();
         }
 
         public void Create(T entity)

@@ -69,9 +69,11 @@
         </div>
         <form class="m-form m-form--fit m-form--label-align-left">
 
-            @foreach (var stepBlock in Model.StepBlocks)
+            @for (int i = 0; i < Model.StepBlocks.Count; i++)
             {
-                <partial name="~/Views/Worksheet/Partials/_StepBlock.cshtml" model="stepBlock" />
+                <partial name="~/Views/Worksheet/Partials/_StepBlock.cshtml"
+                         model="Model"
+                         view-data='new ViewDataDictionary(ViewData) { { "BlockIndex", i } }' />
             }
 
             @if (Model.Step == Steps.Predeparture)

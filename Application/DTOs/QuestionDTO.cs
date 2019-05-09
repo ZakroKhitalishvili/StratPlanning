@@ -24,5 +24,7 @@ namespace Application.DTOs
 
         public IEnumerable<AnswerDTO> OtherAnswers { get; set; }
 
+        public AnswerDTO DefinitiveAnswer { get; set; }
+
     }
 }

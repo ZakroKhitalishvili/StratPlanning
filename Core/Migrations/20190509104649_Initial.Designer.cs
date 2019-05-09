@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Core.Migrations
 {
     [DbContext(typeof(PlanningDbContext))]
-    [Migration("20190508135200_Initial")]
+    [Migration("20190509104649_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -743,7 +743,8 @@ namespace Core.Migrations
 
                     b.Property<int?>("QuestionId");
 
-                    b.Property<int>("Step")
+                    b.Property<string>("Step")
+                        .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<DateTime>("UpdatedAt");
