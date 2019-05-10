@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Application.DTOs
@@ -20,6 +21,7 @@ namespace Application.DTOs
 
         public IList<OptionDTO> Options { get; set; }
 
+        [Required]
         public AnswerDTO Answer { get; set; }
 
         public IEnumerable<AnswerDTO> OtherAnswers { get; set; }

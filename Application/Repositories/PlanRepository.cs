@@ -110,7 +110,125 @@ namespace Application.Repositories
 
         }
 
+        public bool SaveStep(PlanStepDTO planStep, bool isDefinitive, bool isSubmitted, int userId)
+        {
+            var stepUserResult = GetUserStepResult(planStep.PlanId, planStep.Step, isDefinitive, userId);
+
+            if (!stepUserResult.IsFinal && stepUserResult.IsSubmitted)
+            {
+                return false;
+            }
+
+            stepUserResult.IsSubmitted = isSubmitted;
+
+            SaveStepBlocks(planStep.StepBlocks, stepUserResult);
+
+            Context.SaveChanges();
+
+            return true;
+
+        }
+
         #region Private methods
+
+        private UserStepResult GetUserStepResult(int planId, string stepIndex, bool isDefinitive, int userId)
+        {
+            UserStepResult userStepResult;
+
+            if (isDefinitive)
+            {
+                userStepResult = Context.UserStepResults
+                    .Where(x => x.Step == stepIndex && x.PlanId == planId)
+                    .Include(x => x.BooleanAnswers)
+                    .FirstOrDefault();
+            }
+            else
+            {
+                userStepResult = Context.UserStepResults
+                    .Where(x => x.Step == stepIndex)
+                    .Include(x => x.UserToPlan)
+                    .Where(x => x.UserToPlan.UserId == userId && x.UserToPlan.PlanId == planId)
+                    .Include(x => x.BooleanAnswers)
+                    .FirstOrDefault();
+            }
+
+            if (userStepResult == null)
+            {
+                userStepResult = new UserStepResult
+                {
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                    CreatedBy = userId,
+                    UpdatedBy = userId,
+                    IsFinal = isDefinitive,
+                    PlanId = planId,
+                    Step = stepIndex
+                };
+
+                if (!isDefinitive)
+                {
+                    userStepResult.PlanId = null;
+                    var userToPlan = Context.UsersToPlans.Where(x => x.UserId == userId && x.PlanId == planId).FirstOrDefault();
+                    userStepResult.UserToPlan = userToPlan;
+                }
+
+                Context.UserStepResults.Add(userStepResult);
+                Context.SaveChanges();
+            }
+
+            return userStepResult;
+
+        }
+
+        private void SaveStepBlocks(IList<StepBlockDTO> stepBlocks, UserStepResult userStepResult)
+        {
+            foreach (var stepBlock in stepBlocks)
+            {
+                foreach (var question in stepBlock.Questions)
+                {
+                    if (question.Type == QuestionTypes.Boolean)
+                    {
+                        SaveBooleanAnswer(question, userStepResult);
+                    }
+                }
+            }
+        }
+
+        private void SaveBooleanAnswer(QuestionDTO question, UserStepResult userStepResult)
+        {
+            BooleanAnswer dbAnswer = null;
+
+            if (userStepResult.BooleanAnswers != null)
+            {
+                dbAnswer = userStepResult.BooleanAnswers.Where(x => x.QuestionId == question.Id).FirstOrDefault();
+            }
+            else
+            {
+                userStepResult.BooleanAnswers = new HashSet<BooleanAnswer>();
+            }
+
+            if (dbAnswer != null)
+            {
+                dbAnswer.Answer = question.Answer.BooleanAnswer.Answer;
+                dbAnswer.UpdatedAt = DateTime.Now;
+                dbAnswer.UpdatedBy = userStepResult.UpdatedBy;
+            }
+            else
+            {
+                var newAnswer = new BooleanAnswer
+                {
+                    Answer = question.Answer.BooleanAnswer.Answer,
+                    QuestionId = question.Id,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                    CreatedBy = userStepResult.UpdatedBy,
+                    UpdatedBy = userStepResult.UpdatedBy
+                };
+
+                userStepResult.BooleanAnswers.Add(newAnswer);
+            }
+
+        }
 
         private IList<StepBlockDTO> GetStepStructure(string stepIndex)
         {

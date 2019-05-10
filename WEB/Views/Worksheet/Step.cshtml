@@ -67,189 +67,22 @@
                 <partial name="~/Views/Worksheet/Partials/_PlanningTeam.cshtml" model="Model.PlanningTeam" />
             }
         </div>
-        <form class="m-form m-form--fit m-form--label-align-left">
-
-            @for (int i = 0; i < Model.StepBlocks.Count; i++)
-            {
-                <partial name="~/Views/Worksheet/Partials/_StepBlock.cshtml"
-                         model="Model"
-                         view-data='new ViewDataDictionary(ViewData) { { "BlockIndex", i } }' />
-            }
-
-            @if (Model.Step == Steps.Predeparture)
-            {
-                <partial name="~/Views/Worksheet/Partials/_StepTasks.cshtml" />
-            }
-
-            <div class="form-group m-form__group m--img-centered">
-                <button type="button" class="btn m-btn--pill    btn-sp m--margin-right-10">
-                    Save
-                </button>
-                <button type="button" class="btn m-btn--pill    btn-sp user-submit-btn">
-                    Submit
-                </button>
-            </div>
-        </form>
+        <partial name="~/Views/Worksheet/Partials/_StepForm.cshtml" model="Model" />
     </div>
 </div>
 
 
 @section scripts{
+
+    <script src="~/js/step.js" type="text/javascript"></script>
     <script>
         $('#menu_worksheet').addClass('m-menu__item--active');
+        var GlobalPlanId = @Model.PlanId;
+        var AddNewUserToPlanURL = '@Url.Action("AddNewUserToPlan", "User")';
+        var AddExistingUserToPlanURL = '@Url.Action("AddExistingUserToPlan","User")';
+        var RemoveUserFromPlanURL = '@Url.Action("RemoveUserFromPlan", "User")';
+        var GetPlanningTeamURL = '@Url.Action("GetPlanningTeam","Worksheet")';
+        var SaveStepURL = '@Url.Action("SaveStep","Worksheet")';
     </script>
 
-    @if (Model.Step == Steps.Predeparture)
-    {
-        <script>
-
-            $(document).on('submit', "form#add_user_to_plan_new", function (e) {
-                e.preventDefault();
-
-                let formData = new FormData(document.querySelector('form#add_user_to_plan_new'));
-
-                let formObject = {};
-                formData.forEach(function (value, key) {
-                    formObject[key] = value;
-                });
-
-                formObject['PlanId'] =@Model.PlanId;
-
-                $.ajax(
-                    {
-                        url: '@Url.Action("AddNewUserToPlan","User")',
-                        method: "post",
-                        data: formObject,
-                        success: function (data, statusText, xhr) {
-                            if (xhr.status == 201) {
-                                notify("Successfully added", "success", 5);
-                                updatePlanningTeam();
-
-                            }
-                            if (xhr.status == 400) {
-                                notify("An Error occured during sending a request", "danger", 5);
-                            }
-
-                            $('form#add_user_to_plan_new').html(data);
-
-                            $('form#add_user_to_plan_new').find('.m-select2').select2();
-
-                            $.validator.unobtrusive.parse('form#add_user_to_plan_new');
-                        },
-                        error: function (xhr, statusText, error) {
-                            notify("An Error occured during sending a request", "danger", 5);
-                        }
-                    })
-            });
-
-            $(document).on('submit', "form#add_user_to_plan_existing", function (e) {
-                e.preventDefault();
-
-                let formData = new FormData(document.querySelector('form#add_user_to_plan_existing'));
-
-                let formObject = {};
-                formData.forEach(function (value, key) {
-                    formObject[key] = value;
-                });
-
-                formObject['PlanId'] =@Model.PlanId;
-
-                $.ajax(
-                    {
-                        url: '@Url.Action("AddExistingUserToPlan","User")',
-                        method: "post",
-                        data: formObject,
-                        success: function (data, statusText, xhr) {
-                            if (xhr.status == 201) {
-
-                                notify("Successfully added", "success", 5);
-                                updatePlanningTeam();
-                            }
-
-                            if (xhr.status == 400) {
-                                notify("An Error occured during sending a request", "danger", 5);
-                            }
-
-                            $('form#add_user_to_plan_existing').html(data);
-
-                            $('form#add_user_to_plan_existing').find('.m-select2').select2();
-
-                            $.validator.unobtrusive.parse('form#add_user_to_plan_existing');
-                        },
-                        error: function (xhr, statusText, error) {
-                            notify("An Error occured during sending a request", "danger", 5);
-                        }
-                    })
-            });
-
-
-            $(document).on('click', '.remove-user-from-plan', function (e) {
-                e.preventDefault();
-
-                let userId = $(this).data('id');
-
-                deleteConfirm().then(result => {
-                    if (result) {
-                         $.ajax(
-                       {
-                           url: '@Url.Action("RemoveUserFromPlan", "User")',
-                           method: "post",
-                           data: {
-                                userId: userId,
-                                planId: @Model.PlanId
-                           },
-                        success: function (data, statusText, xhr) {
-                            if (xhr.status == 400) {
-                                notify("An Error occured during sending a request", "danger", 5);
-                            }
-
-                            if (data.result) {
-                                notify("Successfully deleted", "success", 5);
-                                updatePlanningTeam();
-                            }
-                            else {
-                                notify("Removing the user failed", "danger", 5);
-                            }
-
-                        },
-                        error: function (xhr, statusText, error) {
-                            notify("An Error occured during sending a request", "danger", 5);
-                        }
-                    })
-                    }
-                })
-
-            });
-
-            function updatePlanningTeam() {
-
-                $('#planning_team_add_modal').modal('hide');
-
-                   $.ajax(
-                       {
-                           url: '@Url.Action("GetPlanningTeam","Worksheet")',
-                           method: "post",
-                           data: {
-                           planId: @Model.PlanId
-                           },
-                        success: function (data, statusText, xhr) {
-                            if (xhr.status == 400) {
-                                notify("Planning team update failed", "danger", 5);
-                            }
-
-                            $('#planning_team_portlet').html(data);
-
-                            $('#planning_team_portlet').find('.m-select2').select2();
-
-                            $.validator.unobtrusive.parse('#planning_team_portlet form');
-
-                        },
-                        error: function (xhr, statusText, error) {
-                            notify("An Error occured during updating the planning plan's view", "danger", 5);
-                        }
-                    })
-            }
-
-        </script>
-    }
 }

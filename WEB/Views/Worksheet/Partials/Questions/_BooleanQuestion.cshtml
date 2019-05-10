@@ -55,12 +55,15 @@
             </div>
         </div>
         <div class="col-7 col-md-9">
-            @(question.Order).  @question.Title
+            @question.Title
+            <br>
+            <span class="text-danger" asp-validation-for="StepBlocks[blockIndex].Questions[questionIndex]"></span>
         </div>
         <div class="col-4 col-md-2 m-align--center">
             <span class="m-switch m-switch--icon">
                 <label>
-                    <input asp-for="StepBlocks[blockIndex].Questions[questionIndex].Answer.BooleanAnswer.Answer" checked="@(Model.StepBlocks[blockIndex].Questions[questionIndex].Answer?.BooleanAnswer?.Answer??false)" type="checkbox">
+                    <input type="hidden" asp-for="StepBlocks[blockIndex].Questions[questionIndex].Id" />
+                    <input asp-for="StepBlocks[blockIndex].Questions[questionIndex].Answer.BooleanAnswer.Answer" checked="@(Model.StepBlocks[blockIndex].Questions[questionIndex].Answer?.BooleanAnswer.Answer??false)" type="checkbox">
                     <span></span>
                 </label>
             </span>

@@ -20,5 +20,7 @@ namespace Application.Interfaces.Repositories
 
         IEnumerable<UserPlanningMemberDTO> GetPlanningTeam(int planId);
 
+        bool SaveStep(PlanStepDTO planStep, bool isDefinitive, bool isSubmitted, int userId);
+
     }
 }

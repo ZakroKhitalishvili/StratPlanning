@@ -59,6 +59,7 @@
             </div>
         </div>
         <div class="col-10 col-md-11">
+            <input type="hidden" asp-for="StepBlocks[blockIndex].Questions[questionIndex].Id" />
             <select asp-for="StepBlocks[blockIndex].Questions[questionIndex].Answer.SelectAnswers"
                     asp-items="question.Options.Select(o=>new SelectListItem {Text= o.Title ,Value=o.Id.ToString()})" multiple class="form-control m-select2"></select>
         </div>

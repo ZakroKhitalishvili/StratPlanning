@@ -1,0 +1,29 @@
+﻿@model Application.DTOs.PlanStepDTO
+
+<form class="m-form m-form--fit m-form--label-align-left" id="step_form">
+    <input type="hidden" asp-for="PlanId" />
+    <input type="hidden" asp-for="Step" />
+    @for (int i = 0; i < Model.StepBlocks.Count; i++)
+    {
+        <partial name="~/Views/Worksheet/Partials/_StepBlock.cshtml"
+                 model="Model"
+                 view-data='new ViewDataDictionary(ViewData) { { "BlockIndex", i } }' />
+    }
+
+    @*@if (Model.Step == Steps.Predeparture)
+        {
+            <partial name="~/Views/Worksheet/Partials/_StepTasks.cshtml" />
+        }*@
+    <div class="form-group m-form__group">
+        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+    </div>
+
+    <div class="form-group m-form__group m--img-centered">
+        <button type="submit" class="btn m-btn--pill btn-sp m--margin-right-10">
+            Save
+        </button>
+        <button type="submit" class="btn m-btn--pill btn-sp">
+            Submit
+        </button>
+    </div>
+</form>

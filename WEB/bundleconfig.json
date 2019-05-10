@@ -2,7 +2,7 @@
   {
     "outputFileName": "wwwroot/js/scripts.min.js",
     "inputFiles": [
-      "wwwroot/js/script.js",
+      "wwwroot/js/global.js",
       "wwwroot/js/session-timeout.js"
     ],
     "minify": {

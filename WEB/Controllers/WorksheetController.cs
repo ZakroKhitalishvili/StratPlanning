@@ -61,5 +61,26 @@ namespace Web.Controllers
 
             return PartialView("~/Views/Worksheet/Partials/_PlanningTeam.cshtml", planningTeam);
         }
+
+        [HttpPost]
+        public IActionResult SaveStep(PlanStepDTO planStep)
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status202Accepted;
+            if (ModelState.IsValid)
+            {
+                var isDefinitive = User.IsInRole(Roles.Admin);
+
+                var result = _planRepository.SaveStep(planStep, isDefinitive, isSubmitted: false, userId: HttpContext.GetUserId());
+
+                if (result)
+                {
+                    HttpContext.Response.StatusCode = StatusCodes.Status200OK;
+                }
+            }
+
+            return PartialView("~/Views/Worksheet/Partials/_StepForm.cshtml", planStep);
+        }
+
+
     }
 }

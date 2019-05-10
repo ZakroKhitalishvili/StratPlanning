@@ -1,27 +1,36 @@
+function initializeInputs(element) {
+
+    $(element).find('.m-select2').select2();
+
+    $(element).find(".tag-select").select2({
+
+        tags: true,
+        tokenSeparators: [","]
+    });
+
+    $(element).find('.datepicker').datepicker();
+
+    $(element).find('.select2-without-search').select2({
+        minimumResultsForSearch: Infinity
+    });
+}
+
 
 $(document).ready(function () {
 
     ///////
     //shared
     //
-    $('form').on('keyup keypress', function (e) {
-        var keyCode = e.keyCode || e.which;
-        if (keyCode === 13) {
-            e.preventDefault();
-            return false;
-        }
-    });
-
-    $('.datepicker').datepicker();
-
-    $('.m-select2').select2();
+    //$('form').on('keyup keypress', function (e) {
+    //    var keyCode = e.keyCode || e.which;
+    //    if (keyCode === 13) {
+    //        e.preventDefault();
+    //        return false;
+    //    }
+    //});
+    initializeInputs(document);
 
     $('.sp-tooltip').tooltip();
-
-
-    $('.select2-without-search').select2({
-        minimumResultsForSearch: Infinity
-    });
 
     $.fn.dataTable.ext.order['dom-select'] = function (settings, col) {
         return this.api().column(col, { order: 'index' }).nodes().map(function (td, i) {
@@ -36,7 +45,6 @@ $(document).ready(function () {
     };
 
     $('.user-submit-btn').click(submitConfirm);
-
 
     $('.dropzone-sp').dropzone(
         {
@@ -113,123 +121,9 @@ $(document).ready(function () {
     /////
     ///
 
-    /////////////
-    //stakeholders analysis worksheet
-    //////////
-    // $('#stakeholders-rating-table').DataTable(
-    //     {
-    //         responsive: true,
-    //         paging: false,
-    //         serverSide: false,
-    //         searching: false,
-    //         info: false,
-    //         columnDefs:
-    //             [{ "orderDataType": "dom-select", targets: [1, 2, 3, 4, 5, 6, 7, 9] }],
-
-    //     }
-    // );
-
-    $('.stakeholders-rating-table .m-select2').select2({
-        minimumResultsForSearch: Infinity
-    });
-
-    /////////////////////
-    ////////////
-
-    ////////////
-    // master list of issues
-    ///
-    $('#issues-master-list-table').dataTable(
-        {
-            // rowReorder:
-            // {
-            //     selector: 'td:nth-child(1)'
-            // },
-            paging: false,
-            serverSide: false,
-            searching: false,
-            info: false,
-            ordering: true,
-            columnDefs:
-                [{ visible: false, targets: [0] },
-                { orderable: false, targets: [1, 2, 3, 4, 5] },
-                { orderDataType: 'dom-input', targets: [6] }],
-        }
-    );
-
-    $('#issues-master-list-table tr td:nth-child(6) input').blur(function (e) {
-        $('#issues-master-list-table').DataTable().column(6).order().draw();
-    }).on('keyup', function (e) {
-        if (e.keyCode == 13)//enter button
-        {
-            $('#issues-master-list-table').DataTable().column(6).order().draw();
-        }
-    })
-
-    $('#issues-master-list-table').on('row-reordered.dt', function (e, details, edit) {
-
-        details.map(function (el, ind) {
-            $(el.node).find("input.order").val(el.newPosition);
-        });
-
-    });
-
-    /////////////
-    ///////
-
-    //////
-    /// evalution sliders
-    ///
-
-    $(".evalution-slider").each(function (ind, slider) {
-        noUiSlider.create(slider, {
-            start: [5],
-            step: 1,
-            range: {
-                min: [1],
-                max: [10]
-            },
-            tooltips: true,
-            format: wNumb({
-                decimals: 0
-            }),
-            connect: [true, false]
-        });
-
-        slider.noUiSlider.on('change.one', function (value) {
-
-            $(this.target).parent().find('input').val(value);
-        });
-
-    });
-
-    $(".tag-select").select2({
-
-        tags: true,
-        tokenSeparators: [","]
-    });
-
-
-    ///////////
-    //// selects speficy-other event
-    //////////////
-
-    $('select.select-specify').on('change', function (e) {
-        let value = $(this).val();
-        let specifyInput = $(this).parent().find('input.select-specify-input');
-
-        if (value.toLowerCase() == 'other') {
-            specifyInput.show();
-        }
-        else {
-            specifyInput.hide();
-        }
-    }).trigger('change');
-
-
-
 
 });
+
 
 ///////
 // delete confirm alert
@@ -332,6 +226,3 @@ function notify(text, type, seconds = 5) {
             }
         });
 }
-
-
-

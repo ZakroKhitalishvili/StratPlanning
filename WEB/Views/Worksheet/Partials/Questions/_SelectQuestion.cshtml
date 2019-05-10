@@ -70,7 +70,7 @@
             }
             <select asp-for="StepBlocks[blockIndex].Questions[questionIndex].Answer.SelectAnswer.OptionId"
                     asp-items="items" class="form-control m-select2 @(question.CanSpecifyOther?"select-specify":"")">
-                <option>-- Specify --</option>
+                <option value="">-- Specify --</option>
             </select>
             <input asp-for="StepBlocks[blockIndex].Questions[questionIndex].Answer.SelectAnswer.AltOption" type="text" class="select-specify-input form-control m--margin-top-10 hidden" placeholder="specify..." />
         </div>

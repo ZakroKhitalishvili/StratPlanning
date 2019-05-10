@@ -59,11 +59,14 @@
         </div>
         <div class="col-10 col-md-11">
             <div class="row">
+                <input type="hidden" asp-for="StepBlocks[blockIndex].Questions[questionIndex].Id" />
                 <div class="col-lg-6">
                     <label class="m-option">
                         <span class="m-option__control">
                             <span class="m-radio radio-sp m-radio--check-bold">
-                                <input type="radio" name="m_option_1" value="1">
+                                <input type="radio"
+                                       asp-for="StepBlocks[blockIndex].Questions[questionIndex].Answer.BooleanAnswer.Answer"
+                                       value="true" checked>
                                 <span></span>
                             </span>
                         </span>
@@ -85,7 +88,9 @@
                     <label class="m-option">
                         <span class="m-option__control">
                             <span class="m-radio radio-sp m-radio--check-bold">
-                                <input type="radio" name="m_option_1" value="1">
+                                <input type="radio"
+                                       asp-for="StepBlocks[blockIndex].Questions[questionIndex].Answer.BooleanAnswer.Answer"
+                                       value="false">
                                 <span></span>
                             </span>
                         </span>
