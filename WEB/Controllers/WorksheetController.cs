@@ -66,11 +66,18 @@ namespace Web.Controllers
         public IActionResult SaveStep(PlanStepDTO planStep)
         {
             HttpContext.Response.StatusCode = StatusCodes.Status202Accepted;
+
+            bool result = false;
+
+            TryValidateModel(planStep.AnswerGroups);
+
             if (ModelState.IsValid)
             {
-                var isDefinitive = User.IsInRole(Roles.Admin);
+                //var isDefinitive = User.IsInRole(Roles.Admin);
 
-                var result = _planRepository.SaveStep(planStep, isDefinitive, isSubmitted: false, userId: HttpContext.GetUserId());
+                var isDefinitive = false;
+
+                result = _planRepository.SaveStep(planStep, isDefinitive, isSubmitted: false, userId: HttpContext.GetUserId());
 
                 if (result)
                 {
@@ -78,7 +85,14 @@ namespace Web.Controllers
                 }
             }
 
-            return PartialView("~/Views/Worksheet/Partials/_StepForm.cshtml", planStep);
+            var newPlanStep = _planRepository.GetStep(planStep.Step, planStep.PlanId, HttpContext.GetUserId());
+
+            if (!result)
+            {
+                newPlanStep.FilledAnswers = planStep.AnswerGroups;
+            }
+
+            return PartialView("~/Views/Worksheet/Partials/_StepForm.cshtml", newPlanStep);
         }
 
 

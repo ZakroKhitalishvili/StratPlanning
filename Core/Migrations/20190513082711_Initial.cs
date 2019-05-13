@@ -300,7 +300,7 @@ namespace Core.Migrations
                     PlanId = table.Column<int>(nullable: true),
                     Step = table.Column<string>(maxLength: 50, nullable: false),
                     IsSubmitted = table.Column<bool>(nullable: false, defaultValue: false),
-                    IsFinal = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsDefinitive = table.Column<bool>(nullable: false, defaultValue: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<int>(nullable: true),

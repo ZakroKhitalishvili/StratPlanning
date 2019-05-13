@@ -21,12 +21,5 @@ namespace Application.DTOs
 
         public IList<OptionDTO> Options { get; set; }
 
-        [Required]
-        public AnswerDTO Answer { get; set; }
-
-        public IEnumerable<AnswerDTO> OtherAnswers { get; set; }
-
-        public AnswerDTO DefinitiveAnswer { get; set; }
-
     }
 }

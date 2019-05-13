@@ -729,7 +729,7 @@ namespace Core.Migrations
 
                     b.Property<int?>("CreatedBy");
 
-                    b.Property<bool>("IsFinal")
+                    b.Property<bool>("IsDefinitive")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(false);
 

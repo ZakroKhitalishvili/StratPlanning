@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Core.Migrations
 {
     [DbContext(typeof(PlanningDbContext))]
-    [Migration("20190509104649_Initial")]
+    [Migration("20190513082711_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -731,7 +731,7 @@ namespace Core.Migrations
 
                     b.Property<int?>("CreatedBy");
 
-                    b.Property<bool>("IsFinal")
+                    b.Property<bool>("IsDefinitive")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(false);
 

@@ -206,7 +206,6 @@ namespace Web.Controllers
                 HttpContext.UpdateUser(user);
 
                 Response.StatusCode = StatusCodes.Status200OK;
-
             }
 
             return PartialView("~/Views/User/Partials/_UserProfileDetails.cshtml");

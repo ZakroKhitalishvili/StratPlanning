@@ -1,6 +1,8 @@
-﻿
-$(document).ready(function () {
+﻿$(document).ready(function () {
+    initializeStep();
+});
 
+function initializeStep() {
     $('.stakeholders-rating-table .m-select2').select2({
         minimumResultsForSearch: Infinity
     });
@@ -104,8 +106,7 @@ $(document).ready(function () {
             specifyInput.hide();
         }
     }).trigger('change');
-
-});
+}
 
 
 $(document).on('submit', "form#add_user_to_plan_new", function (e) {
@@ -113,18 +114,15 @@ $(document).on('submit', "form#add_user_to_plan_new", function (e) {
 
     let formData = new FormData(document.querySelector('form#add_user_to_plan_new'));
 
-    let formObject = {};
-    formData.forEach(function (value, key) {
-        formObject[key] = value;
-    });
-
-    formObject['PlanId'] = GlobalPlanId;
+    formData.set('PlanId', GlobalPlanId);
 
     $.ajax(
         {
             url: AddNewUserToPlanURL,
             method: "post",
-            data: formObject,
+            data: formData,
+            processData: false,
+            contentType: false,
             success: function (data, statusText, xhr) {
                 if (xhr.status == 201) {
                     notify("Successfully added", "success", 5);
@@ -152,18 +150,16 @@ $(document).on('submit', "form#add_user_to_plan_existing", function (e) {
 
     let formData = new FormData(document.querySelector('form#add_user_to_plan_existing'));
 
-    let formObject = {};
-    formData.forEach(function (value, key) {
-        formObject[key] = value;
-    });
 
-    formObject['PlanId'] = GlobalPlanId;
+    formData.set('PlanId', GlobalPlanId);
 
     $.ajax(
         {
             url: AddExistingUserToPlanURL,
             method: "post",
-            data: formObject,
+            data: formData,
+            processData: false,
+            contentType: false,
             success: function (data, statusText, xhr) {
                 if (xhr.status == 201) {
 
@@ -258,25 +254,24 @@ function updatePlanningTeam() {
 $(document).on('submit', "form#step_form", function (e) {
     e.preventDefault();
 
-    console.log('submitted');
-
     let formData = new FormData(document.querySelector('form#step_form'));
-
-    let formObject = {};
-    formData.forEach(function (value, key) {
-        formObject[key] = value;
-    });
 
     $.ajax(
         {
             url: SaveStepURL,
             method: "post",
-            data: formObject,
+            data: formData,
+            processData: false,
+            contentType: false,
             success: function (data, statusText, xhr) {
                 if (xhr.status == 200) {
 
                     notify("Successfully saved", "success", 5);
-                    updatePlanningTeam();
+                }
+
+                if (xhr.status == 202) {
+
+                    notify("Input data are not valid ", "danger", 5);
                 }
 
                 if (xhr.status == 400) {
@@ -286,6 +281,8 @@ $(document).on('submit', "form#step_form", function (e) {
                 $('form#step_form').html(data);
 
                 initializeInputs($('form#step_form'));
+
+                initializeStep();
 
                 $.validator.unobtrusive.parse('form#step_form');
             },

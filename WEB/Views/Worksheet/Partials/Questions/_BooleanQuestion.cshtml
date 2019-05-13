@@ -4,7 +4,13 @@
     var blockIndex = (int)ViewData["BlockIndex"];
     var questionIndex = (int)ViewData["QuestionIndex"];
 
+    var questionIndexOffset = (int)ViewData["QuestionIndexOffset"];
+
     var question = Model.StepBlocks[blockIndex].Questions[questionIndex];
+
+    var answerGroup = Model.AnswerGroups.Where(x => x.QuestionId == question.Id).FirstOrDefault();
+
+    var filledAnswer = Model.FilledAnswers?.Where(x => x.QuestionId == question.Id).FirstOrDefault();
 }
 <div class="form-group m-form__group">
     <div class="row">
@@ -23,7 +29,7 @@
                                      data-max-height="200">
                                     <div class="m-list-timeline">
                                         <div class="m-list-timeline__items">
-                                            @foreach (var otherAnswer in question.OtherAnswers)
+                                            @foreach (var otherAnswer in answerGroup.OtherAnswers)
                                             {
                                                 <div class="m-list-timeline__item">
                                                     <span class="m-list-timeline__badge"></span>
@@ -31,7 +37,7 @@
 
                                                     </span>
                                                     <span class="m-list-timeline__text">
-                                                        @otherAnswer.BooleanAnswer.Answer
+                                                        @otherAnswer.BooleanAnswer
                                                     </span>
                                                 </div>
                                             }
@@ -41,7 +47,7 @@
                                                     <b>Definitive answer</b>
                                                 </span>
                                                 <span class="m-list-timeline__text">
-                                                    @question.DefinitiveAnswer?.BooleanAnswer.Answer
+                                                    @answerGroup.DefinitiveAnswer?.BooleanAnswer
                                                 </span>
                                             </div>
                                         </div>
@@ -57,13 +63,17 @@
         <div class="col-7 col-md-9">
             @question.Title
             <br>
-            <span class="text-danger" asp-validation-for="StepBlocks[blockIndex].Questions[questionIndex]"></span>
+            <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer"></span>
         </div>
         <div class="col-4 col-md-2 m-align--center">
             <span class="m-switch m-switch--icon">
                 <label>
-                    <input type="hidden" asp-for="StepBlocks[blockIndex].Questions[questionIndex].Id" />
-                    <input asp-for="StepBlocks[blockIndex].Questions[questionIndex].Answer.BooleanAnswer.Answer" checked="@(Model.StepBlocks[blockIndex].Questions[questionIndex].Answer?.BooleanAnswer.Answer??false)" type="checkbox">
+                    <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].QuestionId" value="@question.Id" />
+                    <input asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.BooleanAnswer"
+                           checked="@(filledAnswer!=null?
+                        filledAnswer.Answer.BooleanAnswer
+                        :(answerGroup.Answer?.BooleanAnswer??false))"
+                           type="checkbox">
                     <span></span>
                 </label>
             </span>

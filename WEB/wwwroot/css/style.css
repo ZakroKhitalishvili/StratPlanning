@@ -646,11 +646,11 @@ table td .m-list-badge {
 .btn-large-sp {
     padding: 1.4rem 4rem;
     margin-top: 0.8rem;
-    box-shadow: 0px 5px 10px 2px #f1b764a4 !important;
+    box-shadow: 0px 5px 10px 2px #f1b764 !important;
 }
 
     .btn-large-sp:hover {
-        box-shadow: 0px 5px 10px 2px #ec9c2ba4 !important
+        box-shadow: 0px 5px 10px 2px #ec9c2b !important
     }
 
 .btn-sp--secondary {

@@ -59,7 +59,7 @@ namespace Core.Context
         /// <summary>
         /// Relations' tables
         /// </summary>
-        
+
         public DbSet<IssueOptionAnswerToResource> IssueOptionAnswersToResources { get; set; }
 
         public DbSet<StakeholderRatingAnswerToDictionary> StakeholderRatingAnswersToDictionaries { get; set; }

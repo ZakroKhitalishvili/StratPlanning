@@ -24,8 +24,10 @@
         @{
             var questions = Model.StepBlocks[blockIndex].Questions;
         }
+
         @for (int i = 0; i < questions.Count; i++)
         {
+
             if (questions[i].Type == QuestionTypes.Boolean)
             {
                 <partial name="~/Views/Worksheet/Partials/Questions/_BooleanQuestion.cshtml"
@@ -44,7 +46,7 @@
             {
                 <partial name="~/Views/Worksheet/Partials/Questions/_MultiSelectQuestion.cshtml"
                          model="Model"
-                         view-data='new ViewDataDictionary(ViewData) {  {"QuestionIndex", i } }' />
+                         view - data='new ViewDataDictionary(ViewData) {  {"QuestionIndex", i } }' />
             }
 
             if (questions[i].Type == QuestionTypes.TagMultiSelect)

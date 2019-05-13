@@ -13,8 +13,11 @@ namespace Application.DTOs
         [Required]
         public string Step { get; set; }
 
-        [Required]
         public IList<StepBlockDTO> StepBlocks { get; set; }
+
+        public IList<AnswerGroupDTO> AnswerGroups { get; set; }
+
+        public IList<AnswerGroupDTO> FilledAnswers { get; set; }
 
         public IEnumerable<UserPlanningMemberDTO> PlanningTeam { get; set; }
 

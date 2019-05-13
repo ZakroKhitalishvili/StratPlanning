@@ -4,7 +4,11 @@
     var blockIndex = (int)ViewData["BlockIndex"];
     var questionIndex = (int)ViewData["QuestionIndex"];
 
+    var questionIndexOffset = (int)ViewData["QuestionIndexOffset"];
+
     var question = Model.StepBlocks[blockIndex].Questions[questionIndex];
+
+    var answerGroup = Model.AnswerGroups.Where(x => x.QuestionId == question.Id).FirstOrDefault();
 }
 
 <div class="form-group m-form__group">
@@ -28,24 +32,24 @@
                                     <div class="m-list-timeline">
                                         <div class="m-list-timeline__items">
                                             @*@foreach (var otherAnswer in question.OtherAnswers)
-                                            {
-                                                <div class="m-list-timeline__item">
-                                                    <span class="m-list-timeline__badge"></span>
-                                                    <span class="m-list-timeline__text">
+                                                {
+                                                    <div class="m-list-timeline__item">
+                                                        <span class="m-list-timeline__badge"></span>
+                                                        <span class="m-list-timeline__text">
 
-                                                    </span>
-                                                    <span class="m-list-timeline__text">
-                                                        @otherAnswer.BooleanAnswer?.Answer
-                                                    </span>
-                                                </div>
-                                            }*@
+                                                        </span>
+                                                        <span class="m-list-timeline__text">
+                                                            @otherAnswer.BooleanAnswer?.Answer
+                                                        </span>
+                                                    </div>
+                                                }*@
                                             <div class="m-list-timeline__item">
                                                 <span class="m-list-timeline__badge"></span>
                                                 <span class="m-list-timeline__text">
                                                     <b>Definitive answer</b>
                                                 </span>
                                                 <span class="m-list-timeline__text">
-                                                    @question.DefinitiveAnswer?.BooleanAnswer.Answer
+                                                    @*@answerGroup.DefinitiveAnswer?.BooleanAnswer.Answer*@
                                                 </span>
                                             </div>
                                         </div>
@@ -68,11 +72,13 @@
                     items = items.Append(new SelectListItem { Text = "Other", Value = "other" });
                 }
             }
-            <select asp-for="StepBlocks[blockIndex].Questions[questionIndex].Answer.SelectAnswer.OptionId"
+            <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].QuestionId" value="@question.Id" />
+            <select asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.SelectAnswer.OptionId"
                     asp-items="items" class="form-control m-select2 @(question.CanSpecifyOther?"select-specify":"")">
                 <option value="">-- Specify --</option>
             </select>
-            <input asp-for="StepBlocks[blockIndex].Questions[questionIndex].Answer.SelectAnswer.AltOption" type="text" class="select-specify-input form-control m--margin-top-10 hidden" placeholder="specify..." />
+            <input asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.SelectAnswer.AltOption" type="text" class="select-specify-input form-control m--margin-top-10 hidden" placeholder="specify..." />
+            <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer"></span>
         </div>
     </div>
     @if (!string.IsNullOrEmpty(question.Description))

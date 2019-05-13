@@ -19,7 +19,7 @@ namespace Core.Configurations
                .IsRequired()
                .HasDefaultValue(false);
 
-            builder.Property(x => x.IsFinal)
+            builder.Property(x => x.IsDefinitive)
                .IsRequired()
                .HasDefaultValue(false);
 

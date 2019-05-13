@@ -4,7 +4,11 @@
     var blockIndex = (int)ViewData["BlockIndex"];
     var questionIndex = (int)ViewData["QuestionIndex"];
 
+    var questionIndexOffset = (int)ViewData["QuestionIndexOffset"];
+
     var question = Model.StepBlocks[blockIndex].Questions[questionIndex];
+
+    var answerGroup = Model.AnswerGroups.Where(x => x.QuestionId == question.Id).FirstOrDefault();
 }
 
 <div class="form-group m-form__group">
@@ -45,7 +49,7 @@
                                                     <b>Definitive answer</b>
                                                 </span>
                                                 <span class="m-list-timeline__text">
-                                                    @question.DefinitiveAnswer?.BooleanAnswer.Answer
+                                                    @* @answerGroup.DefinitiveAnswer?.BooleanAnswer.Answer*@
                                                 </span>
                                             </div>
                                         </div>
@@ -59,8 +63,11 @@
             </div>
         </div>
         <div class="col-10 col-md-11">
-            <select asp-for="StepBlocks[blockIndex].Questions[questionIndex].Answer.SelectAnswers"
-                    asp-items="question.Options.Select(o=>new SelectListItem {Text= o.Title ,Value=o.Id.ToString()})" multiple class="form-control m-select2 tag-select"></select>
+            <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].QuestionId" value="@question.Id" />
+            <select asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.TagSelectAnswers"
+                    asp-items="question.Options.Select(o=>new SelectListItem {Text= o.Title ,Value=o.Title})" multiple class="form-control m-select2 tag-select"></select>
+            <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer"></span>
+
         </div>
     </div>
     @if (!string.IsNullOrEmpty(question.Description))

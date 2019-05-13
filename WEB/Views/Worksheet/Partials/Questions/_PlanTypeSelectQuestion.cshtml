@@ -4,7 +4,11 @@
     var blockIndex = (int)ViewData["BlockIndex"];
     var questionIndex = (int)ViewData["QuestionIndex"];
 
+    var questionIndexOffset = (int)ViewData["QuestionIndexOffset"];
+
     var question = Model.StepBlocks[blockIndex].Questions[questionIndex];
+
+    var answerGroup = Model.AnswerGroups.Where(x => x.QuestionId == question.Id).FirstOrDefault();
 }
 <div class="form-group m-form__group">
     <label for="exampleSelect1">
@@ -44,7 +48,7 @@
                                                     <b>Definitive answer</b>
                                                 </span>
                                                 <span class="m-list-timeline__text">
-                                                    @question.DefinitiveAnswer?.BooleanAnswer.Answer
+                                                    @*@answerGroup.DefinitiveAnswer?.BooleanAnswer.Answer*@
                                                 </span>
                                             </div>
                                         </div>
@@ -59,13 +63,13 @@
         </div>
         <div class="col-10 col-md-11">
             <div class="row">
-                <input type="hidden" asp-for="StepBlocks[blockIndex].Questions[questionIndex].Id" />
+                <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].QuestionId" value="@question.Id" />
                 <div class="col-lg-6">
                     <label class="m-option">
                         <span class="m-option__control">
                             <span class="m-radio radio-sp m-radio--check-bold">
                                 <input type="radio"
-                                       asp-for="StepBlocks[blockIndex].Questions[questionIndex].Answer.BooleanAnswer.Answer"
+                                       asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.BooleanAnswer"
                                        value="true" checked>
                                 <span></span>
                             </span>
@@ -89,7 +93,7 @@
                         <span class="m-option__control">
                             <span class="m-radio radio-sp m-radio--check-bold">
                                 <input type="radio"
-                                       asp-for="StepBlocks[blockIndex].Questions[questionIndex].Answer.BooleanAnswer.Answer"
+                                       asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.BooleanAnswer"
                                        value="false">
                                 <span></span>
                             </span>
@@ -107,6 +111,7 @@
                         </span>
                     </label>
                 </div>
+                <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer"></span>
             </div>
         </div>
     </div>
