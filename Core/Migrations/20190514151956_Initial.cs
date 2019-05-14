@@ -311,15 +311,15 @@ namespace Core.Migrations
                 {
                     table.PrimaryKey("PK_UserStepResults", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserStepResults_Questions_QuestionId",
-                        column: x => x.QuestionId,
-                        principalTable: "Questions",
+                        name: "FK_UserStepResults_Plans_PlanId",
+                        column: x => x.PlanId,
+                        principalTable: "Plans",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_UserStepResults_Plans_UserToPlanId",
-                        column: x => x.UserToPlanId,
-                        principalTable: "Plans",
+                        name: "FK_UserStepResults_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -878,6 +878,11 @@ namespace Core.Migrations
                 name: "IX_Users_PositionId",
                 table: "Users",
                 column: "PositionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserStepResults_PlanId",
+                table: "UserStepResults",
+                column: "PlanId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserStepResults_QuestionId",

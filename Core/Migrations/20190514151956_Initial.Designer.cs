@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Core.Migrations
 {
     [DbContext(typeof(PlanningDbContext))]
-    [Migration("20190513082711_Initial")]
+    [Migration("20190514151956_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -755,6 +755,8 @@ namespace Core.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PlanId");
+
                     b.HasIndex("QuestionId");
 
                     b.HasIndex("UserToPlanId");
@@ -1023,14 +1025,14 @@ namespace Core.Migrations
 
             modelBuilder.Entity("Core.Entities.UserStepResult", b =>
                 {
+                    b.HasOne("Core.Entities.Plan", "Plan")
+                        .WithMany("AdminStepResults")
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Core.Entities.Question")
                         .WithMany("UserStepResults")
                         .HasForeignKey("QuestionId");
-
-                    b.HasOne("Core.Entities.Plan", "Plan")
-                        .WithMany("AdminStepResults")
-                        .HasForeignKey("UserToPlanId")
-                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Core.Entities.UserToPlan", "UserToPlan")
                         .WithMany("UserStepResults")

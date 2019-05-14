@@ -149,7 +149,7 @@ namespace Application.Repositories
                     .Include(x => x.UserToPlan)
                     .Where(x => x.UserToPlan.UserId == userId && x.UserToPlan.PlanId == planId)
                     .Include(x => x.BooleanAnswers)
-                    .Include(x => x.SelectAnswers)
+                    .Include(x => x.SelectAnswers).ThenInclude(x => x.Option)
                     .FirstOrDefault();
             }
 
@@ -197,6 +197,15 @@ namespace Application.Repositories
                     SaveSelectAnswer(answerGroup, userStepResult);
                 }
 
+                if (question.Type == QuestionTypes.TagMultiSelect)
+                {
+                    SaveTagMultiSelectAnswer(answerGroup, userStepResult);
+                }
+                if (question.Type == QuestionTypes.PlanTypeSelect)
+                {
+                    SaveBooleanAnswer(answerGroup, userStepResult);
+                }
+
             }
         }
 
@@ -235,10 +244,15 @@ namespace Application.Repositories
 
             dbAnswer = userStepResult.SelectAnswers.Where(x => x.QuestionId == answerGroup.QuestionId).FirstOrDefault();
 
+            if (answerGroup.Answer.SelectAnswer.OptionId < 1)
+            {
+                answerGroup.Answer.SelectAnswer.OptionId = null;
+            }
+
             if (dbAnswer != null)
             {
                 dbAnswer.OptionId = answerGroup.Answer.SelectAnswer.OptionId;
-                dbAnswer.AltOption = dbAnswer.OptionId == null ? answerGroup.Answer.SelectAnswer.AltOption : null;
+                dbAnswer.AltOption = answerGroup.Answer.SelectAnswer.OptionId == null ? answerGroup.Answer.SelectAnswer.AltOption : null;
                 dbAnswer.UpdatedAt = DateTime.Now;
                 dbAnswer.UpdatedBy = userStepResult.UpdatedBy;
             }
@@ -258,6 +272,53 @@ namespace Application.Repositories
                 userStepResult.SelectAnswers.Add(newAnswer);
             }
 
+        }
+
+        private void SaveTagMultiSelectAnswer(AnswerGroupDTO answerGroup, UserStepResult userStepResult)
+        {
+            IList<SelectAnswer> dbAnswers = null;
+
+            dbAnswers = userStepResult.SelectAnswers.Where(x => x.QuestionId == answerGroup.QuestionId).ToList();
+
+            foreach (var dbAnswer in dbAnswers)
+            {
+                var answerText = dbAnswer.Option != null ? dbAnswer.Option.Title : dbAnswer.AltOption;
+
+                if (!answerGroup.Answer.TagSelectAnswers.Contains(answerText))
+                {
+                    Context.SelectAnswers.Remove(dbAnswer);
+                    Context.SaveChanges();
+                    //userStepResult.SelectAnswers.Remove(dbAnswer);
+                }
+            }
+
+            foreach (var answer in answerGroup.Answer.TagSelectAnswers)
+            {
+                if (!dbAnswers.Any(x => x.Option?.Title == answer || x.AltOption == answer))
+                {
+                    var dbOption = Context.Options.Where(x => x.QuestionId == answerGroup.QuestionId && x.Title == answer).FirstOrDefault();
+
+                    var newAnswer = new SelectAnswer
+                    {
+                        QuestionId = answerGroup.QuestionId,
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now,
+                        CreatedBy = userStepResult.UpdatedBy,
+                        UpdatedBy = userStepResult.UpdatedBy
+                    };
+
+                    if (dbOption != null)
+                    {
+                        newAnswer.Option = dbOption;
+                    }
+                    else
+                    {
+                        newAnswer.AltOption = answer;
+                    }
+
+                    userStepResult.SelectAnswers.Add(newAnswer);
+                }
+            }
         }
 
         private IList<StepBlockDTO> GetStepStructure(string stepIndex)
@@ -296,10 +357,12 @@ namespace Application.Repositories
                     {
                         planStep.AnswerGroups.Add(GetTagMultiSelectAnswers(questions[j].Id, currentUserToPlan, userToPlans, planStep.Step));
                     }
+
                     if (questions[j].Type == QuestionTypes.PlanTypeSelect)
                     {
-                        planStep.AnswerGroups.Add(GetPlanTypeSelectAnswers(questions[j].Id, currentUserToPlan, userToPlans, planStep.Step));
+                        planStep.AnswerGroups.Add(GetBooleanAnswers(questions[j].Id, currentUserToPlan, userToPlans, planStep.Step));
                     }
+
                 }
             }
         }
@@ -443,23 +506,39 @@ namespace Application.Repositories
 
             if (currentUserAnswer != null && currentUserAnswer.Any())
             {
+                foreach (var answer in currentUserAnswer)
+                {
+                    Context.Entry(answer).Reference(x => x.Option).Load();
+                }
+
                 answerGroup.Answer = new AnswerDTO
                 {
-                    TagSelectAnswers = currentUserAnswer.Select(x => x.AltOption).ToList()
+                    TagSelectAnswers = currentUserAnswer.Select(x => x.OptionId != null ? x.Option.Title : x.AltOption).ToList()
                 };
             }
 
             if (definitiveAnswer != null && definitiveAnswer.Any())
             {
-                answerGroup.DefinitiveAnswer = new AnswerDTO
+                foreach (var answer in definitiveAnswer)
                 {
-                    TagSelectAnswers = definitiveAnswer.Select(x => x.AltOption).ToList()
+
+                    Context.Entry(answer).Reference(x => x.Option).Load();
+                }
+
+                answerGroup.Answer = new AnswerDTO
+                {
+                    TagSelectAnswers = definitiveAnswer.Select(x => x.OptionId != null ? x.Option.Title : x.AltOption).ToList()
                 };
+            }
+
+            foreach (var answer in otherAnswers)
+            {
+                Context.Entry(answer).Reference(x => x.Option).Load();
             }
 
             answerGroup.OtherAnswers = otherAnswers.GroupBy(x => x.UserStepResultId).Select(x => new AnswerDTO
             {
-                TagSelectAnswers = x.Select(items => items.AltOption).ToList(),
+                TagSelectAnswers = x.Select(s => s.OptionId != null ? s.Option.Title : s.AltOption).ToList(),
 
                 Author = $"{x.First().UserStepResult.UserToPlan.User.FirstName} {x.First().UserStepResult.UserToPlan.User.LastName}"
             });
@@ -489,16 +568,20 @@ namespace Application.Repositories
                         .Where(x => x.UserToPlanId == userToPlan.Id && x.Step == stepIndex)
                         .FirstOrDefault();
 
-                    T userAnswer;
+                    List<T> userAnswers;
                     if (userStepResult != null)
                     {
-                        userAnswer = Context.Set<T>().Where(x => x.UserStepResultId == userStepResult.Id && x.QuestionId == questionId)
+                        userAnswers = Context.Set<T>().Where(x => x.UserStepResultId == userStepResult.Id && x.QuestionId == questionId)
                             .Include(x => x.UserStepResult)
                             .ThenInclude(x => x.UserToPlan)
                             .ThenInclude(x => x.User)
-                            .FirstOrDefault();
+                            .ToList();
 
-                        otherAnswers.Add(userAnswer);
+                        foreach (var userAnswer in userAnswers)
+                        {
+                            otherAnswers.Add(userAnswer);
+                        }
+
                     }
 
                 }
@@ -509,7 +592,7 @@ namespace Application.Repositories
                 .FirstOrDefault();
 
             definitiveAnswer = null;
-            if (currentUserStepResult != null)
+            if (adminResult != null)
             {
                 definitiveAnswer = Context.Set<T>().Where(x => x.UserStepResultId == adminResult.Id).ToList();
             }

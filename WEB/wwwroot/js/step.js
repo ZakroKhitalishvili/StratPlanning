@@ -99,7 +99,7 @@ function initializeStep() {
         let value = $(this).val();
         let specifyInput = $(this).parent().find('input.select-specify-input');
 
-        if (value.toLowerCase() == 'other') {
+        if (value.toLowerCase() == '-1') {
             specifyInput.show();
         }
         else {
@@ -287,7 +287,7 @@ $(document).on('submit', "form#step_form", function (e) {
                 $.validator.unobtrusive.parse('form#step_form');
             },
             error: function (xhr, statusText, error) {
-                notify("An Error occured during sending a request", "danger", 5);
+                notify("An Error occured on the request", "danger", 5);
             }
         })
 });

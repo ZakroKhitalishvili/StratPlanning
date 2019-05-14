@@ -73,5 +73,10 @@ namespace Core.Context
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(PlanningDbContext).Assembly);
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder contextOptionsBuilder)
+        {
+            contextOptionsBuilder.EnableSensitiveDataLogging(true);
+        }
+
     }
 }

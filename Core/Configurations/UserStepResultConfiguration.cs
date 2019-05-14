@@ -31,7 +31,7 @@ namespace Core.Configurations
 
             builder.HasOne(x => x.Plan)
                .WithMany(s => s.AdminStepResults)
-               .HasForeignKey(x => x.UserToPlanId)
+               .HasForeignKey(x => x.PlanId)
                .IsRequired(false)
                .OnDelete(DeleteBehavior.Restrict);
 

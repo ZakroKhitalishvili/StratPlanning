@@ -753,6 +753,8 @@ namespace Core.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PlanId");
+
                     b.HasIndex("QuestionId");
 
                     b.HasIndex("UserToPlanId");
@@ -1021,14 +1023,14 @@ namespace Core.Migrations
 
             modelBuilder.Entity("Core.Entities.UserStepResult", b =>
                 {
+                    b.HasOne("Core.Entities.Plan", "Plan")
+                        .WithMany("AdminStepResults")
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Core.Entities.Question")
                         .WithMany("UserStepResults")
                         .HasForeignKey("QuestionId");
-
-                    b.HasOne("Core.Entities.Plan", "Plan")
-                        .WithMany("AdminStepResults")
-                        .HasForeignKey("UserToPlanId")
-                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Core.Entities.UserToPlan", "UserToPlan")
                         .WithMany("UserStepResults")

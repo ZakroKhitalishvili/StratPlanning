@@ -10,7 +10,7 @@
 
     var answerGroup = Model.AnswerGroups.Where(x => x.QuestionId == question.Id).FirstOrDefault();
 
-    var filledAnswer = Model.FilledAnswers?.Where(x => x.QuestionId == question.Id).FirstOrDefault();
+    var filledAnswer = Model.AnswerGroups[questionIndexOffset + questionIndex];
 }
 <div class="form-group m-form__group">
     <div class="row">
@@ -34,7 +34,7 @@
                                                 <div class="m-list-timeline__item">
                                                     <span class="m-list-timeline__badge"></span>
                                                     <span class="m-list-timeline__text">
-
+                                                        @otherAnswer.Author
                                                     </span>
                                                     <span class="m-list-timeline__text">
                                                         @otherAnswer.BooleanAnswer
@@ -70,9 +70,6 @@
                 <label>
                     <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].QuestionId" value="@question.Id" />
                     <input asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.BooleanAnswer"
-                           checked="@(filledAnswer!=null?
-                        filledAnswer.Answer.BooleanAnswer
-                        :(answerGroup.Answer?.BooleanAnswer??false))"
                            type="checkbox">
                     <span></span>
                 </label>
