@@ -49,14 +49,14 @@
                                                     </span>
                                                 </div>
                                             }
-                                            <div class="m-list-timeline__item">
-                                                <span class="m-list-timeline__badge"></span>
-                                                <span class="m-list-timeline__text">
-                                                    <b>Definitive answer</b>
-                                                </span>
-                                                <span class="m-list-timeline__text">
-                                                    @if (answerGroup.DefinitiveAnswer != null)
-                                                    {
+                                            @if (answerGroup.DefinitiveAnswer != null)
+                                            {
+                                                <div class="m-list-timeline__item">
+                                                    <span class="m-list-timeline__badge"></span>
+                                                    <span class="m-list-timeline__text">
+                                                        <b>Definitive answer</b>
+                                                    </span>
+                                                    <span class="m-list-timeline__text">
                                                         @if (answerGroup.DefinitiveAnswer.BooleanAnswer)
                                                         {
                                                             <span>Strategic plan with action plan(s)</span>
@@ -65,9 +65,9 @@
                                                         {
                                                             <span>Strategic plan without action plan(s)</span>
                                                         }
-                                                    }
-                                                </span>
-                                            </div>
+                                                    </span>
+                                                </div>
+                                            }
                                         </div>
                                     </div>
                                 </div>

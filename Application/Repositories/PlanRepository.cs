@@ -56,26 +56,62 @@ namespace Application.Repositories
                 .ToList();
         }
 
-        public PlanStepDTO GetStep(string stepIndex, int planId, int userId)
+        public PlanStepDTO GetStep(string stepIndex, int planId, bool isDefinitive, int userId)
         {
             var blocksDTOs = GetStepStructure(stepIndex);
 
             var userToPlans = Context.UsersToPlans
-                .Where(x => x.PlanId == planId)
-                .Include(x => x.User)
+                .Where(x => x.PlanId == planId && x.UserId != userId)
                 .ToList();
 
-            var currentUserToPlan = userToPlans.Where(x => x.UserId == userId).FirstOrDefault();
+            var currentUserStepResult = GetOrCreateUserStepResult(planId, stepIndex, isDefinitive, userId);
+
+            var otherUserStepResults = new List<UserStepResult>();
+
+            foreach (var userToPlan in userToPlans)
+            {
+                var userStepResult = GetUserStepResult(planId, stepIndex, false, userToPlan.UserId);
+                if (userStepResult != null)
+                {
+                    otherUserStepResults.Add(userStepResult);
+                }
+            }
+
+            UserStepResult adminStepResult = currentUserStepResult;
+            if (!isDefinitive)
+            {
+                adminStepResult = GetUserStepResult(planId, stepIndex, true, userId);
+                if (adminStepResult != null)
+                {
+                    otherUserStepResults.Add(adminStepResult);
+                }
+            }
 
             var planStep = new PlanStepDTO
             {
                 PlanId = planId,
                 Step = stepIndex,
                 StepBlocks = blocksDTOs.ToList(),
-                PlanningTeam = GetPlanningTeam(planId)
+                PlanningTeam = GetPlanningTeam(planId),
+                IsAdmin = isDefinitive,
+                IsCompleted = adminStepResult?.IsSubmitted ?? false
             };
 
-            FillWithAnswers(planStep, currentUserToPlan, userToPlans);
+            planStep.SubmittedUsers = otherUserStepResults
+                .Where(x => !x.IsDefinitive && x.IsSubmitted)
+                .Select(x => new UserPlanningMemberDTO
+                {
+                    FullName = $"{x.UserToPlan.User.FirstName} {x.UserToPlan.User.LastName}"
+                });
+
+            planStep.NotSubmittedUsers = otherUserStepResults
+                .Where(x => !x.IsDefinitive && !x.IsSubmitted)
+                .Select(x => new UserPlanningMemberDTO
+                {
+                    FullName = $"{x.UserToPlan.User.FirstName} {x.UserToPlan.User.LastName}"
+                });
+
+            FillWithAnswers(planStep, currentUserStepResult, otherUserStepResults);
 
             return planStep;
         }
@@ -112,7 +148,7 @@ namespace Application.Repositories
 
         public bool SaveStep(PlanStepDTO planStep, bool isDefinitive, bool isSubmitted, int userId)
         {
-            var stepUserResult = GetUserStepResult(planStep.PlanId, planStep.Step, isDefinitive, userId);
+            var stepUserResult = GetOrCreateUserStepResult(planStep.PlanId, planStep.Step, isDefinitive, userId);
 
             if (!stepUserResult.IsDefinitive && stepUserResult.IsSubmitted)
             {
@@ -129,29 +165,21 @@ namespace Application.Repositories
 
         }
 
+        public IEnumerable<PlanDTO> GetPlanListForUser(int userId)
+        {
+            return Context.UsersToPlans
+                .Where(x => x.UserId == userId)
+                .Include(x => x.Plan)
+                .Select(x => Mapper.Map<PlanDTO>(x.Plan)).ToList();
+
+        }
+
         #region Private methods
 
-        private UserStepResult GetUserStepResult(int planId, string stepIndex, bool isDefinitive, int userId)
+        #region General methods
+        private UserStepResult GetOrCreateUserStepResult(int planId, string stepIndex, bool isDefinitive, int userId)
         {
-            UserStepResult userStepResult;
-
-            if (isDefinitive)
-            {
-                userStepResult = Context.UserStepResults
-                    .Where(x => x.Step == stepIndex && x.PlanId == planId)
-                    .Include(x => x.BooleanAnswers)
-                    .FirstOrDefault();
-            }
-            else
-            {
-                userStepResult = Context.UserStepResults
-                    .Where(x => x.Step == stepIndex)
-                    .Include(x => x.UserToPlan)
-                    .Where(x => x.UserToPlan.UserId == userId && x.UserToPlan.PlanId == planId)
-                    .Include(x => x.BooleanAnswers)
-                    .Include(x => x.SelectAnswers).ThenInclude(x => x.Option)
-                    .FirstOrDefault();
-            }
+            UserStepResult userStepResult = GetUserStepResult(planId, stepIndex, isDefinitive, userId);
 
             if (userStepResult == null)
             {
@@ -180,6 +208,47 @@ namespace Application.Repositories
             return userStepResult;
 
         }
+
+        private UserStepResult GetUserStepResult(int planId, string stepIndex, bool isDefinitive, int userId)
+        {
+            UserStepResult userStepResult;
+
+            if (isDefinitive)
+            {
+                userStepResult = Context.UserStepResults
+                    .Where(x => x.Step == stepIndex && x.PlanId == planId)
+                    .Include(x => x.BooleanAnswers)
+                    .Include(x => x.SelectAnswers).ThenInclude(x => x.Option)
+                    .FirstOrDefault();
+            }
+            else
+            {
+                userStepResult = Context.UserStepResults
+                    .Where(x => x.Step == stepIndex)
+                    .Include(x => x.UserToPlan).ThenInclude(x => x.User)
+                    .Where(x => x.UserToPlan.UserId == userId && x.UserToPlan.PlanId == planId)
+                    .Include(x => x.BooleanAnswers)
+                    .Include(x => x.SelectAnswers).ThenInclude(x => x.Option)
+                    .FirstOrDefault();
+            }
+
+            return userStepResult;
+        }
+
+        private IList<StepBlockDTO> GetStepStructure(string stepIndex)
+        {
+            return Context.StepBlocks.Where(x => x.Step == stepIndex)
+                .Include(x => x.Questions)
+                .ThenInclude(x => x.Options)
+                .OrderBy(x => x.Order)
+                .AsEnumerable()
+                .Select(x => Mapper.Map<StepBlockDTO>(x))
+                .ToList();
+        }
+
+        #endregion
+
+        #region Saving methods
 
         private void SaveAnswers(IList<AnswerGroupDTO> answerGroups, UserStepResult userStepResult)
         {
@@ -247,6 +316,10 @@ namespace Application.Repositories
             if (answerGroup.Answer.SelectAnswer.OptionId < 1)
             {
                 answerGroup.Answer.SelectAnswer.OptionId = null;
+            }
+            else
+            {
+                answerGroup.Answer.SelectAnswer.AltOption = null;
             }
 
             if (dbAnswer != null)
@@ -321,19 +394,11 @@ namespace Application.Repositories
             }
         }
 
-        private IList<StepBlockDTO> GetStepStructure(string stepIndex)
-        {
-            return Context.StepBlocks.Where(x => x.Step == stepIndex)
-                .Include(x => x.Questions)
-                .ThenInclude(x => x.Options)
-                .OrderBy(x => x.Order)
-                .AsEnumerable()
-                .Select(x => Mapper.Map<StepBlockDTO>(x))
-                .ToList();
-        }
+        #endregion
 
+        #region Reading methods
 
-        private void FillWithAnswers(PlanStepDTO planStep, UserToPlan currentUserToPlan, IList<UserToPlan> userToPlans)
+        private void FillWithAnswers(PlanStepDTO planStep, UserStepResult currentUserStepResult, IList<UserStepResult> otherUserStepResults)
         {
             planStep.AnswerGroups = new List<AnswerGroupDTO>();
 
@@ -345,259 +410,196 @@ namespace Application.Repositories
                 {
                     if (questions[j].Type == QuestionTypes.Boolean)
                     {
-                        planStep.AnswerGroups.Add(GetBooleanAnswers(questions[j].Id, currentUserToPlan, userToPlans, planStep.Step));
+                        planStep.AnswerGroups.Add(GetBooleanAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
                     }
 
                     if (questions[j].Type == QuestionTypes.Select)
                     {
-                        planStep.AnswerGroups.Add(GetSelectAnswers(questions[j].Id, currentUserToPlan, userToPlans, planStep.Step));
+                        planStep.AnswerGroups.Add(GetSelectAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
                     }
 
                     if (questions[j].Type == QuestionTypes.TagMultiSelect)
                     {
-                        planStep.AnswerGroups.Add(GetTagMultiSelectAnswers(questions[j].Id, currentUserToPlan, userToPlans, planStep.Step));
+                        planStep.AnswerGroups.Add(GetTagMultiSelectAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
                     }
 
                     if (questions[j].Type == QuestionTypes.PlanTypeSelect)
                     {
-                        planStep.AnswerGroups.Add(GetBooleanAnswers(questions[j].Id, currentUserToPlan, userToPlans, planStep.Step));
+                        planStep.AnswerGroups.Add(GetBooleanAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
                     }
 
                 }
             }
         }
 
-        private AnswerGroupDTO GetBooleanAnswers(int questionId, UserToPlan currentUserToPlan, IList<UserToPlan> userToPlans, string stepIndex)
+        private AnswerGroupDTO GetBooleanAnswers(int questionId, UserStepResult currentUserStepResult, IList<UserStepResult> otherUserStepResults)
         {
-            GetAnswers<BooleanAnswer>(questionId,
-                currentUserToPlan,
-                userToPlans,
-                stepIndex,
-                out IList<BooleanAnswer> currentUserAnswer,
-                out IList<BooleanAnswer> otherAnswers,
-                out IList<BooleanAnswer> definitiveAnswer);
-
             AnswerGroupDTO answerGroup = new AnswerGroupDTO
             {
                 QuestionId = questionId
             };
 
-            if (currentUserAnswer != null && currentUserAnswer.Any())
+            var currentUserAnswer = currentUserStepResult.BooleanAnswers.Where(x => x.QuestionId == questionId).SingleOrDefault();
+
+            if (currentUserAnswer != null)
             {
-                answerGroup.Answer = new AnswerDTO { BooleanAnswer = currentUserAnswer.First().Answer };
+                answerGroup.Answer = new AnswerDTO { BooleanAnswer = currentUserAnswer.Answer };
             }
 
-            if (definitiveAnswer != null && definitiveAnswer.Any())
+            var definitiveStepResult = otherUserStepResults.Where(x => x.IsDefinitive).SingleOrDefault();
+
+            var definitiveAnswer = definitiveStepResult?.BooleanAnswers.Where(x => x.QuestionId == questionId).SingleOrDefault();
+
+            if (definitiveAnswer != null)
             {
-                answerGroup.DefinitiveAnswer = new AnswerDTO { BooleanAnswer = definitiveAnswer.First().Answer };
+                answerGroup.DefinitiveAnswer = new AnswerDTO { BooleanAnswer = definitiveAnswer.Answer };
             }
 
-            answerGroup.OtherAnswers = otherAnswers.Select(x => new AnswerDTO
+            var otherAnswers = new List<AnswerDTO>();
+
+            foreach (var otherUserStepResult in otherUserStepResults.Where(x => !x.IsDefinitive))
             {
-                BooleanAnswer = x.Answer,
-                Author = $"{x.UserStepResult.UserToPlan.User.FirstName} {x.UserStepResult.UserToPlan.User.LastName}"
-            });
+                var userAnswer = otherUserStepResult.BooleanAnswers.Where(a => a.QuestionId == questionId).SingleOrDefault();
+
+                if (userAnswer != null)
+                {
+                    var answerDTO = new AnswerDTO
+                    {
+                        BooleanAnswer = userAnswer.Answer,
+                        Author = $"{otherUserStepResult.UserToPlan.User.FirstName} {otherUserStepResult.UserToPlan.User.LastName}"
+                    };
+
+                    otherAnswers.Add(answerDTO);
+                }
+            }
+
+            answerGroup.OtherAnswers = otherAnswers;
 
             return answerGroup;
         }
 
-        private AnswerGroupDTO GetPlanTypeSelectAnswers(int questionId, UserToPlan currentUserToPlan, IList<UserToPlan> userToPlans, string stepIndex)
+        private AnswerGroupDTO GetSelectAnswers(int questionId, UserStepResult currentUserStepResult, IList<UserStepResult> otherUserStepResults)
         {
-            GetAnswers<BooleanAnswer>(questionId,
-                currentUserToPlan,
-                userToPlans,
-                stepIndex,
-                out IList<BooleanAnswer> currentUserAnswer,
-                out IList<BooleanAnswer> otherAnswers,
-                out IList<BooleanAnswer> definitiveAnswer);
-
             AnswerGroupDTO answerGroup = new AnswerGroupDTO
             {
                 QuestionId = questionId
             };
 
-            if (currentUserAnswer != null && currentUserAnswer.Any())
-            {
-                answerGroup.Answer = new AnswerDTO { BooleanAnswer = currentUserAnswer.First().Answer };
-            }
+            var currentUserAnswer = currentUserStepResult.SelectAnswers.Where(x => x.QuestionId == questionId).SingleOrDefault();
 
-            if (definitiveAnswer != null && definitiveAnswer.Any())
-            {
-                answerGroup.DefinitiveAnswer = new AnswerDTO { BooleanAnswer = definitiveAnswer.First().Answer };
-            }
-
-            answerGroup.OtherAnswers = otherAnswers.Select(x => new AnswerDTO
-            {
-                BooleanAnswer = x.Answer,
-                Author = $"{x.UserStepResult.UserToPlan.User.FirstName} {x.UserStepResult.UserToPlan.User.LastName}"
-            });
-
-            return answerGroup;
-        }
-
-
-        private AnswerGroupDTO GetSelectAnswers(int questionId, UserToPlan currentUserToPlan, IList<UserToPlan> userToPlans, string stepIndex)
-        {
-            GetAnswers<SelectAnswer>(questionId,
-                currentUserToPlan,
-                userToPlans,
-                stepIndex,
-                out IList<SelectAnswer> currentUserAnswer,
-                out IList<SelectAnswer> otherAnswers,
-                out IList<SelectAnswer> definitiveAnswer);
-
-            AnswerGroupDTO answerGroup = new AnswerGroupDTO
-            {
-                QuestionId = questionId
-            };
-
-            if (currentUserAnswer != null && currentUserAnswer.Any())
+            if (currentUserAnswer != null)
             {
                 answerGroup.Answer = new AnswerDTO
                 {
                     SelectAnswer = new SelectAnswerDTO
                     {
-                        OptionId = currentUserAnswer.First().OptionId,
-                        AltOption = currentUserAnswer.First().AltOption
+                        OptionId = currentUserAnswer.OptionId,
+                        AltOption = currentUserAnswer.AltOption
                     }
                 };
             }
 
-            if (definitiveAnswer != null && definitiveAnswer.Any())
+            var definitiveStepResult = otherUserStepResults.Where(x => x.IsDefinitive).SingleOrDefault();
+
+            var definitiveAnswer = definitiveStepResult?.SelectAnswers.Where(x => x.QuestionId == questionId).SingleOrDefault();
+
+            if (definitiveAnswer != null)
             {
                 answerGroup.DefinitiveAnswer = new AnswerDTO
                 {
                     SelectAnswer = new SelectAnswerDTO
                     {
-                        OptionId = definitiveAnswer.First().OptionId,
-                        AltOption = definitiveAnswer.First().AltOption
+                        OptionId = definitiveAnswer.OptionId,
+                        AltOption = definitiveAnswer.AltOption
                     }
                 };
             }
 
-            answerGroup.OtherAnswers = otherAnswers.Select(x => new AnswerDTO
-            {
-                SelectAnswer = new SelectAnswerDTO
-                {
-                    OptionId = x.OptionId,
-                    AltOption = x.AltOption
-                },
+            var otherAnswers = new List<AnswerDTO>();
 
-                Author = $"{x.UserStepResult.UserToPlan.User.FirstName} {x.UserStepResult.UserToPlan.User.LastName}"
-            });
+            foreach (var otherUserStepResult in otherUserStepResults.Where(x => !x.IsDefinitive))
+            {
+                var userAnswer = otherUserStepResult.SelectAnswers.Where(a => a.QuestionId == questionId).SingleOrDefault();
+
+                if (userAnswer != null)
+                {
+                    var answerDTO = new AnswerDTO
+                    {
+                        SelectAnswer = new SelectAnswerDTO
+                        {
+                            OptionId = userAnswer.OptionId,
+                            AltOption = userAnswer.AltOption
+                        },
+
+                        Author = $"{otherUserStepResult.UserToPlan.User.FirstName} {otherUserStepResult.UserToPlan.User.LastName}"
+                    };
+
+                    otherAnswers.Add(answerDTO);
+                }
+
+            }
+
+            answerGroup.OtherAnswers = otherAnswers;
 
             return answerGroup;
         }
 
-        private AnswerGroupDTO GetTagMultiSelectAnswers(int questionId, UserToPlan currentUserToPlan, IList<UserToPlan> userToPlans, string stepIndex)
+        private AnswerGroupDTO GetTagMultiSelectAnswers(int questionId, UserStepResult currentUserStepResult, IList<UserStepResult> otherUserStepResults)
         {
-            GetAnswers<SelectAnswer>(questionId,
-                currentUserToPlan,
-                userToPlans,
-                stepIndex,
-                out IList<SelectAnswer> currentUserAnswer,
-                out IList<SelectAnswer> otherAnswers,
-                out IList<SelectAnswer> definitiveAnswer);
-
             AnswerGroupDTO answerGroup = new AnswerGroupDTO
             {
                 QuestionId = questionId
             };
 
-            if (currentUserAnswer != null && currentUserAnswer.Any())
+            answerGroup.Answer = new AnswerDTO
             {
-                foreach (var answer in currentUserAnswer)
-                {
-                    Context.Entry(answer).Reference(x => x.Option).Load();
-                }
+                TagSelectAnswers = currentUserStepResult
+                                    .SelectAnswers
+                                    .Where(x => x.QuestionId == questionId)
+                                    .Select(x => x.OptionId != null ? x.Option.Title : x.AltOption)
+                                    .ToList()
+            };
 
-                answerGroup.Answer = new AnswerDTO
+            var definitiveStepResult = otherUserStepResults.Where(x => x.IsDefinitive).SingleOrDefault();
+
+            if (definitiveStepResult != null)
+            {
+                answerGroup.DefinitiveAnswer = new AnswerDTO
                 {
-                    TagSelectAnswers = currentUserAnswer.Select(x => x.OptionId != null ? x.Option.Title : x.AltOption).ToList()
+                    TagSelectAnswers = definitiveStepResult
+                                            .SelectAnswers
+                                            .Where(x => x.QuestionId == questionId)
+                                            .Select(x => x.OptionId != null ? x.Option.Title : x.AltOption)
+                                            .ToList()
                 };
             }
 
-            if (definitiveAnswer != null && definitiveAnswer.Any())
-            {
-                foreach (var answer in definitiveAnswer)
-                {
+            var otherAnswers = new List<AnswerDTO>();
 
-                    Context.Entry(answer).Reference(x => x.Option).Load();
+            foreach (var otherUserStepResult in otherUserStepResults.Where(x => !x.IsDefinitive))
+            {
+                var userAnswers = otherUserStepResult.SelectAnswers.Where(a => a.QuestionId == questionId).ToList();
+
+                if (userAnswers.Any())
+                {
+                    var answerDTO = new AnswerDTO
+                    {
+                        TagSelectAnswers = userAnswers.Select(s => s.OptionId != null ? s.Option.Title : s.AltOption).ToList(),
+
+                        Author = $"{otherUserStepResult.UserToPlan.User.FirstName} {otherUserStepResult.UserToPlan.User.LastName}"
+                    };
+
+                    otherAnswers.Add(answerDTO);
                 }
 
-                answerGroup.Answer = new AnswerDTO
-                {
-                    TagSelectAnswers = definitiveAnswer.Select(x => x.OptionId != null ? x.Option.Title : x.AltOption).ToList()
-                };
             }
 
-            foreach (var answer in otherAnswers)
-            {
-                Context.Entry(answer).Reference(x => x.Option).Load();
-            }
-
-            answerGroup.OtherAnswers = otherAnswers.GroupBy(x => x.UserStepResultId).Select(x => new AnswerDTO
-            {
-                TagSelectAnswers = x.Select(s => s.OptionId != null ? s.Option.Title : s.AltOption).ToList(),
-
-                Author = $"{x.First().UserStepResult.UserToPlan.User.FirstName} {x.First().UserStepResult.UserToPlan.User.LastName}"
-            });
+            answerGroup.OtherAnswers = otherAnswers;
 
             return answerGroup;
         }
 
-        private void GetAnswers<T>(int questionId, UserToPlan currentUserToPlan, IList<UserToPlan> userToPlans, string stepIndex, out IList<T> currentUserAnswers, out IList<T> otherAnswers, out IList<T> definitiveAnswer) where T : AbstractAnswer
-        {
-            var currentUserStepResult = Context.UserStepResults
-                .Where(x => x.UserToPlanId == currentUserToPlan.Id && x.Step == stepIndex)
-                .FirstOrDefault();
-
-            currentUserAnswers = null;
-            if (currentUserStepResult != null)
-            {
-                currentUserAnswers = Context.Set<T>().Where(x => x.UserStepResultId == currentUserStepResult.Id && x.QuestionId == questionId).ToList();
-            }
-
-            otherAnswers = new List<T>();
-
-            foreach (var userToPlan in userToPlans)
-            {
-                if (userToPlan.Id != currentUserToPlan.Id)
-                {
-                    var userStepResult = Context.UserStepResults
-                        .Where(x => x.UserToPlanId == userToPlan.Id && x.Step == stepIndex)
-                        .FirstOrDefault();
-
-                    List<T> userAnswers;
-                    if (userStepResult != null)
-                    {
-                        userAnswers = Context.Set<T>().Where(x => x.UserStepResultId == userStepResult.Id && x.QuestionId == questionId)
-                            .Include(x => x.UserStepResult)
-                            .ThenInclude(x => x.UserToPlan)
-                            .ThenInclude(x => x.User)
-                            .ToList();
-
-                        foreach (var userAnswer in userAnswers)
-                        {
-                            otherAnswers.Add(userAnswer);
-                        }
-
-                    }
-
-                }
-            }
-
-            var adminResult = Context.UserStepResults
-                .Where(x => x.IsDefinitive && x.PlanId == currentUserToPlan.PlanId && x.Step == stepIndex)
-                .FirstOrDefault();
-
-            definitiveAnswer = null;
-            if (adminResult != null)
-            {
-                definitiveAnswer = Context.Set<T>().Where(x => x.UserStepResultId == adminResult.Id).ToList();
-            }
-
-        }
+        #endregion
 
         #endregion
     }

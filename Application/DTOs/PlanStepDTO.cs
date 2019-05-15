@@ -21,6 +21,10 @@ namespace Application.DTOs
 
         public IEnumerable<UserPlanningMemberDTO> PlanningTeam { get; set; }
 
+        public IEnumerable<UserPlanningMemberDTO> SubmittedUsers { get; set; }
+
+        public IEnumerable<UserPlanningMemberDTO> NotSubmittedUsers { get; set; }
+
         public bool IsCompleted { get; set; }
 
         public bool IsAdmin { get; set; }

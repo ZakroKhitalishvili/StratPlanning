@@ -61,20 +61,27 @@
             </div>
             <!--end::Item-->
         </div>
-        <div id="planning_team_portlet">
-            @if (Model.Step == Steps.Predeparture)
-            {
+
+        @if (Model.Step == Steps.Predeparture && Model.IsAdmin)
+        {
+            <div id="planning_team_portlet">
                 <partial name="~/Views/Worksheet/Partials/_PlanningTeam.cshtml" model="Model.PlanningTeam" />
-            }
-        </div>
+            </div>
+        }
+
+        @if (Model.IsAdmin)
+        {
+            <partial name="~/Views/Worksheet/Partials/_InfoAboutUsersStatus.cshtml" model="Model" />
+        }
+
         <partial name="~/Views/Worksheet/Partials/_StepForm.cshtml" model="Model" />
+
+
     </div>
 </div>
 
 
 @section scripts{
-
-    <script src="~/js/step.js" type="text/javascript"></script>
     <script>
         $('#menu_worksheet').addClass('m-menu__item--active');
         var GlobalPlanId = @Model.PlanId;
@@ -84,5 +91,7 @@
         var GetPlanningTeamURL = '@Url.Action("GetPlanningTeam","Worksheet")';
         var SaveStepURL = '@Url.Action("SaveStep","Worksheet")';
     </script>
+    <script src="~/js/step.js" type="text/javascript"></script>
+
 
 }

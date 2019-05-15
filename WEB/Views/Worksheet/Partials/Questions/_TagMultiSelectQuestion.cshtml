@@ -41,26 +41,26 @@
                                                     <span class="m-list-timeline__text">
                                                         @foreach (var answer in otherAnswer.TagSelectAnswers)
                                                         {
-                                                            <span>@answer</span>
+                                                            <span>@answer;</span>
                                                         }
                                                     </span>
                                                 </div>
                                             }
-                                            <div class="m-list-timeline__item">
-                                                <span class="m-list-timeline__badge"></span>
-                                                <span class="m-list-timeline__text">
-                                                    <b>Definitive answer</b>
-                                                </span>
-                                                <span class="m-list-timeline__text">
-                                                    @if (answerGroup.DefinitiveAnswer != null)
-                                                    {
+                                            @if (answerGroup.DefinitiveAnswer != null)
+                                            {
+                                                <div class="m-list-timeline__item">
+                                                    <span class="m-list-timeline__badge"></span>
+                                                    <span class="m-list-timeline__text">
+                                                        <b>Definitive answer</b>
+                                                    </span>
+                                                    <span class="m-list-timeline__text">
                                                         @foreach (var answer in answerGroup.DefinitiveAnswer.TagSelectAnswers)
                                                         {
-                                                            <span>@answer</span>
+                                                            <span>@answer;</span>
                                                         }
-                                                    }
-                                                </span>
-                                            </div>
+                                                    </span>
+                                                </div>
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -84,7 +84,11 @@
                             items = items.Append(new SelectListItem { Text = answer });
                         }
                     }
-                    values = answerGroup.Answer.TagSelectAnswers.Aggregate((a, b) => $"{a},{b}");
+
+                    if (answerGroup.Answer.TagSelectAnswers.Any())
+                    {
+                        values = answerGroup.Answer.TagSelectAnswers.Aggregate((a, b) => $"{a},{b}");
+                    }
                 }
 
 

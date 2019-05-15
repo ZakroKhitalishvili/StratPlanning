@@ -41,15 +41,18 @@
                                                     </span>
                                                 </div>
                                             }
-                                            <div class="m-list-timeline__item">
-                                                <span class="m-list-timeline__badge"></span>
-                                                <span class="m-list-timeline__text">
-                                                    <b>Definitive answer</b>
-                                                </span>
-                                                <span class="m-list-timeline__text">
-                                                    @answerGroup.DefinitiveAnswer?.BooleanAnswer
-                                                </span>
-                                            </div>
+                                            @if (answerGroup.DefinitiveAnswer != null)
+                                            {
+                                                <div class="m-list-timeline__item">
+                                                    <span class="m-list-timeline__badge"></span>
+                                                    <span class="m-list-timeline__text">
+                                                        <b>Definitive answer</b>
+                                                    </span>
+                                                    <span class="m-list-timeline__text">
+                                                        @answerGroup.DefinitiveAnswer.BooleanAnswer
+                                                    </span>
+                                                </div>
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -65,7 +68,7 @@
             <br>
             <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer"></span>
         </div>
-        <div class="col-4 col-md-2 m-align--center">
+        <div class="col-3 col-md-2 m-align--center">
             <span class="m-switch m-switch--icon">
                 <label>
                     <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].QuestionId" value="@question.Id" />

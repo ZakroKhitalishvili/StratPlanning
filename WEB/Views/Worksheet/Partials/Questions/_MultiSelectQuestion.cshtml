@@ -42,27 +42,27 @@
                                                         @foreach (var optionid in otherAnswer.SelectAnswers)
                                                         {
                                                             var option = question.Options.Where(x => x.Id == optionid).FirstOrDefault();
-                                                            <span>@option.Title</span>
+                                                            <span>@option.Title;</span>
                                                         }
                                                     </span>
                                                 </div>
                                             }
-                                            <div class="m-list-timeline__item">
-                                                <span class="m-list-timeline__badge"></span>
-                                                <span class="m-list-timeline__text">
-                                                    <b>Definitive answer</b>
-                                                </span>
-                                                <span class="m-list-timeline__text">
-                                                    @if (answerGroup.DefinitiveAnswer != null)
-                                                    {
+                                            @if (answerGroup.DefinitiveAnswer != null)
+                                            {
+                                                <div class="m-list-timeline__item">
+                                                    <span class="m-list-timeline__badge"></span>
+                                                    <span class="m-list-timeline__text">
+                                                        <b>Definitive answer</b>
+                                                    </span>
+                                                    <span class="m-list-timeline__text">
                                                         @foreach (var optionid in answerGroup.DefinitiveAnswer.SelectAnswers)
                                                         {
                                                             var option = question.Options.Where(x => x.Id == optionid).FirstOrDefault();
-                                                            <span>@option.Title</span>
+                                                            <span>@option.Title;</span>
                                                         }
-                                                    }
                                                     </span>
-                                            </div>
+                                                </div>
+                                            }
                                         </div>
                                     </div>
                                 </div>

@@ -8,7 +8,7 @@ namespace Application.Interfaces.Repositories
     {
         void CreatePlan(Plan plan);
 
-        PlanStepDTO GetStep(string stepIndex, int planId, int userId);
+        PlanStepDTO GetStep(string stepIndex, int planId, bool isDefinitive, int userId);
 
         IEnumerable<PlanStepDTO> GetStepList();
 
@@ -22,5 +22,6 @@ namespace Application.Interfaces.Repositories
 
         bool SaveStep(PlanStepDTO planStep, bool isDefinitive, bool isSubmitted, int userId);
 
+        IEnumerable<PlanDTO> GetPlanListForUser(int userId);
     }
 }

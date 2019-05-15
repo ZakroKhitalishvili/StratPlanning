@@ -23,7 +23,9 @@ namespace Web.Controllers
         {
             var userId = HttpContext.GetUserId();
 
-            var stepDTO = _planRepository.GetStep(stepIndex, planId, userId);
+            var isDefinitive = User.IsInRole(Roles.Admin);
+
+            var stepDTO = _planRepository.GetStep(stepIndex, planId, isDefinitive, userId);
 
             ViewBag.Steps = _planRepository.GetStepList();
 
@@ -37,9 +39,18 @@ namespace Web.Controllers
 
         public IActionResult GetPlanList()
         {
-            var planList = _planRepository.GetPlanList();
+            if (User.IsInRole(Roles.Admin))
+            {
+                var planList = _planRepository.GetPlanList();
 
-            return View("PlanList", planList);
+                return View("PlanList", planList);
+            }
+            else
+            {
+                var planList = _planRepository.GetPlanListForUser(HttpContext.GetUserId());
+
+                return View("PlanList", planList);
+            }
         }
 
         public IActionResult GetPlan(int id)
@@ -66,6 +77,7 @@ namespace Web.Controllers
         public IActionResult SaveStep(PlanStepDTO planStep)
         {
             HttpContext.Response.StatusCode = StatusCodes.Status202Accepted;
+            var isDefinitive = User.IsInRole(Roles.Admin);
 
             bool result = false;
 
@@ -73,10 +85,6 @@ namespace Web.Controllers
 
             if (ModelState.IsValid)
             {
-                //var isDefinitive = User.IsInRole(Roles.Admin);
-
-                var isDefinitive = false;
-
                 result = _planRepository.SaveStep(planStep, isDefinitive, isSubmitted: false, userId: HttpContext.GetUserId());
 
                 if (result)
@@ -85,7 +93,7 @@ namespace Web.Controllers
                 }
             }
 
-            var newPlanStep = _planRepository.GetStep(planStep.Step, planStep.PlanId, HttpContext.GetUserId());
+            var newPlanStep = _planRepository.GetStep(planStep.Step, planStep.PlanId, isDefinitive, HttpContext.GetUserId());
 
             if (!result)
             {

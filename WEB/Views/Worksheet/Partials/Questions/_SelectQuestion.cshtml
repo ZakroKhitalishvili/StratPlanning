@@ -52,27 +52,28 @@
                                                     </span>
                                                 </div>
                                             }
-                                            <div class="m-list-timeline__item">
-                                                <span class="m-list-timeline__badge"></span>
-                                                <span class="m-list-timeline__text">
-                                                    <b>Definitive answer</b>
-                                                </span>
-                                                <span class="m-list-timeline__text">
-                                                    @if (answerGroup.DefinitiveAnswer != null)
-                                                    {
+                                            @if (answerGroup.DefinitiveAnswer != null)
+                                            {
+                                                <div class="m-list-timeline__item">
+                                                    <span class="m-list-timeline__badge"></span>
+                                                    <span class="m-list-timeline__text">
+                                                        <b>Definitive answer</b>
+                                                    </span>
+                                                    <span class="m-list-timeline__text">
+
                                                         @if (answerGroup.DefinitiveAnswer.SelectAnswer.OptionId != null)
                                                         {
-                                                            var definitivePption = question.Options.Where(x => x.Id == answerGroup.DefinitiveAnswer.SelectAnswer.OptionId).FirstOrDefault();
+                                                            var definitiveOption = question.Options.Where(x => x.Id == answerGroup.DefinitiveAnswer.SelectAnswer.OptionId).FirstOrDefault();
 
-                                                            <span>@definitivePption.Title</span>
+                                                            <span>@definitiveOption.Title</span>
                                                         }
                                                         else
                                                         {
-                                                            <span>@answerGroup.DefinitiveAnswer.SelectAnswer</span>
+                                                            <span>@answerGroup.DefinitiveAnswer.SelectAnswer.AltOption</span>
                                                         }
-                                                    }
-                                                </span>
-                                            </div>
+                                                    </span>
+                                                </div>
+                                            }
                                         </div>
                                     </div>
                                 </div>

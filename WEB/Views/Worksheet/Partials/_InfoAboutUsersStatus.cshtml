@@ -1,0 +1,36 @@
+﻿@model Application.DTOs.PlanStepDTO
+
+<div class="form-group m-form__group">
+    <label>
+        Input received from
+    </label>
+    <div>
+        <div class="m-list-badge m-list-badge--light-bg">
+            <div class="m-list-badge__items">
+                @foreach (var member in Model.SubmittedUsers)
+                {
+                    <span class="m-list-badge__item m-list-badge__item--default">
+                        @member.FullName
+                    </span>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group m-form__group">
+    <label>
+        Still awaiting feedback from
+    </label>
+    <div>
+        <div class="m-list-badge m-list-badge--light-bg">
+            <div class="m-list-badge__items">
+                @foreach (var member in Model.NotSubmittedUsers)
+                {
+                    <span class="m-list-badge__item m-list-badge__item--default">
+                        @member.FullName
+                    </span>
+                }
+            </div>
+        </div>
+    </div>
+</div>
