@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Core.Migrations
 {
     [DbContext(typeof(PlanningDbContext))]
-    [Migration("20190514151956_Initial")]
-    partial class Initial
+    [Migration("20190516151020_UserStepResult_IsFinal_Property_Added")]
+    partial class UserStepResult_IsFinal_Property_Added
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -520,7 +520,9 @@ namespace Core.Migrations
 
                     b.Property<int?>("CreatedBy");
 
-                    b.Property<bool>("IsCompleted");
+                    b.Property<bool>("IsCompleted")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
 
                     b.Property<int>("PlanId");
 
@@ -528,7 +530,8 @@ namespace Core.Migrations
 
                     b.Property<DateTime?>("Schedule");
 
-                    b.Property<int>("Step")
+                    b.Property<string>("Step")
+                        .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<DateTime>("UpdatedAt");
@@ -539,7 +542,7 @@ namespace Core.Migrations
 
                     b.HasIndex("PlanId");
 
-                    b.ToTable("StepTask");
+                    b.ToTable("StepTasks");
                 });
 
             modelBuilder.Entity("Core.Entities.StepTaskAnswer", b =>
@@ -560,7 +563,7 @@ namespace Core.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<bool>("IsFinal")
+                    b.Property<bool>("IsDefinitive")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(false);
 
@@ -582,7 +585,7 @@ namespace Core.Migrations
 
                     b.HasIndex("UserToPlanId");
 
-                    b.ToTable("StepTaskAnswer");
+                    b.ToTable("StepTaskAnswers");
                 });
 
             modelBuilder.Entity("Core.Entities.StrategicIssueAnswer", b =>
@@ -734,6 +737,8 @@ namespace Core.Migrations
                     b.Property<bool>("IsDefinitive")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(false);
+
+                    b.Property<bool?>("IsFinal");
 
                     b.Property<bool>("IsSubmitted")
                         .ValueGeneratedOnAdd()
@@ -966,9 +971,9 @@ namespace Core.Migrations
             modelBuilder.Entity("Core.Entities.StepTask", b =>
                 {
                     b.HasOne("Core.Entities.Plan", "Plan")
-                        .WithMany()
+                        .WithMany("StepTasks")
                         .HasForeignKey("PlanId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Core.Entities.StepTaskAnswer", b =>

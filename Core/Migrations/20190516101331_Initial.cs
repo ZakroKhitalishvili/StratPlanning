@@ -116,16 +116,16 @@ namespace Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "StepTask",
+                name: "StepTasks",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Step = table.Column<int>(maxLength: 50, nullable: false),
+                    Step = table.Column<string>(maxLength: 50, nullable: false),
                     PlanId = table.Column<int>(nullable: false),
                     Schedule = table.Column<DateTime>(nullable: true),
                     Remind = table.Column<int>(nullable: true),
-                    IsCompleted = table.Column<bool>(nullable: false),
+                    IsCompleted = table.Column<bool>(nullable: false, defaultValue: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<int>(nullable: true),
@@ -133,13 +133,13 @@ namespace Core.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StepTask", x => x.Id);
+                    table.PrimaryKey("PK_StepTasks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_StepTask_Plans_PlanId",
+                        name: "FK_StepTasks_Plans_PlanId",
                         column: x => x.PlanId,
                         principalTable: "Plans",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -257,7 +257,7 @@ namespace Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "StepTaskAnswer",
+                name: "StepTaskAnswers",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -267,7 +267,7 @@ namespace Core.Migrations
                     Email = table.Column<string>(maxLength: 50, nullable: false),
                     FirstName = table.Column<string>(maxLength: 50, nullable: false),
                     LastName = table.Column<string>(maxLength: 50, nullable: false),
-                    IsFinal = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsDefinitive = table.Column<bool>(nullable: false, defaultValue: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<int>(nullable: true),
@@ -275,15 +275,15 @@ namespace Core.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StepTaskAnswer", x => x.Id);
+                    table.PrimaryKey("PK_StepTaskAnswers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_StepTaskAnswer_StepTask_StepTaskId",
+                        name: "FK_StepTaskAnswers_StepTasks_StepTaskId",
                         column: x => x.StepTaskId,
-                        principalTable: "StepTask",
+                        principalTable: "StepTasks",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_StepTaskAnswer_UsersToPlans_UserToPlanId",
+                        name: "FK_StepTaskAnswers_UsersToPlans_UserToPlanId",
                         column: x => x.UserToPlanId,
                         principalTable: "UsersToPlans",
                         principalColumn: "Id",
@@ -835,19 +835,19 @@ namespace Core.Migrations
                 column: "StakeholderRatingAnswerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StepTask_PlanId",
-                table: "StepTask",
-                column: "PlanId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_StepTaskAnswer_StepTaskId",
-                table: "StepTaskAnswer",
+                name: "IX_StepTaskAnswers_StepTaskId",
+                table: "StepTaskAnswers",
                 column: "StepTaskId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StepTaskAnswer_UserToPlanId",
-                table: "StepTaskAnswer",
+                name: "IX_StepTaskAnswers_UserToPlanId",
+                table: "StepTaskAnswers",
                 column: "UserToPlanId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StepTasks_PlanId",
+                table: "StepTasks",
+                column: "PlanId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StrategicIssueAnswers_IssueId",
@@ -941,7 +941,7 @@ namespace Core.Migrations
                 name: "StakeholderRatingAnswersToDictionaries");
 
             migrationBuilder.DropTable(
-                name: "StepTaskAnswer");
+                name: "StepTaskAnswers");
 
             migrationBuilder.DropTable(
                 name: "StrategicIssueAnswers");
@@ -962,7 +962,7 @@ namespace Core.Migrations
                 name: "StakeholderRatingAnswers");
 
             migrationBuilder.DropTable(
-                name: "StepTask");
+                name: "StepTasks");
 
             migrationBuilder.DropTable(
                 name: "IssueOptionAnswers");

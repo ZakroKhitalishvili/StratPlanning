@@ -18,7 +18,7 @@ namespace Core.Entities
 
         public string LastName { get; set; }
 
-        public bool IsFinal { get; set; }
+        public bool IsDefinitive { get; set; }
 
         public DateTime CreatedAt { get; set; }
 

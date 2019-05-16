@@ -29,5 +29,7 @@ namespace Application.DTOs
 
         public bool IsAdmin { get; set; }
 
+        public bool IsSubmitted { get; set; }
+
     }
 }

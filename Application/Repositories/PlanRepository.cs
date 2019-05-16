@@ -37,9 +37,33 @@ namespace Application.Repositories
             return true;
         }
 
-        public void CreatePlan(Plan plan)
+        public bool CreatePlan(PlanDTO plan, int userId)
         {
-            throw new NotImplementedException();
+            var newPlan = new Plan
+            {
+                Name = plan.Name,
+                Description = plan.Description,
+                IsCompleted = false,
+                StartDate = DateTime.Now,
+                CreatedAt = DateTime.Now,
+                CreatedBy = userId,
+                UpdatedAt = DateTime.Now,
+                UpdatedBy = userId
+            };
+
+            try
+            {
+                Context.Plans.Add(newPlan);
+                Context.SaveChanges();
+
+                GetOrCreateStepTask(newPlan.Id, Steps.Predeparture, userId);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public IEnumerable<PlanDTO> GetPlanList()
@@ -58,58 +82,49 @@ namespace Application.Repositories
 
         public PlanStepDTO GetStep(string stepIndex, int planId, bool isDefinitive, int userId)
         {
-            var blocksDTOs = GetStepStructure(stepIndex);
+            // checks if a requested step is active in plan's tasks or just planId or/and stepIndex are wrong
+            var stepTask = GetStepTask(planId, stepIndex);
 
-            var userToPlans = Context.UsersToPlans
-                .Where(x => x.PlanId == planId && x.UserId != userId)
-                .ToList();
-
-            var currentUserStepResult = GetOrCreateUserStepResult(planId, stepIndex, isDefinitive, userId);
-
-            var otherUserStepResults = new List<UserStepResult>();
-
-            foreach (var userToPlan in userToPlans)
+            if (stepTask == null)
             {
-                var userStepResult = GetUserStepResult(planId, stepIndex, false, userToPlan.UserId);
-                if (userStepResult != null)
-                {
-                    otherUserStepResults.Add(userStepResult);
-                }
+                return null;
             }
+            //
 
-            UserStepResult adminStepResult = currentUserStepResult;
+            var planStep = GetPlanStep(planId, stepIndex, isDefinitive, userId);
+
+            var otherUserStepResults = GetPlanStepResults(planId, stepIndex);
+
+            UserStepResult currentUserStepResult = GetOrCreateUserStepResult(planId, stepIndex, isDefinitive, userId);
+
             if (!isDefinitive)
             {
-                adminStepResult = GetUserStepResult(planId, stepIndex, true, userId);
-                if (adminStepResult != null)
+                var stepResult = otherUserStepResults.Where(x => x.UserToPlanId != null && x.UserToPlan.User.Id == userId).SingleOrDefault();
+                otherUserStepResults.Remove(stepResult);
+
+                var adminStepResult = GetSubmittedDefinitiveStepResult(planId, stepIndex);
+
+                if (adminStepResult != null && adminStepResult.IsSubmitted)
                 {
                     otherUserStepResults.Add(adminStepResult);
                 }
             }
-
-            var planStep = new PlanStepDTO
+            else
             {
-                PlanId = planId,
-                Step = stepIndex,
-                StepBlocks = blocksDTOs.ToList(),
-                PlanningTeam = GetPlanningTeam(planId),
-                IsAdmin = isDefinitive,
-                IsCompleted = adminStepResult?.IsSubmitted ?? false
-            };
+                planStep.SubmittedUsers = otherUserStepResults.Where(x => !x.IsDefinitive && x.IsSubmitted)
+                    .Select(x => new UserPlanningMemberDTO
+                    {
+                        FullName = $"{x.UserToPlan.User.FirstName} {x.UserToPlan.User.LastName}"
+                    });
 
-            planStep.SubmittedUsers = otherUserStepResults
-                .Where(x => !x.IsDefinitive && x.IsSubmitted)
-                .Select(x => new UserPlanningMemberDTO
-                {
-                    FullName = $"{x.UserToPlan.User.FirstName} {x.UserToPlan.User.LastName}"
-                });
+                planStep.NotSubmittedUsers = otherUserStepResults.Where(x => !x.IsDefinitive && !x.IsSubmitted)
+                    .Select(x => new UserPlanningMemberDTO
+                    {
+                        FullName = $"{x.UserToPlan.User.FirstName} {x.UserToPlan.User.LastName}"
+                    });
+            }
 
-            planStep.NotSubmittedUsers = otherUserStepResults
-                .Where(x => !x.IsDefinitive && !x.IsSubmitted)
-                .Select(x => new UserPlanningMemberDTO
-                {
-                    FullName = $"{x.UserToPlan.User.FirstName} {x.UserToPlan.User.LastName}"
-                });
+            planStep.IsSubmitted = currentUserStepResult.IsSubmitted;
 
             FillWithAnswers(planStep, currentUserStepResult, otherUserStepResults);
 
@@ -143,11 +158,17 @@ namespace Application.Repositories
             }
 
             return true;
-
         }
 
         public bool SaveStep(PlanStepDTO planStep, bool isDefinitive, bool isSubmitted, int userId)
         {
+            var stepTask = GetStepTask(planStep.PlanId, planStep.Step);
+
+            if (stepTask == null)
+            {
+                return false;
+            }
+
             var stepUserResult = GetOrCreateUserStepResult(planStep.PlanId, planStep.Step, isDefinitive, userId);
 
             if (!stepUserResult.IsDefinitive && stepUserResult.IsSubmitted)
@@ -155,7 +176,82 @@ namespace Application.Repositories
                 return false;
             }
 
+            //if (!isDefinitive)
+            //{
+            //    var userStepResult = GetOrCreateUserStepResult(planStep.PlanId, planStep.Step, false, userId);
+            //    if (!userStepResult.IsDefinitive && userStepResult.IsSubmitted)
+            //    {
+            //        return false;
+            //    }
+
+            //    if (isSubmitted)
+            //    {
+            //        userStepResult.IsSubmitted = true;
+            //    }
+
+            //    SaveAnswers(planStep.AnswerGroups, userStepResult);
+
+            //    Context.SaveChanges();
+
+            //}
+            //else
+            //{
+            //    var finalDefinitiveStepResult = GetFinalDefinitiveStepResult(planStep.PlanId, planStep.Step);
+            //    if (finalDefinitiveStepResult == null)
+            //    {
+            //        finalDefinitiveStepResult = CreateUserStepResult(planStep.PlanId, planStep.Step, isDefinitive, userId);
+            //        finalDefinitiveStepResult.IsFinal = true;
+            //        if (isSubmitted)
+            //        {
+            //            finalDefinitiveStepResult.IsSubmitted = true;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        var submittedDefinitiveResult = GetSubmittedDefinitiveStepResult(planStep.PlanId, planStep.Step);
+
+            //        if (submittedDefinitiveResult != null)
+            //        {
+            //            if (submittedDefinitiveResult.Id != finalDefinitiveStepResult.Id)
+            //            {
+            //                if (isSubmitted)
+            //                {
+            //                    submittedDefinitiveResult.IsSubmitted = false;
+            //                    finalDefinitiveStepResult.IsSubmitted = true;
+            //                }
+            //                else
+            //                {
+            //                    //finish this if else logics and save
+            //                }
+            //            }
+            //            else
+            //            {
+
+            //                if (isSubmitted)
+            //                {
+            //                    finalDefinitiveStepResult.IsSubmitted = true;
+            //                }
+            //            }
+            //        }
+            //        else
+            //        {
+            //            if (isSubmitted)
+            //            {
+            //                finalDefinitiveStepResult.IsSubmitted = true;
+            //            }
+            //        }
+            //    }
+
+            //    SaveAnswers(planStep.AnswerGroups, finalDefinitiveStepResult);
+
+            //    Context.SaveChanges();
+
+            //}
+
+
             stepUserResult.IsSubmitted = isSubmitted;
+
+            //stepTask.IsCompleted = isSubmitted;
 
             SaveAnswers(planStep.AnswerGroups, stepUserResult);
 
@@ -171,68 +267,108 @@ namespace Application.Repositories
                 .Where(x => x.UserId == userId)
                 .Include(x => x.Plan)
                 .Select(x => Mapper.Map<PlanDTO>(x.Plan)).ToList();
-
         }
 
         #region Private methods
 
         #region General methods
+
         private UserStepResult GetOrCreateUserStepResult(int planId, string stepIndex, bool isDefinitive, int userId)
         {
-            UserStepResult userStepResult = GetUserStepResult(planId, stepIndex, isDefinitive, userId);
+            UserStepResult userStepResult;
+
+            if (isDefinitive)
+            {
+                userStepResult = GetFinalDefinitiveStepResult(planId, stepIndex);
+            }
+            else
+            {
+                userStepResult = GetUserStepResult(planId, stepIndex, userId);
+            }
 
             if (userStepResult == null)
             {
-                userStepResult = new UserStepResult
-                {
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now,
-                    CreatedBy = userId,
-                    UpdatedBy = userId,
-                    IsDefinitive = isDefinitive,
-                    PlanId = planId,
-                    Step = stepIndex
-                };
-
-                if (!isDefinitive)
-                {
-                    userStepResult.PlanId = null;
-                    var userToPlan = Context.UsersToPlans.Where(x => x.UserId == userId && x.PlanId == planId).FirstOrDefault();
-                    userStepResult.UserToPlan = userToPlan;
-                }
-
-                Context.UserStepResults.Add(userStepResult);
-                Context.SaveChanges();
+                userStepResult = CreateUserStepResult(planId, stepIndex, isDefinitive, userId);
             }
 
             return userStepResult;
 
         }
 
-        private UserStepResult GetUserStepResult(int planId, string stepIndex, bool isDefinitive, int userId)
+        private UserStepResult CreateUserStepResult(int planId, string stepIndex, bool isDefinitive, int userId)
         {
-            UserStepResult userStepResult;
+            var userStepResult = new UserStepResult
+            {
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+                CreatedBy = userId,
+                UpdatedBy = userId,
+                IsDefinitive = isDefinitive,
+                PlanId = planId,
+                Step = stepIndex
+            };
 
-            if (isDefinitive)
+            if (!isDefinitive)
             {
-                userStepResult = Context.UserStepResults
-                    .Where(x => x.Step == stepIndex && x.PlanId == planId)
-                    .Include(x => x.BooleanAnswers)
-                    .Include(x => x.SelectAnswers).ThenInclude(x => x.Option)
-                    .FirstOrDefault();
+                userStepResult.PlanId = null;
+                var userToPlan = Context.UsersToPlans.Where(x => x.UserId == userId && x.PlanId == planId).FirstOrDefault();
+                userStepResult.UserToPlan = userToPlan;
             }
-            else
-            {
-                userStepResult = Context.UserStepResults
+
+            Context.UserStepResults.Add(userStepResult);
+            Context.SaveChanges();
+
+            return userStepResult;
+        }
+
+        private UserStepResult GetUserStepResult(int planId, string stepIndex, int userId)
+        {
+            return Context.UserStepResults
                     .Where(x => x.Step == stepIndex)
                     .Include(x => x.UserToPlan).ThenInclude(x => x.User)
                     .Where(x => x.UserToPlan.UserId == userId && x.UserToPlan.PlanId == planId)
                     .Include(x => x.BooleanAnswers)
                     .Include(x => x.SelectAnswers).ThenInclude(x => x.Option)
-                    .FirstOrDefault();
+                    .SingleOrDefault();
+        }
+
+        private UserStepResult GetSubmittedDefinitiveStepResult(int planId, string stepIndex)
+        {
+            return Context.UserStepResults
+                    .Where(x => x.Step == stepIndex && x.PlanId == planId && x.IsDefinitive && x.IsSubmitted)
+                    .Include(x => x.BooleanAnswers)
+                    .Include(x => x.SelectAnswers).ThenInclude(x => x.Option)
+                    .SingleOrDefault();
+        }
+
+        private UserStepResult GetFinalDefinitiveStepResult(int planId, string stepIndex)
+        {
+            return Context.UserStepResults
+                    .Where(x => x.Step == stepIndex && x.PlanId == planId && x.IsDefinitive && x.IsFinal.HasValue && x.IsFinal.Value)
+                    .Include(x => x.BooleanAnswers)
+                    .Include(x => x.SelectAnswers).ThenInclude(x => x.Option)
+                    .SingleOrDefault();
+        }
+
+        private IList<UserStepResult> GetPlanStepResults(int planId, string stepIndex)
+        {
+            var userToPlans = Context.UsersToPlans
+               .Where(x => x.PlanId == planId)
+               .ToList();
+
+            var userStepResults = new List<UserStepResult>();
+
+            foreach (var userToPlan in userToPlans)
+            {
+                var userStepResult = GetUserStepResult(planId, stepIndex, userToPlan.UserId);
+                if (userStepResult != null)
+                {
+                    userStepResults.Add(userStepResult);
+                }
             }
 
-            return userStepResult;
+            return userStepResults;
+
         }
 
         private IList<StepBlockDTO> GetStepStructure(string stepIndex)
@@ -244,6 +380,54 @@ namespace Application.Repositories
                 .AsEnumerable()
                 .Select(x => Mapper.Map<StepBlockDTO>(x))
                 .ToList();
+        }
+
+        private StepTask GetOrCreateStepTask(int planId, string stepIndex, int userId)
+        {
+            var stepTask = GetStepTask(planId, stepIndex);
+
+            if (stepTask == null)
+            {
+                stepTask = new StepTask
+                {
+                    PlanId = planId,
+                    Step = stepIndex,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                    CreatedBy = userId,
+                    UpdatedBy = userId,
+                    IsCompleted = false
+                };
+
+                Context.StepTasks.Add(stepTask);
+                Context.SaveChanges();
+            }
+
+            return stepTask;
+        }
+
+        private StepTask GetStepTask(int planId, string stepIndex)
+        {
+            return Context.StepTasks.Where(x => x.PlanId == planId && x.Step == stepIndex).SingleOrDefault();
+        }
+
+        private PlanStepDTO GetPlanStep(int planId, string stepIndex, bool isDefinitive, int userId)
+        {
+            var steptask = GetStepTask(planId, stepIndex);
+
+            var blocksDTOs = GetStepStructure(stepIndex);
+
+            var planStep = new PlanStepDTO
+            {
+                PlanId = planId,
+                Step = stepIndex,
+                StepBlocks = blocksDTOs.ToList(),
+                PlanningTeam = GetPlanningTeam(planId),
+                IsAdmin = isDefinitive,
+                IsCompleted = steptask.IsCompleted
+            };
+
+            return planStep;
         }
 
         #endregion
@@ -286,9 +470,12 @@ namespace Application.Repositories
 
             if (dbAnswer != null)
             {
-                dbAnswer.Answer = answerGroup.Answer.BooleanAnswer;
-                dbAnswer.UpdatedAt = DateTime.Now;
-                dbAnswer.UpdatedBy = userStepResult.UpdatedBy;
+                if (dbAnswer.Answer != answerGroup.Answer.BooleanAnswer)
+                {
+                    dbAnswer.Answer = answerGroup.Answer.BooleanAnswer;
+                    dbAnswer.UpdatedAt = DateTime.Now;
+                    dbAnswer.UpdatedBy = userStepResult.UpdatedBy;
+                }
             }
             else
             {
@@ -317,24 +504,29 @@ namespace Application.Repositories
             {
                 answerGroup.Answer.SelectAnswer.OptionId = null;
             }
-            else
+
+            if (answerGroup.Answer.SelectAnswer.OptionId != null)
             {
                 answerGroup.Answer.SelectAnswer.AltOption = null;
             }
 
             if (dbAnswer != null)
             {
-                dbAnswer.OptionId = answerGroup.Answer.SelectAnswer.OptionId;
-                dbAnswer.AltOption = answerGroup.Answer.SelectAnswer.OptionId == null ? answerGroup.Answer.SelectAnswer.AltOption : null;
-                dbAnswer.UpdatedAt = DateTime.Now;
-                dbAnswer.UpdatedBy = userStepResult.UpdatedBy;
+                if (!(dbAnswer.OptionId == answerGroup.Answer.SelectAnswer.OptionId
+                    && dbAnswer.AltOption == answerGroup.Answer.SelectAnswer.AltOption))
+                {
+                    dbAnswer.OptionId = answerGroup.Answer.SelectAnswer.OptionId;
+                    dbAnswer.AltOption = answerGroup.Answer.SelectAnswer.AltOption;
+                    dbAnswer.UpdatedAt = DateTime.Now;
+                    dbAnswer.UpdatedBy = userStepResult.UpdatedBy;
+                }
             }
             else
             {
                 var newAnswer = new SelectAnswer
                 {
                     OptionId = answerGroup.Answer.SelectAnswer.OptionId,
-                    AltOption = answerGroup.Answer.SelectAnswer.OptionId == null ? answerGroup.Answer.SelectAnswer.AltOption : null,
+                    AltOption = answerGroup.Answer.SelectAnswer.AltOption,
                     QuestionId = answerGroup.QuestionId,
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,

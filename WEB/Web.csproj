@@ -6,7 +6,6 @@
     <AssemblyName>Web</AssemblyName>
     <RootNamespace>Web</RootNamespace>
     <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
-    <TieredCompilation>true</TieredCompilation>
   </PropertyGroup>
 
   <ItemGroup>

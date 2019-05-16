@@ -38,5 +38,7 @@ namespace Core.Entities
         public virtual ICollection<UserToPlan> UsersToPlans { get; set; }
 
         public virtual ICollection<UserStepResult> AdminStepResults { get; set; }
+
+        public virtual ICollection<StepTask> StepTasks { get; set; }
     }
 }

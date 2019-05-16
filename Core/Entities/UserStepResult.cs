@@ -30,6 +30,8 @@ namespace Core.Entities
 
         public bool IsDefinitive { get; set; }
 
+        public bool? IsFinal { get; set; }
+
         public DateTime CreatedAt { get; set; }
 
         public DateTime UpdatedAt { get; set; }

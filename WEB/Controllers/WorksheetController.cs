@@ -85,12 +85,16 @@ namespace Web.Controllers
 
             if (ModelState.IsValid)
             {
-                result = _planRepository.SaveStep(planStep, isDefinitive, isSubmitted: false, userId: HttpContext.GetUserId());
+                result = _planRepository.SaveStep(planStep, isDefinitive, planStep.IsSubmitted, userId: HttpContext.GetUserId());
 
                 if (result)
                 {
                     HttpContext.Response.StatusCode = StatusCodes.Status200OK;
                 }
+            }
+            else
+            {
+                HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
             }
 
             var newPlanStep = _planRepository.GetStep(planStep.Step, planStep.PlanId, isDefinitive, HttpContext.GetUserId());

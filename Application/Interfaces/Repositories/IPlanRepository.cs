@@ -6,7 +6,7 @@ namespace Application.Interfaces.Repositories
 {
     public interface IPlanRepository : IRepositoryBase<Plan>
     {
-        void CreatePlan(Plan plan);
+        bool CreatePlan(PlanDTO plan,int userId);
 
         PlanStepDTO GetStep(string stepIndex, int planId, bool isDefinitive, int userId);
 

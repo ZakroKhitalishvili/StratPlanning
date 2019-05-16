@@ -156,11 +156,11 @@ function deleteConfirm() {
     );
 }
 
-function submitConfirm() {
+function submitConfirm(text) {
     return swal({
         icon: "warning",
         title: "Are you sure?",
-        text: "You won't be able to edit this step.",
+        text: text,
         buttons:
         {
             confirm:

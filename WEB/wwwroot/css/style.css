@@ -698,3 +698,7 @@ table td .m-list-badge {
 .author {
     background: #f5f5f5;
 }
+
+#planning_team_portlet .m-portlet {
+    margin: 0px;
+}

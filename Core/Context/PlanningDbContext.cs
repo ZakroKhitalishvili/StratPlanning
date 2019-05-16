@@ -35,10 +35,15 @@ namespace Core.Context
         public DbSet<Option> Options { get; set; }
 
 
-
         /// <summary>
         /// Answers' tables
         /// </summary>
+
+        public DbSet<StepTask> StepTasks { get; set; }
+
+        public DbSet<UserStepResult> UserStepResults { get; set; }
+
+        public DbSet<StepTaskAnswer> StepTaskAnswers { get; set; }
 
         public DbSet<BooleanAnswer> BooleanAnswers { get; set; }
 
@@ -47,8 +52,6 @@ namespace Core.Context
         public DbSet<SelectAnswer> SelectAnswers { get; set; }
 
         public DbSet<PreparingAnswer> PreparingAnswers { get; set; }
-
-        public DbSet<UserStepResult> UserStepResults { get; set; }
 
         public DbSet<TextAnswer> TextAnswers { get; set; }
 

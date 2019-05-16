@@ -23,5 +23,6 @@ namespace Core.Entities
         public virtual Question Question { get; set; }
 
         public UserStepResult UserStepResult { get; set; }
+
     }
 }

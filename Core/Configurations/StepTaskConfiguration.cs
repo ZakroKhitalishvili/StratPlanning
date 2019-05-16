@@ -14,18 +14,21 @@ namespace Core.Configurations
                 .IsRequired()
                 .HasMaxLength(EntityConfigs.TextMaxLength);
 
+            builder.HasOne(x => x.Plan)
+                .WithMany(s => s.StepTasks)
+                .HasForeignKey(x => x.PlanId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder.Property(x => x.Schedule)
                 .IsRequired(false);
-
-            builder.Property(x => x.Step)
-                .IsRequired()
-                .HasMaxLength(EntityConfigs.TextMaxLength);
 
             builder.Property(x => x.Remind)
                .IsRequired(false);
 
             builder.Property(x => x.IsCompleted)
-              .IsRequired();
+              .IsRequired()
+              .HasDefaultValue(false);
 
             builder.Property(x => x.CreatedAt)
                 .IsRequired();

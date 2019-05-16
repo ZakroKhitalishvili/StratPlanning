@@ -23,6 +23,9 @@ namespace Core.Configurations
                .IsRequired()
                .HasDefaultValue(false);
 
+            builder.Property(x => x.IsFinal)
+              .IsRequired(false);
+
             builder.HasOne(x => x.UserToPlan)
                .WithMany(s => s.UserStepResults)
                .HasForeignKey(x => x.UserToPlanId)

@@ -23,7 +23,7 @@ namespace Core.Configurations
                .IsRequired()
                .HasMaxLength(EntityConfigs.TextMaxLength);
 
-            builder.Property(x => x.IsFinal)
+            builder.Property(x => x.IsDefinitive)
                .IsRequired()
                .HasDefaultValue(false);
 

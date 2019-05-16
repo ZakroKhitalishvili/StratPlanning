@@ -86,11 +86,31 @@ namespace Core.Context
                 new Plan
                 {
                     Name="Initial",Description="Initially generated plan",CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,CreatedBy=null, UpdatedBy=null,EndDate=null,IsCompleted=false,IsWithActionPlan=null,StartDate=DateTime.Now,
+                    StepTasks=new List<StepTask>()
+                    {
+                        new StepTask
+                        {
+                            Step = Steps.Predeparture,
+                            IsCompleted = false,
+                            CreatedAt = DateTime.Now,
+                            UpdatedAt = DateTime.Now
+                        }
+                    }
                 },
                  new Plan
                 {
                     Name="Party Goals Planning",Description="Initially generated plan",CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,CreatedBy=null, UpdatedBy=null,EndDate=null,IsCompleted=false,IsWithActionPlan=null,StartDate=DateTime.Now,
-                }
+                    StepTasks=new List<StepTask>()
+                    {
+                        new StepTask
+                        {
+                            Step = Steps.Predeparture,
+                            IsCompleted = false,
+                            CreatedAt = DateTime.Now,
+                            UpdatedAt = DateTime.Now
+                        }
+                    }
+                 }
             };
 
             foreach (var plan in Plans)

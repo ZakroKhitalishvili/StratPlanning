@@ -238,6 +238,11 @@ function updatePlanningTeam() {
                     notify("Planning team update failed", "danger", 5);
                 }
 
+
+                if (xhr.status > 500) {
+                    notify("An error occured on the server", "danger", 5);
+                }
+
                 $('#planning_team_portlet').html(data);
 
                 $('#planning_team_portlet').find('.m-select2').select2();
@@ -251,10 +256,25 @@ function updatePlanningTeam() {
         })
 }
 
-$(document).on('submit', "form#step_form", function (e) {
-    e.preventDefault();
+$(document).on('click', 'button#step_form_save_button', function (e) {
+    updateStep(false);
 
+});
+
+$(document).on('click', 'button#step_form_submit_button', function (e) {
+
+    submitConfirm().then(function (result) {
+        if (result) {
+            updateStep(true);
+        }
+    });
+
+});
+
+function updateStep(isSubmitted) {
     let formData = new FormData(document.querySelector('form#step_form'));
+
+    formData.append('IsSubmitted', isSubmitted);
 
     $.ajax(
         {
@@ -269,13 +289,9 @@ $(document).on('submit', "form#step_form", function (e) {
                     notify("Successfully saved", "success", 5);
                 }
 
-                if (xhr.status == 202) {
+                if (xhr.status == 202 || xhr.status == 400) {
 
                     notify("Input data are not valid ", "danger", 5);
-                }
-
-                if (xhr.status == 400) {
-                    notify("An Error occured during sending a request", "danger", 5);
                 }
 
                 $('form#step_form').html(data);
@@ -289,7 +305,7 @@ $(document).on('submit', "form#step_form", function (e) {
             error: function (xhr, statusText, error) {
                 notify("An Error occured on the request", "danger", 5);
             }
-        })
-});
+        });
+}
 
 
