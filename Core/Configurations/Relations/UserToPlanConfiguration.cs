@@ -9,6 +9,9 @@ namespace Core.Configurations
     {
         public void Configure(EntityTypeBuilder<UserToPlan> builder)
         {
+            builder.Property(x => x.Step)
+                .IsRequired(false)
+                .HasMaxLength(EntityConfigs.TextMaxLength);
 
             builder.Property(x => x.CreatedAt)
                 .IsRequired();

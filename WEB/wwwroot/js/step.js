@@ -126,6 +126,9 @@ $(document).on('submit', "form#add_user_to_plan_new", function (e) {
             success: function (data, statusText, xhr) {
                 if (xhr.status == 201) {
                     notify("Successfully added", "success", 5);
+                    $('#planning_team_add_modal').modal('hide');
+                    $('body').removeClass('modal-open');
+                    $('.modal-backdrop').remove();
                     updatePlanningTeam();
 
                 }
@@ -164,6 +167,9 @@ $(document).on('submit', "form#add_user_to_plan_existing", function (e) {
                 if (xhr.status == 201) {
 
                     notify("Successfully added", "success", 5);
+                    $('#planning_team_add_modal').modal('hide');
+                    $('body').removeClass('modal-open');
+                    $('.modal-backdrop').remove();
                     updatePlanningTeam();
                 }
 
@@ -223,8 +229,6 @@ $(document).on('click', '.remove-user-from-plan', function (e) {
 });
 
 function updatePlanningTeam() {
-
-    $('#planning_team_add_modal').modal('hide');
 
     $.ajax(
         {

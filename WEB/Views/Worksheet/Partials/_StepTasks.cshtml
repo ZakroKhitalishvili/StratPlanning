@@ -18,9 +18,9 @@
             </div>
         </div>
         @*<a href="#" data-target="#help_modal_steptasks" data-toggle="modal"
-           class="m-portlet__nav-link btn btn-lg btn-secondary  m-btn m-btn--icon m-btn--icon-only m-btn--pill  m-dropdown__toggle m-intro__help">
-            <i class="fa fa-question"></i>
-        </a>*@
+               class="m-portlet__nav-link btn btn-lg btn-secondary  m-btn m-btn--icon m-btn--icon-only m-btn--pill  m-dropdown__toggle m-intro__help">
+                <i class="fa fa-question"></i>
+            </a>*@
     </div>
     <div class="m-portlet__body">
 
@@ -30,6 +30,7 @@
                     What steps will you use in your planning process?
                 </label>
             </div>
+            <!--others' answers: Start-->
             <div class="m-demo">
                 <div class="m-demo__preview">
                     <div class="form-group m-form__group">
@@ -125,6 +126,7 @@
                     </div>
                 </div>
             </div>
+            <!--otherss answers: End-->
             <div class="m-scrollable " data-scrollable="true" data-axis="xy">
                 <table class="table m-table  table-bordered m--margin-top-10" width="100%">
                     <thead>
@@ -152,45 +154,45 @@
                     </thead>
                     <tbody>
                         @foreach (var step in stepList)
-                {
-                        <tr>
-                            <td>
-                                @steps.ResourceManager.GetString(step.Step)
-                            </td>
-                            <td>
-                                <div class="m-list-badge m-list-badge--light-bg">
-                                    <div class="m-list-badge__items">
-                                        <span class="m-list-badge__item m-list-badge__item--default">
-                                            Mariam Merabishvili
-                                        </span>
+                        {
+                            <tr>
+                                <td>
+                                    @steps.ResourceManager.GetString(step.Step)
+                                </td>
+                                <td>
+                                    <div class="m-list-badge m-list-badge--light-bg">
+                                        <div class="m-list-badge__items">
+                                            <span class="m-list-badge__item m-list-badge__item--default">
+                                                Mariam Merabishvili
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td>
-                                22/01/2019
-                            </td>
-                            <td>
-                                10
-                            </td>
-                            <td>
-                                <i class="fa fa-check-square-o sp-font-md"></i>
-                            </td>
-                            <td>
-                                <span class="fa fa-check m--font-success">
-                                </span>
-                            </td>
-                            <td>
-                                <span class="table-row-actions">
-                                    <a href="#"
-                                       class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
-                                       title="Edit" data-toggle="modal"
-                                       data-target="#m_question8_modal">
-                                        <i class="la la-edit"></i>
-                                    </a>
-                                </span>
-                            </td>
-                        </tr>
-                }
+                                </td>
+                                <td>
+                                    22/01/2019
+                                </td>
+                                <td>
+                                    10
+                                </td>
+                                <td>
+                                    <i class="fa fa-check-square-o sp-font-md"></i>
+                                </td>
+                                <td>
+                                    <span class="fa fa-check m--font-success">
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="table-row-actions">
+                                        <a href="#"
+                                           class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
+                                           title="Edit" data-toggle="modal"
+                                           data-target="#m_question8_modal">
+                                            <i class="la la-edit"></i>
+                                        </a>
+                                    </span>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>

@@ -21,6 +21,8 @@ namespace Core.Entities
 
         public int? PositionId { get; set; }
 
+        public string Step { get; set; }
+
         public virtual User User { get; set; }
 
         public virtual Plan Plan { get; set; }
