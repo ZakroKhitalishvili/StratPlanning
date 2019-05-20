@@ -379,6 +379,8 @@ namespace Application.Repositories
             return Context.StepBlocks.Where(x => x.Step == stepIndex)
                 .Include(x => x.Questions)
                 .ThenInclude(x => x.Options)
+                .Include(x => x.Questions)
+                .ThenInclude(x => x.Files)
                 .OrderBy(x => x.Order)
                 .AsEnumerable()
                 .Select(x => Mapper.Map<StepBlockDTO>(x))

@@ -26,6 +26,13 @@ namespace Application.Mappers
                               src.HasOptions ? src.Options.Select(
                                   o => Mapper.Map<OptionDTO>(o)) : null));
 
+                cfg.CreateMap<Question, QuestionDTO>()
+                  .ForMember(
+                       dest => dest.Files,
+                          opt => opt.MapFrom(src =>
+                              src.HasFiles ? src.Files.Select(
+                                  o => Mapper.Map<FileDTO>(o)) : null));
+
                 cfg.CreateMap<User, UserDTO>()
                  .ForMember(
                       dest => dest.Position,

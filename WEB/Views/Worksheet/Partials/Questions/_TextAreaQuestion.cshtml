@@ -17,20 +17,18 @@
     <label for="exampleSelect1">
         @question.Title
     </label>
-    @if (false)
+    @if (question.Files.Any())
     {
         <div class="m-list-badge m-list-badge--light-bg m--margin-bottom-10">
             <div class="m-list-badge__items">
-                <span class="m-list-badge__item m-list-badge__item--default ">
-                    <a download="" href="/image.png" target="_blank">
-                        summery.docx
-                    </a>
-                </span>
-                <span class="m-list-badge__item m-list-badge__item--default">
-                    <a download="" href="/description.pdf" target="_blank">
-                        description.pdf
-                    </a>
-                </span>
+                @foreach (var f in question.Files)
+                {
+                    <span class="m-list-badge__item m-list-badge__item--default ">
+                        <a download="" href="/image.png" target="_blank">
+                            @(f.Name + "." + f.Ext)
+                        </a>
+                    </span>
+                }
             </div>
         </div>
     }
