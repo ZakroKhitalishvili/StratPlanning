@@ -6,7 +6,7 @@ namespace Core.Entities
 {
     public class TextAnswer : AbstractAnswer
     {
-        TextAnswer()
+        public TextAnswer()
         {
             IssueOptionAnswers = new HashSet<IssueOptionAnswer>();
 

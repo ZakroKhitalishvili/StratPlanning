@@ -21,5 +21,6 @@ namespace Application.DTOs
 
         public IList<OptionDTO> Options { get; set; }
 
+        public IList<FileDTO> Files { get; set; }
     }
 }

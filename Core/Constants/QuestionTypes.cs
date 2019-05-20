@@ -20,6 +20,8 @@ namespace Core.Constants
 
         public const string StepTable = "StepTable";
 
+        public const string TextArea = "TextArea";
+
         public const string File = "File";
     }
 }
