@@ -1,4 +1,7 @@
-﻿@using Core.Constants;
+﻿@model Application.DTOs.PlanStepDTO
+
+@using Core.Constants;
+@using Web.Helpers;
 
 <button class="m-aside-left-close m-aside-left-close--skin-light" id="m_aside_left_close_btn">
     <i class="la la-close"></i>
@@ -28,18 +31,26 @@
                 </h4>
                 <i class="m-menu__section-icon flaticon-more-v3"></i>
             </li>
-            <li class="m-menu__item m-menu__item--active" aria-haspopup="true" data-redirect="true">
-                <a asp-controller="WorkSheet" asp-action="GetStep" asp-route-stepIndex="@Steps.Predeparture" class="m-menu__link m--padding-left-5">
-                    <i class="m-menu__link-bullet fa fa-check m--font-success">
-                        <span></span>
-                    </i>
-                    <span class="m-menu__link-text m--padding-left-10">
-                        Pre-Departure Checklist
-                    </span>
-                </a>
-            </li>
-            <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
-                <a href="mission.html" class="m-menu__link m--padding-left-5">
+
+            @foreach (PlanStepDTO step in StepHelper.GetStepList(Context))
+            {
+                <li class="m-menu__item @(Model.Step == step.Step ? "m-menu__item--active" : "")" aria-haspopup="true" data-redirect="true">
+                    <a asp-controller="WorkSheet" asp-action="GetStep" asp-route-stepIndex="@step.Step" asp-route-planId="@Model.PlanId" class="m-menu__link m--padding-left-5">
+                        <i class="m-menu__link-bullet fa @(false ? "fa-check m--font-success" : "fa-remove m--font-danger")">
+                            <span></span>
+                        </i>
+                        <span class="m-menu__link-text m--padding-left-10">
+                            @steps.ResourceManager.GetString(step.Step)
+                        </span>
+                    </a>
+                </li>
+            }
+
+
+
+
+            @*<li class="m-menu__item " aria-haspopup="true" data-redirect="true">
+                <a asp-controller="WorkSheet" asp-action="GetStep" asp-route-stepIndex="@Steps.Mission" asp-route-planId="" class="m-menu__link m--padding-left-5">
                     <i class="m-menu__link-bullet fa fa-check m--font-success">
                         <span></span>
                     </i>
@@ -157,7 +168,7 @@
                         Evaluation
                     </span>
                 </a>
-            </li>
+            </li>*@
         </ul>
     </div>
     <!-- END: Aside Menu -->
