@@ -10,6 +10,7 @@ using Application.Interfaces.Services;
 using Core.Constants;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Web.Extensions;
@@ -36,7 +37,7 @@ namespace Web.Controllers
 
         public IActionResult GetProfile(int? userId)
         {
-            if(!userId.HasValue)
+            if (!userId.HasValue)
             {
                 return RedirectToAction("GetMyProfile");
             }
@@ -73,11 +74,12 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult AddUserToPlan()
         {
-            
+
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = Roles.Admin)]
         public IActionResult AddExistingUserToPlan(AddUserToPlanDTO addUserToPlan, int planId)
         {
             Response.StatusCode = StatusCodes.Status202Accepted;
@@ -109,6 +111,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Roles.Admin)]
         public IActionResult AddNewUserToPlan(AddUserToPlanDTO addUserToPlan, int planId)
         {
             Response.StatusCode = StatusCodes.Status202Accepted;
@@ -151,6 +154,102 @@ namespace Web.Controllers
                 }
 
                 if (!_planRepository.AddUserToPlan(user.Id, planId, newUser.PositionId.Value))
+                {
+                    ModelState.AddModelError(string.Empty, "User was not added to the planning team due ");
+
+                    return PartialView("~/Views/User/Partials/_AddNewUser.cshtml");
+                }
+
+                Response.StatusCode = StatusCodes.Status201Created;
+            }
+
+            return PartialView("~/Views/User/Partials/_AddNewUser.cshtml");
+
+        }
+
+
+        [HttpPost]
+        [Authorize(Roles = Roles.Admin)]
+        public IActionResult AddExistingExternalUserToStep(AddExternalUserToStepDTO addExternalUserToStep)
+        {
+            Response.StatusCode = StatusCodes.Status202Accepted;
+
+            if (string.IsNullOrEmpty(addExternalUserToStep.Step))
+            {
+                Response.StatusCode = StatusCodes.Status400BadRequest;
+
+                return PartialView("~/Views/User/Partials/_AddNewUser.cshtml");
+            }
+
+            var existingUser = addExternalUserToStep.ExistingExternalUser;
+
+            if (TryValidateModel(existingUser))
+            {
+                var result = _planRepository.AddUserToPlanPlanStep(existingUser.Id.Value, addExternalUserToStep.PlanId, addExternalUserToStep.Step);
+
+                if (result)
+                {
+                    Response.StatusCode = StatusCodes.Status201Created;
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "User is already added to the planning or something went wrong");
+                }
+            }
+
+            return PartialView("~/Views/User/Partials/_AddExistingUser.cshtml");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = Roles.Admin)]
+        public IActionResult AddNewExternalUserToStep(AddExternalUserToStepDTO addExternalUserToStep)
+        {
+            Response.StatusCode = StatusCodes.Status202Accepted;
+
+            if (string.IsNullOrEmpty(addExternalUserToStep.Step) && addExternalUserToStep.PlanId <= 0)
+            {
+                Response.StatusCode = StatusCodes.Status400BadRequest;
+
+                return PartialView("~/Views/User/Partials/_AddNewUser.cshtml");
+            }
+
+            var newExternaluser = addExternalUserToStep.NewExternalUser;
+
+            if (TryValidateModel(newExternaluser))
+            {
+
+                if (_userRepository.FindByCondition(u => u.Email == newExternaluser.Email).Any())
+                {
+                    ModelState.AddModelError("NewUser.Email", "An user with the email exists");
+
+                    return PartialView("~/Views/User/Partials/_AddNewUser.cshtml");
+                }
+                var newUser = new NewUserDTO
+                {
+                    Email = newExternaluser.Email,
+                    FirstName = newExternaluser.FirstName,
+                    LastName = newExternaluser.LastName
+                };
+
+                newUser.Password = _userRepository.GeneratePassword();
+                newUser.Role = Roles.External;
+                var user = _userRepository.AddNew(newUser);
+
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Adding a new user failed");
+
+                    return PartialView("~/Views/User/Partials/_AddNewUser.cshtml");
+                }
+
+                if (!_emailService.SendPasswordToUser(newUser.Password, user))
+                {
+                    ModelState.AddModelError(string.Empty, "Email was not sent to the user");
+
+                    return PartialView("~/Views/User/Partials/_AddNewUser.cshtml");
+                }
+
+                if (!_planRepository.AddUserToPlanPlanStep(user.Id, addExternalUserToStep.PlanId, addExternalUserToStep.Step))
                 {
                     ModelState.AddModelError(string.Empty, "User was not added to the planning team due ");
 

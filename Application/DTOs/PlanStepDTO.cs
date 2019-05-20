@@ -19,6 +19,8 @@ namespace Application.DTOs
 
         public IList<AnswerGroupDTO> FilledAnswers { get; set; }
 
+        public AnswerGroupDTO StepTaskAnswers { get; set; }
+
         public IEnumerable<UserPlanningMemberDTO> PlanningTeam { get; set; }
 
         public IEnumerable<UserPlanningMemberDTO> SubmittedUsers { get; set; }

@@ -5,8 +5,10 @@ using Core.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Linq;
 using Web.Extensions;
+using System.IO;
 
 namespace Web.Controllers
 {
@@ -14,9 +16,12 @@ namespace Web.Controllers
     {
         public readonly IPlanRepository _planRepository;
 
-        public WorksheetController(IPlanRepository planRepository, ILoggerManager loggerManager) : base(loggerManager)
+        public readonly IFileRepository _fileRepository;
+
+        public WorksheetController(IPlanRepository planRepository, ILoggerManager loggerManager, IFileRepository fileRepository) : base(loggerManager)
         {
             _planRepository = planRepository;
+            _fileRepository = fileRepository;
         }
 
         public IActionResult GetStep(string stepIndex, int planId)
@@ -107,6 +112,38 @@ namespace Web.Controllers
             return PartialView("~/Views/Worksheet/Partials/_StepForm.cshtml", newPlanStep);
         }
 
+        [HttpPost]
+        public IActionResult UploadFile()
+        {
+            var files = HttpContext.Request.Form.Files;
+
+            if (files == null || files.Count == 0)
+            {
+                return BadRequest();
+            }
+            int id = 0;
+            foreach (var file in files)
+            {
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Uploads",
+                                       file.FileName);
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+
+                var fileEntity = new Core.Entities.File
+                {
+
+                };
+
+                //_fileRepository.Create(fileEntity);
+                //id= fileEntity.Id;
+
+            }
+
+            return Ok(new { fileId = id });
+        }
 
     }
 }

@@ -1,4 +1,5 @@
-﻿@using Resources
+﻿@model Application.DTOs.PlanStepDTO
+@using Resources
 
 @using Web.Helpers
 
@@ -135,7 +136,8 @@
                                 Steps / tasks
                             </th>
                             <th>
-                                Persons / groups involved
+                                External users
+                                @*Persons / groups involved*@
                             </th>
                             <th>
                                 Schedule
@@ -167,12 +169,16 @@
                                             </span>
                                         </div>
                                     </div>
+                                    <a href="" class="btn btn-sp m-btn m-btn--pill m--pull-right"
+                                       data-toggle="modal" data-target="#edit_steptasks_modal">
+                                        Add new
+                                    </a>
                                 </td>
                                 <td>
-                                    22/01/2019
+                                    <input type="text" class="datepicker form-control" value="2/01/2019" />
                                 </td>
                                 <td>
-                                    10
+                                    <input type="text" class="form-control" value="4" />
                                 </td>
                                 <td>
                                     <i class="fa fa-check-square-o sp-font-md"></i>
@@ -181,16 +187,16 @@
                                     <span class="fa fa-check m--font-success">
                                     </span>
                                 </td>
-                                <td>
-                                    <span class="table-row-actions">
-                                        <a href="#"
-                                           class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
-                                           title="Edit" data-toggle="modal"
-                                           data-target="#m_question8_modal">
-                                            <i class="la la-edit"></i>
-                                        </a>
-                                    </span>
-                                </td>
+                                @*<td>
+                                        <span class="table-row-actions">
+                                            <a href="#"
+                                               class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
+                                               title="Edit" data-toggle="modal"
+                                               data-target="#m_question8_modal">
+                                                <i class="la la-edit"></i>
+                                            </a>
+                                        </span>
+                                    </td>*@
                             </tr>
                         }
                     </tbody>
@@ -201,6 +207,24 @@
                 Review these steps with the people who are involved, and refine them as
                 needed.
             </span>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="edit_steptasks_modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="">
+                    Add an external user
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="la la-remove"></span>
+                </button>
+            </div>
+            <partial name="~/Views/User/Partials/ExternalUser/_AddExternalUserToStep.cshtml" view-data="ViewData" model="new AddExternalUserToStepDTO {}" />
         </div>
     </div>
 </div>

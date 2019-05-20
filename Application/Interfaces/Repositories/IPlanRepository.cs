@@ -6,7 +6,7 @@ namespace Application.Interfaces.Repositories
 {
     public interface IPlanRepository : IRepositoryBase<Plan>
     {
-        bool CreatePlan(PlanDTO plan,int userId);
+        bool CreatePlan(PlanDTO plan, int userId);
 
         PlanStepDTO GetStep(string stepIndex, int planId, bool isDefinitive, int userId);
 
@@ -15,6 +15,8 @@ namespace Application.Interfaces.Repositories
         IEnumerable<PlanDTO> GetPlanList();
 
         bool AddUserToPlan(int userId, int planId, int positionId);
+
+        bool AddUserToPlanPlanStep(int userId, int planId, string step);
 
         bool RemoveUserFromPlan(int userId, int planId);
 

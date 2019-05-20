@@ -18,6 +18,7 @@ namespace Core.Entities
             UserStepResults = new HashSet<UserStepResult>();
             StrategicIssueAnswers = new HashSet<StrategicIssueAnswer>();
             TextAnswers = new HashSet<TextAnswer>();
+            FileAnswers = new HashSet<FileAnswer>();
         }
 
         public int Id { get; set; }
@@ -46,7 +47,7 @@ namespace Core.Entities
 
         public int? UpdatedBy { get; set; }
 
-        public virtual StepBlock  StepBlock { get; set; }
+        public virtual StepBlock StepBlock { get; set; }
 
         public virtual ICollection<Option> Options { get; set; }
 
@@ -67,6 +68,8 @@ namespace Core.Entities
         public virtual ICollection<TextAnswer> TextAnswers { get; set; }
 
         public virtual ICollection<SelectAnswer> SelectAnswers { get; set; }
+
+        public virtual ICollection<FileAnswer> FileAnswers { get; set; }
 
     }
 }

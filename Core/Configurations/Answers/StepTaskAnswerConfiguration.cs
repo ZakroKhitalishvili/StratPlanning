@@ -51,6 +51,12 @@ namespace Core.Configurations
             builder.Property(x => x.UpdatedBy)
                 .IsRequired(false);
 
+            builder.HasOne(x => x.Plan)
+                .WithMany(x => x.AdminStepTaskAnswers)
+                .HasForeignKey(x => x.PlanId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

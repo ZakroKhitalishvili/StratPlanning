@@ -16,6 +16,7 @@ namespace Core.Entities
             StakeholderRatingAnswers = new HashSet<StakeholderRatingAnswer>();
             StrategicIssueAnswers = new HashSet<StrategicIssueAnswer>();
             TextAnswers = new HashSet<TextAnswer>();
+            FileAnswers = new HashSet<FileAnswer>();
         }
 
         public int Id { get; set; }
@@ -57,5 +58,7 @@ namespace Core.Entities
         public virtual ICollection<TextAnswer> TextAnswers { get; set; }
 
         public virtual ICollection<SelectAnswer> SelectAnswers { get; set; }
+
+        public virtual ICollection<FileAnswer> FileAnswers { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿@model Application.DTOs.AddUserToPlanDTO
 @using Web.Helpers
+@using Core.Constants
 
 @{
     Layout = null;
@@ -16,7 +17,7 @@
                 User
             </label>
             <div class="col-10">
-                <select asp-items="UserHelper.GetUsersSelectList(Context)" asp-for="ExistingUser.Id" class="form-control m-select2" style="width:100%">
+                <select asp-items="UserHelper.GetUsersSelectListByRole(Context,Roles.Employee)" asp-for="ExistingUser.Id" class="form-control m-select2" style="width:100%">
                     <option value="">-- Specify --</option>
                 </select>
                 <span class="text-danger" asp-validation-for="ExistingUser.Id"></span>
@@ -33,7 +34,6 @@
                 </select>
                 <span class="text-danger" asp-validation-for="ExistingUser.PositionId"></span>
             </div>
-
         </div>
     </div>
     <div class="m-portlet__foot m-portlet__foot--fit">

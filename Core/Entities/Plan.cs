@@ -39,6 +39,8 @@ namespace Core.Entities
 
         public virtual ICollection<UserStepResult> AdminStepResults { get; set; }
 
+        public virtual ICollection<StepTaskAnswer> AdminStepTaskAnswers { get; set; }
+
         public virtual ICollection<StepTask> StepTasks { get; set; }
     }
 }

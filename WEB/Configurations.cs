@@ -26,6 +26,7 @@ namespace Web
             services.AddScoped<ILoggerManager, LoggerManager>();
             services.AddScoped<IPlanRepository, PlanRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IFileRepository, FileRepository>();
             services.AddScoped<IDictionaryRepository, DictionaryRepository>();
             services.AddScoped<IHashService, SHA256Service>();
             services.AddScoped<IEmailService, EmailService>();

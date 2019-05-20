@@ -4,14 +4,16 @@ using Core.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Core.Migrations
 {
     [DbContext(typeof(PlanningDbContext))]
-    partial class PlanningDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190520073052_Added_FileAnswers")]
+    partial class Added_FileAnswers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -600,8 +602,6 @@ namespace Core.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<int?>("PlanId");
-
                     b.Property<int>("StepTaskId");
 
                     b.Property<DateTime>("UpdatedAt");
@@ -611,8 +611,6 @@ namespace Core.Migrations
                     b.Property<int>("UserToPlanId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PlanId");
 
                     b.HasIndex("StepTaskId");
 
@@ -1032,11 +1030,6 @@ namespace Core.Migrations
 
             modelBuilder.Entity("Core.Entities.StepTaskAnswer", b =>
                 {
-                    b.HasOne("Core.Entities.Plan", "Plan")
-                        .WithMany("AdminStepTaskAnswers")
-                        .HasForeignKey("PlanId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Core.Entities.StepTask", "StepTask")
                         .WithMany("StepTaskAnswers")
                         .HasForeignKey("StepTaskId")

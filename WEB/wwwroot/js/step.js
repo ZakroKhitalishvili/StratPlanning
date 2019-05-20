@@ -106,6 +106,73 @@ function initializeStep() {
             specifyInput.hide();
         }
     }).trigger('change');
+
+
+    $('.dropzone-sp').dropzone(
+        {
+            addRemoveLinks: true,
+            removedfile: function (file) {
+                let currentPreviewElement = $(file.previewElement);
+
+                removeFilePreview(currentPreviewElement);
+
+            },
+            url: "/Worksheet/UploadFile",
+            uploadMultiple: true,
+            paramName: 'file',
+            success: function (file) {
+                console.log(file);
+            },
+            previewTemplate: `
+            <div class="dz-preview dz-file-preview dz-processing dz-error dz-complete">  
+                <div class="dz-image">
+                    <img data-dz-thumbnail="">
+                </div>  
+                <div class="dz-details">    
+                    <div class="dz-size">
+                        <span data-dz-size=""><strong></strong> KB</span>
+                    </div>    
+                    <div class="dz-filename">
+                        <span data-dz-name=""></span>
+                    </div>  
+                    </div>  
+                    <div class="dz-progress">
+                        <span class="dz-upload" data-dz-uploadprogress=""></span>
+                    </div>   
+                </div>
+                <a class="dz-remove" href="javascript:undefined;" data-dz-remove="">Remove file</a>
+            </div>`
+
+
+        })
+        .droppable({
+            accept: '.draggable-file',
+
+            drop: function (e, ui) {
+                e.preventDefault();
+
+                let name = $(ui.draggable).html();
+
+                $(this).find('.dz-message').hide();
+
+                $(this).append(`<div class="dz-preview dz-file-preview dz-processing dz-error dz-complete">  
+                <div class="dz-image">
+                    <img data-dz-thumbnail=""/>
+                </div>  
+                <div class="dz-details">      
+                    <div class="dz-filename">
+                        <span data-dz-name="">${name}</span>
+                    </div>  
+                    <div class="dz-progress">
+                        <span class="dz-upload" data-dz-uploadprogress=""></span>
+                    </div>   
+                </div>
+                <a class="dz-remove" href="javascript:undefined;" onclick="filePreviewRemoveHandler(event)" data-dz-remove="">Remove file</a>
+            </div>`);
+
+            }
+        })
+        .addClass('dropzone');
 }
 
 
@@ -289,12 +356,10 @@ function updateStep(isSubmitted) {
             contentType: false,
             success: function (data, statusText, xhr) {
                 if (xhr.status == 200) {
-
                     notify("Successfully saved", "success", 5);
                 }
 
                 if (xhr.status == 202 || xhr.status == 400) {
-
                     notify("Input data are not valid ", "danger", 5);
                 }
 

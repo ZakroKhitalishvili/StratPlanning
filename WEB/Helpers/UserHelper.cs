@@ -20,6 +20,15 @@ namespace Web.Helpers
             return selectList;
         }
 
+        public static IEnumerable<SelectListItem> GetUsersSelectListByRole(HttpContext context, string role)
+        {
+            var userRepository = context.RequestServices.GetService<IUserRepository>();
+
+            var selectList = userRepository.FindByCondition(x => x.Role == role).Select(u => new SelectListItem { Value = u.Id.ToString(), Text = $"{u.FirstName} {u.LastName}" });
+
+            return selectList;
+        }
+
         public static IEnumerable<SelectListItem> GetPositionsSelectList(HttpContext context)
         {
             var dictionaryRepository = context.RequestServices.GetService<IDictionaryRepository>();

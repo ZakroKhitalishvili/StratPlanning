@@ -1,0 +1,50 @@
+﻿@model Application.DTOs.AddExternalUserToStepDTO
+@using Web.Helpers
+
+@{
+    Layout = null;
+}
+<form class="m-form m-form--fit m-form--label-align-right" id="add_external_user_to_plan_new">
+    <div class="m-portlet__body">
+        <div class="form-group m-form__group">
+            <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+        </div>
+        <div class="form-group m-form__group row">
+            <label for="example-text-input" class="col-2 col-form-label">
+                Firstname
+            </label>
+            <div class="col-10">
+                <input asp-for="NewExternalUser.FirstName" class="form-control m-input" />
+                <span class="text-danger" asp-validation-for="NewExternalUser.FirstName"></span>
+            </div>
+
+        </div>
+        <div class="form-group m-form__group row">
+            <label for="example-text-input" class="col-2 col-form-label">
+                Lastname
+            </label>
+            <div class="col-10">
+                <input asp-for="NewExternalUser.LastName" class="form-control m-input" />
+                <span class="text-danger" asp-validation-for="NewExternalUser.LastName"></span>
+            </div>
+
+        </div>
+        <div class="form-group m-form__group row">
+            <label asp-for="NewExternalUser.Email" class="col-2 col-form-label">
+                Email
+            </label>
+            <div class="col-10">
+                <input asp-for="NewExternalUser.Email" class="form-control m-input" />
+                <span class="text-danger" asp-validation-for="NewExternalUser.Email"></span>
+            </div>
+
+        </div>
+    </div>
+    <div class="m-portlet__foot m-portlet__foot--fit">
+        <div class="m-form__actions pull-right">
+            <button type="submit" class="btn btn-sp m-btn m-btn--icon">
+                Add
+            </button>
+        </div>
+    </div>
+</form>

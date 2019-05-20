@@ -59,6 +59,8 @@ namespace Core.Context
 
         public DbSet<StakeholderRatingAnswer> StakeholderRatingAnswers { get; set; }
 
+        public DbSet<FileAnswer> FileAnswers { get; set; }
+
         /// <summary>
         /// Relations' tables
         /// </summary>

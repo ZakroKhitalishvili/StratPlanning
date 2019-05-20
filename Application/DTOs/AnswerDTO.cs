@@ -17,5 +17,7 @@ namespace Application.DTOs
         public IList<string> TagSelectAnswers { get; set; }
 
         public TextAnswerDTO TextAnswer { get; set; }
+
+        public IList<StepTaskAnswerDTO> StepTaskAnswers { get; set; }
     }
 }

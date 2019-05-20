@@ -19,5 +19,7 @@ namespace Core.Constants
         public const string PlanTypeSelect = "PlanTypeSelect";
 
         public const string StepTable = "StepTable";
+
+        public const string File = "File";
     }
 }

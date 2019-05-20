@@ -46,66 +46,6 @@ $(document).ready(function () {
 
     $('.user-submit-btn').click(submitConfirm);
 
-    $('.dropzone-sp').dropzone(
-        {
-            addRemoveLinks: true,
-            removedfile: function (file) {
-                let currentPreviewElement = $(file.previewElement);
-
-                removeFilePreview(currentPreviewElement);
-
-            },
-            previewTemplate: `
-            <div class="dz-preview dz-file-preview dz-processing dz-error dz-complete">  
-                <div class="dz-image">
-                    <img data-dz-thumbnail="">
-                </div>  
-                <div class="dz-details">    
-                    <div class="dz-size">
-                        <span data-dz-size=""><strong></strong> KB</span>
-                    </div>    
-                    <div class="dz-filename">
-                        <span data-dz-name=""></span>
-                    </div>  
-                    </div>  
-                    <div class="dz-progress">
-                        <span class="dz-upload" data-dz-uploadprogress=""></span>
-                    </div>   
-                </div>
-                <a class="dz-remove" href="javascript:undefined;" data-dz-remove="">Remove file</a>
-            </div>`
-
-
-        })
-        .droppable({
-            accept: '.draggable-file',
-
-            drop: function (e, ui) {
-                e.preventDefault();
-
-                let name = $(ui.draggable).html();
-
-                $(this).find('.dz-message').hide();
-
-                $(this).append(`<div class="dz-preview dz-file-preview dz-processing dz-error dz-complete">  
-                <div class="dz-image">
-                    <img data-dz-thumbnail=""/>
-                </div>  
-                <div class="dz-details">      
-                    <div class="dz-filename">
-                        <span data-dz-name="">${name}</span>
-                    </div>  
-                    <div class="dz-progress">
-                        <span class="dz-upload" data-dz-uploadprogress=""></span>
-                    </div>   
-                </div>
-                <a class="dz-remove" href="javascript:undefined;" onclick="filePreviewRemoveHandler(event)" data-dz-remove="">Remove file</a>
-            </div>`);
-
-            }
-        })
-        .addClass('dropzone');
-
     $('.draggable-file').draggable({
         revert: "invalid", // when not dropped, the item will revert back to its initial position
         containment: "document",
