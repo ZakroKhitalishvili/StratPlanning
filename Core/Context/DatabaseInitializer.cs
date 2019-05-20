@@ -44,6 +44,11 @@ namespace Core.Context
                 SeedPositions();
             }
 
+            if (!Context.StepBlocks.Where(x => x.Step == Steps.Mission).Any())
+            {
+                SeedMissionStep();
+            }
+
             Context.SaveChanges();
 
         }
@@ -198,6 +203,42 @@ namespace Core.Context
 
             Context.StepBlocks.AddRange(Blocks);
 
+        }
+
+        private void SeedMissionStep()
+        {
+            Blocks = new StepBlock[]
+            {
+                new StepBlock
+                {
+                    Title = "Mission Statement",
+                    Instruction = "sagittis. In dignissim commodo hendrerit. Sed congue purus luctus mi feugiat, ut consequat nisi porttitor",
+                    Order=1,
+                    Step=Steps.Mission,
+                    Description=null,
+                    UpdatedAt=DateTime.Now,
+                    CreatedAt=DateTime.Now,
+                    CreatedBy=null,
+                    UpdatedBy=null,
+                    Questions=new List<Question>()
+                    {
+                        new Question{ Type=QuestionTypes.TextArea, Order=1, Title="Which of the party documents express your mission statement the best?", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description="Please, copy the existing mission statement here.", HasFiles=true,
+                            Files = new List<File>()
+                            {
+                                new File { Name="summery", Ext="docx", CreatedAt=DateTime.Now, CreatedBy=null, Path="" },
+                                new File { Name="description", Ext="pdf", CreatedAt=DateTime.Now, CreatedBy=null, Path="" }
+                            }
+                        },
+                        new Question{ Type=QuestionTypes.TextArea, Order=2, Title="In general, what does our party offer to society? How our party differs from the competing political parties?", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false },
+                        new Question{ Type=QuestionTypes.TextArea, Order=3, Title="What is our ideology? What are our core values?", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false },
+                        new Question{ Type=QuestionTypes.TextArea, Order=4, Title="Should our mission statement be modified? If yes, why and how?", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false },
+                        new Question{ Type=QuestionTypes.TextArea, Order=5, Title="Examine your answers to the above questions and draft a new mission statement.", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false },
+
+                    }
+                }
+            };
+
+            Context.StepBlocks.AddRange(Blocks);
         }
     }
 }

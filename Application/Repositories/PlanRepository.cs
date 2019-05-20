@@ -83,12 +83,12 @@ namespace Application.Repositories
         public PlanStepDTO GetStep(string stepIndex, int planId, bool isDefinitive, int userId)
         {
             // checks if a requested step is active in plan's tasks or just planId or/and stepIndex are wrong
-            var stepTask = GetStepTask(planId, stepIndex);
+            //var stepTask = GetStepTask(planId, stepIndex);
 
-            if (stepTask == null)
-            {
-                return null;
-            }
+            //if (stepTask == null)
+            //{
+            //    return null;
+            //}
             //
 
             var planStep = GetPlanStep(planId, stepIndex, isDefinitive);
@@ -148,12 +148,12 @@ namespace Application.Repositories
 
         public bool SaveStep(PlanStepDTO planStep, bool isDefinitive, bool isSubmitted, int userId)
         {
-            var stepTask = GetStepTask(planStep.PlanId, planStep.Step);
+            //var stepTask = GetStepTask(planStep.PlanId, planStep.Step);
 
-            if (stepTask == null)
-            {
-                return false;
-            }
+            //if (stepTask == null)
+            //{
+            //    return false;
+            //}
 
             if (!isDefinitive)
             {
@@ -309,6 +309,7 @@ namespace Application.Repositories
                     .Where(x => x.UserToPlan.UserId == userId && x.UserToPlan.PlanId == planId)
                     .Include(x => x.BooleanAnswers)
                     .Include(x => x.SelectAnswers).ThenInclude(x => x.Option)
+                    .Include(x => x.TextAnswers)
                     .SingleOrDefault();
         }
 
@@ -318,6 +319,7 @@ namespace Application.Repositories
                     .Where(x => x.Step == stepIndex && x.PlanId == planId && x.IsDefinitive && x.IsSubmitted)
                     .Include(x => x.BooleanAnswers)
                     .Include(x => x.SelectAnswers).ThenInclude(x => x.Option)
+                    .Include(x => x.TextAnswers)
                     .SingleOrDefault();
         }
 
@@ -327,6 +329,7 @@ namespace Application.Repositories
                     .Where(x => x.Step == stepIndex && x.PlanId == planId && x.IsDefinitive && x.IsFinal.HasValue && x.IsFinal.Value)
                     .Include(x => x.BooleanAnswers)
                     .Include(x => x.SelectAnswers).ThenInclude(x => x.Option)
+                    .Include(x => x.TextAnswers)
                     .SingleOrDefault();
         }
 
@@ -424,7 +427,7 @@ namespace Application.Repositories
                 StepBlocks = blocksDTOs.ToList(),
                 PlanningTeam = GetPlanningTeam(planId),
                 IsAdmin = isDefinitive,
-                IsCompleted = steptask.IsCompleted
+                IsCompleted = steptask?.IsCompleted ?? false
             };
 
             if (isDefinitive)
@@ -480,6 +483,10 @@ namespace Application.Repositories
                     SaveBooleanAnswer(answerGroup, userStepResult);
                 }
 
+                if (question.Type == QuestionTypes.TextArea)
+                {
+                    SaveTextAnswer(answerGroup, userStepResult);
+                }
             }
         }
 
@@ -607,6 +614,37 @@ namespace Application.Repositories
             }
         }
 
+        private void SaveTextAnswer(AnswerGroupDTO answerGroup, UserStepResult userStepResult)
+        {
+            TextAnswer dbAnswer = null;
+
+            dbAnswer = userStepResult.TextAnswers.Where(x => x.QuestionId == answerGroup.QuestionId).FirstOrDefault();
+
+            if (dbAnswer != null)
+            {
+                if (!dbAnswer.Text.Equals(answerGroup.Answer.TextAnswer.Text))
+                {
+                    dbAnswer.Text = answerGroup.Answer.TextAnswer.Text;
+                    dbAnswer.UpdatedAt = DateTime.Now;
+                    dbAnswer.UpdatedBy = userStepResult.UpdatedBy;
+                }
+            }
+            else
+            {
+                var newAnswer = new TextAnswer
+                {
+                    Text = answerGroup.Answer.TextAnswer.Text,
+                    QuestionId = answerGroup.QuestionId,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                    CreatedBy = userStepResult.UpdatedBy,
+                    UpdatedBy = userStepResult.UpdatedBy
+                };
+
+                userStepResult.TextAnswers.Add(newAnswer);
+            }
+        }
+
         #endregion
 
         #region Reading methods
@@ -640,7 +678,10 @@ namespace Application.Repositories
                     {
                         planStep.AnswerGroups.Add(GetBooleanAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
                     }
-
+                    if (questions[j].Type == QuestionTypes.TextArea)
+                    {
+                        planStep.AnswerGroups.Add(GetTextAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
+                    }
                 }
             }
         }
@@ -805,6 +846,52 @@ namespace Application.Repositories
                     otherAnswers.Add(answerDTO);
                 }
 
+            }
+
+            answerGroup.OtherAnswers = otherAnswers;
+
+            return answerGroup;
+        }
+
+        private AnswerGroupDTO GetTextAnswers(int questionId, UserStepResult currentUserStepResult, IList<UserStepResult> otherUserStepResults)
+        {
+            AnswerGroupDTO answerGroup = new AnswerGroupDTO
+            {
+                QuestionId = questionId
+            };
+
+            var currentUserAnswer = currentUserStepResult.TextAnswers.Where(x => x.QuestionId == questionId).SingleOrDefault();
+
+            if (currentUserAnswer != null)
+            {
+                answerGroup.Answer = new AnswerDTO { TextAnswer = new TextAnswerDTO { IsIssue = currentUserAnswer.IsIssue, IsStakeholder = currentUserAnswer.IsStakeholder, Text = currentUserAnswer.Text } };
+            }
+
+            var definitiveStepResult = otherUserStepResults.Where(x => x.IsDefinitive).SingleOrDefault();
+
+            var definitiveAnswer = definitiveStepResult?.TextAnswers.Where(x => x.QuestionId == questionId).SingleOrDefault();
+
+            if (definitiveAnswer != null)
+            {
+                answerGroup.DefinitiveAnswer = new AnswerDTO { TextAnswer = new TextAnswerDTO { IsIssue = definitiveAnswer.IsIssue, IsStakeholder = definitiveAnswer.IsStakeholder, Text = definitiveAnswer.Text } };
+            }
+
+            var otherAnswers = new List<AnswerDTO>();
+
+            foreach (var otherUserStepResult in otherUserStepResults.Where(x => !x.IsDefinitive))
+            {
+                var userAnswer = otherUserStepResult.TextAnswers.Where(a => a.QuestionId == questionId).SingleOrDefault();
+
+                if (userAnswer != null)
+                {
+                    var answerDTO = new AnswerDTO
+                    {
+                        TextAnswer = new TextAnswerDTO { IsIssue = userAnswer.IsIssue, IsStakeholder = userAnswer.IsStakeholder, Text = userAnswer.Text },
+                        Author = $"{otherUserStepResult.UserToPlan.User.FirstName} {otherUserStepResult.UserToPlan.User.LastName}"
+                    };
+
+                    otherAnswers.Add(answerDTO);
+                }
             }
 
             answerGroup.OtherAnswers = otherAnswers;
