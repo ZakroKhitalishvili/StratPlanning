@@ -260,8 +260,14 @@ namespace Application.Repositories
                 .Select(x => Mapper.Map<PlanDTO>(x.Plan)).ToList();
         }
 
-        #region Private methods
+        public IList<FileDTO> GetFileAnswers(int questionId, int userId)
+        {
+            return Context.Questions.Where(x => x.Id == questionId)
+                    .SelectMany(x => x.FileAnswers).Where(x => x.CreatedBy == userId)
+                    .Select(x => Mapper.Map<FileDTO>(x.File)).ToList();
+        }
 
+        #region Private methods
         #region General methods
 
         private IList<StepTaskDTO> GetStepTasks(int planId)
@@ -366,6 +372,7 @@ namespace Application.Repositories
                     .Include(x => x.BooleanAnswers)
                     .Include(x => x.SelectAnswers).ThenInclude(x => x.Option)
                     .Include(x => x.TextAnswers)
+                    .Include(x => x.FileAnswers).ThenInclude(x => x.File)
                     .SingleOrDefault();
         }
 
@@ -376,6 +383,7 @@ namespace Application.Repositories
                     .Include(x => x.BooleanAnswers)
                     .Include(x => x.SelectAnswers).ThenInclude(x => x.Option)
                     .Include(x => x.TextAnswers)
+                    .Include(x => x.FileAnswers).ThenInclude(x => x.File)
                     .SingleOrDefault();
         }
 
@@ -386,6 +394,7 @@ namespace Application.Repositories
                     .Include(x => x.BooleanAnswers)
                     .Include(x => x.SelectAnswers).ThenInclude(x => x.Option)
                     .Include(x => x.TextAnswers)
+                    .Include(x => x.FileAnswers).ThenInclude(x => x.File)
                     .SingleOrDefault();
         }
 
@@ -689,6 +698,11 @@ namespace Application.Repositories
                 {
                     SaveTextAnswer(answerGroup, userStepResult);
                 }
+
+                if (question.Type == QuestionTypes.File)
+                {
+                    SaveFileAnswer(answerGroup, userStepResult);
+                }
             }
         }
 
@@ -847,6 +861,47 @@ namespace Application.Repositories
             }
         }
 
+        private void SaveFileAnswer(AnswerGroupDTO answerGroup, UserStepResult userStepResult)
+        {
+            IList<FileAnswer> dbAnswers = null;
+
+            dbAnswers = userStepResult.FileAnswers.Where(x => x.QuestionId == answerGroup.QuestionId).ToList();
+
+            foreach (var dbAnswer in dbAnswers)
+            {
+                var answerFileId = dbAnswer.FileId;
+
+                if (!answerGroup.Answer.InputFileAnswer.Contains(answerFileId))
+                {
+                    Context.FileAnswers.Remove(dbAnswer);
+                    Context.SaveChanges();
+                    //userStepResult.SelectAnswers.Remove(dbAnswer);
+                }
+            }
+
+            foreach (var answer in answerGroup.Answer.InputFileAnswer)
+            {
+                if (!dbAnswers.Any(x => x.FileId == answer))
+                {
+                    var dbFile = Context.Files.Where(x => x.Id == answer).FirstOrDefault();
+
+                    if (dbFile == null) continue;
+
+                    var newAnswer = new FileAnswer
+                    {
+                        QuestionId = answerGroup.QuestionId,
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now,
+                        CreatedBy = userStepResult.UpdatedBy,
+                        UpdatedBy = userStepResult.UpdatedBy,
+                        File = dbFile
+                    };
+
+                    userStepResult.FileAnswers.Add(newAnswer);
+                }
+            }
+        }
+
         #endregion
 
         #region Reading methods
@@ -884,8 +939,13 @@ namespace Application.Repositories
                     {
                         planStep.AnswerGroups.Add(GetTextAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
                     }
+                    if (questions[j].Type == QuestionTypes.File)
+                    {
+                        planStep.AnswerGroups.Add(GetFileAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
+                    }
                 }
             }
+
 
             if (planStep.Step == Steps.Predeparture)
             {
@@ -1095,6 +1155,76 @@ namespace Application.Repositories
                     var answerDTO = new AnswerDTO
                     {
                         TextAnswer = new TextAnswerDTO { IsIssue = userAnswer.IsIssue, IsStakeholder = userAnswer.IsStakeholder, Text = userAnswer.Text },
+                        Author = $"{otherUserStepResult.UserToPlan.User.FirstName} {otherUserStepResult.UserToPlan.User.LastName}"
+                    };
+
+                    otherAnswers.Add(answerDTO);
+                }
+            }
+
+            answerGroup.OtherAnswers = otherAnswers;
+
+            return answerGroup;
+        }
+
+        private AnswerGroupDTO GetFileAnswers(int questionId, UserStepResult currentUserStepResult, IList<UserStepResult> otherUserStepResults)
+        {
+            AnswerGroupDTO answerGroup = new AnswerGroupDTO
+            {
+                QuestionId = questionId
+            };
+
+            var currentUserAnswer = currentUserStepResult.FileAnswers.Where(x => x.QuestionId == questionId);
+
+            if (currentUserAnswer != null && currentUserAnswer.Any())
+            {
+                answerGroup.Answer = new AnswerDTO
+                {
+                    FileAnswer = currentUserAnswer.Select(x => new FileAnswerDTO
+                    {
+                        FileId = x.FileId,
+                        Name = x.File?.Name,
+                        Ext = x.File?.Ext,
+                        Path = x.File?.Path
+                    }).ToList()
+                };
+            }
+
+            var definitiveStepResult = otherUserStepResults.Where(x => x.IsDefinitive).SingleOrDefault();
+
+            var definitiveAnswer = definitiveStepResult?.FileAnswers.Where(x => x.QuestionId == questionId);
+
+            if (definitiveAnswer != null && definitiveAnswer.Any())
+            {
+                answerGroup.DefinitiveAnswer = new AnswerDTO
+                {
+                    FileAnswer = definitiveAnswer.Select(x => new FileAnswerDTO
+                    {
+                        FileId = x.FileId,
+                        Name = x.File?.Name,
+                        Ext = x.File?.Ext,
+                        Path = x.File?.Path
+                    }).ToList()
+                };
+            }
+
+            var otherAnswers = new List<AnswerDTO>();
+
+            foreach (var otherUserStepResult in otherUserStepResults.Where(x => !x.IsDefinitive))
+            {
+                var userAnswer = otherUserStepResult.FileAnswers.Where(x => x.QuestionId == questionId);
+
+                if (userAnswer != null && userAnswer.Any())
+                {
+                    var answerDTO = new AnswerDTO
+                    {
+                        FileAnswer = userAnswer.Select(x => new FileAnswerDTO
+                        {
+                            FileId = x.FileId,
+                            Name = x.File?.Name,
+                            Ext = x.File?.Ext,
+                            Path = x.File?.Path
+                        }).ToList(),
                         Author = $"{otherUserStepResult.UserToPlan.User.FirstName} {otherUserStepResult.UserToPlan.User.LastName}"
                     };
 

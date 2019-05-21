@@ -107,9 +107,39 @@ function initializeStep() {
         }
     }).trigger('change');
 
+    $('.dropzone-sp').each(function () {
+        var element = $(this);
+        var initurl = element.data('initurl');
+        var inputname = element.data('inputname');
 
-    $('.dropzone-sp').dropzone(
-        {
+        element.dropzone({
+            init: function () {
+                thisDropzone = this;
+
+                if (!initurl) return;
+
+                $.get(initurl, function (data) {
+                    if (data === null) {
+                        return;
+                    }
+
+                    $.each(data, function (key, value) {
+                        var mockFile = { name: value.name, fileId: value.id };
+
+                        thisDropzone.emit("addedfile", mockFile);
+
+                        $(mockFile.previewElement).find(".sp-file-input").val(value.id);
+                        $(mockFile.previewElement).find(".sp-file-link").attr('href', value.url);
+
+                        //thisDropzone.options.thumbnail.call(thisDropzone, mockFile, value.path);
+                        //// Make sure that there is no progress bar, etc...
+                        //thisDropzone.emit("complete", mockFile);
+                        //thisDropzone.emit("complete", $(mockFile._removeLink).html("<div ><span class='fa fa-trash text-danger' style='font-size: 1.5em'></span></div>"));
+                        //thisDropzone.emit("complete", $(mockFile._removeLink).click(function () { $.post("/Manage/Remove", { "id": value.id }, function (data) { console.log(data); }); }));
+                    });
+                });
+
+            },
             addRemoveLinks: true,
             removedfile: function (file) {
                 let currentPreviewElement = $(file.previewElement);
@@ -120,56 +150,67 @@ function initializeStep() {
             url: "/Worksheet/UploadFile",
             uploadMultiple: true,
             paramName: 'file',
-            success: function (file) {
-                console.log(file);
+            success: function (file, res) {
+                var index = 0;
+                var fileResponse = res.filter(function (data, i) {
+                    if (data.name === file.name) {
+                        index = i;
+                        return true;
+                    }
+
+                    return false;
+                })[0];
+
+                
+                $(file.previewElement).find(".sp-file-input").val(fileResponse.id);
+                $(file.previewElement).find(".sp-file-link").attr('href', fileResponse.url);
             },
             previewTemplate: `
-            <div class="dz-preview dz-file-preview dz-processing dz-error dz-complete">  
-                <div class="dz-image">
-                    <img data-dz-thumbnail="">
-                </div>  
-                <div class="dz-details">    
-                    <div class="dz-size">
-                        <span data-dz-size=""><strong></strong> KB</span>
-                    </div>    
-                    <div class="dz-filename">
-                        <span data-dz-name=""></span>
+                <div class="dz-preview dz-file-preview dz-processing dz-error dz-complete">
+                    <input class="sp-file-input" type="hidden" name="${inputname}"/>
+                    <div class="dz-image">
+                        <img data-dz-thumbnail="">
                     </div>  
+                    <div class="dz-details">
+                        <div class="dz-filename">
+                            <a class="sp-file-link" href="#" target="_Blank"><span data-dz-name=""></span></a>
+                        </div>
                     </div>  
                     <div class="dz-progress">
                         <span class="dz-upload" data-dz-uploadprogress=""></span>
                     </div>   
-                </div>
-                <a class="dz-remove" href="javascript:undefined;" data-dz-remove="">Remove file</a>
-            </div>`
-
-
+                    </div>
+                    <a class="dz-remove" href="javascript:undefined;" data-dz-remove="">Remove file</a>
+                </div>`
         })
         .droppable({
             accept: '.draggable-file',
 
             drop: function (e, ui) {
+                console.log('drop');
+
                 e.preventDefault();
 
                 let name = $(ui.draggable).html();
 
                 $(this).find('.dz-message').hide();
 
-                $(this).append(`<div class="dz-preview dz-file-preview dz-processing dz-error dz-complete">  
-                <div class="dz-image">
-                    <img data-dz-thumbnail=""/>
-                </div>  
-                <div class="dz-details">      
-                    <div class="dz-filename">
-                        <span data-dz-name="">${name}</span>
-                    </div>  
-                    <div class="dz-progress">
-                        <span class="dz-upload" data-dz-uploadprogress=""></span>
-                    </div>   
-                </div>
-                <a class="dz-remove" href="javascript:undefined;" onclick="filePreviewRemoveHandler(event)" data-dz-remove="">Remove file</a>
-            </div>`);
-
+                $(this).append(`
+                <div class="dz-preview dz-file-preview dz-processing dz-error dz-complete">
+                    <input class="sp-file-input" type="hidden" name="${inputname}"/>
+                    <div class="dz-image">
+                        <img data-dz-thumbnail=""/>
+                    </div>
+                    <div class="dz-details">      
+                        <div class="dz-filename">
+                            <span data-dz-name="">${name}</span>
+                        </div>  
+                        <div class="dz-progress">
+                            <span class="dz-upload" data-dz-uploadprogress=""></span>
+                        </div>   
+                    </div>
+                    <a class="dz-remove" href="javascript:undefined;" onclick="filePreviewRemoveHandler(event)" data-dz-remove="">Remove file</a>
+                </div>`);
             }
         })
         .addClass('dropzone');
