@@ -5,6 +5,9 @@
 
 @{
     var stepList = StepHelper.GetStepList(Context);
+
+    var count = 0;
+    var stepTaskCount = 0;
 }
 
 <div class="m-portlet m-portlet--bordered m-portlet--unair m--margin-top-30">
@@ -31,103 +34,6 @@
                     What steps will you use in your planning process?
                 </label>
             </div>
-            <!--others' answers: Start-->
-            <div class="m-demo">
-                <div class="m-demo__preview">
-                    <div class="form-group m-form__group">
-                        <label>
-                            Combined result
-                        </label>
-                        <div>
-                            <div class="m-scrollable " data-scrollable="true" data-axis="xy">
-                                <table class="table m-table  table-bordered m--margin-top-10"
-                                       width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                Steps / tasks
-                                            </th>
-                                            <th>
-                                                Persons / groups involved
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                Step 1
-                                            </td>
-                                            <td>
-                                                <div class="m-list-badge m-list-badge--light-bg">
-                                                    <div class="m-list-badge__items">
-                                                        <span title="Giorgi Giorganashvili"
-                                                              data-toggle="tooltip"
-                                                              class="m-list-badge__item m-list-badge__item--default sp-tooltip">
-
-                                                            Mariam Merabishvili
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </td>
-
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                Step 2
-                                            </td>
-                                            <td>
-                                                <div class="m-list-badge m-list-badge--light-bg">
-                                                    <div class="m-list-badge__items">
-                                                        <span title="Mariam Merabishvili"
-                                                              data-toggle="tooltip"
-                                                              class="m-list-badge__item m-list-badge__item--default sp-tooltip">
-
-                                                            ia mgeladze
-                                                        </span>
-                                                        <span title="Mariam Merabishvili"
-                                                              data-toggle="tooltip"
-                                                              class="m-list-badge__item m-list-badge__item--default sp-tooltip">
-
-                                                            Giorgi Giorganashvili
-                                                        </span>
-                                                        <span title="Giorgi Giorganashvili, Mariam Merabishvili"
-                                                              data-toggle="tooltip"
-                                                              class="m-list-badge__item m-list-badge__item--default sp-tooltip">
-
-                                                            isidore mgaloblishvili
-                                                        </span>
-                                                    </div>
-                                                </div>
-
-                                            </td>
-
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                Step 3
-                                            </td>
-                                            <td>
-                                                <div class="m-list-badge m-list-badge--light-bg">
-                                                    <div class="m-list-badge__items">
-                                                        <span title="Giorgi Giorganashvili, Mariam Merabishvili"
-                                                              data-toggle="tooltip"
-                                                              class="m-list-badge__item m-list-badge__item--default sp-tooltip">
-
-                                                            Mariam Merabishvili
-                                                        </span>
-                                                    </div>
-                                                </div>
-
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--otherss answers: End-->
             <div class="m-scrollable " data-scrollable="true" data-axis="xy">
                 <table class="table m-table  table-bordered m--margin-top-10" width="100%">
                     <thead>
@@ -139,92 +45,133 @@
                                 External users
                                 @*Persons / groups involved*@
                             </th>
-                            <th>
-                                Schedule
-                            </th>
-                            <th>
-                                Remind in (days)
-                            </th>
-                            <th>
-                                Completed
-                            </th>
-                            <th>
-                                Status
-                            </th>
-                            <th></th>
+                            @if (Model.IsAdmin)
+                            {
+                                <th>
+                                    Schedule
+                                </th>
+                                <th>
+                                    Remind in (days)
+                                </th>
+                                <th>
+                                    Completed
+                                </th>
+                                <th>
+                                    Status
+                                </th>
+                            }
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var step in stepList)
+
+                        @foreach (var stepTask in Model.StepTasks)
                         {
+                            var stepTaskAnswers = Model.StepTaskAnswers?.Answer?.StepTaskAnswers.Where(x => x.Step == stepTask.Step) ?? Enumerable.Empty<StepTaskAnswerDTO>();
+
                             <tr>
-                                <td>
-                                    @steps.ResourceManager.GetString(step.Step)
+                                <td rowspan="2">
+                                    <input asp-for="StepTasks[stepTaskCount].Id" type="hidden" />
+                                    @steps.ResourceManager.GetString(stepTask.Step)
                                 </td>
                                 <td>
                                     <div class="m-list-badge m-list-badge--light-bg">
                                         <div class="m-list-badge__items">
-                                            <span class="m-list-badge__item m-list-badge__item--default">
-                                                Mariam Merabishvili
-                                            </span>
+                                            @{
+                                                if (!Model.IsAdmin)
+                                                {
+                                                    var definitiveAnswers = Model.StepTaskAnswers?.DefinitiveAnswer?.StepTaskAnswers.Where(x => x.Step == stepTask.Step) ?? Enumerable.Empty<StepTaskAnswerDTO>();
+
+                                                    foreach (var definitiveAnswer in definitiveAnswers)
+                                                    {
+                                                        <span class="m-list-badge__item m-list-badge__item--warning">
+                                                            @definitiveAnswer.FirstName @definitiveAnswer.LastName (@definitiveAnswer.Email)
+                                                        </span>
+                                                    }
+                                                }
+
+                                                var otherAnswers = Model.StepTaskAnswers?.OtherAnswers ?? Enumerable.Empty<AnswerDTO>();
+
+                                                foreach (var otherAnswer in otherAnswers)
+                                                {
+                                                    var otherStepTaskAnswers = otherAnswer.StepTaskAnswers.Where(x => x.Step == stepTask.Step) ?? Enumerable.Empty<StepTaskAnswerDTO>();
+
+                                                    foreach (var stepTaskAnswer in otherStepTaskAnswers)
+                                                    {
+                                                        <span title="@otherAnswer.Author"
+                                                              data-toggle="tooltip"
+                                                              class="m-list-badge__item m-list-badge__item--default sp-tooltip">
+                                                            @stepTaskAnswer.FirstName @stepTaskAnswer.LastName (@stepTaskAnswer.Email)
+                                                        </span>
+                                                    }
+                                                }
+                                            }
                                         </div>
                                     </div>
-                                    <a href="" class="btn btn-sp m-btn m-btn--pill m--pull-right"
-                                       data-toggle="modal" data-target="#edit_steptasks_modal">
-                                        Add new
-                                    </a>
                                 </td>
-                                <td>
-                                    <input type="text" class="datepicker form-control" value="2/01/2019" />
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control" value="4" />
-                                </td>
-                                <td>
-                                    <i class="fa fa-check-square-o sp-font-md"></i>
-                                </td>
-                                <td>
-                                    <span class="fa fa-check m--font-success">
-                                    </span>
-                                </td>
-                                @*<td>
-                                        <span class="table-row-actions">
-                                            <a href="#"
-                                               class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
-                                               title="Edit" data-toggle="modal"
-                                               data-target="#m_question8_modal">
-                                                <i class="la la-edit"></i>
-                                            </a>
-                                        </span>
-                                    </td>*@
                             </tr>
+                            <tr>
+                                <td>
+                                    <div class="m-list-badge m-list-badge--light-bg">
+                                        <div class="m-list-badge__items list-items" id="step_tasks_list_@stepTask.Step">
+                                            @foreach (var stepTaskAnswer in stepTaskAnswers)
+                                            {
+                                                <a class="m-list-badge__item m-list-badge__item--default list-item">
+                                                    <input type="hidden" asp-for="StepTaskAnswers.Answer.StepTaskAnswers[count].Id" value="@stepTaskAnswer.Id" />
+                                                    <input type="hidden" name="StepTaskAnswers.Answer.StepTaskAnswers.Index" value="@count" />
+                                                    @stepTaskAnswer.FirstName @stepTaskAnswer.LastName (@stepTaskAnswer.Email)
+                                                    <span class="list-item-delete fa fa-close"></span>
+                                                </a>
+                                                count++;
+                                            }
+                                        </div>
+                                    </div>
+                                    @if (Model.IsAdmin || !Model.IsSubmitted)
+                                    {
+                                        <a href="" class="btn btn-sp m-btn m-btn--pill m--pull-right"
+                                           data-toggle="modal" data-target="#edit_steptasks_modal" data-step="@stepTask.Step">
+                                            Add new
+                                        </a>
+                                    }
+                                </td>
+                                @if (Model.IsAdmin)
+                                {
+                                    <td rowspan="2">
+                                        <input type="text" asp-for="StepTasks[stepTaskCount].Schedule" class="datepicker form-control" />
+                                    </td>
+                                    <td rowspan="2">
+                                        <input type="text" asp-for="StepTasks[stepTaskCount].RemindIn" class="form-control" />
+                                    </td>
+                                    <td rowspan="2">
+                                        <i class="fa fa-check-square-o sp-font-md"></i>
+                                    </td>
+                                    <td rowspan="2">
+                                        @{ 
+                                            var statusClass = "";
+
+                                            switch (stepTask.Status)
+                                            {
+                                                case StepTaskStatus.Completed: statusClass = "fa-check m--font-success"; break;
+                                                case StepTaskStatus.Uncompleted: statusClass = ""; break;
+                                                case StepTaskStatus.OverdueCompleted: statusClass = "fa-warning m--font-warning"; break;
+                                                case StepTaskStatus.OverdueUnCompleted: statusClass = "fa-remove m--font-danger"; break;
+                                            }
+                                        }
+                                        <span class="fa @statusClass">
+                                        </span>
+                                    </td>
+                                }
+
+                            </tr>
+                            stepTaskCount++;
                         }
                     </tbody>
                 </table>
+                <input type="hidden" name="count" id="step_tasks_count" value="@count" />
             </div>
-
             <span class="m-form__help">
                 Review these steps with the people who are involved, and refine them as
                 needed.
             </span>
-        </div>
-    </div>
-</div>
-
-
-
-<div class="modal fade" id="edit_steptasks_modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="">
-                    Add an external user
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" class="la la-remove"></span>
-                </button>
-            </div>
-            <partial name="~/Views/User/Partials/ExternalUser/_AddExternalUserToStep.cshtml" view-data="ViewData" model="new AddExternalUserToStepDTO {}" />
         </div>
     </div>
 </div>

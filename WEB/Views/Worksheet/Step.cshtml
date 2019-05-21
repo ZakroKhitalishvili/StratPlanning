@@ -5,7 +5,7 @@
     ViewData["Title"] = "Worksheet";
 }
 
-<partial name="~/Views/Worksheet/Partials/_SideMenu.cshtml" model="Model"/>
+<partial name="~/Views/Worksheet/Partials/_SideMenu.cshtml" model="Model" />
 
 <div class="m-portlet m-portlet--full-height m-portlet--tabs m-width--100">
     <div class="m-portlet__head">
@@ -62,35 +62,6 @@
             <!--end::Item-->
         </div>
 
-        @*<div class="form-group m-form__group">
-            <label for="exampleSelect1">
-                Attach files
-            </label>
-            <div class="row">
-                <div class="col-2 col-md-1">
-                    <div class="m-dropdown m-dropdown--up m-dropdown--inline m-dropdown--huge" data-dropdown-toggle="click" data-dropdown-persistent="true">
-                        <a href="#" class=" m-dropdown__toggle  combined_result margin-top-0 dropdown-toggle">
-                            <i class="fa fa-info"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-10 col-md-11">
-                    <div class="m-dropzone dropzone-sp m-dropzone--default m--margin-top-20 dz-clickable ui-droppable">
-                        <div class="m-dropzone__msg dz-message needsclick">
-                            <h3 class="m-dropzone__msg-title">
-                                Drop files here or click to upload.
-                            </h3>
-                            <span class="m-dropzone__msg-desc">
-                                Only image, pdf and psd files are allowed for upload
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>*@
-
         @if (Model.Step == Steps.Predeparture && Model.IsAdmin)
         {
             <div id="planning_team_portlet">
@@ -104,6 +75,23 @@
         }
 
         <partial name="~/Views/Worksheet/Partials/_StepForm.cshtml" model="Model" />
+
+
+        <div class="modal fade" id="edit_steptasks_modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="">
+                            Add an external user
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="la la-remove"></span>
+                        </button>
+                    </div>
+                    <partial name="~/Views/User/Partials/ExternalUser/_AddExternalUserToStep.cshtml" view-data="ViewData" model="new AddExternalUserToStepDTO {}" />
+                </div>
+            </div>
+        </div>
 
 
     </div>
@@ -121,6 +109,5 @@
         var SaveStepURL = '@Url.Action("SaveStep","Worksheet")';
     </script>
     <script src="~/js/step.js" type="text/javascript"></script>
-
 
 }

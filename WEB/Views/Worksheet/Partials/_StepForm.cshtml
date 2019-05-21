@@ -15,15 +15,16 @@
 
     }
 
-    @*@if (Model.Step == Steps.Predeparture)
-        {
-            <partial name="~/Views/Worksheet/Partials/_StepTasks.cshtml" />
-        }*@
+    @if (Model.Step == Steps.Predeparture)
+    {
+        <partial name="~/Views/Worksheet/Partials/_StepTasks.cshtml" />
+    }
+
     <div class="form-group m-form__group">
         <div class="text-danger" asp-validation-summary="ModelOnly"></div>
     </div>
 
-    @if (Model.IsAdmin || (!Model.IsSubmitted && !Model.IsCompleted))
+    @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
     {
         <div class="form-group m-form__group m--img-centered">
             <button type="button" id="step_form_save_button" class="btn m-btn--pill btn-sp m--margin-right-10">

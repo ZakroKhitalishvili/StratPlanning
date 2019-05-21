@@ -4,8 +4,9 @@
 @{
     Layout = null;
 }
-<form class="m-form m-form--fit m-form--label-align-right" id="add_external_user_to_plan_new">
+<form class="m-form m-form--fit m-form--label-align-right" id="add_external_user_to_step_new">
     <div class="m-portlet__body">
+        <input type="hidden" asp-for="NewExternalUser.Step" />
         <div class="form-group m-form__group">
             <div class="text-danger" asp-validation-summary="ModelOnly"></div>
         </div>
@@ -17,7 +18,6 @@
                 <input asp-for="NewExternalUser.FirstName" class="form-control m-input" />
                 <span class="text-danger" asp-validation-for="NewExternalUser.FirstName"></span>
             </div>
-
         </div>
         <div class="form-group m-form__group row">
             <label for="example-text-input" class="col-2 col-form-label">
@@ -27,7 +27,6 @@
                 <input asp-for="NewExternalUser.LastName" class="form-control m-input" />
                 <span class="text-danger" asp-validation-for="NewExternalUser.LastName"></span>
             </div>
-
         </div>
         <div class="form-group m-form__group row">
             <label asp-for="NewExternalUser.Email" class="col-2 col-form-label">
@@ -37,7 +36,6 @@
                 <input asp-for="NewExternalUser.Email" class="form-control m-input" />
                 <span class="text-danger" asp-validation-for="NewExternalUser.Email"></span>
             </div>
-
         </div>
     </div>
     <div class="m-portlet__foot m-portlet__foot--fit">

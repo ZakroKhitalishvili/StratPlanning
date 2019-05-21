@@ -30,7 +30,7 @@ namespace Core.Configurations
             builder.HasOne(x => x.UserToPlan)
                .WithMany(s => s.StepTaskAnswers)
                .HasForeignKey(x => x.UserToPlanId)
-               .IsRequired()
+               .IsRequired(false)
                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(x => x.StepTask)

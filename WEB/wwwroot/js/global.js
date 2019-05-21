@@ -151,18 +151,19 @@ function notify(text, type, seconds = 5) {
     $.notify({
         // options
         message: text
-    }, {
-            // settings
-            type: type,
-            delay: seconds * 1000,
-            placement: {
-                from: "bottom",
-                align: "right"
-            },
-            offset:
-            {
-                x: 20,
-                y: 100
-            }
-        });
+    },
+    {
+        // settings
+        type: type,
+        delay: seconds * 1000,
+        placement: {
+            from: "bottom",
+            align: "right"
+        },
+        offset:
+        {
+            x: 20,
+            y: 100
+        }
+    });
 }

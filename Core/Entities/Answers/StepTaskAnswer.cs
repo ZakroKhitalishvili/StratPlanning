@@ -8,7 +8,7 @@ namespace Core.Entities
     {
         public int Id { get; set; }
 
-        public int UserToPlanId { get; set; }
+        public int? UserToPlanId { get; set; }
 
         public int StepTaskId { get; set; }
 

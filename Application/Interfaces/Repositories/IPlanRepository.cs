@@ -10,7 +10,7 @@ namespace Application.Interfaces.Repositories
 
         PlanStepDTO GetStep(string stepIndex, int planId, bool isDefinitive, int userId);
 
-        IEnumerable<PlanStepDTO> GetStepList();
+        IEnumerable<string> GetStepList();
 
         IEnumerable<PlanDTO> GetPlanList();
 

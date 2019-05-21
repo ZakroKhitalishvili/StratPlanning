@@ -173,6 +173,13 @@ function initializeStep() {
             }
         })
         .addClass('dropzone');
+
+    $(document).on('click', '.list-item-delete', function (e) {
+
+        let listItem = $(this).closest('.list-item');
+        listItem.remove();
+
+    });
 }
 
 
@@ -217,10 +224,7 @@ $(document).on('submit', "form#add_user_to_plan_new", function (e) {
 
 $(document).on('submit', "form#add_user_to_plan_existing", function (e) {
     e.preventDefault();
-
     let formData = new FormData(document.querySelector('form#add_user_to_plan_existing'));
-
-
     formData.set('PlanId', GlobalPlanId);
 
     $.ajax(
@@ -232,7 +236,6 @@ $(document).on('submit', "form#add_user_to_plan_existing", function (e) {
             contentType: false,
             success: function (data, statusText, xhr) {
                 if (xhr.status == 201) {
-
                     notify("Successfully added", "success", 5);
                     $('#planning_team_add_modal').modal('hide');
                     $('body').removeClass('modal-open');
@@ -245,9 +248,7 @@ $(document).on('submit', "form#add_user_to_plan_existing", function (e) {
                 }
 
                 $('form#add_user_to_plan_existing').html(data);
-
                 $('form#add_user_to_plan_existing').find('.m-select2').select2();
-
                 $.validator.unobtrusive.parse('form#add_user_to_plan_existing');
             },
             error: function (xhr, statusText, error) {
@@ -309,7 +310,6 @@ function updatePlanningTeam() {
                     notify("Planning team update failed", "danger", 5);
                 }
 
-
                 if (xhr.status > 500) {
                     notify("An error occured on the server", "danger", 5);
                 }
@@ -328,17 +328,21 @@ function updatePlanningTeam() {
 }
 
 $(document).on('click', 'button#step_form_save_button', function (e) {
-    updateStep(false);
+    if ($('#step_form').valid()) {
+        updateStep(false);
+    }
 
 });
 
 $(document).on('click', 'button#step_form_submit_button', function (e) {
 
-    submitConfirm().then(function (result) {
-        if (result) {
-            updateStep(true);
-        }
-    });
+    if ($('#step_form').valid()) {
+        submitConfirm().then(function (result) {
+            if (result) {
+                updateStep(true);
+            }
+        });
+    }
 
 });
 
@@ -377,4 +381,49 @@ function updateStep(isSubmitted) {
         });
 }
 
+////////////////////////////////
+//// step tasks in predeparture step
+////////
+$(document).ready(function () {
+    $(document).on('show.bs.modal', '#edit_steptasks_modal', function (e) {
+        let step = $(e.relatedTarget).data('step');
+        console.log('called bs modal show');
+        $(this).find('input[name$="Step"]').val(step);
+    });
 
+    $(document).on('submit', 'form#add_external_user_to_step_new', function (e) {
+        e.preventDefault();
+        if (!$(this).valid()) {
+            return;
+        }
+
+        let count = parseInt($('input#step_tasks_count').val());
+
+        let email = $(this).find('input[name$="Email"]').val();
+        let firstName = $(this).find('input[name$="FirstName"]').val();
+        let lastName = $(this).find('input[name$="LastName"]').val();
+        let step = $(this).find('input[name$="Step"]').val();
+
+        let html = `<a class="m-list-badge__item m-list-badge__item--default list-item">
+                                <input type="hidden" name="StepTaskAnswers.Answer.StepTaskAnswers[${count}].Email" value="${email}" />
+                                <input type="hidden" name="StepTaskAnswers.Answer.StepTaskAnswers[${count}].FirstName" value="${firstName}" />
+                                <input type="hidden" name="StepTaskAnswers.Answer.StepTaskAnswers[${count}].LastName" value="${lastName}" />
+                                <input type="hidden" name="StepTaskAnswers.Answer.StepTaskAnswers[${count}].Step" value="${step}" />
+                                <input type="hidden" name="StepTaskAnswers.Answer.StepTaskAnswers.Index" value="${count}" />
+                                ${firstName} ${lastName} (${email})
+                                <span class="fa fa-close list-item-delete"></span>
+                            </a>`;
+
+        $('#step_tasks_list_' + step).append(html);
+
+        $('input#step_tasks_count').val(count + 1);
+
+        $('#edit_steptasks_modal').modal('hide');
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+    });
+
+});
+
+/////////
+/////

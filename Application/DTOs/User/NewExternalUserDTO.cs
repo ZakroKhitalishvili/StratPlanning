@@ -17,5 +17,8 @@ namespace Application.DTOs
         [Required]
         public string LastName { get; set; }
 
+        [Required]
+        public string Step { get; set; }
+
     }
 }

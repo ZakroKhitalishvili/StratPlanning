@@ -27,6 +27,8 @@ namespace Application.DTOs
 
         public IEnumerable<UserPlanningMemberDTO> NotSubmittedUsers { get; set; }
 
+        public IList<StepTaskDTO> StepTasks { get; set; }
+
         public bool IsCompleted { get; set; }
 
         public bool IsAdmin { get; set; }

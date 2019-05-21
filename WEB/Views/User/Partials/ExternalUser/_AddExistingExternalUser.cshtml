@@ -7,8 +7,9 @@
 }
 
 
-<form class="m-form m-form--fit m-form--label-align-right" id="add_external_user_to_plan_existing">
+<form class="m-form m-form--fit m-form--label-align-right" id="add_external_user_to_step_existing">
     <div class="m-portlet__body">
+        <input type="hidden" asp-for="Step" />
         <div class="form-group m-form__group">
             <div class="text-danger" asp-validation-summary="ModelOnly"></div>
         </div>

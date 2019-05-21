@@ -58,12 +58,12 @@
     cursor: pointer;
 }
 
-.m-list-badge .m-list-badge__items a.m-list-badge__item:hover {
+.m-list-badge .m-list-badge__items a.m-list-badge__item.m-list-badge__item--default:hover {
     color: #2b70ba;
     background-color: #e2e1df;
 }
 
-    .m-list-badge .m-list-badge__items a.m-list-badge__item:hover .fa-close {
+    .m-list-badge .m-list-badge__items a.m-list-badge__item.m-list-badge__item--default:hover .fa-close {
         color: #f4516c;
     }
 
@@ -135,12 +135,12 @@
     cursor: pointer;
 }
 
-.m-list-badge .m-list-badge__items a.m-list-badge__item:hover {
+.m-list-badge .m-list-badge__items a.m-list-badge__item.m-list-badge__item--default:hover {
     color: #2b70ba;
     background-color: #e2e1df;
 }
 
-    .m-list-badge .m-list-badge__items a.m-list-badge__item:hover .fa-close {
+    .m-list-badge .m-list-badge__items a.m-list-badge__item.m-list-badge__item--default:hover .fa-close {
         color: #f4516c;
     }
 
@@ -291,7 +291,7 @@ a {
     max-width: 1045px;
 }
 
-.m-list-badge.m-list-badge--light-bg .m-list-badge__items .m-list-badge__item {
+.m-list-badge.m-list-badge--light-bg .m-list-badge__items .m-list-badge__item.m-list-badge__item--default {
     color: #2b70b8;
     background-color: #ffffff;
     border: 1px solid #2b70b8;

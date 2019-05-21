@@ -32,15 +32,25 @@
                 <i class="m-menu__section-icon flaticon-more-v3"></i>
             </li>
 
-            @foreach (PlanStepDTO step in StepHelper.GetStepList(Context))
+            @foreach (var stepTask in Model.StepTasks)
             {
-                <li class="m-menu__item @(Model.Step == step.Step ? "m-menu__item--active" : "")" aria-haspopup="true" data-redirect="true">
-                    <a asp-controller="WorkSheet" asp-action="GetStep" asp-route-stepIndex="@step.Step" asp-route-planId="@Model.PlanId" class="m-menu__link m--padding-left-5">
-                        <i class="m-menu__link-bullet fa @(false ? "fa-check m--font-success" : "fa-remove m--font-danger")">
+                var statusClass = "";
+
+                switch(stepTask.Status)
+                {
+                    case StepTaskStatus.Completed: statusClass = "fa-check m--font-success";break;
+                    case StepTaskStatus.Uncompleted: statusClass = ""; break;
+                    case StepTaskStatus.OverdueCompleted: statusClass = "fa-warning m--font-warning"; break;
+                    case StepTaskStatus.OverdueUnCompleted: statusClass = "fa-remove m--font-danger"; break;
+                }
+
+                <li class="m-menu__item @(Model.Step == stepTask.Step ? "m-menu__item--active" : "")" aria-haspopup="true" data-redirect="true">
+                    <a asp-controller="WorkSheet" asp-action="GetStep" asp-route-stepIndex="@stepTask.Step" asp-route-planId="@Model.PlanId" class="m-menu__link m--padding-left-5">
+                        <i class="m-menu__link-bullet fa @statusClass">
                             <span></span>
                         </i>
                         <span class="m-menu__link-text m--padding-left-10">
-                            @steps.ResourceManager.GetString(step.Step)
+                            @steps.ResourceManager.GetString(stepTask.Step)
                         </span>
                     </a>
                 </li>

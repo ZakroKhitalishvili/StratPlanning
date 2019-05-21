@@ -13,7 +13,7 @@ namespace Web.Helpers
     public class StepHelper
     {
 
-        public static IEnumerable<PlanStepDTO> GetStepList(HttpContext context)
+        public static IEnumerable<string> GetStepList(HttpContext context)
         {
             var planRepository = context.RequestServices.GetService<IPlanRepository>();
             return planRepository.GetStepList();

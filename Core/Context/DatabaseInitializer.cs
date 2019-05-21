@@ -1,5 +1,6 @@
 ﻿using Core.Constants;
 using Core.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,19 +30,37 @@ namespace Core.Context
                 SeedUsers();
             }
 
-            if (!Context.StepBlocks.Any())
-            {
-                SeedPredepartureStep();
-            }
-
             if (!Context.Plans.Any())
             {
                 SeedPlans();
             }
 
+
             if (!Context.Dictionaries.Any(x => x.HasPosition))
             {
                 SeedPositions();
+            }
+
+            //if (Context.Plans.Include(x => x.StepTasks).Any(x => x.StepTasks.Count != 13))
+            //{
+            //    SeedPlans();
+            //    var stepTasks = Plans[0].StepTasks;
+            //    var dbplans = Context.Plans.Include(x=>x.StepTasks).ToList();
+
+            //    int count = 0;
+            //    foreach (var dbPlan in dbplans)
+            //    {
+            //        foreach (var stepTask in Plans[count].StepTasks)
+            //        {
+            //            dbPlan.StepTasks.Add(stepTask);
+            //        }
+            //        count++;
+            //    }
+            //}
+
+            if (!Context.StepBlocks.Where(x => x.Step == Steps.Predeparture).Any())
+            {
+                SeedPredepartureStep();
             }
 
             if (!Context.StepBlocks.Where(x => x.Step == Steps.Mission).Any())
@@ -53,6 +72,7 @@ namespace Core.Context
             {
                 SeedVisionStep();
             }
+
 
             Context.SaveChanges();
 
@@ -98,13 +118,19 @@ namespace Core.Context
                     Name="Initial",Description="Initially generated plan",CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,CreatedBy=null, UpdatedBy=null,EndDate=null,IsCompleted=false,IsWithActionPlan=null,StartDate=DateTime.Now,
                     StepTasks=new List<StepTask>()
                     {
-                        new StepTask
-                        {
-                            Step = Steps.Predeparture,
-                            IsCompleted = false,
-                            CreatedAt = DateTime.Now,
-                            UpdatedAt = DateTime.Now
-                        }
+                        new StepTask{Step = Steps.ActionPlanDetailed,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
+                        new StepTask{Step = Steps.ActionPlanKeyQuestions,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
+                        new StepTask{Step = Steps.Evalution,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
+                        new StepTask{Step = Steps.IssuesDistinguish,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
+                        new StepTask{Step = Steps.Mission,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
+                        new StepTask{Step = Steps.Predeparture,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
+                        new StepTask{Step = Steps.Review,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
+                        new StepTask{Step = Steps.StakeholdersAnalysis,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
+                        new StepTask{Step = Steps.StakeholdersIdentify,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
+                        new StepTask{Step = Steps.StrategicIssues,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
+                        new StepTask{Step = Steps.SWOT,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
+                        new StepTask{Step = Steps.Values,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
+                        new StepTask{Step = Steps.Vision,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
                     }
                 },
                  new Plan
@@ -112,21 +138,30 @@ namespace Core.Context
                     Name="Party Goals Planning",Description="Initially generated plan",CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,CreatedBy=null, UpdatedBy=null,EndDate=null,IsCompleted=false,IsWithActionPlan=null,StartDate=DateTime.Now,
                     StepTasks=new List<StepTask>()
                     {
-                        new StepTask
-                        {
-                            Step = Steps.Predeparture,
-                            IsCompleted = false,
-                            CreatedAt = DateTime.Now,
-                            UpdatedAt = DateTime.Now
-                        }
+                        new StepTask{Step = Steps.ActionPlanDetailed,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
+                        new StepTask{Step = Steps.ActionPlanKeyQuestions,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
+                        new StepTask{Step = Steps.Evalution,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
+                        new StepTask{Step = Steps.IssuesDistinguish,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
+                        new StepTask{Step = Steps.Mission,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
+                        new StepTask{Step = Steps.Predeparture,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
+                        new StepTask{Step = Steps.Review,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
+                        new StepTask{Step = Steps.StakeholdersAnalysis,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
+                        new StepTask{Step = Steps.StakeholdersIdentify,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
+                        new StepTask{Step = Steps.StrategicIssues,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
+                        new StepTask{Step = Steps.SWOT,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
+                        new StepTask{Step = Steps.Values,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
+                        new StepTask{Step = Steps.Vision,IsCompleted = false, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now},
                     }
                  }
             };
 
             foreach (var plan in Plans)
             {
-                foreach (var user in Users)
-                    plan.UsersToPlans.Add(new UserToPlan { User = user });
+                if (Users != null)
+                {
+                    foreach (var user in Users)
+                        plan.UsersToPlans.Add(new UserToPlan { User = user });
+                }
             }
 
             Context.Plans.AddRange(Plans);
