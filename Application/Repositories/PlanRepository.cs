@@ -946,7 +946,6 @@ namespace Application.Repositories
                 }
             }
 
-
             if (planStep.Step == Steps.Predeparture)
             {
                 planStep.StepTaskAnswers = GetStepTaskAnswers(planStep.PlanId, currentUserStepResult.IsDefinitive, currentUserStepResult.UserToPlan?.UserId ?? 0);
