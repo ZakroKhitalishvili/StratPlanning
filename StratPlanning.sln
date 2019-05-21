@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{2687FA29-DDC2-4EBA-B02F-E69A6984B3C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{5E82910B-9281-49F3-8BAA-18254FC4E458}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Resources", "Resources\Resources.csproj", "{5E82910B-9281-49F3-8BAA-18254FC4E458}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -25,5 +25,7 @@ namespace Application.Interfaces.Repositories
         bool SaveStep(PlanStepDTO planStep, bool isDefinitive, bool isSubmitted, int userId);
 
         IEnumerable<PlanDTO> GetPlanListForUser(int userId);
+
+        IList<FileDTO> GetFileAnswers(int questionId, int userId);
     }
 }

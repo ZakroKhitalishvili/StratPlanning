@@ -238,7 +238,7 @@ namespace Core.Context
                         new Question{ Type=QuestionTypes.TextArea, Order=3, Title="2. What is our ideology? What are our core values?", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false },
                         new Question{ Type=QuestionTypes.TextArea, Order=4, Title="3. Should our mission statement be modified? If yes, why and how?", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false },
                         new Question{ Type=QuestionTypes.TextArea, Order=5, Title="4. Examine your answers to the above questions and draft a new mission statement.", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false },
-
+                        new Question{ Type=QuestionTypes.File, Order=6, Title="Attach files", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=true }
                     }
                 }
             };

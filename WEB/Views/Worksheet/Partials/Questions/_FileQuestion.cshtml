@@ -17,21 +17,6 @@
     <label>
         @question.Title
     </label>
-    @if (question.Files.Any())
-    {
-        <div class="m-list-badge m-list-badge--light-bg m--margin-bottom-10">
-            <div class="m-list-badge__items">
-                @foreach (var f in question.Files)
-                {
-                    <span class="m-list-badge__item m-list-badge__item--default ">
-                        <a download="" href="/image.png" target="_blank">
-                            @(f.Name + f.Ext)
-                        </a>
-                    </span>
-                }
-            </div>
-        </div>
-    }
     <div class="row">
         <div class="col-2 col-md-1">
             <div class="m-dropdown m-dropdown--up m-dropdown--inline m-dropdown--huge" data-dropdown-toggle="click" data-dropdown-persistent="true">
@@ -42,9 +27,9 @@
                     <div class="m-dropdown__inner">
                         <div class="m-dropdown__body">
                             <div class="m-dropdown__content">
-                                <div class="m-scrollable mCustomScrollbar _mCS_2 mCS-autoHide mCS_no_scrollbar" data-scrollable="true" data-max-height="200" style="max-height: 200px; height: 200px; position: relative; overflow: visible;">
-                                    <div id="mCSB_2" class="mCustomScrollBox mCS-minimal-dark mCSB_vertical mCSB_outside" style="max-height: 200px;" tabindex="0">
-                                        <div id="mCSB_2_container" class="mCSB_container mCS_y_hidden mCS_no_scrollbar_y" style="position:relative; top:0; left:0;" dir="ltr">
+                                <div class="m-scrollable mCustomScrollbar _mCS_6 mCS-autoHide mCS_no_scrollbar" data-scrollable="true" data-max-height="200" style="max-height: 200px; height: 200px; position: relative; overflow: visible;">
+                                    <div id="mCSB_6" class="mCustomScrollBox mCS-minimal-dark mCSB_vertical mCSB_outside" style="max-height: 200px;" tabindex="0">
+                                        <div id="mCSB_6_container" class="mCSB_container mCS_y_hidden mCS_no_scrollbar_y" style="position:relative; top:0; left:0;" dir="ltr">
                                             <div class="m-list-timeline">
                                                 <div class="m-list-timeline__items">
                                                     @foreach (var otherAnswer in answerGroup.OtherAnswers)
@@ -55,7 +40,16 @@
                                                                 @otherAnswer.Author
                                                             </span>
                                                             <span class="m-list-timeline__text">
-                                                                @otherAnswer.TextAnswer.Text
+                                                                <div class="m-list-badge__items">
+                                                                    @foreach (var file in otherAnswer.FileAnswer)
+                                                                    {
+                                                                        <span class="m-list-badge__item m-list-badge__item--default ">
+                                                                            <a download="" href="@file.Path" target="_blank">
+                                                                                @(file.Name + file.Ext)
+                                                                            </a>
+                                                                        </span>
+                                                                    }
+                                                                </div>
                                                             </span>
                                                         </div>
                                                     }
@@ -67,14 +61,23 @@
                                                                 <b>Definitive answer</b>
                                                             </span>
                                                             <span class="m-list-timeline__text">
-                                                                @answerGroup.DefinitiveAnswer.TextAnswer.Text
+                                                                <div class="m-list-badge__items">
+                                                                    @foreach (var file in answerGroup.DefinitiveAnswer.FileAnswer)
+                                                                    {
+                                                                        <span class="m-list-badge__item m-list-badge__item--default ">
+                                                                            <a download="" href="@file.Path" target="_blank">
+                                                                                @(file.Name + file.Ext)
+                                                                            </a>
+                                                                        </span>
+                                                                    }
+                                                                </div>
                                                             </span>
                                                         </div>
                                                     }
                                                 </div>
                                             </div>
                                         </div>
-                                    </div><div id="mCSB_2_scrollbar_vertical" class="mCSB_scrollTools mCSB_2_scrollbar mCS-minimal-dark mCSB_scrollTools_vertical" style="display: none;"><div class="mCSB_draggerContainer"><div id="mCSB_2_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 50px; top: 0px;"><div class="mCSB_dragger_bar" style="line-height: 50px;"></div></div><div class="mCSB_draggerRail"></div></div></div>
+                                    </div><div id="mCSB_6_scrollbar_vertical" class="mCSB_scrollTools mCSB_6_scrollbar mCS-minimal-dark mCSB_scrollTools_vertical" style="display: none;"><div class="mCSB_draggerContainer"><div id="mCSB_6_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 50px; top: 0px;"><div class="mCSB_dragger_bar" style="line-height: 50px;"></div></div><div class="mCSB_draggerRail"></div></div></div>
                                 </div>
                             </div>
                         </div>
@@ -85,14 +88,19 @@
         </div>
         <div class="col-10 col-md-11">
             <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].QuestionId" value="@question.Id" />
-            <textarea asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.TextAnswer.Text" class="form-control m-input" rows="3"></textarea>
-            <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.TextAnswer.Text"></span>
+            <div class="m-dropzone dropzone-sp m-dropzone--default m--margin-top-20"
+                 data-initurl="@Url.Action("GetAnswerFiles", "Worksheet", new { questionId = question.Id })"
+                 data-inputname="@Html.NameFor(x => x.AnswerGroups[questionIndexOffset + questionIndex].Answer.InputFileAnswer)">
+                <div class="m-dropzone__msg dz-message needsclick">
+                    <h3 class="m-dropzone__msg-title">
+                        Drop files here or click to upload.
+                    </h3>
+                    <span class="m-dropzone__msg-desc">
+                        Only image, pdf and psd files are allowed for upload
+                    </span>
+                </div>
+            </div>
         </div>
     </div>
-    @if (!string.IsNullOrEmpty(question.Description))
-    {
-        <span class="m-form__help">
-            @question.Description
-        </span>
-    }
+
 </div>

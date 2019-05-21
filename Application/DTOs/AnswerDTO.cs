@@ -18,6 +18,10 @@ namespace Application.DTOs
 
         public TextAnswerDTO TextAnswer { get; set; }
 
+        public IList<FileAnswerDTO> FileAnswer { get; set; }
+
+        public IList<int> InputFileAnswer { get; set; }
+
         public IList<StepTaskAnswerDTO> StepTaskAnswers { get; set; }
     }
 }

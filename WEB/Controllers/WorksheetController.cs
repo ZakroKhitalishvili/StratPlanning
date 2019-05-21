@@ -112,6 +112,21 @@ namespace Web.Controllers
             return PartialView("~/Views/Worksheet/Partials/_StepForm.cshtml", newPlanStep);
         }
 
+        [HttpGet]
+        public IActionResult GetAnswerFiles(int questionId)
+        {
+            var userId = HttpContext.GetUserId();
+
+            var files = _planRepository.GetFileAnswers(questionId, userId);
+
+            return Ok(files.Select(x => new
+            {
+                id = x.Id,
+                name = x.Name + x.Ext,
+                url = x.Path
+            }).ToArray());
+        }
+
         [HttpPost]
         public IActionResult UploadFile()
         {
@@ -121,7 +136,11 @@ namespace Web.Controllers
             {
                 return BadRequest();
             }
-            int id = 0;
+
+            var result = new List<FileDTO>();
+
+            var userId = HttpContext.GetUserId();
+
             foreach (var file in files)
             {
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Uploads",
@@ -132,17 +151,18 @@ namespace Web.Controllers
                     file.CopyTo(stream);
                 }
 
-                var fileEntity = new Core.Entities.File
-                {
+                var fileDto = _fileRepository.CreateNewFile(Path.GetFileNameWithoutExtension(path), Path.GetExtension(path), $"/Uploads/{file.FileName}", userId);
 
-                };
-
-                //_fileRepository.Create(fileEntity);
-                //id= fileEntity.Id;
+                if (fileDto != null) result.Add(fileDto);
 
             }
 
-            return Ok(new { fileId = id });
+            return Ok(result.Select(x => new
+            {
+                id = x.Id,
+                name = x.Name + x.Ext,
+                url = x.Path
+            }).ToArray());
         }
 
     }
