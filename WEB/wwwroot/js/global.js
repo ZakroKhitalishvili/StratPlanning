@@ -8,7 +8,7 @@ function initializeInputs(element) {
         tokenSeparators: [","]
     });
 
-    $(element).find('.datepicker').datepicker();
+    $(element).find('.datepicker').datepicker({ format: 'dd-mm-yyyy' });
 
     $(element).find('.select2-without-search').select2({
         minimumResultsForSearch: Infinity

@@ -64,16 +64,18 @@
                             var stepTaskAnswers = Model.StepTaskAnswers?.Answer?.StepTaskAnswers.Where(x => x.Step == stepTask.Step) ?? Enumerable.Empty<StepTaskAnswerDTO>();
 
                             <tr>
-                                <td rowspan="2">
+                                <td>
                                     @steps.ResourceManager.GetString(stepTask.Step)
                                 </td>
                                 <td>
                                     <div class="m-list-badge m-list-badge--light-bg">
                                         <div class="m-list-badge__items">
                                             @{
+                                                IEnumerable<StepTaskAnswerDTO> definitiveAnswers = Enumerable.Empty<StepTaskAnswerDTO>();
+                                                IEnumerable<StepTaskAnswerDTO> otherStepTaskAnswers = Enumerable.Empty<StepTaskAnswerDTO>();
                                                 if (!Model.IsAdmin)
                                                 {
-                                                    var definitiveAnswers = Model.StepTaskAnswers?.DefinitiveAnswer?.StepTaskAnswers.Where(x => x.Step == stepTask.Step) ?? Enumerable.Empty<StepTaskAnswerDTO>();
+                                                    definitiveAnswers = Model.StepTaskAnswers?.DefinitiveAnswer?.StepTaskAnswers.Where(x => x.Step == stepTask.Step) ?? Enumerable.Empty<StepTaskAnswerDTO>();
 
                                                     foreach (var definitiveAnswer in definitiveAnswers)
                                                     {
@@ -87,7 +89,7 @@
 
                                                 foreach (var otherAnswer in otherAnswers)
                                                 {
-                                                    var otherStepTaskAnswers = otherAnswer.StepTaskAnswers.Where(x => x.Step == stepTask.Step) ?? Enumerable.Empty<StepTaskAnswerDTO>();
+                                                    otherStepTaskAnswers = otherAnswer.StepTaskAnswers.Where(x => x.Step == stepTask.Step) ?? Enumerable.Empty<StepTaskAnswerDTO>();
 
                                                     foreach (var stepTaskAnswer in otherStepTaskAnswers)
                                                     {
@@ -98,13 +100,15 @@
                                                         </span>
                                                     }
                                                 }
+
+                                                if (definitiveAnswers.Count() == 0 && otherStepTaskAnswers.Count() == 0)
+                                                {
+                                                    <span>no other answers</span>
+                                                }
                                             }
                                         </div>
                                     </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                                    <hr />
                                     <div class="m-list-badge m-list-badge--light-bg">
                                         <div class="m-list-badge__items list-items" id="step_tasks_list_@stepTask.Step">
                                             @foreach (var stepTaskAnswer in stepTaskAnswers)
@@ -129,17 +133,23 @@
                                 </td>
                                 @if (Model.IsAdmin)
                                 {
-                                    <td rowspan="2">
+                                    <td>
                                         <input asp-for="StepTasks[stepTaskCount].Id" type="hidden" />
-                                        <input type="text" asp-for="StepTasks[stepTaskCount].Schedule" class="datepicker form-control" />
+                                        <input type="text" asp-for="StepTasks[stepTaskCount].Schedule" class="datepicker form-control" value="@Model.StepTasks[stepTaskCount].Schedule?.ToString("dd-MM-yyyy")" />
                                     </td>
-                                    <td rowspan="2">
-                                        <input type="text" asp-for="StepTasks[stepTaskCount].RemindIn" class="form-control" />
+                                    <td>
+                                        <input type="number" asp-for="StepTasks[stepTaskCount].RemindIn" class="form-control" />
                                     </td>
-                                    <td rowspan="2">
-                                        <i class="fa fa-check-square-o sp-font-md"></i>
+                                    <td>
+                                        <span class="m-switch m-switch--icon">
+                                            <label>
+                                                <input asp-for="StepTasks[stepTaskCount].IsCompleted" disabled="@Model.StepTasks[stepTaskCount].IsCompleted" class="step-complete-checkbox"
+                                                       type="checkbox" data-id="@Model.StepTasks[stepTaskCount].Id">
+                                                <span></span>
+                                            </label>
+                                        </span>
                                     </td>
-                                    <td rowspan="2">
+                                    <td>
                                         @{
                                             var statusClass = "";
 
