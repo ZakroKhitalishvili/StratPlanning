@@ -3,6 +3,9 @@
 @using Core.Constants;
 @using Web.Helpers;
 
+@{ 
+    var sortedSteps = StepHelper.GetStepList(Context).ToArray();
+}
 <button class="m-aside-left-close m-aside-left-close--skin-light" id="m_aside_left_close_btn">
     <i class="la la-close"></i>
 </button>
@@ -32,7 +35,7 @@
                 <i class="m-menu__section-icon flaticon-more-v3"></i>
             </li>
 
-            @foreach (var stepTask in Model.StepTasks)
+            @foreach (var stepTask in Model.StepTasks.OrderBy(x => Array.IndexOf(sortedSteps, x.Step)))
             {
                 var statusClass = "";
 
