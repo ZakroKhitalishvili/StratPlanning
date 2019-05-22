@@ -499,3 +499,73 @@ $(document).ready(function () {
 
 /////////
 /////
+
+$(document).on('hidden.bs.modal', function (event) {
+    var modal = $(event.target);
+
+    modal.find('.m-input').each(function (i, el) {
+        $(el).val("");
+    });
+
+    modal.find('.m-index').val("");
+});
+
+function editRecord(el, targetId) {
+    if (valueAnswerOptions[targetId] === undefined) return;
+
+    var options = valueAnswerOptions[targetId];
+    var modal = $(el).closest('.modal');
+    var list = $(targetId);
+
+    var data = {};
+
+    modal.find('.m-input').each(function (i, el) {
+        data[$(el).attr('name')] = $(el).val();
+    });
+
+    var index = modal.find('.m-index').val();
+
+    if (index) {
+        $('#' + index).replaceWith(options.template(data, index));
+    }
+    else {
+        index = guid();
+
+        list.append(options.template(data, index));
+    }
+
+    modal.modal('hide');
+}
+
+function showRecordDetail(source, modalId) {
+    var modal = $(modalId);
+
+    var record = source.closest('tr');
+
+    var data = JSON.parse($(record).attr('data-val'));
+
+    var index = $(record).attr('id');
+
+    modal.find('.m-input').each(function (i, el) {
+        $(el).val(data[$(el).attr('name')]);
+    });
+
+    modal.find('.m-index').val(index);
+
+    modal.modal('show');
+}
+
+function deleteRecord(source) {
+    var record = source.closest('tr');
+    $(record).remove();
+}
+
+function guid() {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
+}

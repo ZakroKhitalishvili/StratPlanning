@@ -1,4 +1,19 @@
-﻿<div class="m-demo">
+﻿@model Application.DTOs.PlanStepDTO
+
+@{
+    var blockIndex = (int)ViewData["BlockIndex"];
+    var questionIndex = (int)ViewData["QuestionIndex"];
+
+    var questionIndexOffset = (int)ViewData["QuestionIndexOffset"];
+
+    var question = Model.StepBlocks[blockIndex].Questions[questionIndex];
+
+    var answerGroup = Model.AnswerGroups.Where(x => x.QuestionId == question.Id).FirstOrDefault();
+
+    var filledAnswer = Model.AnswerGroups[questionIndexOffset + questionIndex];
+}
+
+<div class="m-demo">
     <div class="m-demo__preview">
         <div class="form-group m-form__group">
             <div>
@@ -20,56 +35,34 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="author">
-                                        <td colspan="3"> Giorgi Giorganashvili</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Integrity </td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Democratic decision-making
-                                        </td>
-                                        <td>
-                                            Major decisions are taken based on discussions in
-                                            the party
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Sympathy
-                                        </td>
-                                        <td>
-                                            Team members help each other.
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                    <tr class="author">
-                                        <td colspan="3">Mariam kelaptrishvili</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Profesionalism </td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Integrity </td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            Sympathy
-                                        </td>
-                                        <td>
-                                            Team members help each other.
-                                        </td>
-                                        <td></td>
-                                    </tr>
+                                    @foreach (var otherAnswer in answerGroup.OtherAnswers)
+                                    {
+                                        <tr class="author">
+                                            <td colspan="3">@otherAnswer.Author</td>
+                                        </tr>
+                                        @foreach (var valueAnswer in otherAnswer.ValueAnswer)
+                                        {
+                                            <tr>
+                                                <td>@valueAnswer.Value</td>
+                                                <td>@valueAnswer.Definition</td>
+                                                <td>@valueAnswer.Description</td>
+                                            </tr>
+                                        }
+                                    }
+                                    @if (answerGroup.DefinitiveAnswer != null)
+                                    {
+                                        <tr class="author">
+                                            <td colspan="3">@answerGroup.DefinitiveAnswer.Author</td>
+                                        </tr>
+                                        @foreach (var valueAnswer in answerGroup.DefinitiveAnswer.ValueAnswer)
+                                        {
+                                            <tr>
+                                                <td>@valueAnswer.Value</td>
+                                                <td>@valueAnswer.Definition</td>
+                                                <td>@valueAnswer.Description</td>
+                                            </tr>
+                                        }
+                                    }
                                 </tbody>
                             </table>
                         </div>
@@ -84,9 +77,9 @@
     <div class="row">
         <div class="col-sm-12">
             <label>
-                Your answer
+                @question.Title
             </label>
-            <a href="" class="btn btn-sp m-btn m-btn--pill m--pull-right" data-toggle="modal" data-target="#m_select2_modal">
+            <a href="" class="btn btn-sp m-btn m-btn--pill m--pull-right" data-toggle="modal" data-target="#v_@(question.Id)_modal">
                 Add
             </a>
         </div>
@@ -110,120 +103,140 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                Team work
-                            </td>
-                            <td>
-                                Decisions are shared
-                            </td>
-                            <td>
-                                Information is provided in time, distance/communication
-                                tools
-                                are
-                                used and wide consensus is a priority.
-                            </td>
-                            <td>
-                                <span class="table-row-actions">
-                                    <a href="#" class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete">
-                                        <i class="la la-trash"></i>
-                                    </a>
-                                    <a href="#" class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill" title="Edit" data-toggle="modal" data-target="#m_select2_modal">
-                                        <i class="la la-edit"></i>
-                                    </a>
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Openness </td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <span class="table-row-actions">
-                                    <a href="#" class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete">
-                                        <i class="la la-trash"></i>
-                                    </a>
-                                    <a href="#" class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill" title="Edit" data-toggle="modal" data-target="#m_select2_modal">
-                                        <i class="la la-edit"></i>
-                                    </a>
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Integrity </td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <span class="table-row-actions">
-                                    <a href="#" class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete">
-                                        <i class="la la-trash"></i>
-                                    </a>
-                                    <a href="#" class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill" title="Edit" data-toggle="modal" data-target="#m_select2_modal">
-                                        <i class="la la-edit"></i>
-                                    </a>
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Profesionalism </td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <span class="table-row-actions">
-                                    <a href="#" class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete">
-                                        <i class="la la-trash"></i>
-                                    </a>
-                                    <a href="#" class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill" title="Edit" data-toggle="modal" data-target="#m_select2_modal">
-                                        <i class="la la-edit"></i>
-                                    </a>
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Democratic decision-making
-                            </td>
-                            <td>
-                                Major decisions are taken based on discussions in the party
-                            </td>
-                            <td></td>
-                            <td>
-                                <span class="table-row-actions">
-                                    <a href="#" class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete">
-                                        <i class="la la-trash"></i>
-                                    </a>
-                                    <a href="#" class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill" title="Edit" data-toggle="modal" data-target="#m_select2_modal">
-                                        <i class="la la-edit"></i>
-                                    </a>
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Sympathy
-                            </td>
-                            <td>
-                                Team members help each other.
-                            </td>
-                            <td></td>
-                            <td>
-                                <span class="table-row-actions">
-                                    <a href="#" class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete">
-                                        <i class="la la-trash"></i>
-                                    </a>
-                                    <a href="#" class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill" title="Edit" data-toggle="modal" data-target="#m_select2_modal">
-                                        <i class="la la-edit"></i>
-                                    </a>
-                                </span>
-                            </td>
-                        </tr>
+                    <tbody id="v_@(question.Id)_list">
+                        @if (answerGroup.Answer != null)
+                        {
+                            string guid = "";
+                            foreach (var valueAnswer in answerGroup.Answer.ValueAnswer)
+                            {
+                                {
+                                    guid = Guid.NewGuid().ToString();
+                                }
+                                <tr id="@guid" data-val='@Json.Serialize(valueAnswer)'>
+                                    <td>
+                                        @valueAnswer.Value
+                                    </td>
+                                    <td>
+                                        @valueAnswer.Definition
+                                    </td>
+                                    <td>
+                                        @valueAnswer.Description
+                                    </td>
+                                    <td>
+                                        <span class="table-row-actions">
+                                            <button type="button" class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete" onclick="deleteRecord(this)">
+                                                <i class="la la-trash"></i>
+                                            </button>
+                                            <button type="button" class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill" title="Edit" onclick="showRecordDetail(this, '#v_@(question.Id)_modal')">
+                                                <i class="la la-edit"></i>
+                                            </button>
+                                        </span>
+                                    </td>
+                                    <input type="hidden" value="@guid" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer.index" />
+                                    <input type="hidden" value="@valueAnswer.Id" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[@guid].Id" />
+                                    <input type="hidden" value="@valueAnswer.Value" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[@guid].Value" />
+                                    <input type="hidden" value="@valueAnswer.Definition" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[@guid].Definition" />
+                                    <input type="hidden" value="@valueAnswer.Description" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[@guid].Description" />
+                                </tr>
+                            }
+                        }
                     </tbody>
                 </table>
             </div>
         </div><div id="mCSB_2_scrollbar_vertical" class="mCSB_scrollTools mCSB_2_scrollbar mCS-minimal-dark mCSB_scrollTools_vertical" style="display: none;"><div class="mCSB_draggerContainer"><div id="mCSB_2_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 50px; height: 0px; top: 0px;"><div class="mCSB_dragger_bar" style="line-height: 50px;"></div></div><div class="mCSB_draggerRail"></div></div></div><div id="mCSB_2_scrollbar_horizontal" class="mCSB_scrollTools mCSB_2_scrollbar mCS-minimal-dark mCSB_scrollTools_horizontal" style="display: block;"><div class="mCSB_draggerContainer"><div id="mCSB_2_dragger_horizontal" class="mCSB_dragger" style="position: absolute; min-width: 50px; display: block; width: 860px; max-width: 849.8px; left: 0px;"><div class="mCSB_dragger_bar"></div></div><div class="mCSB_draggerRail"></div></div></div>
     </div>
     <span class="m-form__help">
-        Please, enter values.
+        @question.Description
     </span>
+    <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].QuestionId" value="@question.Id" />
 </div>
+<div class="modal fade" id="v_@(question.Id)_modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="">
+                    Add value statement
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="la la-remove"></span>
+                </button>
+            </div>
+            <form class="m-form m-form--fit m-form--label-align-right">
+                <div class="modal-body">
+                    <input type="hidden" class="m-index" />
+                    <input type="hidden" class="m-input" name="id" />
+                    <div class="form-group m-form__group row m--margin-top-20">
+                        <label class="col-form-label col-lg-3 col-sm-12">
+                            Value
+                        </label>
+                        <div class="col-lg-9 col-md-9 col-sm-12">
+                            <input class="form-control m-input" name="value" />
+                        </div>
+                    </div>
+                    <div class="form-group m-form__group row m--margin-top-20">
+                        <label class="col-form-label col-lg-3 col-sm-12">
+                            Definition
+                        </label>
+                        <div class="col-lg-9 col-md-9 col-sm-12">
+                            <textarea class="form-control m-input" rows="3" name="definition"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group m-form__group row m--margin-top-20">
+                        <label class="col-form-label col-lg-3 col-sm-12">
+                            How is this value expressed in our party life?
+                        </label>
+                        <div class="col-lg-9 col-md-9 col-sm-12">
+                            <textarea class="form-control m-input" rows="3" name="description"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sp m-btn submit-btn" onclick="editRecord(this, '#v_@(question.Id)_list');">
+                        Add
+                    </button>
+                    <button type="button" class="btn btn-secondary m-btn" data-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    if (valueAnswerOptions === undefined) {
+        var valueAnswerOptions = {};
+    }
+
+    valueAnswerOptions['#v_@(question.Id)_list'] = {
+        template: function (data, index) {
+            return `
+                <tr id="${index}" data-val='${JSON.stringify(data)}'>
+                    <td>
+                        ${data.value}
+                    </td>
+                    <td>
+                        ${data.definition}
+                    </td>
+                    <td>
+                        ${data.description}
+                    </td>
+                    <td>
+                        <span class="table-row-actions">
+                            <button type="button" class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete" onclick="deleteRecord(this)">
+                                <i class="la la-trash"></i>
+                            </button>
+                            <button type="button" class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill" title="Edit" onclick="showRecordDetail(this, '#v_@(question.Id)_modal')">
+                                <i class="la la-edit"></i>
+                            </button>
+                        </span>
+                    </td>
+                    <input type="hidden" value="${index}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer.index"/>
+                    <input type="hidden" value="${data.id ? data.id : 0}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[${index}].Id"/>
+                    <input type="hidden" value="${data.value}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[${index}].Value"/>
+                    <input type="hidden" value="${data.definition}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[${index}].Definition"/>
+                    <input type="hidden" value="${data.description}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[${index}].Description"/>
+                </tr>
+            `;
+        }
+    };
+</script>

@@ -384,9 +384,8 @@ namespace Application.Repositories
                     .Include(x => x.TextAnswers)
                     .Include(x => x.FileAnswers).ThenInclude(x => x.File)
                     .Include(x => x.StepTaskAnswers).ThenInclude(x => x.StepTask)
-                    .Include(x => x.StepTaskAnswers).ThenInclude(x => x.UserToPlan).ToList();
-                    .Include(x => x.ValueAnswers)
-                    .SingleOrDefault();
+                    .Include(x => x.StepTaskAnswers).ThenInclude(x => x.UserToPlan)
+                    .Include(x => x.ValueAnswers).ToList();
         }
 
         private UserStepResult GetUserStepResult(int planId, string stepIndex, int userId)
@@ -832,13 +831,21 @@ namespace Application.Repositories
 
             foreach (var dbAnswer in dbAnswers)
             {
-                var answerId = dbAnswer.Id;
+                var updateAnswer = answerGroup.Answer.ValueAnswer.Where(x => x.Id == dbAnswer.Id).FirstOrDefault();
 
-                if (!answerGroup.Answer.ValueAnswer.Select(x => x.Id).Contains(answerId))
+                if (updateAnswer == null)
                 {
                     Context.ValueAnswers.Remove(dbAnswer);
                     Context.SaveChanges();
                     //userStepResult.SelectAnswers.Remove(dbAnswer);
+                }
+                else
+                {
+                    dbAnswer.Value = updateAnswer.Value;
+                    dbAnswer.Definition = updateAnswer.Definition;
+                    dbAnswer.Description = updateAnswer.Description;
+                    dbAnswer.UpdatedAt = DateTime.Now;
+                    dbAnswer.UpdatedBy = userStepResult.UpdatedBy;
                 }
             }
 
@@ -906,7 +913,7 @@ namespace Application.Repositories
                     }
                     if (questions[j].Type == QuestionTypes.Values)
                     {
-                        planStep.AnswerGroups.Add(GetFileAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
+                        planStep.AnswerGroups.Add(GetValueAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
                     }
                 }
             }
@@ -1241,6 +1248,9 @@ namespace Application.Repositories
                     }).ToList()
                 };
             }
+
+            return answerGroup;
+        }
 
         private AnswerGroupDTO GetValueAnswers(int questionId, UserStepResult currentUserStepResult, IList<UserStepResult> otherUserStepResults)
         {
