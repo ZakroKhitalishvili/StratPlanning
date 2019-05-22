@@ -73,6 +73,11 @@ namespace Core.Context
                 SeedVisionStep();
             }
 
+            if (!Context.StepBlocks.Where(x => x.Step == Steps.Values).Any())
+            {
+                SeedValuesStep();
+            }
+
 
             Context.SaveChanges();
 
@@ -377,6 +382,31 @@ namespace Core.Context
                         new Question{ Type=QuestionTypes.TextArea, Order=3, Title="3. Operational aspects", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false },
                         new Question{ Type=QuestionTypes.TextArea, Order=4, Title="4. The role", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false },
                         new Question{ Type=QuestionTypes.TextArea, Order=5, Title="5. Examine your answers to the above questions and draft a vision statement", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false }
+                    }
+                }
+            };
+
+            Context.StepBlocks.AddRange(Blocks);
+        }
+
+        private void SeedValuesStep()
+        {
+            Blocks = new StepBlock[]
+            {
+                new StepBlock
+                {
+                    Title = "Value Statement",
+                    Instruction = "sagittis. In dignissim commodo hendrerit. Sed congue purus luctus mi feugiat, ut consequat nisi porttitor",
+                    Order=1,
+                    Step=Steps.Values,
+                    Description=null,
+                    UpdatedAt=DateTime.Now,
+                    CreatedAt=DateTime.Now,
+                    CreatedBy=null,
+                    UpdatedBy=null,
+                    Questions=new List<Question>()
+                    {
+                        new Question{ Type=QuestionTypes.Values, Order=1, Title="Your answer", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description="Please, enter values.", HasFiles=false }
                     }
                 }
             };

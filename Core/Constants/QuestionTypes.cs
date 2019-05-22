@@ -23,5 +23,7 @@ namespace Core.Constants
         public const string TextArea = "TextArea";
 
         public const string File = "File";
+
+        public const string Values = "Values";
     }
 }

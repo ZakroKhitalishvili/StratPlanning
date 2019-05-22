@@ -23,5 +23,7 @@ namespace Application.DTOs
         public IList<int> InputFileAnswer { get; set; }
 
         public IList<StepTaskAnswerDTO> StepTaskAnswers { get; set; }
+
+        public IList<ValueAnswerDTO> ValueAnswer { get; set; }
     }
 }

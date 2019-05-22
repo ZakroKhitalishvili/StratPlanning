@@ -373,6 +373,7 @@ namespace Application.Repositories
                     .Include(x => x.SelectAnswers).ThenInclude(x => x.Option)
                     .Include(x => x.TextAnswers)
                     .Include(x => x.FileAnswers).ThenInclude(x => x.File)
+                    .Include(x => x.ValueAnswers)
                     .SingleOrDefault();
         }
 
@@ -384,6 +385,7 @@ namespace Application.Repositories
                     .Include(x => x.SelectAnswers).ThenInclude(x => x.Option)
                     .Include(x => x.TextAnswers)
                     .Include(x => x.FileAnswers).ThenInclude(x => x.File)
+                    .Include(x => x.ValueAnswers)
                     .SingleOrDefault();
         }
 
@@ -395,6 +397,7 @@ namespace Application.Repositories
                     .Include(x => x.SelectAnswers).ThenInclude(x => x.Option)
                     .Include(x => x.TextAnswers)
                     .Include(x => x.FileAnswers).ThenInclude(x => x.File)
+                    .Include(x => x.ValueAnswers)
                     .SingleOrDefault();
         }
 
@@ -703,6 +706,11 @@ namespace Application.Repositories
                 {
                     SaveFileAnswer(answerGroup, userStepResult);
                 }
+
+                if (question.Type == QuestionTypes.Values)
+                {
+                    SaveValueAnswer(answerGroup, userStepResult);
+                }
             }
         }
 
@@ -902,6 +910,45 @@ namespace Application.Repositories
             }
         }
 
+        private void SaveValueAnswer(AnswerGroupDTO answerGroup, UserStepResult userStepResult)
+        {
+            IList<ValueAnswer> dbAnswers = null;
+
+            dbAnswers = userStepResult.ValueAnswers.Where(x => x.QuestionId == answerGroup.QuestionId).ToList();
+
+            foreach (var dbAnswer in dbAnswers)
+            {
+                var answerId = dbAnswer.Id;
+
+                if (!answerGroup.Answer.ValueAnswer.Select(x => x.Id).Contains(answerId))
+                {
+                    Context.ValueAnswers.Remove(dbAnswer);
+                    Context.SaveChanges();
+                    //userStepResult.SelectAnswers.Remove(dbAnswer);
+                }
+            }
+
+            foreach (var answer in answerGroup.Answer.ValueAnswer)
+            {
+                if (!dbAnswers.Any(x => x.Id == answer.Id))
+                {
+                    var newAnswer = new ValueAnswer
+                    {
+                        QuestionId = answerGroup.QuestionId,
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now,
+                        CreatedBy = userStepResult.UpdatedBy,
+                        UpdatedBy = userStepResult.UpdatedBy,
+                        Value = answer.Value,
+                        Definition = answer.Definition,
+                        Description = answer.Description
+                    };
+
+                    userStepResult.ValueAnswers.Add(newAnswer);
+                }
+            }
+        }
+
         #endregion
 
         #region Reading methods
@@ -940,6 +987,10 @@ namespace Application.Repositories
                         planStep.AnswerGroups.Add(GetTextAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
                     }
                     if (questions[j].Type == QuestionTypes.File)
+                    {
+                        planStep.AnswerGroups.Add(GetFileAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
+                    }
+                    if (questions[j].Type == QuestionTypes.Values)
                     {
                         planStep.AnswerGroups.Add(GetFileAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
                     }
@@ -1223,6 +1274,76 @@ namespace Application.Repositories
                             Name = x.File?.Name,
                             Ext = x.File?.Ext,
                             Path = x.File?.Path
+                        }).ToList(),
+                        Author = $"{otherUserStepResult.UserToPlan.User.FirstName} {otherUserStepResult.UserToPlan.User.LastName}"
+                    };
+
+                    otherAnswers.Add(answerDTO);
+                }
+            }
+
+            answerGroup.OtherAnswers = otherAnswers;
+
+            return answerGroup;
+        }
+
+        private AnswerGroupDTO GetValueAnswers(int questionId, UserStepResult currentUserStepResult, IList<UserStepResult> otherUserStepResults)
+        {
+            AnswerGroupDTO answerGroup = new AnswerGroupDTO
+            {
+                QuestionId = questionId
+            };
+
+            var currentUserAnswer = currentUserStepResult.ValueAnswers.Where(x => x.QuestionId == questionId);
+
+            if (currentUserAnswer != null && currentUserAnswer.Any())
+            {
+                answerGroup.Answer = new AnswerDTO
+                {
+                    ValueAnswer = currentUserAnswer.Select(x => new ValueAnswerDTO
+                    {
+                        Id = x.Id,
+                        Value = x.Value,
+                        Definition = x.Definition,
+                        Description = x.Description
+                    }).ToList()
+                };
+            }
+
+            var definitiveStepResult = otherUserStepResults.Where(x => x.IsDefinitive).SingleOrDefault();
+
+            var definitiveAnswer = definitiveStepResult?.ValueAnswers.Where(x => x.QuestionId == questionId);
+
+            if (definitiveAnswer != null && definitiveAnswer.Any())
+            {
+                answerGroup.DefinitiveAnswer = new AnswerDTO
+                {
+                    ValueAnswer = definitiveAnswer.Select(x => new ValueAnswerDTO
+                    {
+                        Id = x.Id,
+                        Value = x.Value,
+                        Definition = x.Definition,
+                        Description = x.Description
+                    }).ToList()
+                };
+            }
+
+            var otherAnswers = new List<AnswerDTO>();
+
+            foreach (var otherUserStepResult in otherUserStepResults.Where(x => !x.IsDefinitive))
+            {
+                var userAnswer = otherUserStepResult.ValueAnswers.Where(x => x.QuestionId == questionId);
+
+                if (userAnswer != null && userAnswer.Any())
+                {
+                    var answerDTO = new AnswerDTO
+                    {
+                        ValueAnswer = userAnswer.Select(x => new ValueAnswerDTO
+                        {
+                            Id = x.Id,
+                            Value = x.Value,
+                            Definition = x.Definition,
+                            Description = x.Description
                         }).ToList(),
                         Author = $"{otherUserStepResult.UserToPlan.User.FirstName} {otherUserStepResult.UserToPlan.User.LastName}"
                     };
