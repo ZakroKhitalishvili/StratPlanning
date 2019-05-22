@@ -29,6 +29,15 @@ namespace Web.Helpers
             return selectList;
         }
 
+        public static IEnumerable<SelectListItem> GetUsersSelectListByPlan(HttpContext context, int planId)
+        {
+            var planRepository = context.RequestServices.GetService<IPlanRepository>();
+
+            var selectList = planRepository.GetPlanningTeam(planId).Select(u => new SelectListItem { Value = u.UserToPlanId.ToString(), Text = u.FullName });
+
+            return selectList;
+        }
+
         public static IEnumerable<SelectListItem> GetPositionsSelectList(HttpContext context)
         {
             var dictionaryRepository = context.RequestServices.GetService<IDictionaryRepository>();

@@ -170,7 +170,7 @@ namespace Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = Roles.Admin)]
-        public IActionResult AddExistingExternalUserToStep(AddExternalUserToStepDTO addExternalUserToStep)
+        public IActionResult AddExistingExternalUserToStep(AddResponsibleUserToStepDTO addExternalUserToStep)
         {
             Response.StatusCode = StatusCodes.Status202Accepted;
 
@@ -181,7 +181,7 @@ namespace Web.Controllers
                 return PartialView("~/Views/User/Partials/_AddNewUser.cshtml");
             }
 
-            var existingUser = addExternalUserToStep.ExistingExternalUser;
+            var existingUser = addExternalUserToStep.ExistingResponsibleUser;
 
             if (TryValidateModel(existingUser))
             {
@@ -202,7 +202,7 @@ namespace Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = Roles.Admin)]
-        public IActionResult AddNewExternalUserToStep(AddExternalUserToStepDTO addExternalUserToStep)
+        public IActionResult AddNewExternalUserToStep(AddResponsibleUserToStepDTO addExternalUserToStep)
         {
             Response.StatusCode = StatusCodes.Status202Accepted;
 
@@ -213,7 +213,7 @@ namespace Web.Controllers
                 return PartialView("~/Views/User/Partials/_AddNewUser.cshtml");
             }
 
-            var newExternaluser = addExternalUserToStep.NewExternalUser;
+            var newExternaluser = addExternalUserToStep.NewResponsibleUser;
 
             if (TryValidateModel(newExternaluser))
             {

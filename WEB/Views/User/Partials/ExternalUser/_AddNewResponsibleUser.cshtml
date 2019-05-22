@@ -1,12 +1,12 @@
-﻿@model Application.DTOs.AddExternalUserToStepDTO
+﻿@model Application.DTOs.AddResponsibleUserToStepDTO
 @using Web.Helpers
 
 @{
     Layout = null;
 }
-<form class="m-form m-form--fit m-form--label-align-right" id="add_external_user_to_step_new">
+<form class="m-form m-form--fit m-form--label-align-right" id="add_responsible_user_to_step_new">
     <div class="m-portlet__body">
-        <input type="hidden" asp-for="NewExternalUser.Step" />
+        <input type="hidden" asp-for="NewResponsibleUser.Step" />
         <div class="form-group m-form__group">
             <div class="text-danger" asp-validation-summary="ModelOnly"></div>
         </div>
@@ -15,8 +15,8 @@
                 Firstname
             </label>
             <div class="col-10">
-                <input asp-for="NewExternalUser.FirstName" class="form-control m-input" />
-                <span class="text-danger" asp-validation-for="NewExternalUser.FirstName"></span>
+                <input asp-for="NewResponsibleUser.FirstName" class="form-control m-input" />
+                <span class="text-danger" asp-validation-for="NewResponsibleUser.FirstName"></span>
             </div>
         </div>
         <div class="form-group m-form__group row">
@@ -24,17 +24,17 @@
                 Lastname
             </label>
             <div class="col-10">
-                <input asp-for="NewExternalUser.LastName" class="form-control m-input" />
-                <span class="text-danger" asp-validation-for="NewExternalUser.LastName"></span>
+                <input asp-for="NewResponsibleUser.LastName" class="form-control m-input" />
+                <span class="text-danger" asp-validation-for="NewResponsibleUser.LastName"></span>
             </div>
         </div>
         <div class="form-group m-form__group row">
-            <label asp-for="NewExternalUser.Email" class="col-2 col-form-label">
+            <label asp-for="NewResponsibleUser.Email" class="col-2 col-form-label">
                 Email
             </label>
             <div class="col-10">
-                <input asp-for="NewExternalUser.Email" class="form-control m-input" />
-                <span class="text-danger" asp-validation-for="NewExternalUser.Email"></span>
+                <input asp-for="NewResponsibleUser.Email" class="form-control m-input" />
+                <span class="text-danger" asp-validation-for="NewResponsibleUser.Email"></span>
             </div>
         </div>
     </div>

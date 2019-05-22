@@ -1,4 +1,4 @@
-﻿@model Application.DTOs.AddExternalUserToStepDTO
+﻿@model Application.DTOs.AddResponsibleUserToStepDTO
 @using Web.Helpers
 @using Core.Constants
 
@@ -7,7 +7,7 @@
 }
 
 
-<form class="m-form m-form--fit m-form--label-align-right" id="add_external_user_to_step_existing">
+<form class="m-form m-form--fit m-form--label-align-right" id="add_responsible_user_to_step_existing">
     <div class="m-portlet__body">
         <input type="hidden" asp-for="Step" />
         <div class="form-group m-form__group">
@@ -18,10 +18,10 @@
                 User
             </label>
             <div class="col-10">
-                <select asp-items="UserHelper.GetUsersSelectListByRole(Context,Roles.External)" asp-for="ExistingExternalUser.Id" class="form-control m-select2" style="width:100%">
+                <select asp-items="UserHelper.GetUsersSelectListByPlan(Context,Model.PlanId)" asp-for="ExistingResponsibleUser.Id" class="form-control m-select2" style="width:100%">
                     <option value="">-- Specify --</option>
                 </select>
-                <span class="text-danger" asp-validation-for="ExistingExternalUser.Id"></span>
+                <span class="text-danger" asp-validation-for="ExistingResponsibleUser.Id"></span>
             </div>
         </div>
     </div>

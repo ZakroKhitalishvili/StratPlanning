@@ -17,6 +17,7 @@ namespace Core.Entities
             StrategicIssueAnswers = new HashSet<StrategicIssueAnswer>();
             TextAnswers = new HashSet<TextAnswer>();
             FileAnswers = new HashSet<FileAnswer>();
+            StepTaskAnswers = new HashSet<StepTaskAnswer>();
         }
 
         public int Id { get; set; }
@@ -60,5 +61,7 @@ namespace Core.Entities
         public virtual ICollection<SelectAnswer> SelectAnswers { get; set; }
 
         public virtual ICollection<FileAnswer> FileAnswers { get; set; }
+
+        public virtual ICollection<StepTaskAnswer> StepTaskAnswers { get; set; }
     }
 }

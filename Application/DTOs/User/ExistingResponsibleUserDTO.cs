@@ -5,17 +5,12 @@ using System.Text;
 
 namespace Application.DTOs
 {
-    public class AddExternalUserToStepDTO
+    public class ExistingResponsibleUserDTO
     {
-        public ExistingExternalUserDTO ExistingExternalUser { get; set; }
-
-        public NewExternalUserDTO NewExternalUser { get; set; }
-
         [Required]
-        public int PlanId { get; set; }
+        public int? Id { get; set; }
 
         [Required]
         public string Step { get; set; }
-
     }
 }

@@ -11,6 +11,8 @@ namespace Core.Entities
             UsersToPlans = new HashSet<UserToPlan>();
 
             AdminStepResults = new HashSet<UserStepResult>();
+
+            StepTasks = new HashSet<StepTask>();
         }
 
         public int Id { get; set; }
@@ -38,8 +40,6 @@ namespace Core.Entities
         public virtual ICollection<UserToPlan> UsersToPlans { get; set; }
 
         public virtual ICollection<UserStepResult> AdminStepResults { get; set; }
-
-        public virtual ICollection<StepTaskAnswer> AdminStepTaskAnswers { get; set; }
 
         public virtual ICollection<StepTask> StepTasks { get; set; }
     }

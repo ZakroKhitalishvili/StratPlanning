@@ -4,14 +4,16 @@ using Core.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Core.Migrations
 {
     [DbContext(typeof(PlanningDbContext))]
-    partial class PlanningDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190522073503_StepTaskAnswers_Attached_To_UserStepResult")]
+    partial class StepTaskAnswers_Attached_To_UserStepResult
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -628,7 +630,8 @@ namespace Core.Migrations
 
                     b.Property<int?>("UpdatedBy");
 
-                    b.Property<int>("UserStepResultId");
+                    b.Property<int>("UserStepResultId")
+                    .IsRequired();
 
                     b.Property<int?>("UserToPlanId");
 
@@ -1074,7 +1077,7 @@ namespace Core.Migrations
 
                     b.HasOne("Core.Entities.UserStepResult", "UserStepResult")
                         .WithMany("StepTaskAnswers")
-                        .HasForeignKey("UserToPlanId")
+                        .HasForeignKey("UserStepResultId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Core.Entities.UserToPlan", "UserToPlan")

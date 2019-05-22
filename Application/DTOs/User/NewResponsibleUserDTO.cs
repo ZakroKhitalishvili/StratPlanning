@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Application.DTOs
 {
-    public class NewExternalUserDTO
+    public class NewResponsibleUserDTO
     {
         [Required]
         [EmailAddress]

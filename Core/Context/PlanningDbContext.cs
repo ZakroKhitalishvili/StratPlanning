@@ -21,6 +21,7 @@ namespace Core.Context
 
         public DbSet<File> Files { get; set; }
 
+        public DbSet<StepResponsible> StepResponsibles { get; set; }
 
         /// <summary>
         /// Step structure tables

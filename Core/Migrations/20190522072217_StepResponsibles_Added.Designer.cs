@@ -4,14 +4,16 @@ using Core.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Core.Migrations
 {
     [DbContext(typeof(PlanningDbContext))]
-    partial class PlanningDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190522072217_StepResponsibles_Added")]
+    partial class StepResponsibles_Added
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -608,9 +610,11 @@ namespace Core.Migrations
                     b.Property<int?>("CreatedBy");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<bool>("IsDefinitive")
@@ -618,6 +622,7 @@ namespace Core.Migrations
                         .HasDefaultValue(false);
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<int?>("PlanId");
@@ -627,8 +632,6 @@ namespace Core.Migrations
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int?>("UpdatedBy");
-
-                    b.Property<int>("UserStepResultId");
 
                     b.Property<int?>("UserToPlanId");
 
@@ -1070,11 +1073,6 @@ namespace Core.Migrations
                     b.HasOne("Core.Entities.StepTask", "StepTask")
                         .WithMany("StepTaskAnswers")
                         .HasForeignKey("StepTaskId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Core.Entities.UserStepResult", "UserStepResult")
-                        .WithMany("StepTaskAnswers")
-                        .HasForeignKey("UserToPlanId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Core.Entities.UserToPlan", "UserToPlan")
