@@ -61,6 +61,8 @@ namespace Core.Context
 
         public DbSet<FileAnswer> FileAnswers { get; set; }
 
+        public DbSet<ValueAnswer> ValueAnswers { get; set; }
+
         /// <summary>
         /// Relations' tables
         /// </summary>
