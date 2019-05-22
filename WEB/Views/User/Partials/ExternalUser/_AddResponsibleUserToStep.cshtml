@@ -1,0 +1,33 @@
+﻿@model Application.DTOs.AddResponsibleUserToStepDTO
+
+@{
+    Layout = null;
+}
+
+<div class="m-portlet m-portlet--full-height m-portlet--tabs">
+    <div class="m-portlet__head">
+        <div class="m-portlet__head-tools">
+            <ul class="nav nav-tabs m-tabs m-tabs-line m-tabs-line--left m-tabs-line--primary" role="tablist">
+                <li class="nav-item m-tabs__item">
+                    <a class="nav-link m-tabs__link active show" data-toggle="tab" href="#add_responsible_user_to_step_existing_tab" role="tab" aria-selected="true">
+                        Existing user
+                    </a>
+                </li>
+                <li class="nav-item m-tabs__item">
+                    <a class="nav-link m-tabs__link" data-toggle="tab" href="#add_responsible_user_to_step_new_tab" role="tab" aria-selected="false">
+                        New user
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="tab-content">
+        <div class="tab-pane active show" id="add_responsible_user_to_step_existing_tab">
+            <partial name="~/Views/User/Partials/ExternalUser/_AddExistingResponsibleUser.cshtml" view-data="ViewData" model="Model" />
+        </div>
+        <div class="tab-pane" id="add_responsible_user_to_step_new_tab">
+            <partial name="~/Views/User/Partials/ExternalUser/_AddNewResponsibleUser.cshtml" view-data="ViewData" model="Model" />
+        </div>
+    </div>
+
+</div>

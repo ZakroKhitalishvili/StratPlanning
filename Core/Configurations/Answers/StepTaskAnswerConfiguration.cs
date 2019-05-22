@@ -12,20 +12,26 @@ namespace Core.Configurations
         {
 
             builder.Property(x => x.Email)
-                .IsRequired()
+                .IsRequired(false)
                 .HasMaxLength(EntityConfigs.TextMaxLength);
 
             builder.Property(x => x.FirstName)
-               .IsRequired()
+               .IsRequired(false)
                .HasMaxLength(EntityConfigs.TextMaxLength);
 
             builder.Property(x => x.LastName)
-               .IsRequired()
+               .IsRequired(false)
                .HasMaxLength(EntityConfigs.TextMaxLength);
 
             builder.Property(x => x.IsDefinitive)
                .IsRequired()
                .HasDefaultValue(false);
+
+            builder.HasOne(x => x.UserStepResult)
+               .WithMany(s => s.StepTaskAnswers)
+               .HasForeignKey(x => x.UserStepResultId)
+               .IsRequired(true)
+               .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(x => x.UserToPlan)
                .WithMany(s => s.StepTaskAnswers)
@@ -50,12 +56,6 @@ namespace Core.Configurations
 
             builder.Property(x => x.UpdatedBy)
                 .IsRequired(false);
-
-            builder.HasOne(x => x.Plan)
-                .WithMany(x => x.AdminStepTaskAnswers)
-                .HasForeignKey(x => x.PlanId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.Restrict);
 
         }
     }

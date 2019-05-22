@@ -21,10 +21,6 @@
                 </div>
             </div>
         </div>
-        @*<a href="#" data-target="#help_modal_steptasks" data-toggle="modal"
-               class="m-portlet__nav-link btn btn-lg btn-secondary  m-btn m-btn--icon m-btn--icon-only m-btn--pill  m-dropdown__toggle m-intro__help">
-                <i class="fa fa-question"></i>
-            </a>*@
     </div>
     <div class="m-portlet__body">
 
@@ -42,8 +38,7 @@
                                 Steps / tasks
                             </th>
                             <th>
-                                External users
-                                @*Persons / groups involved*@
+                                Responsible persons
                             </th>
                             @if (Model.IsAdmin)
                             {
@@ -70,7 +65,6 @@
 
                             <tr>
                                 <td rowspan="2">
-                                    <input asp-for="StepTasks[stepTaskCount].Id" type="hidden" />
                                     @steps.ResourceManager.GetString(stepTask.Step)
                                 </td>
                                 <td>
@@ -118,7 +112,7 @@
                                                 <a class="m-list-badge__item m-list-badge__item--default list-item">
                                                     <input type="hidden" asp-for="StepTaskAnswers.Answer.StepTaskAnswers[count].Id" value="@stepTaskAnswer.Id" />
                                                     <input type="hidden" name="StepTaskAnswers.Answer.StepTaskAnswers.Index" value="@count" />
-                                                    @stepTaskAnswer.FirstName @stepTaskAnswer.LastName (@stepTaskAnswer.Email)
+                                                    @stepTaskAnswer.FirstName @stepTaskAnswer.LastName @(stepTaskAnswer.UserToPlanId == null ? $"({stepTaskAnswer.Email})" : "")
                                                     <span class="list-item-delete fa fa-close"></span>
                                                 </a>
                                                 count++;
@@ -129,13 +123,14 @@
                                     {
                                         <a href="" class="btn btn-sp m-btn m-btn--pill m--pull-right"
                                            data-toggle="modal" data-target="#edit_steptasks_modal" data-step="@stepTask.Step">
-                                            Add new
+                                            <i class="fa fa-plus"></i>
                                         </a>
                                     }
                                 </td>
                                 @if (Model.IsAdmin)
                                 {
                                     <td rowspan="2">
+                                        <input asp-for="StepTasks[stepTaskCount].Id" type="hidden" />
                                         <input type="text" asp-for="StepTasks[stepTaskCount].Schedule" class="datepicker form-control" />
                                     </td>
                                     <td rowspan="2">
@@ -145,7 +140,7 @@
                                         <i class="fa fa-check-square-o sp-font-md"></i>
                                     </td>
                                     <td rowspan="2">
-                                        @{ 
+                                        @{
                                             var statusClass = "";
 
                                             switch (stepTask.Status)

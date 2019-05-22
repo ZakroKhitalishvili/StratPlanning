@@ -8,11 +8,11 @@ namespace Core.Entities
     {
         public int Id { get; set; }
 
-        public int? UserToPlanId { get; set; }
+        public int UserStepResultId { get; set; }
 
         public int StepTaskId { get; set; }
 
-        public int? PlanId { get; set; }
+        public int? UserToPlanId { get; set; }
 
         public string Email { get; set; }
 
@@ -34,7 +34,7 @@ namespace Core.Entities
 
         public virtual StepTask StepTask { get; set; }
 
-        public virtual Plan Plan { get; set; }
+        public virtual UserStepResult UserStepResult { get; set; }
 
     }
 }

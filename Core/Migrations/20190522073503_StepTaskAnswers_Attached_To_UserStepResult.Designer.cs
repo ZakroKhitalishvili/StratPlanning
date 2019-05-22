@@ -4,14 +4,16 @@ using Core.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Core.Migrations
 {
     [DbContext(typeof(PlanningDbContext))]
-    partial class PlanningDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190522073503_StepTaskAnswers_Attached_To_UserStepResult")]
+    partial class StepTaskAnswers_Attached_To_UserStepResult
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -628,7 +630,8 @@ namespace Core.Migrations
 
                     b.Property<int?>("UpdatedBy");
 
-                    b.Property<int>("UserStepResultId");
+                    b.Property<int>("UserStepResultId")
+                    .IsRequired();
 
                     b.Property<int?>("UserToPlanId");
 
@@ -873,45 +876,6 @@ namespace Core.Migrations
                     b.ToTable("UsersToPlans");
                 });
 
-            modelBuilder.Entity("Core.Entities.ValueAnswer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<int?>("CreatedBy");
-
-                    b.Property<string>("Definition")
-                        .IsRequired()
-                        .HasMaxLength(500);
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(500);
-
-                    b.Property<int>("QuestionId");
-
-                    b.Property<DateTime>("UpdatedAt");
-
-                    b.Property<int?>("UpdatedBy");
-
-                    b.Property<int>("UserStepResultId");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.HasIndex("UserStepResultId");
-
-                    b.ToTable("ValueAnswers");
-                });
-
             modelBuilder.Entity("Core.Entities.BooleanAnswer", b =>
                 {
                     b.HasOne("Core.Entities.Question", "Question")
@@ -1113,7 +1077,7 @@ namespace Core.Migrations
 
                     b.HasOne("Core.Entities.UserStepResult", "UserStepResult")
                         .WithMany("StepTaskAnswers")
-                        .HasForeignKey("UserToPlanId")
+                        .HasForeignKey("UserStepResultId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Core.Entities.UserToPlan", "UserToPlan")
@@ -1207,19 +1171,6 @@ namespace Core.Migrations
                         .WithMany("UsersToPlans")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Core.Entities.ValueAnswer", b =>
-                {
-                    b.HasOne("Core.Entities.Question", "Question")
-                        .WithMany("ValueAnswers")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Core.Entities.UserStepResult", "UserStepResult")
-                        .WithMany("ValueAnswers")
-                        .HasForeignKey("UserStepResultId")
-                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

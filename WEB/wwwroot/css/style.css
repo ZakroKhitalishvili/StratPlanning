@@ -99,6 +99,11 @@
     border-radius: 0px;
 }
 
+.modal .m-portlet 
+{
+    margin-bottom:0px;
+}
+
 .modal-xl {
     max-width: 1000px;
 }

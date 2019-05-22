@@ -161,7 +161,7 @@ function initializeStep() {
                     return false;
                 })[0];
 
-                
+
                 $(file.previewElement).find(".sp-file-input").val(fileResponse.id);
                 $(file.previewElement).find(".sp-file-link").attr('href', fileResponse.url);
             },
@@ -183,19 +183,19 @@ function initializeStep() {
                     <a class="dz-remove" href="javascript:undefined;" data-dz-remove="">Remove file</a>
                 </div>`
         })
-        .droppable({
-            accept: '.draggable-file',
+            .droppable({
+                accept: '.draggable-file',
 
-            drop: function (e, ui) {
-                console.log('drop');
+                drop: function (e, ui) {
+                    console.log('drop');
 
-                e.preventDefault();
+                    e.preventDefault();
 
-                let name = $(ui.draggable).html();
+                    let name = $(ui.draggable).html();
 
-                $(this).find('.dz-message').hide();
+                    $(this).find('.dz-message').hide();
 
-                $(this).append(`
+                    $(this).append(`
                 <div class="dz-preview dz-file-preview dz-processing dz-error dz-complete">
                     <input class="sp-file-input" type="hidden" name="${inputname}"/>
                     <div class="dz-image">
@@ -211,9 +211,10 @@ function initializeStep() {
                     </div>
                     <a class="dz-remove" href="javascript:undefined;" onclick="filePreviewRemoveHandler(event)" data-dz-remove="">Remove file</a>
                 </div>`);
-            }
-        })
-        .addClass('dropzone');
+                }
+            })
+            .addClass('dropzone');
+    });
 
     $(document).on('click', '.list-item-delete', function (e) {
 
@@ -432,7 +433,7 @@ $(document).ready(function () {
         $(this).find('input[name$="Step"]').val(step);
     });
 
-    $(document).on('submit', 'form#add_external_user_to_step_new', function (e) {
+    $(document).on('submit', 'form#add_responsible_user_to_step_new', function (e) {
         e.preventDefault();
         if (!$(this).valid()) {
             return;
@@ -452,6 +453,36 @@ $(document).ready(function () {
                                 <input type="hidden" name="StepTaskAnswers.Answer.StepTaskAnswers[${count}].Step" value="${step}" />
                                 <input type="hidden" name="StepTaskAnswers.Answer.StepTaskAnswers.Index" value="${count}" />
                                 ${firstName} ${lastName} (${email})
+                                <span class="fa fa-close list-item-delete"></span>
+                            </a>`;
+
+        $('#step_tasks_list_' + step).append(html);
+
+        $('input#step_tasks_count').val(count + 1);
+
+        $('#edit_steptasks_modal').modal('hide');
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+    });
+
+
+    $(document).on('submit', 'form#add_responsible_user_to_step_existing', function (e) {
+        e.preventDefault();
+        if (!$(this).valid()) {
+            return;
+        }
+
+        let count = parseInt($('input#step_tasks_count').val());
+
+        let Id = $(this).find('select[name$="Id"]').val();
+        let fullName = $(this).find('select[name$="Id"] option[value="'+Id+'"]').text();
+        let step = $(this).find('input[name$="Step"]').val();
+
+        let html = `<a class="m-list-badge__item m-list-badge__item--default list-item">
+                                <input type="hidden" name="StepTaskAnswers.Answer.StepTaskAnswers[${count}].UserToPlanId" value="${Id}" />
+                                <input type="hidden" name="StepTaskAnswers.Answer.StepTaskAnswers[${count}].Step" value="${step}" />
+                                <input type="hidden" name="StepTaskAnswers.Answer.StepTaskAnswers.Index" value="${count}" />
+                                ${fullName}
                                 <span class="fa fa-close list-item-delete"></span>
                             </a>`;
 
