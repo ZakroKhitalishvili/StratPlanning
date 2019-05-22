@@ -165,5 +165,17 @@ namespace Web.Controllers
             }).ToArray());
         }
 
+        [HttpPost]
+        public IActionResult CompleteStepTask(int stepTaskId)
+        {
+            if(stepTaskId<=0)
+            {
+                return BadRequest();
+            }
+
+
+            return Ok();
+        }
+
     }
 }

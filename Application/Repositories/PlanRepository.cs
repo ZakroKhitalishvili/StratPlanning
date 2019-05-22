@@ -101,7 +101,7 @@ namespace Application.Repositories
             return Context.UsersToPlans
                 .Where(x => x.PlanId == planId && x.Step == null).Include(x => x.User).Include(x => x.Position)
                 .AsEnumerable()
-                .Select(x => new UserPlanningMemberDTO { Id = x.User.Id, UserToPlanId= x.Id, FullName = $"{x.User.FirstName} {x.User.LastName}", Position = x.Position?.Title })
+                .Select(x => new UserPlanningMemberDTO { Id = x.User.Id, UserToPlanId = x.Id, FullName = $"{x.User.FirstName} {x.User.LastName}", Position = x.Position?.Title })
                 .ToList();
         }
 
@@ -259,6 +259,11 @@ namespace Application.Repositories
 
             }
 
+            if (planStep.Step == Steps.Predeparture)
+            {
+                SaveStepTasks(planStep.StepTasks, userId);
+            }
+
             Context.SaveChanges();
             return true;
         }
@@ -286,27 +291,35 @@ namespace Application.Repositories
             return Context.StepTasks.Where(x => x.PlanId == planId).ToList().Select(x =>
             {
                 StepTaskStatus status;
-                if (x.IsCompleted)
+                if (x.Schedule != null)
                 {
-                    if (x.Schedule >= DateTime.Now)
+
+                    if (x.IsCompleted)
                     {
-                        status = StepTaskStatus.Completed;
+                        if (x.Schedule >= DateTime.Now)
+                        {
+                            status = StepTaskStatus.Completed;
+                        }
+                        else
+                        {
+                            status = StepTaskStatus.OverdueCompleted;
+                        }
                     }
                     else
                     {
-                        status = StepTaskStatus.OverdueCompleted;
+                        if (x.Schedule >= DateTime.Now)
+                        {
+                            status = StepTaskStatus.Uncompleted;
+                        }
+                        else
+                        {
+                            status = StepTaskStatus.OverdueUnCompleted;
+                        }
                     }
                 }
                 else
                 {
-                    if (x.Schedule >= DateTime.Now)
-                    {
-                        status = StepTaskStatus.Uncompleted;
-                    }
-                    else
-                    {
-                        status = StepTaskStatus.OverdueUnCompleted;
-                    }
+                    status = StepTaskStatus.Uncompleted;
                 }
 
                 return new StepTaskDTO
@@ -341,7 +354,6 @@ namespace Application.Repositories
             }
 
             return userStepResult;
-
         }
 
         private UserStepResult CreateUserStepResult(int planId, string stepIndex, bool isDefinitive, int userId)
@@ -370,7 +382,6 @@ namespace Application.Repositories
 
             Context.UserStepResults.Add(userStepResult);
             Context.SaveChanges();
-
             return userStepResult;
         }
 
@@ -395,7 +406,6 @@ namespace Application.Repositories
         private UserStepResult GetSubmittedDefinitiveStepResult(int planId, string stepIndex)
         {
             return GetUserStepResultByCondition(x => x.Step == stepIndex && x.PlanId == planId && x.IsDefinitive && x.IsSubmitted).SingleOrDefault();
-
         }
 
         private UserStepResult GetFinalDefinitiveStepResult(int planId, string stepIndex)
@@ -422,7 +432,6 @@ namespace Application.Repositories
             }
 
             return userStepResults;
-
         }
 
         private bool DeleteUserStepResult(int id)
@@ -441,7 +450,6 @@ namespace Application.Repositories
 
                 return true;
             }
-
             return false;
         }
 
@@ -478,7 +486,6 @@ namespace Application.Repositories
                 Context.StepTasks.Add(stepTask);
                 Context.SaveChanges();
             }
-
             return stepTask;
         }
 
@@ -524,13 +531,33 @@ namespace Application.Repositories
                        FullName = $"{x.User.FirstName} {x.User.LastName}"
                    });
             }
-
             return planStep;
         }
 
         #endregion
 
         #region Saving methods
+
+        private void SaveStepTasks(IList<StepTaskDTO> stepTasks, int userId)
+        {
+            if (stepTasks == null)
+            {
+                return;
+            }
+
+            foreach (var stepTask in stepTasks)
+            {
+                var dbStepTask = Context.StepTasks.Where(x => x.Id == stepTask.Id).SingleOrDefault();
+                if (dbStepTask.Schedule != stepTask.Schedule || dbStepTask.Remind != stepTask.RemindIn)
+                {
+                    dbStepTask.Schedule = stepTask.Schedule;
+                    dbStepTask.Remind = stepTask.RemindIn;
+                    dbStepTask.UpdatedAt = DateTime.Now;
+                    dbStepTask.UpdatedBy = userId;
+                }
+            }
+            Context.SaveChanges();
+        }
 
         private void SaveAnswers(IList<AnswerGroupDTO> answerGroups, UserStepResult userStepResult)
         {
@@ -1077,7 +1104,6 @@ namespace Application.Repositories
             }
 
             answerGroup.OtherAnswers = otherAnswers;
-
             return answerGroup;
         }
 
@@ -1213,9 +1239,7 @@ namespace Application.Repositories
 
                 otherStepTaskAnswers.Add(answerDTO);
             }
-
             answerGroup.OtherAnswers = otherStepTaskAnswers;
-
             return answerGroup;
         }
         #endregion

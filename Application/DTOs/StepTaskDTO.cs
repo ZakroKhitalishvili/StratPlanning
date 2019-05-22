@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Application.DTOs
@@ -14,6 +15,7 @@ namespace Application.DTOs
 
         public bool IsCompleted { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? Schedule { get; set; }
 
         public int? RemindIn { get; set; }

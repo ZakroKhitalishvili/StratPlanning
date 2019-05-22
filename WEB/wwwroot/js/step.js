@@ -475,7 +475,7 @@ $(document).ready(function () {
         let count = parseInt($('input#step_tasks_count').val());
 
         let Id = $(this).find('select[name$="Id"]').val();
-        let fullName = $(this).find('select[name$="Id"] option[value="'+Id+'"]').text();
+        let fullName = $(this).find('select[name$="Id"] option[value="' + Id + '"]').text();
         let step = $(this).find('input[name$="Step"]').val();
 
         let html = `<a class="m-list-badge__item m-list-badge__item--default list-item">
@@ -499,3 +499,47 @@ $(document).ready(function () {
 
 /////////
 /////
+
+
+///////////////////////////
+//// steptask completion event
+////////
+$(document).on('click', 'input.step-complete-checkbox', function (e) {
+    e.preventDefault();
+
+    let completeCheckBox = $(this);
+    let stepTaskId = completeCheckBox.data('id');
+
+    if ($(this).val()) {
+        submitConfirm("You won't be able to change it after").then(function (result) {
+            if (result) {
+                $.ajax(
+                    {
+                        url: CompleteStepTaskURL,
+                        method: "post",
+                        data: {
+                            stepTaskId
+                        },
+                        processData: true,
+                        success: function (data, statusText, xhr) {
+                            if (xhr.status == 200) {
+                                notify("Successfully completed", "success", 5);
+                                completeCheckBox.prop('checked', true);
+                            }
+
+                            if (xhr.status == 202 || xhr.status == 400) {
+                                notify("Input data are not valid ", "danger", 5);
+                            }
+                           
+                        },
+                        error: function (xhr, statusText, error) {
+                            notify("An Error occured on the request", "danger", 5);
+                        }
+                    });
+            }
+        }
+        );
+    }
+});
+///////
+////
