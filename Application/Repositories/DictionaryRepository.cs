@@ -24,7 +24,7 @@ namespace Application.Repositories
 
         public IEnumerable<string> GetValues()
         {
-            return FindAll().Select(x => x.Title);
+            return FindByCondition(x => x.HasValue).AsEnumerable().Select(x => x.Title);
         }
     }
 }

@@ -17,6 +17,15 @@ namespace Core.Configurations
                 .IsRequired()
                 .HasMaxLength(EntityConfigs.TextMaxLength);
 
+            builder.Property(x => x.HasPosition)
+                .HasDefaultValue(false);
+
+            builder.Property(x => x.HasCriterion)
+                .HasDefaultValue(false);
+
+            builder.Property(x => x.HasValue)
+                .HasDefaultValue(false);
+
             builder.Property(x => x.CreatedAt)
                 .IsRequired();
 
