@@ -37,12 +37,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var otherAnswer in answerGroup.OtherAnswers)
+                                    @if (answerGroup.DefinitiveAnswer != null)
                                     {
                                         <tr class="author">
-                                            <td colspan="3">@otherAnswer.Author</td>
+                                            <td colspan="3">Definitive answer</td>
                                         </tr>
-                                        @foreach (var valueAnswer in otherAnswer.ValueAnswer)
+                                        @foreach (var valueAnswer in answerGroup.DefinitiveAnswer.ValueAnswer)
                                         {
                                             <tr>
                                                 <td>@valueAnswer.Value</td>
@@ -51,12 +51,12 @@
                                             </tr>
                                         }
                                     }
-                                    @if (answerGroup.DefinitiveAnswer != null)
+                                    @foreach (var otherAnswer in answerGroup.OtherAnswers)
                                     {
                                         <tr class="author">
-                                            <td colspan="3">@answerGroup.DefinitiveAnswer.Author</td>
+                                            <td colspan="3">@otherAnswer.Author</td>
                                         </tr>
-                                        @foreach (var valueAnswer in answerGroup.DefinitiveAnswer.ValueAnswer)
+                                        @foreach (var valueAnswer in otherAnswer.ValueAnswer)
                                         {
                                             <tr>
                                                 <td>@valueAnswer.Value</td>
@@ -81,9 +81,12 @@
             <label>
                 @question.Title
             </label>
-            <a href="" class="btn btn-sp m-btn m-btn--pill m--pull-right" data-toggle="modal" data-target="#v_@(question.Id)_modal">
-                Add
-            </a>
+            @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
+            {
+                <a href="" class="btn btn-sp m-btn m-btn--pill m--pull-right" data-toggle="modal" data-target="#v_@(question.Id)_modal">
+                    Add
+                </a>
+            }
         </div>
     </div>
     <div class="m-scrollable mCustomScrollbar _mCS_2 mCS-autoHide" data-scrollable="true" data-axis="xy" style="position: relative; overflow: visible;">
@@ -101,8 +104,10 @@
                             <th>
                                 How is this value expressed in our party life?
                             </th>
-                            <th>
-                            </th>
+                            @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
+                            {
+                                <th></th>
+                            }
                         </tr>
                     </thead>
                     <tbody id="v_@(question.Id)_list">
@@ -124,21 +129,24 @@
                                     <td>
                                         @valueAnswer.Description
                                     </td>
-                                    <td>
-                                        <span class="table-row-actions">
-                                            <button type="button" class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete" onclick="deleteRecord(this)">
-                                                <i class="la la-trash"></i>
-                                            </button>
-                                            <button type="button" class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill" title="Edit" onclick="showRecordDetail(this, '#v_@(question.Id)_modal')">
-                                                <i class="la la-edit"></i>
-                                            </button>
-                                        </span>
-                                    </td>
-                                    <input type="hidden" value="@guid" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer.index" />
-                                    <input type="hidden" value="@valueAnswer.Id" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[@guid].Id" />
-                                    <input type="hidden" value="@valueAnswer.Value" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[@guid].Value" />
-                                    <input type="hidden" value="@valueAnswer.Definition" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[@guid].Definition" />
-                                    <input type="hidden" value="@valueAnswer.Description" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[@guid].Description" />
+                                    @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
+                                    {
+                                        <td>
+                                            <span class="table-row-actions">
+                                                <button type="button" class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete" onclick="deleteRecord(this)">
+                                                    <i class="la la-trash"></i>
+                                                </button>
+                                                <button type="button" class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill" title="Edit" onclick="showRecordDetail(this, '#v_@(question.Id)_modal')">
+                                                    <i class="la la-edit"></i>
+                                                </button>
+                                            </span>
+                                        </td>
+                                        <input type="hidden" value="@guid" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer.index" />
+                                        <input type="hidden" value="@valueAnswer.Id" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[@guid].Id" />
+                                        <input type="hidden" value="@valueAnswer.Value" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[@guid].Value" />
+                                        <input type="hidden" value="@valueAnswer.Definition" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[@guid].Definition" />
+                                        <input type="hidden" value="@valueAnswer.Description" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[@guid].Description" />
+                                    }
                                 </tr>
                             }
                         }
@@ -152,94 +160,97 @@
     </span>
     <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].QuestionId" value="@question.Id" />
 </div>
-<div class="modal fade" id="v_@(question.Id)_modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="">
-                    Add value statement
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" class="la la-remove"></span>
-                </button>
-            </div>
-            <div class="m-form m-form--fit m-form--label-align-right">
-                <div class="modal-body">
-                    <input type="hidden" class="m-index" />
-                    <input type="hidden" class="m-input" name="id" />
-                    <div class="form-group m-form__group row m--margin-top-20">
-                        <label class="col-form-label col-lg-3 col-sm-12">
-                            Value
-                        </label>
-                        <div class="col-lg-9 col-md-9 col-sm-12">
-                            <input class="form-control m-input m-values-autocomplete" name="value" />
-                        </div>
-                    </div>
-                    <div class="form-group m-form__group row m--margin-top-20">
-                        <label class="col-form-label col-lg-3 col-sm-12">
-                            Definition
-                        </label>
-                        <div class="col-lg-9 col-md-9 col-sm-12">
-                            <textarea class="form-control m-input" rows="3" name="definition"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group m-form__group row m--margin-top-20">
-                        <label class="col-form-label col-lg-3 col-sm-12">
-                            How is this value expressed in our party life?
-                        </label>
-                        <div class="col-lg-9 col-md-9 col-sm-12">
-                            <textarea class="form-control m-input" rows="3" name="description"></textarea>
-                        </div>
-                    </div>
+@if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
+{
+    <div class="modal fade" id="v_@(question.Id)_modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="">
+                        Add value statement
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="la la-remove"></span>
+                    </button>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-sp m-btn submit-btn" onclick="editRecord(this, '#v_@(question.Id)_list');">
-                        Add
-                    </button>
-                    <button type="button" class="btn btn-secondary m-btn" data-dismiss="modal">
-                        Close
-                    </button>
+                <div class="m-form m-form--fit m-form--label-align-right">
+                    <div class="modal-body">
+                        <input type="hidden" class="m-index" />
+                        <input type="hidden" class="m-input" name="id" />
+                        <div class="form-group m-form__group row m--margin-top-20">
+                            <label class="col-form-label col-lg-3 col-sm-12">
+                                Value
+                            </label>
+                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                <input class="form-control m-input m-values-autocomplete" name="value" />
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row m--margin-top-20">
+                            <label class="col-form-label col-lg-3 col-sm-12">
+                                Definition
+                            </label>
+                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                <textarea class="form-control m-input" rows="3" name="definition"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row m--margin-top-20">
+                            <label class="col-form-label col-lg-3 col-sm-12">
+                                How is this value expressed in our party life?
+                            </label>
+                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                <textarea class="form-control m-input" rows="3" name="description"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sp m-btn submit-btn" onclick="editRecord(this, '#v_@(question.Id)_list');">
+                            Add
+                        </button>
+                        <button type="button" class="btn btn-secondary m-btn" data-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<script>
-    if (valueAnswerOptions === undefined) {
-        var valueAnswerOptions = {};
-        valueAnswerOptions.valuesDictionary = @Json.Serialize(valuesDictionary);
-    }
-
-    valueAnswerOptions['#v_@(question.Id)_list'] = {
-        template: function (data, index) {
-            return `
-                <tr id="${index}" data-val='${JSON.stringify(data)}'>
-                    <td>
-                        ${data.value}
-                    </td>
-                    <td>
-                        ${data.definition}
-                    </td>
-                    <td>
-                        ${data.description}
-                    </td>
-                    <td>
-                        <span class="table-row-actions">
-                            <button type="button" class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete" onclick="deleteRecord(this)">
-                                <i class="la la-trash"></i>
-                            </button>
-                            <button type="button" class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill" title="Edit" onclick="showRecordDetail(this, '#v_@(question.Id)_modal')">
-                                <i class="la la-edit"></i>
-                            </button>
-                        </span>
-                    </td>
-                    <input type="hidden" value="${index}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer.index"/>
-                    <input type="hidden" value="${data.id ? data.id : 0}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[${index}].Id"/>
-                    <input type="hidden" value="${data.value}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[${index}].Value"/>
-                    <input type="hidden" value="${data.definition}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[${index}].Definition"/>
-                    <input type="hidden" value="${data.description}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[${index}].Description"/>
-                </tr>
-            `;
+    <script>
+        if (valueAnswerOptions === undefined) {
+            var valueAnswerOptions = {};
+            valueAnswerOptions.valuesDictionary = @Json.Serialize(valuesDictionary);
         }
-    };
-</script>
+
+        valueAnswerOptions['#v_@(question.Id)_list'] = {
+            template: function (data, index) {
+                return `
+                    <tr id="${index}" data-val='${JSON.stringify(data)}'>
+                        <td>
+                            ${data.value}
+                        </td>
+                        <td>
+                            ${data.definition}
+                        </td>
+                        <td>
+                            ${data.description}
+                        </td>
+                        <td>
+                            <span class="table-row-actions">
+                                <button type="button" class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete" onclick="deleteRecord(this)">
+                                    <i class="la la-trash"></i>
+                                </button>
+                                <button type="button" class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill" title="Edit" onclick="showRecordDetail(this, '#v_@(question.Id)_modal')">
+                                    <i class="la la-edit"></i>
+                                </button>
+                            </span>
+                        </td>
+                        <input type="hidden" value="${index}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer.index"/>
+                        <input type="hidden" value="${data.id ? data.id : 0}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[${index}].Id"/>
+                        <input type="hidden" value="${data.value}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[${index}].Value"/>
+                        <input type="hidden" value="${data.definition}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[${index}].Definition"/>
+                        <input type="hidden" value="${data.description}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[${index}].Description"/>
+                    </tr>
+                `;
+            }
+        };
+    </script>
+}
