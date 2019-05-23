@@ -8,5 +8,7 @@ namespace Application.Interfaces.Repositories
     public interface IDictionaryRepository
     {
         IEnumerable<PositionDTO> GetPositions();
+
+        IEnumerable<string> GetValues();
     }
 }

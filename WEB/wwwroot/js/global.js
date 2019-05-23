@@ -14,6 +14,13 @@ function initializeInputs(selector) {
         minimumResultsForSearch: Infinity
     });
 
+    if (valueAnswerOptions !== undefined) {
+        $(element).find('.m-values-autocomplete').autocomplete({
+            source: valueAnswerOptions.valuesDictionary
+        });
+        $(element).find('.m-values-autocomplete').autocomplete('option', 'appendTo', '.modal');
+    }
+
     $.validator.unobtrusive.parse(selector);
 }
 

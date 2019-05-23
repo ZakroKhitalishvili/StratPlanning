@@ -41,6 +41,11 @@ namespace Core.Context
                 SeedPositions();
             }
 
+            if (!Context.Dictionaries.Any(x => x.HasValue))
+            {
+                SeedValues();
+            }
+
             //if (Context.Plans.Include(x => x.StepTasks).Any(x => x.StepTasks.Count != 13))
             //{
             //    SeedPlans();
@@ -95,6 +100,31 @@ namespace Core.Context
                 {
                     HasPosition=true,Title="Advisor",CreatedAt=DateTime.Now, CreatedBy=null,UpdatedAt=DateTime.Now,UpdatedBy=null
                 }
+            };
+
+            Context.Dictionaries.AddRange(Positions);
+        }
+
+        private void SeedValues()
+        {
+            Positions = new Dictionary[]
+            {
+                new Dictionary
+                {
+                    HasValue=true,Title="Team work",CreatedAt=DateTime.Now, CreatedBy=null,UpdatedAt=DateTime.Now,UpdatedBy=null
+                },
+                new Dictionary
+                {
+                    HasValue=true,Title="Openness",CreatedAt=DateTime.Now, CreatedBy=null,UpdatedAt=DateTime.Now,UpdatedBy=null
+                },
+                new Dictionary
+                {
+                    HasValue=true,Title="Integrity",CreatedAt=DateTime.Now, CreatedBy=null,UpdatedAt=DateTime.Now,UpdatedBy=null
+                },
+                new Dictionary
+                {
+                    HasValue=true,Title="Profesionalism",CreatedAt=DateTime.Now, CreatedBy=null,UpdatedAt=DateTime.Now,UpdatedBy=null
+                },
             };
 
             Context.Dictionaries.AddRange(Positions);

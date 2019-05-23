@@ -4,14 +4,16 @@ using Core.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Core.Migrations
 {
     [DbContext(typeof(PlanningDbContext))]
-    partial class PlanningDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190523085547_Dictionary_hasValue")]
+    partial class Dictionary_hasValue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -456,49 +458,6 @@ namespace Core.Migrations
                     b.ToTable("SelectAnswers");
                 });
 
-            modelBuilder.Entity("Core.Entities.StakeholderAnswer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<int?>("CreatedBy");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("FirstName")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("IsInternal")
-                        .IsRequired();
-
-                    b.Property<string>("LastName")
-                        .HasMaxLength(50);
-
-                    b.Property<int>("QuestionId");
-
-                    b.Property<DateTime>("UpdatedAt");
-
-                    b.Property<int?>("UpdatedBy");
-
-                    b.Property<int?>("UserId");
-
-                    b.Property<int>("UserStepResultId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("UserStepResultId");
-
-                    b.ToTable("StakeholderAnswers");
-                });
-
             modelBuilder.Entity("Core.Entities.StakeholderRatingAnswer", b =>
                 {
                     b.Property<int>("Id")
@@ -752,6 +711,10 @@ namespace Core.Migrations
                     b.Property<int?>("CreatedBy");
 
                     b.Property<bool>("IsIssue")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("IsStakeholder")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(false);
 
@@ -1097,24 +1060,6 @@ namespace Core.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Core.Entities.StakeholderAnswer", b =>
-                {
-                    b.HasOne("Core.Entities.Question", "Question")
-                        .WithMany("StakeholderAnswers")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Core.Entities.User", "User")
-                        .WithMany("StakeholderAnswers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Core.Entities.UserStepResult", "UserStepResult")
-                        .WithMany("StakeholderAnswers")
-                        .HasForeignKey("UserStepResultId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
             modelBuilder.Entity("Core.Entities.StakeholderRatingAnswer", b =>
                 {
                     b.HasOne("Core.Entities.Question", "Question")
@@ -1122,7 +1067,7 @@ namespace Core.Migrations
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Core.Entities.StakeholderAnswer", "Stakeholder")
+                    b.HasOne("Core.Entities.TextAnswer", "Stakeholder")
                         .WithMany("StakeholderRatingAnswers")
                         .HasForeignKey("StakeholderId")
                         .OnDelete(DeleteBehavior.Restrict);

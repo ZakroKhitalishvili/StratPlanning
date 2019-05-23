@@ -21,5 +21,10 @@ namespace Application.Repositories
         {
             return FindByCondition(x => x.HasPosition).AsEnumerable().Select(p => Mapper.Map<PositionDTO>(p)).ToList();
         }
+
+        public IEnumerable<string> GetValues()
+        {
+            return FindByCondition(x => x.HasValue).AsEnumerable().Select(x => x.Title);
+        }
     }
 }

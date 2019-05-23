@@ -23,6 +23,8 @@ namespace Core.Entities
 
         public bool HasCriterion { get; set; }
 
+        public bool HasValue { get; set; }
+
         public DateTime CreatedAt { get; set; }
     
         public DateTime UpdatedAt { get; set; }
