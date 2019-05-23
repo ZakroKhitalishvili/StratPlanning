@@ -46,7 +46,7 @@
                                     Schedule
                                 </th>
                                 <th>
-                                    Remind in (days)
+                                    Remind before (days)
                                 </th>
                                 <th>
                                     Completed
@@ -111,12 +111,27 @@
                                     <hr />
                                     <div class="m-list-badge m-list-badge--light-bg">
                                         <div class="m-list-badge__items list-items" id="step_tasks_list_@stepTask.Step">
+                                            @{
+                                                var userToPlans = UserHelper.GetUsersSelectListByPlan(Context, Model.PlanId);
+                                            }
                                             @foreach (var stepTaskAnswer in stepTaskAnswers)
                                             {
                                                 <a class="m-list-badge__item m-list-badge__item--default list-item">
                                                     <input type="hidden" asp-for="StepTaskAnswers.Answer.StepTaskAnswers[count].Id" value="@stepTaskAnswer.Id" />
+                                                    <input type="hidden" asp-for="StepTaskAnswers.Answer.StepTaskAnswers[count].FirstName" value="@stepTaskAnswer.FirstName" />
+                                                    <input type="hidden" asp-for="StepTaskAnswers.Answer.StepTaskAnswers[count].LastName" value="@stepTaskAnswer.LastName" />
+                                                    <input type="hidden" asp-for="StepTaskAnswers.Answer.StepTaskAnswers[count].Step" value="@stepTaskAnswer.Step" />
+                                                    <input type="hidden" asp-for="StepTaskAnswers.Answer.StepTaskAnswers[count].UserToPlanId" value="@stepTaskAnswer.UserToPlanId" />
                                                     <input type="hidden" name="StepTaskAnswers.Answer.StepTaskAnswers.Index" value="@count" />
-                                                    @stepTaskAnswer.FirstName @stepTaskAnswer.LastName @(stepTaskAnswer.UserToPlanId == null ? $"({stepTaskAnswer.Email})" : "")
+                                                    @if (stepTaskAnswer.UserToPlanId != null)
+                                                    {
+                                                        var userToPlan = userToPlans.Where(x => x.Value == stepTaskAnswer.UserToPlanId.Value.ToString()).SingleOrDefault();
+                                                        @userToPlan?.Text
+                                                    }
+                                                    else
+                                                    {
+                                                        @stepTaskAnswer.FirstName @stepTaskAnswer.LastName @(stepTaskAnswer.UserToPlanId == null ? $"({stepTaskAnswer.Email})" : "")
+                                                    }
                                                     <span class="list-item-delete fa fa-close"></span>
                                                 </a>
                                                 count++;

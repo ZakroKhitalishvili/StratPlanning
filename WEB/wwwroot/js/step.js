@@ -246,6 +246,7 @@ $(document).on('submit', "form#add_user_to_plan_new", function (e) {
                     $('body').removeClass('modal-open');
                     $('.modal-backdrop').remove();
                     updatePlanningTeam();
+                    refreshStepForm(true);
 
                 }
                 if (xhr.status == 400) {
@@ -283,6 +284,7 @@ $(document).on('submit', "form#add_user_to_plan_existing", function (e) {
                     $('body').removeClass('modal-open');
                     $('.modal-backdrop').remove();
                     updatePlanningTeam();
+                    refreshStepForm(true);
                 }
 
                 if (xhr.status == 400) {
@@ -323,6 +325,7 @@ $(document).on('click', '.remove-user-from-plan', function (e) {
                         if (data.result) {
                             notify("Successfully deleted", "success", 5);
                             updatePlanningTeam();
+                            refreshStepForm(true);
                         }
                         else {
                             notify("Removing the user failed", "danger", 5);
@@ -390,9 +393,7 @@ $(document).on('click', 'button#step_form_submit_button', function (e) {
 
 function updateStep(isSubmitted) {
     let formData = new FormData(document.querySelector('form#step_form'));
-
     formData.append('IsSubmitted', isSubmitted);
-
     $.ajax(
         {
             url: SaveStepURL,
@@ -404,18 +405,13 @@ function updateStep(isSubmitted) {
                 if (xhr.status == 200) {
                     notify("Successfully saved", "success", 5);
                 }
-
                 if (xhr.status == 202 || xhr.status == 400) {
                     notify("Input data are not valid ", "danger", 5);
                 }
 
-                $('form#step_form').html(data);
-
+                $('#step_form_container').html(data);
                 initializeInputs($('form#step_form'));
-
                 initializeStep();
-
-                $.validator.unobtrusive.parse('form#step_form');
             },
             error: function (xhr, statusText, error) {
                 notify("An Error occured on the request", "danger", 5);
@@ -600,7 +596,7 @@ $(document).on('click', 'input.step-complete-checkbox', function (e) {
                             if (xhr.status == 202 || xhr.status == 400) {
                                 notify("Input data are not valid ", "danger", 5);
                             }
-                           
+
                         },
                         error: function (xhr, statusText, error) {
                             notify("An Error occured on the request", "danger", 5);
@@ -612,4 +608,42 @@ $(document).on('click', 'input.step-complete-checkbox', function (e) {
     }
 });
 ///////
+////
+
+/////////////////////////
+////// step form refresh
+////////
+
+function refreshStepForm(keepFilled = false) {
+    let formData = new FormData(document.querySelector('form#step_form'));
+    formData.append('keepFilled', keepFilled);
+    $.ajax(
+        {
+            url: RefreshStepFormURL,
+            method: "post",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data, statusText, xhr) {
+                if (xhr.status == 200) {
+                    notify("Step successfully refreshed", "success", 5);
+                }
+
+                if (xhr.status >= 400) {
+                    notify("Step was not refreshed", "danger", 5);
+                }
+
+                $('#step_form_container').html(data);
+                initializeInputs('#step_form_container');
+                initializeStep();
+            },
+            error: function (xhr, statusText, error) {
+                notify("An Error occured on the request", "danger", 5);
+            }
+        });
+
+}
+
+//////////
+//////
 ////

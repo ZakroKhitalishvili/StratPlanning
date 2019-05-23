@@ -19,6 +19,7 @@ namespace Core.Entities
             FileAnswers = new HashSet<FileAnswer>();
             ValueAnswers = new HashSet<ValueAnswer>();
             StepTaskAnswers = new HashSet<StepTaskAnswer>();
+            StakeholderAnswers = new HashSet<StakeholderAnswer>();
         }
 
         public int Id { get; set; }
@@ -66,5 +67,7 @@ namespace Core.Entities
         public virtual ICollection<StepTaskAnswer> StepTaskAnswers { get; set; }
 
         public virtual ICollection<ValueAnswer> ValueAnswers { get; set; }
+
+        public virtual ICollection<StakeholderAnswer> StakeholderAnswers { get; set; }
     }
 }

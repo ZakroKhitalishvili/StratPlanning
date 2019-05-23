@@ -64,6 +64,8 @@ namespace Core.Context
 
         public DbSet<ValueAnswer> ValueAnswers { get; set; }
 
+        public DbSet<StakeholderAnswer> StakeholderAnswers { get; set; }
+
         /// <summary>
         /// Relations' tables
         /// </summary>

@@ -19,6 +19,6 @@ namespace Core.Entities
 
         public virtual ICollection<StakeholderRatingAnswerToDictionary> Criteria { get; set; }
 
-        public virtual TextAnswer Stakeholder { get; set; }
+        public virtual StakeholderAnswer Stakeholder { get; set; }
     }
 }
