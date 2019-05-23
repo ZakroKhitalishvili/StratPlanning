@@ -110,6 +110,7 @@
                 <input asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.SelectAnswer.AltOption" type="text" class="select-specify-input form-control m--margin-top-10" placeholder="specify..." />
             }
             <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer"></span>
+            <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.SelectAnswer"></span>
         </div>
     </div>
     @if (!string.IsNullOrEmpty(question.Description))

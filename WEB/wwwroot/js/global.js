@@ -1,16 +1,16 @@
-function initializeInputs(element) {
+function initializeInputs(selector) {
 
-    $(element).find('.m-select2').select2();
+    $(selector).find('.m-select2').select2();
 
-    $(element).find(".tag-select").select2({
+    $(selector).find(".tag-select").select2({
 
         tags: true,
         tokenSeparators: [","]
     });
 
-    $(element).find('.datepicker').datepicker({ format: 'dd-mm-yyyy' });
+    $(selector).find('.datepicker').datepicker({ format: 'dd-mm-yyyy' });
 
-    $(element).find('.select2-without-search').select2({
+    $(selector).find('.select2-without-search').select2({
         minimumResultsForSearch: Infinity
     });
 
@@ -20,6 +20,8 @@ function initializeInputs(element) {
         });
         $(element).find('.m-values-autocomplete').autocomplete('option', 'appendTo', '.modal');
     }
+
+    $.validator.unobtrusive.parse(selector);
 }
 
 

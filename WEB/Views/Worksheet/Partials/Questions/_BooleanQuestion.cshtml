@@ -67,6 +67,7 @@
             @question.Title
             <br>
             <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer"></span>
+            <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.BooleanAnswer"></span>
         </div>
         <div class="col-3 col-md-2 m-align--center">
             <span class="m-switch m-switch--icon">

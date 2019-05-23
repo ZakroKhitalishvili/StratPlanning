@@ -12,8 +12,6 @@ namespace Core.Entities
 
             SelectAnswers = new HashSet<SelectAnswer>();
 
-            StakeholderRatingAnswers = new HashSet<StakeholderRatingAnswer>();
-
             StrategicIssueAnswers = new HashSet<StrategicIssueAnswer>();
         }
 
@@ -21,13 +19,9 @@ namespace Core.Entities
 
         public bool IsIssue { get; set; }
 
-        public bool IsStakeholder { get; set; }
-
         public virtual ICollection<IssueOptionAnswer> IssueOptionAnswers { get; set; }
 
         public virtual ICollection<SelectAnswer> SelectAnswers { get; set; }
-
-        public virtual ICollection<StakeholderRatingAnswer> StakeholderRatingAnswers { get; set; }
 
         public virtual ICollection<StrategicIssueAnswer> StrategicIssueAnswers { get; set; }
 

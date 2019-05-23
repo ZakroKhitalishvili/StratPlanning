@@ -12,7 +12,7 @@
 }
 
 <div class="form-group m-form__group">
-    <label for="exampleSelect1">
+    <label asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.TagSelectAnswers">
         @(question.Order). @question.Title
     </label>
     <div class="row">
@@ -98,8 +98,9 @@
             <select asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.TagSelectAnswers"
                     asp-items="items" multiple class="form-control m-select2 tag-select"
                     value='@values'></select>
+            <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex]"></span>
             <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer"></span>
-
+            <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.TagSelectAnswers"></span>
         </div>
     </div>
     @if (!string.IsNullOrEmpty(question.Description))

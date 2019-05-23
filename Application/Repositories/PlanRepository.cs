@@ -1130,7 +1130,7 @@ namespace Application.Repositories
 
             if (currentUserAnswer != null)
             {
-                answerGroup.Answer = new AnswerDTO { TextAnswer = new TextAnswerDTO { IsIssue = currentUserAnswer.IsIssue, IsStakeholder = currentUserAnswer.IsStakeholder, Text = currentUserAnswer.Text } };
+                answerGroup.Answer = new AnswerDTO { TextAnswer = new TextAnswerDTO { IsIssue = currentUserAnswer.IsIssue,  Text = currentUserAnswer.Text } };
             }
 
             var definitiveStepResult = otherUserStepResults.Where(x => x.IsDefinitive).SingleOrDefault();
@@ -1139,7 +1139,7 @@ namespace Application.Repositories
 
             if (definitiveAnswer != null)
             {
-                answerGroup.DefinitiveAnswer = new AnswerDTO { TextAnswer = new TextAnswerDTO { IsIssue = definitiveAnswer.IsIssue, IsStakeholder = definitiveAnswer.IsStakeholder, Text = definitiveAnswer.Text } };
+                answerGroup.DefinitiveAnswer = new AnswerDTO { TextAnswer = new TextAnswerDTO { IsIssue = definitiveAnswer.IsIssue, Text = definitiveAnswer.Text } };
             }
 
             var otherAnswers = new List<AnswerDTO>();
@@ -1152,7 +1152,7 @@ namespace Application.Repositories
                 {
                     var answerDTO = new AnswerDTO
                     {
-                        TextAnswer = new TextAnswerDTO { IsIssue = userAnswer.IsIssue, IsStakeholder = userAnswer.IsStakeholder, Text = userAnswer.Text },
+                        TextAnswer = new TextAnswerDTO { IsIssue = userAnswer.IsIssue, Text = userAnswer.Text },
                         Author = $"{otherUserStepResult.UserToPlan.User.FirstName} {otherUserStepResult.UserToPlan.User.LastName}"
                     };
 

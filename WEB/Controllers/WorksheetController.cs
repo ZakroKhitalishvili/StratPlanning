@@ -86,8 +86,6 @@ namespace Web.Controllers
 
             bool result = false;
 
-            TryValidateModel(planStep.AnswerGroups);
-
             if (ModelState.IsValid)
             {
                 result = _planRepository.SaveStep(planStep, isDefinitive, planStep.IsSubmitted, userId: HttpContext.GetUserId());
@@ -96,10 +94,6 @@ namespace Web.Controllers
                 {
                     HttpContext.Response.StatusCode = StatusCodes.Status200OK;
                 }
-            }
-            else
-            {
-                HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
             }
 
             var newPlanStep = _planRepository.GetStep(planStep.Step, planStep.PlanId, isDefinitive, HttpContext.GetUserId());
@@ -168,13 +162,32 @@ namespace Web.Controllers
         [HttpPost]
         public IActionResult CompleteStepTask(int stepTaskId)
         {
-            if(stepTaskId<=0)
+            if (stepTaskId <= 0)
             {
                 return BadRequest();
             }
 
-
             return Ok();
+        }
+
+        [HttpPost]
+        public IActionResult RefreshStepForm(PlanStepDTO planStep, bool? keepFilled)
+        {
+            var isDefinitive = User.IsInRole(Roles.Admin);
+
+            var newPlanStep = _planRepository.GetStep(planStep.Step, planStep.PlanId, isDefinitive, HttpContext.GetUserId());
+
+            if (keepFilled != null && keepFilled.Value)
+            {
+                newPlanStep.FilledAnswers = planStep.AnswerGroups;
+                foreach (var stepTaskAnswer in planStep.StepTaskAnswers.Answer.StepTaskAnswers.Where(x => x.Id == 0))
+                {
+                    newPlanStep.StepTaskAnswers.Answer.StepTaskAnswers?.Add(stepTaskAnswer);
+                }
+
+            }
+
+            return PartialView("~/Views/Worksheet/Partials/_StepForm.cshtml", newPlanStep);
         }
 
     }

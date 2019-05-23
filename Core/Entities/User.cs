@@ -11,6 +11,8 @@ namespace Core.Entities
             UsersToPlans = new HashSet<UserToPlan>();
 
             UsersToIssueOptionAnswers = new HashSet<UserToIssueOptionAnswer>();
+
+            StakeholderAnswers = new HashSet<StakeholderAnswer>();
         }
 
         public int Id { get; set; }
@@ -45,5 +47,6 @@ namespace Core.Entities
 
         public virtual ICollection<UserToIssueOptionAnswer> UsersToIssueOptionAnswers { get; set; }
 
+        public virtual ICollection<StakeholderAnswer> StakeholderAnswers { get; internal set; }
     }
 }

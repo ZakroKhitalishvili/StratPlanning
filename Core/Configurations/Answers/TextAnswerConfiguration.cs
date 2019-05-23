@@ -20,11 +20,6 @@ namespace Core.Configurations
                .IsRequired()
                .HasDefaultValue(false);
 
-            builder.Property(x => x.IsStakeholder)
-               .IsRequired()
-               .HasDefaultValue(false);
-
-
             builder.HasOne(x => x.UserStepResult)
                 .WithMany(s => s.TextAnswers)
                 .HasForeignKey(x => x.UserStepResultId)

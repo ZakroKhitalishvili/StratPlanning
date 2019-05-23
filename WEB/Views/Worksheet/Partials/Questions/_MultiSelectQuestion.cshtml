@@ -78,6 +78,7 @@
             <select asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.SelectAnswers"
                     asp-items="question.Options.Select(o=>new SelectListItem {Text= o.Title ,Value=o.Id.ToString()})" multiple class="form-control m-select2"></select>
             <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer"></span>
+            <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.SelectAnswers"></span>
         </div>
     </div>
     @if (!string.IsNullOrEmpty(question.Description))
