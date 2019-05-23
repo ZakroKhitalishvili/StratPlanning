@@ -13,6 +13,13 @@ function initializeInputs(element) {
     $(element).find('.select2-without-search').select2({
         minimumResultsForSearch: Infinity
     });
+
+    if (valueAnswerOptions !== undefined) {
+        $(element).find('.m-values-autocomplete').autocomplete({
+            source: valueAnswerOptions.valuesDictionary
+        });
+        $(element).find('.m-values-autocomplete').autocomplete('option', 'appendTo', '.modal');
+    }
 }
 
 

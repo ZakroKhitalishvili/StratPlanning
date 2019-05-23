@@ -11,6 +11,8 @@
     var answerGroup = Model.AnswerGroups.Where(x => x.QuestionId == question.Id).FirstOrDefault();
 
     var filledAnswer = Model.AnswerGroups[questionIndexOffset + questionIndex];
+
+    var valuesDictionary = Web.Helpers.StepHelper.GetValuesDictionary(Context);
 }
 
 <div class="m-demo">
@@ -170,7 +172,7 @@
                             Value
                         </label>
                         <div class="col-lg-9 col-md-9 col-sm-12">
-                            <input class="form-control m-input" name="value" />
+                            <input class="form-control m-input m-values-autocomplete" name="value" />
                         </div>
                     </div>
                     <div class="form-group m-form__group row m--margin-top-20">
@@ -205,6 +207,7 @@
 <script>
     if (valueAnswerOptions === undefined) {
         var valueAnswerOptions = {};
+        valueAnswerOptions.valuesDictionary = @Json.Serialize(valuesDictionary);
     }
 
     valueAnswerOptions['#v_@(question.Id)_list'] = {
