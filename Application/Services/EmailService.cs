@@ -38,7 +38,7 @@ namespace Application.Services
             client.Credentials = new NetworkCredential(_userName, _password);
 
             MailMessage message = new MailMessage();
-            message.From = new MailAddress("zakro1996@gmail.com");
+            message.From = new MailAddress("systemtestersender@gmail.com");
             message.To.Add(new MailAddress(recipient));
             message.Subject = subject;
             message.Body = body;
