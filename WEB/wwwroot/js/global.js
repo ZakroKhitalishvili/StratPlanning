@@ -14,7 +14,7 @@ function initializeInputs(selector) {
         minimumResultsForSearch: Infinity
     });
 
-    if (typeof variable !== 'undefined') {
+    if (typeof fieldOptions !== 'undefined') {
         $(selector).find('.m-values-autocomplete').autocomplete({
             source: fieldOptions.valuesDictionary
         });
