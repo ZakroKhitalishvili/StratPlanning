@@ -133,7 +133,7 @@
                                     {
                                         <td>
                                             <span class="table-row-actions">
-                                                <button type="button" class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete" onclick="deleteRecord(this)">
+                                                <button type="button" class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete" onclick="deleteRecord(this, 'tr')">
                                                     <i class="la la-trash"></i>
                                                 </button>
                                                 <button type="button" class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill" title="Edit" onclick="showRecordDetail(this, '#v_@(question.Id)_modal')">
@@ -203,7 +203,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-sp m-btn submit-btn" onclick="editRecord(this, '#v_@(question.Id)_list');">
+                        <button type="button" class="btn btn-sp m-btn submit-btn" onclick="editRecord('#v_@(question.Id)_modal', '#v_@(question.Id)_list');">
                             Add
                         </button>
                         <button type="button" class="btn btn-secondary m-btn" data-dismiss="modal">
@@ -215,12 +215,15 @@
         </div>
     </div>
     <script>
-        if (valueAnswerOptions === undefined) {
-            var valueAnswerOptions = {};
-            valueAnswerOptions.valuesDictionary = @Json.Serialize(valuesDictionary);
+        if (fieldOptions === undefined) {
+            var fieldOptions = {};
         }
 
-        valueAnswerOptions['#v_@(question.Id)_list'] = {
+        if (fieldOptions['valuesDictionary'] == undefined) {
+            fieldOptions['valuesDictionary'] = @Json.Serialize(valuesDictionary);
+        }
+
+        fieldOptions['#v_@(question.Id)_list'] = {
             template: function (data, index) {
                 return `
                     <tr id="${index}" data-val='${JSON.stringify(data)}'>
@@ -235,7 +238,7 @@
                         </td>
                         <td>
                             <span class="table-row-actions">
-                                <button type="button" class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete" onclick="deleteRecord(this)">
+                                <button type="button" class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete" onclick="deleteRecord(this, 'tr')">
                                     <i class="la la-trash"></i>
                                 </button>
                                 <button type="button" class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill" title="Edit" onclick="showRecordDetail(this, '#v_@(question.Id)_modal')">

@@ -396,7 +396,8 @@ namespace Application.Repositories
                     .Include(x => x.FileAnswers).ThenInclude(x => x.File)
                     .Include(x => x.StepTaskAnswers).ThenInclude(x => x.StepTask)
                     .Include(x => x.StepTaskAnswers).ThenInclude(x => x.UserToPlan)
-                    .Include(x => x.ValueAnswers).ToList();
+                    .Include(x => x.ValueAnswers)
+                    .Include(x => x.StakeholderAnswers).ToList();
         }
 
         private UserStepResult GetUserStepResult(int planId, string stepIndex, int userId)
@@ -924,7 +925,7 @@ namespace Application.Repositories
             {
                 if (!dbAnswers.Any(x => x.Id == answer.Id))
                 {
-                    var newAnswer = new StakeholderAnswer
+                    StakeholderAnswer newAnswer = new StakeholderAnswer
                     {
                         QuestionId = answerGroup.QuestionId,
                         CreatedAt = DateTime.Now,
@@ -933,10 +934,24 @@ namespace Application.Repositories
                         UpdatedBy = userStepResult.UpdatedBy,
                         UserId = answer.UserId,
                         CategoryId = answer.CategoryId,
-                        FirstName = answer.FirstName,
-                        LastName = answer.LastName,
-                        Email = answer.LastName
                     };
+
+                    if (newAnswer.UserId.HasValue)
+                    {
+                        var user = Context.Users.Find(newAnswer.UserId.Value);
+
+                        if (user == null) continue;
+
+                        newAnswer.FirstName = user.FirstName;
+                        newAnswer.LastName = user.LastName;
+                        newAnswer.IsInternal = true;
+                    }
+                    else
+                    {
+                        newAnswer.FirstName = answer.FirstName;
+                        newAnswer.LastName = answer.LastName;
+                        newAnswer.Email = answer.Email;
+                    }
 
                     userStepResult.StakeholderAnswers.Add(newAnswer);
                 }

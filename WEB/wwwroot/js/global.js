@@ -14,11 +14,18 @@ function initializeInputs(selector) {
         minimumResultsForSearch: Infinity
     });
 
-    if (valueAnswerOptions !== undefined) {
-        $(element).find('.m-values-autocomplete').autocomplete({
-            source: valueAnswerOptions.valuesDictionary
+    if (fieldOptions !== undefined) {
+        $(selector).find('.m-values-autocomplete').autocomplete({
+            source: fieldOptions.valuesDictionary
         });
-        $(element).find('.m-values-autocomplete').autocomplete('option', 'appendTo', '.modal');
+        $(selector).find('.m-values-autocomplete').autocomplete('option', 'appendTo', '.modal');
+
+        $(selector).find('.m-stakeholders-autocomplete').autocomplete({
+            source: fieldOptions.stakeholderUsers,
+            select: function (event, ui) {
+                $(event.target).next("[name='stakeholderId']").val(ui.item.id);
+            }
+        });
     }
 
     $.validator.unobtrusive.parse(selector);
