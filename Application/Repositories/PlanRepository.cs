@@ -397,6 +397,7 @@ namespace Application.Repositories
                     .Include(x => x.StepTaskAnswers).ThenInclude(x => x.StepTask)
                     .Include(x => x.StepTaskAnswers).ThenInclude(x => x.UserToPlan)
                     .Include(x => x.ValueAnswers)
+                    .Include(x => x.StakeholderAnswers).ThenInclude(x => x.Category).ToList();
                     .Include(x => x.SWOTAnswers).ToList();
         }
 
@@ -600,6 +601,13 @@ namespace Application.Repositories
                 {
                     SaveValueAnswer(answerGroup, userStepResult);
                 }
+
+                if (question.Type == QuestionTypes.Stakeholder)
+                {
+                    SaveStakeholderAnswer(answerGroup, userStepResult);
+                }
+            }
+        }
 
                 if (question.Type == QuestionTypes.SWOT)
                 {
@@ -902,6 +910,61 @@ namespace Application.Repositories
             }
         }
 
+        private void SaveStakeholderAnswer(AnswerGroupDTO answerGroup, UserStepResult userStepResult)
+        {
+            IList<StakeholderAnswer> dbAnswers = null;
+
+            dbAnswers = userStepResult.StakeholderAnswers.Where(x => x.QuestionId == answerGroup.QuestionId).ToList();
+
+            foreach (var dbAnswer in dbAnswers)
+            {
+                var updateAnswer = answerGroup.Answer.StakeholderAnswers.Where(x => x.Id == dbAnswer.Id).FirstOrDefault();
+
+                if (updateAnswer == null)
+                {
+                    Context.StakeholderAnswers.Remove(dbAnswer);
+                    Context.SaveChanges();
+                    //userStepResult.SelectAnswers.Remove(dbAnswer);
+                }
+            }
+
+            foreach (var answer in answerGroup.Answer.StakeholderAnswers)
+            {
+                if (!dbAnswers.Any(x => x.Id == answer.Id))
+                {
+                    StakeholderAnswer newAnswer = new StakeholderAnswer
+                    {
+                        QuestionId = answerGroup.QuestionId,
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now,
+                        CreatedBy = userStepResult.UpdatedBy,
+                        UpdatedBy = userStepResult.UpdatedBy,
+                        UserId = answer.UserId,
+                        CategoryId = answer.CategoryId,
+                    };
+
+                    if (newAnswer.UserId.HasValue)
+                    {
+                        var user = Context.Users.Find(newAnswer.UserId.Value);
+
+                        if (user == null) continue;
+
+                        newAnswer.FirstName = user.FirstName;
+                        newAnswer.LastName = user.LastName;
+                        newAnswer.IsInternal = true;
+                    }
+                    else
+                    {
+                        newAnswer.FirstName = answer.FirstName;
+                        newAnswer.LastName = answer.LastName;
+                        newAnswer.Email = answer.Email;
+                    }
+
+                    userStepResult.StakeholderAnswers.Add(newAnswer);
+                }
+            }
+        }
+
         private void SaveSwotAnswers(AnswerGroupDTO answerGroup, UserStepResult userStepResult)
         {
             IList<SWOTAnswer> dbAnswers = null;
@@ -1005,6 +1068,11 @@ namespace Application.Repositories
                     {
                         planStep.AnswerGroups.Add(GetValueAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
                     }
+                    if (questions[j].Type == QuestionTypes.Stakeholder)
+                    {
+                        planStep.AnswerGroups.Add(GetStakeholderAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
+                    }
+
                     if (questions[j].Type == QuestionTypes.SWOT)
                     {
                         planStep.AnswerGroups.Add(GetSWOTAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
@@ -1493,6 +1561,88 @@ namespace Application.Repositories
                             Opportunities = userAnswer.Where(x => x.Type == SWOTTypes.Opportunity).Select(x => x.Name).ToList(),
                             Threats = userAnswer.Where(x => x.Type == SWOTTypes.Threat).Select(x => x.Name).ToList()
                         },
+                        Author = $"{otherUserStepResult.UserToPlan.User.FirstName} {otherUserStepResult.UserToPlan.User.LastName}"
+                    };
+
+                    otherAnswers.Add(answerDTO);
+                }
+            }
+
+            answerGroup.OtherAnswers = otherAnswers;
+
+            return answerGroup;
+        }
+
+        private AnswerGroupDTO GetStakeholderAnswers(int questionId, UserStepResult currentUserStepResult, IList<UserStepResult> otherUserStepResults)
+        {
+            AnswerGroupDTO answerGroup = new AnswerGroupDTO
+            {
+                QuestionId = questionId
+            };
+
+            var currentUserAnswer = currentUserStepResult.StakeholderAnswers.Where(x => x.QuestionId == questionId);
+
+            if (currentUserAnswer != null && currentUserAnswer.Any())
+            {
+                answerGroup.Answer = new AnswerDTO
+                {
+                    StakeholderAnswers = currentUserAnswer.Select(x => new StakeholderAnswerDTO
+                    {
+                        Id = x.Id,
+                        FirstName = x.FirstName,
+                        LastName = x.LastName,
+                        Email = x.Email,
+                        IsInternal = x.IsInternal,
+                        UserId = x.UserId,
+                        CategoryId = x.CategoryId,
+                        Category = x.Category?.Title
+                    }).ToList()
+                };
+            }
+
+            var definitiveStepResult = otherUserStepResults.Where(x => x.IsDefinitive).SingleOrDefault();
+
+            var definitiveAnswer = definitiveStepResult?.StakeholderAnswers.Where(x => x.QuestionId == questionId);
+
+            if (definitiveAnswer != null && definitiveAnswer.Any())
+            {
+                answerGroup.DefinitiveAnswer = new AnswerDTO
+                {
+                    StakeholderAnswers = definitiveAnswer.Select(x => new StakeholderAnswerDTO
+                    {
+                        Id = x.Id,
+                        FirstName = x.FirstName,
+                        LastName = x.LastName,
+                        Email = x.Email,
+                        IsInternal = x.IsInternal,
+                        UserId = x.UserId,
+                        CategoryId = x.CategoryId,
+                        Category = x.Category?.Title
+                    }).ToList()
+                };
+            }
+
+            var otherAnswers = new List<AnswerDTO>();
+
+            foreach (var otherUserStepResult in otherUserStepResults.Where(x => !x.IsDefinitive))
+            {
+                var userAnswer = otherUserStepResult.StakeholderAnswers.Where(x => x.QuestionId == questionId);
+
+                if (userAnswer != null && userAnswer.Any())
+                {
+                    var answerDTO = new AnswerDTO
+                    {
+                        StakeholderAnswers = userAnswer.Select(x => new StakeholderAnswerDTO
+                        {
+                            Id = x.Id,
+                            FirstName = x.FirstName,
+                            LastName = x.LastName,
+                            Email = x.Email,
+                            IsInternal = x.IsInternal,
+                            UserId = x.UserId,
+                            CategoryId = x.CategoryId,
+                            Category = x.Category?.Title
+                        }).ToList(),
                         Author = $"{otherUserStepResult.UserToPlan.User.FirstName} {otherUserStepResult.UserToPlan.User.LastName}"
                     };
 

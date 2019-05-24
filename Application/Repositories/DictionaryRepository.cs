@@ -26,5 +26,10 @@ namespace Application.Repositories
         {
             return FindByCondition(x => x.HasValue).AsEnumerable().Select(x => x.Title);
         }
+
+        public IEnumerable<CategoryDTO> GetCategories()
+        {
+            return FindByCondition(x => x.HasStakeholderCategory).AsEnumerable().Select(p => Mapper.Map<CategoryDTO>(p)).ToList();
+        }
     }
 }

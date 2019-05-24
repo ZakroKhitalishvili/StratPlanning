@@ -1,0 +1,286 @@
+﻿@model Application.DTOs.PlanStepDTO
+
+@{
+    var blockIndex = (int)ViewData["BlockIndex"];
+    var questionIndex = (int)ViewData["QuestionIndex"];
+
+    var questionIndexOffset = (int)ViewData["QuestionIndexOffset"];
+
+    var question = Model.StepBlocks[blockIndex].Questions[questionIndex];
+
+    var answerGroup = Model.AnswerGroups.Where(x => x.QuestionId == question.Id).FirstOrDefault();
+
+    var filledAnswer = Model.AnswerGroups[questionIndexOffset + questionIndex];
+
+    var stakeholderUsers = Web.Helpers.UserHelper.GetUsersSelectList(Context);
+
+    var categories = Web.Helpers.UserHelper.GetCategoriesSelectList(Context);
+}
+<div class="m-demo">
+    <div class="m-demo__preview">
+        <div class="form-group m-form__group">
+            <label>
+                Combined result
+            </label>
+            <div>
+                <div class="row">
+                    <div class="col-xs-12 col-md-6">
+                        <div class="bg-color-gray p-3">
+                            <h5>Internal</h5>
+                        </div>
+                        <div class="bg-color-lightgray p-3">
+                            <div class="m-list-badge m-list-badge--light-bg">
+                                <div class="m-list-badge__items">
+                                    @if (answerGroup.DefinitiveAnswer != null)
+                                    {
+                                        @foreach (var answer in answerGroup.DefinitiveAnswer.StakeholderAnswers.Where(x => x.IsInternal))
+                                        {
+                                            <span title="" data-toggle="tooltip" class="m-list-badge__item m-list-badge__item--default sp-tooltip" data-original-title="Definitive answer">
+                                                @(answer.FirstName + " " + answer.LastName)
+                                            </span>
+                                        }
+                                    }
+                                    @foreach (var otherAnswer in answerGroup.OtherAnswers)
+                                    {
+                                        @foreach (var answer in otherAnswer.StakeholderAnswers.Where(x => x.IsInternal))
+                                        {
+                                            <span title="" data-toggle="tooltip" class="m-list-badge__item m-list-badge__item--default sp-tooltip" data-original-title="@otherAnswer.Author">
+                                                @(answer.FirstName + " " + answer.LastName)
+                                            </span>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sx-12  col-md-6">
+                        <div class="bg-color-gray p-3">
+                            <h5>External</h5>
+                        </div>
+                        <div class="bg-color-lightgray p-3">
+                            <div class="m-list-badge m-list-badge--light-bg">
+                                <div class="m-list-badge__items">
+                                    @if (answerGroup.DefinitiveAnswer != null)
+                                    {
+                                        @foreach (var answer in answerGroup.DefinitiveAnswer.StakeholderAnswers.Where(x => !x.IsInternal))
+                                        {
+                                            <span title="" data-toggle="tooltip" class="m-list-badge__item m-list-badge__item--default sp-tooltip" data-original-title="Definitive answer">
+                                                @(answer.FirstName + " " + answer.LastName)
+                                            </span>
+                                        }
+                                    }
+                                    @foreach (var otherAnswer in answerGroup.OtherAnswers)
+                                    {
+                                        @foreach (var answer in otherAnswer.StakeholderAnswers.Where(x => !x.IsInternal))
+                                        {
+                                            <span title="" data-toggle="tooltip" class="m-list-badge__item m-list-badge__item--default sp-tooltip" data-original-title="@otherAnswer.Author">
+                                                @(answer.FirstName + " " + answer.LastName)
+                                            </span>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group m-form__group">
+    <label>
+        Your answer
+    </label>
+    <div>
+        <div class="row  ">
+            <div class="col-xs-12 col-md-6">
+                <div class="bg-color-gray p-3">
+                    <h5>Internal</h5>
+                    @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
+                    {
+                        <div id="s_@(question.Id)_form" class="input-group m--margin-bottom-10">
+                            <input type="text" class="form-control m-input  m-input--air form-control-danger m-stakeholders-autocomplete" name="stakeholderName">
+                            <input type="hidden" class="m-input" name="stakeholderId">
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-sp m-btn m-btn--icon" onclick="editRecord('#s_@(question.Id)_form', '#s_@(question.Id)_list');">
+                                    add
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="bg-color-lightgray p-3">
+                    <div class="m-list-badge m-list-badge--light-bg">
+                        <div id="s_@(question.Id)_list" class="m-list-badge__items">
+                            @if (answerGroup.Answer != null)
+                            {
+                                string internalGuid = "";
+                                foreach (var answer in answerGroup.Answer.StakeholderAnswers.Where(x => x.IsInternal))
+                                {
+                                    {
+                                        internalGuid = Guid.NewGuid().ToString();
+                                    }
+                                    <a class="m-list-badge__item m-list-badge__item--default">
+                                        @(answer.FirstName + " " + answer.LastName)
+                                        @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted) {
+                                            <span class="fa fa-close" onclick="deleteRecord(this, 'a')"></span>
+                                        }
+                                        <input type="hidden" value="@internalGuid" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers.index" />
+                                        <input type="hidden" value="@answer.Id" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers[@internalGuid].Id" />
+                                        <input type="hidden" value="@(answer.UserId.HasValue ? answer.UserId : 0)" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers[@internalGuid].UserId" />
+                                    </a>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sx-12  col-md-6">
+                <div class="bg-color-gray p-3">
+                    <div class="col-xs-12">
+                        <h5 class="d-inline-block my-2">External</h5>
+                        @*<input type="text" class="form-control m-input  m-input--air form-control-danger">*@
+                        @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
+                        {
+                            <button type="button" class="btn btn-sp m-btn m-btn--icon pull-right" data-toggle="modal" data-target="#s_@(question.Id)_externalsModal">
+                                add
+                            </button>
+                        }
+                    </div>
+                </div>
+                <div class="bg-color-lightgray p-3">
+                    <div class="m-list-badge m-list-badge--light-bg">
+                        <div id="s_@(question.Id)_externals" class="m-list-badge__items">
+                            @if (answerGroup.Answer != null)
+                            {
+                                string externalGuid = "";
+                                foreach (var answer in answerGroup.Answer.StakeholderAnswers.Where(x => !x.IsInternal))
+                                {
+                                    {
+                                        externalGuid = Guid.NewGuid().ToString();
+                                    }
+                                    <a class="m-list-badge__item m-list-badge__item--default">
+                                        @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted) {
+                                            <span class="fa fa-close pull-right" onclick="deleteRecord(this, 'a')"></span>
+                                        }
+                                        <div>@(answer.FirstName + " " + answer.LastName)</div>
+                                        <div>@(answer.Email)</div>
+                                        <div>@(answer.Category)</div>
+                                        <input type="hidden" value="@externalGuid" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers.index" />
+                                        <input type="hidden" value="@answer.Id" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers[@externalGuid].Id" />
+                                    </a>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].QuestionId" value="@question.Id" />
+    </div>
+</div>
+@if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
+{
+    <div class="modal fade" id="s_@(question.Id)_externalsModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="">
+                        Add value statement
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="la la-remove"></span>
+                    </button>
+                </div>
+                <div class="m-form m-form--fit m-form--label-align-right">
+                    <div class="modal-body">
+                        <div class="form-group m-form__group row m--margin-top-20">
+                            <label class="col-form-label col-lg-3 col-sm-12">
+                                First name
+                            </label>
+                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                <input class="form-control m-input" name="firstName" />
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row m--margin-top-20">
+                            <label class="col-form-label col-lg-3 col-sm-12">
+                                Last name
+                            </label>
+                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                <input class="form-control m-input" name="lastName" />
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row m--margin-top-20">
+                            <label class="col-form-label col-lg-3 col-sm-12">
+                                Email
+                            </label>
+                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                <input class="form-control m-input" name="email" />
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row m--margin-top-20">
+                            <label class="col-form-label col-lg-3 col-sm-12">
+                                Category
+                            </label>
+                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                <select name="category" class="form-control m-select2 m-input" style="width:100%;">
+                                    @foreach (var category in categories)
+                                    {
+                                        <option value="@(category.Value)">@category.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sp m-btn submit-btn" onclick="editRecord('#s_@(question.Id)_externalsModal', '#s_@(question.Id)_externals');">
+                            Submit
+                        </button>
+                        <button type="button" class="btn btn-secondary m-btn" data-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        if (fieldOptions === undefined) {
+            var fieldOptions = {};
+        }
+
+        if (fieldOptions['stakeholderUsers'] == undefined) {
+            fieldOptions['stakeholderUsers'] = @Json.Serialize(stakeholderUsers.Select(x => new { label = x.Text, id = x.Value }));
+        }
+
+        fieldOptions['#s_@(question.Id)_list'] = {
+            template: function (data, index) {
+                return `
+                    <a class="m-list-badge__item m-list-badge__item--default">
+                        ${data.stakeholderName} <span class="fa fa-close" onclick="deleteRecord(this, 'a')"></span>
+                        <input type="hidden" value="${index}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers.index"/>
+                        <input type="hidden" value="${data.stakeholderId}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers[${index}].UserId"/>
+                    </a>
+                `;
+            }
+        };
+
+        fieldOptions['#s_@(question.Id)_externals'] = {
+            template: function (data, index) {
+                return `
+                    <a class="m-list-badge__item m-list-badge__item--default">
+                        <span class="fa fa-close pull-right" onclick="deleteRecord(this, 'a')"></span>
+                        <div>${data.firstName} ${data.lastName}</div>
+                        <div>${data.email}</div>
+                        <div>${data.category_label}</div>
+                        <input type="hidden" value="${index}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers.index"/>
+                        <input type="hidden" value="${data.firstName}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers[${index}].FirstName"/>
+                        <input type="hidden" value="${data.lastName}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers[${index}].LastName"/>
+                        <input type="hidden" value="${data.email}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers[${index}].Email"/>
+                        <input type="hidden" value="${data.category}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers[${index}].CategoryId"/>
+                    </a>
+                `;
+            }
+        };
+    </script>
+}

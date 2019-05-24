@@ -541,17 +541,21 @@ $(document).on('hidden.bs.modal', function (event) {
     modal.find('.m-index').val("");
 });
 
-function editRecord(el, targetId) {
-    if (valueAnswerOptions[targetId] === undefined) return;
+function editRecord(modalId, targetId) {
+    if (fieldOptions[targetId] === undefined) return;
 
-    var options = valueAnswerOptions[targetId];
-    var modal = $(el).closest('.modal');
+    var options = fieldOptions[targetId];
+    var modal = $(modalId);
     var list = $(targetId);
 
     var data = {};
 
     modal.find('.m-input').each(function (i, el) {
         data[$(el).attr('name')] = $(el).val();
+    });
+
+    modal.find('select.m-input').each(function (i, el) {
+        data[$(el).attr('name') + '_label'] = $(el).find('option:selected').text();
     });
 
     var index = modal.find('.m-index').val();
@@ -565,7 +569,15 @@ function editRecord(el, targetId) {
         list.append(options.template(data, index));
     }
 
-    modal.modal('hide');
+    if (modal.hasClass('modal')) {
+        modal.modal('hide');
+    }
+
+    modal.find('.m-input').each(function (i, el) {
+        $(el).val("");
+    });
+
+    modal.find('.m-index').val("");
 }
 
 function showRecordDetail(source, modalId) {
@@ -586,8 +598,13 @@ function showRecordDetail(source, modalId) {
     modal.modal('show');
 }
 
-function deleteRecord(source) {
-    var record = source.closest('tr');
+function deleteRecord(source, targetSelector = false) {
+    var record = source;
+
+    if (targetSelector !== false) {
+        record = source.closest(targetSelector);
+    }
+    
     $(record).remove();
 }
 

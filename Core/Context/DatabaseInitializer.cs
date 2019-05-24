@@ -46,6 +46,11 @@ namespace Core.Context
                 SeedValues();
             }
 
+            if (!Context.Dictionaries.Any(x => x.HasStakeholderCategory))
+            {
+                SeedStakeholderCategories();
+            }
+
             if (!Context.StepBlocks.Where(x => x.Step == Steps.Predeparture).Any())
             {
                 SeedPredepartureStep();
@@ -66,10 +71,15 @@ namespace Core.Context
                 SeedValuesStep();
             }
 
+            if (!Context.StepBlocks.Where(x => x.Step == Steps.StakeholdersIdentify).Any())
+            {
+                SeedStakeholdersIdentifyStep();
+            }
             if (!Context.StepBlocks.Where(x => x.Step == Steps.SWOT).Any())
             {
                 SeedSWOTStep();
             }
+
 
             Context.SaveChanges();
 
@@ -431,6 +441,31 @@ namespace Core.Context
             Context.StepBlocks.AddRange(Blocks);
         }
 
+        private void SeedStakeholdersIdentifyStep()
+        {
+            Blocks = new StepBlock[]
+            {
+                new StepBlock
+                {
+                    Title = "Identifying the party’s stakeholders",
+                    Instruction = "sagittis. In dignissim commodo hendrerit. Sed congue purus luctus mi feugiat, ut consequat nisi porttitor",
+                    Order=1,
+                    Step=Steps.StakeholdersIdentify,
+                    Description=null,
+                    UpdatedAt=DateTime.Now,
+                    CreatedAt=DateTime.Now,
+                    CreatedBy=null,
+                    UpdatedBy=null,
+                    Questions=new List<Question>()
+                    {
+                        new Question{ Type=QuestionTypes.Stakeholder, Order=1, Title="Your answer", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description="Please, enter values.", HasFiles=false }
+                    }
+                }
+            };
+
+            Context.StepBlocks.AddRange(Blocks);
+        }
+
         private void SeedSWOTStep()
         {
             Blocks = new StepBlock[]
@@ -454,6 +489,27 @@ namespace Core.Context
             };
 
             Context.StepBlocks.AddRange(Blocks);
+        }
+
+        private void SeedStakeholderCategories()
+        {
+            Positions = new Dictionary[]
+            {
+                new Dictionary
+                {
+                    HasStakeholderCategory=true,Title="Stakeholder category 1",CreatedAt=DateTime.Now, CreatedBy=null,UpdatedAt=DateTime.Now,UpdatedBy=null
+                },
+                new Dictionary
+                {
+                    HasStakeholderCategory=true,Title="Stakeholder category 2",CreatedAt=DateTime.Now, CreatedBy=null,UpdatedAt=DateTime.Now,UpdatedBy=null
+                },
+                new Dictionary
+                {
+                    HasStakeholderCategory=true,Title="Stakeholder category 3",CreatedAt=DateTime.Now, CreatedBy=null,UpdatedAt=DateTime.Now,UpdatedBy=null
+                },
+            };
+
+            Context.Dictionaries.AddRange(Positions);
         }
     }
 }

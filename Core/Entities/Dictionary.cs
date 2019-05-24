@@ -25,6 +25,8 @@ namespace Core.Entities
 
         public bool HasValue { get; set; }
 
+        public bool HasStakeholderCategory { get; set; }
+
         public DateTime CreatedAt { get; set; }
     
         public DateTime UpdatedAt { get; set; }
@@ -32,6 +34,8 @@ namespace Core.Entities
         public int? CreatedBy { get; set; }
 
         public int? UpdatedBy { get; set; }
+
+        public virtual ICollection<StakeholderAnswer> CategoryStakeholders { get; set; }
 
         public virtual ICollection<User> Users { get; set; }
 

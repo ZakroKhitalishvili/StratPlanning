@@ -4,14 +4,16 @@ using Core.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Core.Migrations
 {
     [DbContext(typeof(PlanningDbContext))]
-    partial class PlanningDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190524080317_StakeholderAnswer_isInternal-category")]
+    partial class StakeholderAnswer_isInternalcategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,17 +74,13 @@ namespace Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(false);
 
-                    b.Property<bool>("HasStakeholderCategory")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(false);
-
                     b.Property<bool>("HasValue")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(false);
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("UpdatedAt");
 
@@ -105,15 +103,15 @@ namespace Core.Migrations
 
                     b.Property<string>("Ext")
                         .IsRequired()
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<string>("Path")
                         .IsRequired()
-                        .HasMaxLength(1000);
+                        .HasMaxLength(500);
 
                     b.Property<int?>("QuestionId");
 
@@ -163,15 +161,15 @@ namespace Core.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(1000);
+                        .HasMaxLength(500);
 
                     b.Property<string>("Step")
                         .IsRequired()
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("UpdatedAt");
 
@@ -194,7 +192,7 @@ namespace Core.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Actors")
-                        .HasMaxLength(1000);
+                        .HasMaxLength(500);
 
                     b.Property<DateTime>("CreatedAt");
 
@@ -208,7 +206,7 @@ namespace Core.Migrations
 
                     b.Property<string>("Option")
                         .IsRequired()
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<int>("QuestionId");
 
@@ -259,13 +257,13 @@ namespace Core.Migrations
                     b.Property<int?>("CreatedBy");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(1000);
+                        .HasMaxLength(500);
 
                     b.Property<int>("QuestionId");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("UpdatedAt");
 
@@ -290,7 +288,7 @@ namespace Core.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(1000);
+                        .HasMaxLength(500);
 
                     b.Property<DateTime?>("EndDate");
 
@@ -302,7 +300,7 @@ namespace Core.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("StartDate");
 
@@ -329,7 +327,7 @@ namespace Core.Migrations
 
                     b.Property<string>("HowItWillBeDone")
                         .IsRequired()
-                        .HasMaxLength(1000);
+                        .HasMaxLength(500);
 
                     b.Property<bool>("IsCompleted")
                         .ValueGeneratedOnAdd()
@@ -372,7 +370,7 @@ namespace Core.Migrations
                     b.Property<int?>("CreatedBy");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(1000);
+                        .HasMaxLength(500);
 
                     b.Property<bool>("HasFiles");
 
@@ -386,11 +384,11 @@ namespace Core.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(1000);
+                        .HasMaxLength(500);
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("UpdatedAt");
 
@@ -415,46 +413,11 @@ namespace Core.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
                     b.ToTable("Resources");
-                });
-
-            modelBuilder.Entity("Core.Entities.SWOTAnswer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<int?>("CreatedBy");
-
-                    b.Property<bool>("IsIssue");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(1000);
-
-                    b.Property<int>("QuestionId");
-
-                    b.Property<string>("Type");
-
-                    b.Property<DateTime>("UpdatedAt");
-
-                    b.Property<int?>("UpdatedBy");
-
-                    b.Property<int>("UserStepResultId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.HasIndex("UserStepResultId");
-
-                    b.ToTable("SWOTAnswers");
                 });
 
             modelBuilder.Entity("Core.Entities.SelectAnswer", b =>
@@ -464,7 +427,7 @@ namespace Core.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AltOption")
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("CreatedAt");
 
@@ -508,17 +471,17 @@ namespace Core.Migrations
                     b.Property<int?>("CreatedBy");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<string>("FirstName")
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<bool>("IsInternal")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(false);
 
                     b.Property<string>("LastName")
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<int>("QuestionId");
 
@@ -610,20 +573,20 @@ namespace Core.Migrations
                     b.Property<int?>("CreatedBy");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(5000);
+                        .HasMaxLength(500);
 
                     b.Property<string>("Instruction")
-                        .HasMaxLength(5000);
+                        .HasMaxLength(500);
 
                     b.Property<int>("Order");
 
                     b.Property<string>("Step")
                         .IsRequired()
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("UpdatedAt");
 
@@ -646,7 +609,7 @@ namespace Core.Migrations
 
                     b.Property<string>("Step")
                         .IsRequired()
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<int>("UserToPlanId");
 
@@ -679,7 +642,7 @@ namespace Core.Migrations
 
                     b.Property<string>("Step")
                         .IsRequired()
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("UpdatedAt");
 
@@ -703,17 +666,17 @@ namespace Core.Migrations
                     b.Property<int?>("CreatedBy");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<string>("FirstName")
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<bool>("IsDefinitive")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(false);
 
                     b.Property<string>("LastName")
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<int>("StepTaskId");
 
@@ -748,7 +711,7 @@ namespace Core.Migrations
 
                     b.Property<string>("Goal")
                         .IsRequired()
-                        .HasMaxLength(1000);
+                        .HasMaxLength(500);
 
                     b.Property<int>("IssueId");
 
@@ -758,11 +721,11 @@ namespace Core.Migrations
 
                     b.Property<string>("Result")
                         .IsRequired()
-                        .HasMaxLength(1000);
+                        .HasMaxLength(500);
 
                     b.Property<string>("Solution")
                         .IsRequired()
-                        .HasMaxLength(1000);
+                        .HasMaxLength(500);
 
                     b.Property<DateTime>("UpdatedAt");
 
@@ -772,7 +735,7 @@ namespace Core.Migrations
 
                     b.Property<string>("Why")
                         .IsRequired()
-                        .HasMaxLength(1000);
+                        .HasMaxLength(500);
 
                     b.HasKey("Id");
 
@@ -795,11 +758,15 @@ namespace Core.Migrations
 
                     b.Property<int?>("CreatedBy");
 
+                    b.Property<bool>("IsIssue")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
+
                     b.Property<int>("QuestionId");
 
                     b.Property<string>("Text")
                         .IsRequired()
-                        .HasMaxLength(1000);
+                        .HasMaxLength(500);
 
                     b.Property<DateTime>("UpdatedAt");
 
@@ -828,15 +795,15 @@ namespace Core.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -846,7 +813,7 @@ namespace Core.Migrations
 
                     b.Property<string>("Role")
                         .IsRequired()
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<string>("Token")
                         .HasMaxLength(128);
@@ -890,7 +857,7 @@ namespace Core.Migrations
 
                     b.Property<string>("Step")
                         .IsRequired()
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("UpdatedAt");
 
@@ -943,7 +910,7 @@ namespace Core.Migrations
                     b.Property<int?>("PositionId");
 
                     b.Property<string>("Step")
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.Property<int>("UserId");
 
@@ -970,11 +937,11 @@ namespace Core.Migrations
 
                     b.Property<string>("Definition")
                         .IsRequired()
-                        .HasMaxLength(1000);
+                        .HasMaxLength(500);
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(1000);
+                        .HasMaxLength(500);
 
                     b.Property<int>("QuestionId");
 
@@ -986,7 +953,7 @@ namespace Core.Migrations
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasMaxLength(100);
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
@@ -1051,7 +1018,7 @@ namespace Core.Migrations
 
             modelBuilder.Entity("Core.Entities.IssueOptionAnswer", b =>
                 {
-                    b.HasOne("Core.Entities.SWOTAnswer", "Issue")
+                    b.HasOne("Core.Entities.TextAnswer", "Issue")
                         .WithMany("IssueOptionAnswers")
                         .HasForeignKey("IssueId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1114,22 +1081,9 @@ namespace Core.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Core.Entities.SWOTAnswer", b =>
-                {
-                    b.HasOne("Core.Entities.Question", "Question")
-                        .WithMany("SWOTAnswers")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Core.Entities.UserStepResult", "UserStepResult")
-                        .WithMany("SWOTAnswers")
-                        .HasForeignKey("UserStepResultId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
             modelBuilder.Entity("Core.Entities.SelectAnswer", b =>
                 {
-                    b.HasOne("Core.Entities.SWOTAnswer", "Issue")
+                    b.HasOne("Core.Entities.TextAnswer", "Issue")
                         .WithMany("SelectAnswers")
                         .HasForeignKey("IssueId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1240,7 +1194,7 @@ namespace Core.Migrations
 
             modelBuilder.Entity("Core.Entities.StrategicIssueAnswer", b =>
                 {
-                    b.HasOne("Core.Entities.SWOTAnswer", "Issue")
+                    b.HasOne("Core.Entities.TextAnswer", "Issue")
                         .WithMany("StrategicIssueAnswers")
                         .HasForeignKey("IssueId")
                         .OnDelete(DeleteBehavior.Restrict);
