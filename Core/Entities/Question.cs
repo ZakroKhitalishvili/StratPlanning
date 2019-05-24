@@ -21,6 +21,7 @@ namespace Core.Entities
             FileAnswers = new HashSet<FileAnswer>();
             ValueAnswers = new HashSet<ValueAnswer>();
             StakeholderAnswers = new HashSet<StakeholderAnswer>();
+            SWOTAnswers = new HashSet<SWOTAnswer>();
         }
 
         public int Id { get; set; }
@@ -76,6 +77,8 @@ namespace Core.Entities
         public virtual ICollection<ValueAnswer> ValueAnswers { get; set; }
 
         public virtual ICollection<StakeholderAnswer> StakeholderAnswers { get; set; }
+
+        public virtual ICollection<SWOTAnswer> SWOTAnswers { get; set; }
 
     }
 }

@@ -18,6 +18,6 @@ namespace Core.Entities
 
         public int Ranking { get; set; }
 
-        public virtual TextAnswer Issue { get; set; }
+        public virtual SWOTAnswer Issue { get; set; }
     }
 }

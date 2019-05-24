@@ -46,23 +46,6 @@ namespace Core.Context
                 SeedValues();
             }
 
-            //if (Context.Plans.Include(x => x.StepTasks).Any(x => x.StepTasks.Count != 13))
-            //{
-            //    SeedPlans();
-            //    var stepTasks = Plans[0].StepTasks;
-            //    var dbplans = Context.Plans.Include(x=>x.StepTasks).ToList();
-
-            //    int count = 0;
-            //    foreach (var dbPlan in dbplans)
-            //    {
-            //        foreach (var stepTask in Plans[count].StepTasks)
-            //        {
-            //            dbPlan.StepTasks.Add(stepTask);
-            //        }
-            //        count++;
-            //    }
-            //}
-
             if (!Context.StepBlocks.Where(x => x.Step == Steps.Predeparture).Any())
             {
                 SeedPredepartureStep();
@@ -86,6 +69,10 @@ namespace Core.Context
             if (!Context.StepBlocks.Where(x => x.Step == Steps.StakeholdersIdentify).Any())
             {
                 SeedStakeholdersIdentifyStep();
+            }
+            if (!Context.StepBlocks.Where(x => x.Step == Steps.SWOT).Any())
+            {
+                SeedSWOTStep();
             }
 
 
@@ -467,6 +454,31 @@ namespace Core.Context
                     Questions=new List<Question>()
                     {
                         new Question{ Type=QuestionTypes.Stakeholder, Order=1, Title="Your answer", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description="Please, enter values.", HasFiles=false }
+                    }
+                }
+            };
+
+            Context.StepBlocks.AddRange(Blocks);
+        }
+
+        private void SeedSWOTStep()
+        {
+            Blocks = new StepBlock[]
+            {
+                new StepBlock
+                {
+                    Title = "Fill out SWOT table",
+                    Instruction = "sagittis. In dignissim commodo hendrerit. Sed congue purus luctus mi feugiat, ut consequat nisi porttitor",
+                    Order=1,
+                    Step=Steps.SWOT,
+                    Description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.",
+                    UpdatedAt=DateTime.Now,
+                    CreatedAt=DateTime.Now,
+                    CreatedBy=null,
+                    UpdatedBy=null,
+                    Questions=new List<Question>()
+                    {
+                        new Question{ Type=QuestionTypes.SWOT, Order=1, Title="Your answer", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false }
                     }
                 }
             };

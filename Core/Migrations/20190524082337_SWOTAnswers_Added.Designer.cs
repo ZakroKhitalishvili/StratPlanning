@@ -4,14 +4,16 @@ using Core.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Core.Migrations
 {
     [DbContext(typeof(PlanningDbContext))]
-    partial class PlanningDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190524082337_SWOTAnswers_Added")]
+    partial class SWOTAnswers_Added
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -497,8 +499,6 @@ namespace Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CategoryId");
-
                     b.Property<DateTime>("CreatedAt");
 
                     b.Property<int?>("CreatedBy");
@@ -509,9 +509,8 @@ namespace Core.Migrations
                     b.Property<string>("FirstName")
                         .HasMaxLength(50);
 
-                    b.Property<bool>("IsInternal")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(false);
+                    b.Property<string>("IsInternal")
+                        .IsRequired();
 
                     b.Property<string>("LastName")
                         .HasMaxLength(50);
@@ -527,8 +526,6 @@ namespace Core.Migrations
                     b.Property<int>("UserStepResultId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.HasIndex("QuestionId");
 
@@ -1148,11 +1145,6 @@ namespace Core.Migrations
 
             modelBuilder.Entity("Core.Entities.StakeholderAnswer", b =>
                 {
-                    b.HasOne("Core.Entities.Dictionary", "Category")
-                        .WithMany("CategoryStakeholders")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Core.Entities.Question", "Question")
                         .WithMany("StakeholderAnswers")
                         .HasForeignKey("QuestionId")

@@ -6,24 +6,24 @@ using Core.Configurations.Extensions;
 
 namespace Core.Configurations
 {
-    class TextAnswerConfiguration : IEntityTypeConfiguration<TextAnswer>
+    class SWOTAnswerConfiguration : IEntityTypeConfiguration<SWOTAnswer>
     {
-        public void Configure(EntityTypeBuilder<TextAnswer> builder)
+        public void Configure(EntityTypeBuilder<SWOTAnswer> builder)
         {
             builder.AnswersBaseConfigure();
 
-            builder.Property(x => x.Text)
+            builder.Property(x => x.Name)
                 .IsRequired()
                 .HasMaxLength(EntityConfigs.TextAreaMaxLength);
 
             builder.HasOne(x => x.UserStepResult)
-                .WithMany(s => s.TextAnswers)
+                .WithMany(s => s.SWOTAnswers)
                 .HasForeignKey(x => x.UserStepResultId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(x => x.Question)
-                .WithMany(s => s.TextAnswers)
+                .WithMany(s => s.SWOTAnswers)
                 .HasForeignKey(x => x.QuestionId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);

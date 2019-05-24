@@ -37,7 +37,6 @@ namespace Core.Configurations
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
-
             builder.HasOne(x => x.UserStepResult)
                 .WithMany(s => s.StrategicIssueAnswers)
                 .HasForeignKey(x => x.UserStepResultId)
