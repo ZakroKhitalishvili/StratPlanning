@@ -397,7 +397,7 @@ namespace Application.Repositories
                     .Include(x => x.StepTaskAnswers).ThenInclude(x => x.StepTask)
                     .Include(x => x.StepTaskAnswers).ThenInclude(x => x.UserToPlan)
                     .Include(x => x.ValueAnswers)
-                    .Include(x => x.StakeholderAnswers).ThenInclude(x => x.Category).ToList();
+                    .Include(x => x.StakeholderAnswers).ThenInclude(x => x.Category)
                     .Include(x => x.SWOTAnswers).ToList();
         }
 
@@ -606,8 +606,6 @@ namespace Application.Repositories
                 {
                     SaveStakeholderAnswer(answerGroup, userStepResult);
                 }
-            }
-        }
 
                 if (question.Type == QuestionTypes.SWOT)
                 {

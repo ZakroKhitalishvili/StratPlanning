@@ -224,10 +224,8 @@ function initializeStep() {
     ///
 
     $(document).on('click', '.list-item-delete', function (e) {
-
         let listItem = $(this).closest('.list-item');
         listItem.remove();
-
     });
 
     $(document).on('click', '.list-add-button', function (e) {
@@ -235,7 +233,6 @@ function initializeStep() {
         let inputName = $(this).data('input-name');
         let value = $(this).parents('.list-items-add-group').first().find('.list-add-input').val();
         let val = $(this).parents('.list-items-add-group').first().find('.list-items').find('.list-item').has(`input[name="${inputName}"][value="${value}"]`);
-        console.log(val);
         if (!!value) {
             let html = `<a class="m-list-badge__item m-list-badge__item--default list-item">
                             <input type="hidden" name="${inputName}" value="${value}"/>
@@ -604,7 +601,7 @@ function deleteRecord(source, targetSelector = false) {
     if (targetSelector !== false) {
         record = source.closest(targetSelector);
     }
-    
+
     $(record).remove();
 }
 
