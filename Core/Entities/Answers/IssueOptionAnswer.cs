@@ -25,7 +25,7 @@ namespace Core.Entities
 
         public virtual ICollection<IssueOptionAnswerToResource> IssueOptionAnswersToResources { get; set; }
 
-        public virtual TextAnswer Issue { get; set; }
+        public virtual SWOTAnswer Issue { get; set; }
 
         public virtual PreparingAnswer PreparingAnswer { get; set; }
     }

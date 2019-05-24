@@ -25,5 +25,7 @@ namespace Core.Constants
         public const string File = "File";
 
         public const string Values = "Values";
+
+        public const string SWOT = "SWOT";
     }
 }

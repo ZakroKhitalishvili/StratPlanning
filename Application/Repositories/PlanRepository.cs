@@ -1130,7 +1130,7 @@ namespace Application.Repositories
 
             if (currentUserAnswer != null)
             {
-                answerGroup.Answer = new AnswerDTO { TextAnswer = new TextAnswerDTO { IsIssue = currentUserAnswer.IsIssue,  Text = currentUserAnswer.Text } };
+                answerGroup.Answer = new AnswerDTO { TextAnswer = new TextAnswerDTO { Text = currentUserAnswer.Text } };
             }
 
             var definitiveStepResult = otherUserStepResults.Where(x => x.IsDefinitive).SingleOrDefault();
@@ -1139,7 +1139,7 @@ namespace Application.Repositories
 
             if (definitiveAnswer != null)
             {
-                answerGroup.DefinitiveAnswer = new AnswerDTO { TextAnswer = new TextAnswerDTO { IsIssue = definitiveAnswer.IsIssue, Text = definitiveAnswer.Text } };
+                answerGroup.DefinitiveAnswer = new AnswerDTO { TextAnswer = new TextAnswerDTO { Text = definitiveAnswer.Text } };
             }
 
             var otherAnswers = new List<AnswerDTO>();
@@ -1152,7 +1152,7 @@ namespace Application.Repositories
                 {
                     var answerDTO = new AnswerDTO
                     {
-                        TextAnswer = new TextAnswerDTO { IsIssue = userAnswer.IsIssue, Text = userAnswer.Text },
+                        TextAnswer = new TextAnswerDTO { Text = userAnswer.Text },
                         Author = $"{otherUserStepResult.UserToPlan.User.FirstName} {otherUserStepResult.UserToPlan.User.LastName}"
                     };
 
@@ -1228,9 +1228,7 @@ namespace Application.Repositories
                     otherAnswers.Add(answerDTO);
                 }
             }
-
             answerGroup.OtherAnswers = otherAnswers;
-
             return answerGroup;
         }
 
@@ -1296,9 +1294,7 @@ namespace Application.Repositories
 
                 otherStepTaskAnswers.Add(answerDTO);
             }
-
             answerGroup.OtherAnswers = otherStepTaskAnswers;
-
             return answerGroup;
         }
 
@@ -1368,7 +1364,77 @@ namespace Application.Repositories
             }
 
             answerGroup.OtherAnswers = otherAnswers;
-            
+
+            return answerGroup;
+        }
+
+        private AnswerGroupDTO GetSWOTAnswers(int questionId, UserStepResult currentUserStepResult, IList<UserStepResult> otherUserStepResults)
+        {
+            AnswerGroupDTO answerGroup = new AnswerGroupDTO
+            {
+                QuestionId = questionId
+            };
+
+            var currentUserAnswer = currentUserStepResult.SWOTAnswers.Where(x => x.QuestionId == questionId);
+
+            if (currentUserAnswer != null && currentUserAnswer.Any())
+            {
+                answerGroup.Answer = new AnswerDTO
+                {
+                    SwotAnswer = new SWOTAnswerDTO
+                    {
+                        Strengths = currentUserAnswer.Where(x => x.Type == SWOTTypes.Strength).Select(x => x.Name).ToList(),
+                        Weaknesses = currentUserAnswer.Where(x => x.Type == SWOTTypes.Weakness).Select(x => x.Name).ToList(),
+                        Opportunities = currentUserAnswer.Where(x => x.Type == SWOTTypes.Opportunity).Select(x => x.Name).ToList(),
+                        Threats = currentUserAnswer.Where(x => x.Type == SWOTTypes.Threat).Select(x => x.Name).ToList()
+                    }
+                };
+            }
+
+            var definitiveStepResult = otherUserStepResults.Where(x => x.IsDefinitive).SingleOrDefault();
+
+            var definitiveAnswer = definitiveStepResult?.SWOTAnswers.Where(x => x.QuestionId == questionId);
+
+            if (definitiveAnswer != null && definitiveAnswer.Any())
+            {
+                answerGroup.DefinitiveAnswer = new AnswerDTO
+                {
+                    SwotAnswer = new SWOTAnswerDTO
+                    {
+                        Strengths = definitiveAnswer.Where(x => x.Type == SWOTTypes.Strength).Select(x => x.Name).ToList(),
+                        Weaknesses = definitiveAnswer.Where(x => x.Type == SWOTTypes.Weakness).Select(x => x.Name).ToList(),
+                        Opportunities = definitiveAnswer.Where(x => x.Type == SWOTTypes.Opportunity).Select(x => x.Name).ToList(),
+                        Threats = definitiveAnswer.Where(x => x.Type == SWOTTypes.Threat).Select(x => x.Name).ToList()
+                    }
+                };
+            }
+
+            var otherAnswers = new List<AnswerDTO>();
+
+            foreach (var otherUserStepResult in otherUserStepResults.Where(x => !x.IsDefinitive))
+            {
+                var userAnswer = otherUserStepResult.ValueAnswers.Where(x => x.QuestionId == questionId);
+
+                if (userAnswer != null && userAnswer.Any())
+                {
+                    var answerDTO = new AnswerDTO
+                    {
+                        ValueAnswer = userAnswer.Select(x => new ValueAnswerDTO
+                        {
+                            Id = x.Id,
+                            Value = x.Value,
+                            Definition = x.Definition,
+                            Description = x.Description
+                        }).ToList(),
+                        Author = $"{otherUserStepResult.UserToPlan.User.FirstName} {otherUserStepResult.UserToPlan.User.LastName}"
+                    };
+
+                    otherAnswers.Add(answerDTO);
+                }
+            }
+
+            answerGroup.OtherAnswers = otherAnswers;
+
             return answerGroup;
         }
 

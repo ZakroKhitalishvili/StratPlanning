@@ -14,6 +14,6 @@ namespace Core.Entities
 
         public virtual Option Option { get; set; }
 
-        public virtual TextAnswer Issue { get; set; }
+        public virtual SWOTAnswer Issue { get; set; }
     }
 }
