@@ -397,7 +397,8 @@ namespace Application.Repositories
                     .Include(x => x.StepTaskAnswers).ThenInclude(x => x.StepTask)
                     .Include(x => x.StepTaskAnswers).ThenInclude(x => x.UserToPlan)
                     .Include(x => x.ValueAnswers)
-                    .Include(x => x.StakeholderAnswers).ThenInclude(x => x.Category).ToList();
+                    .Include(x => x.StakeholderAnswers).ThenInclude(x => x.Category)
+                    .Include(x => x.SWOTAnswers).ToList();
         }
 
         private UserStepResult GetUserStepResult(int planId, string stepIndex, int userId)
@@ -605,6 +606,11 @@ namespace Application.Repositories
                 {
                     SaveStakeholderAnswer(answerGroup, userStepResult);
                 }
+
+                if (question.Type == QuestionTypes.SWOT)
+                {
+                    SaveSwotAnswers(answerGroup, userStepResult);
+                }
             }
         }
 
@@ -699,7 +705,6 @@ namespace Application.Repositories
                 {
                     Context.SelectAnswers.Remove(dbAnswer);
                     Context.SaveChanges();
-                    //userStepResult.SelectAnswers.Remove(dbAnswer);
                 }
             }
 
@@ -958,6 +963,64 @@ namespace Application.Repositories
             }
         }
 
+        private void SaveSwotAnswers(AnswerGroupDTO answerGroup, UserStepResult userStepResult)
+        {
+            IList<SWOTAnswer> dbAnswers = null;
+
+            dbAnswers = userStepResult.SWOTAnswers.Where(x => x.QuestionId == answerGroup.QuestionId).ToList();
+
+            answerGroup.Answer.SwotAnswer.Strengths = answerGroup.Answer.SwotAnswer.Strengths?.Distinct().ToList() ?? Enumerable.Empty<string>().ToList();
+            answerGroup.Answer.SwotAnswer.Opportunities = answerGroup.Answer.SwotAnswer.Opportunities?.Distinct().ToList() ?? Enumerable.Empty<string>().ToList();
+            answerGroup.Answer.SwotAnswer.Threats = answerGroup.Answer.SwotAnswer.Threats?.Distinct().ToList() ?? Enumerable.Empty<string>().ToList();
+            answerGroup.Answer.SwotAnswer.Weaknesses = answerGroup.Answer.SwotAnswer.Weaknesses?.Distinct().ToList() ?? Enumerable.Empty<string>().ToList();
+
+            foreach (var dbAnswer in dbAnswers)
+            {
+                var isContained = false;
+                if (dbAnswer.Type == SWOTTypes.Strength)
+                {
+                    isContained = answerGroup.Answer.SwotAnswer.Strengths.Contains(dbAnswer.Name);
+                }
+                if (dbAnswer.Type == SWOTTypes.Weakness)
+                {
+                    isContained = answerGroup.Answer.SwotAnswer.Weaknesses.Contains(dbAnswer.Name);
+                }
+                if (dbAnswer.Type == SWOTTypes.Opportunity)
+                {
+                    isContained = answerGroup.Answer.SwotAnswer.Opportunities.Contains(dbAnswer.Name);
+                }
+                if (dbAnswer.Type == SWOTTypes.Threat)
+                {
+                    isContained = answerGroup.Answer.SwotAnswer.Threats.Contains(dbAnswer.Name);
+                }
+
+                if (!isContained)
+                {
+                    Context.SWOTAnswers.Remove(dbAnswer);
+                    Context.SaveChanges();
+                }
+            }
+            var swotAnswers = new List<SWOTAnswer>();
+            swotAnswers.AddRange(answerGroup.Answer.SwotAnswer.Strengths?.Select(x => new SWOTAnswer { Type = SWOTTypes.Strength, Name = x }));
+            swotAnswers.AddRange(answerGroup.Answer.SwotAnswer.Threats?.Select(x => new SWOTAnswer { Type = SWOTTypes.Threat, Name = x }) );
+            swotAnswers.AddRange(answerGroup.Answer.SwotAnswer.Opportunities?.Select(x => new SWOTAnswer { Type = SWOTTypes.Opportunity, Name = x }));
+            swotAnswers.AddRange(answerGroup.Answer.SwotAnswer.Weaknesses?.Select(x => new SWOTAnswer { Type = SWOTTypes.Weakness, Name = x }));
+
+            foreach (var answer in swotAnswers)
+            {
+                if (!dbAnswers.Any(x => x.Name == answer.Name && x.Type == answer.Type))
+                {
+                    answer.QuestionId = answerGroup.QuestionId;
+                    answer.CreatedAt = DateTime.Now;
+                    answer.UpdatedAt = DateTime.Now;
+                    answer.CreatedBy = userStepResult.UpdatedBy;
+                    answer.UpdatedBy = userStepResult.UpdatedBy;
+                    answer.IsIssue = answer.Type == SWOTTypes.Threat || answer.Type == SWOTTypes.Weakness ? true : false;
+                    userStepResult.SWOTAnswers.Add(answer);
+                }
+            }
+        }
+
         #endregion
 
         #region Reading methods
@@ -1006,6 +1069,11 @@ namespace Application.Repositories
                     if (questions[j].Type == QuestionTypes.Stakeholder)
                     {
                         planStep.AnswerGroups.Add(GetStakeholderAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
+                    }
+
+                    if (questions[j].Type == QuestionTypes.SWOT)
+                    {
+                        planStep.AnswerGroups.Add(GetSWOTAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
                     }
                 }
             }
@@ -1478,19 +1546,19 @@ namespace Application.Repositories
 
             foreach (var otherUserStepResult in otherUserStepResults.Where(x => !x.IsDefinitive))
             {
-                var userAnswer = otherUserStepResult.ValueAnswers.Where(x => x.QuestionId == questionId);
+                var userAnswer = otherUserStepResult.SWOTAnswers.Where(x => x.QuestionId == questionId);
 
                 if (userAnswer != null && userAnswer.Any())
                 {
                     var answerDTO = new AnswerDTO
                     {
-                        ValueAnswer = userAnswer.Select(x => new ValueAnswerDTO
+                        SwotAnswer = new SWOTAnswerDTO
                         {
-                            Id = x.Id,
-                            Value = x.Value,
-                            Definition = x.Definition,
-                            Description = x.Description
-                        }).ToList(),
+                            Strengths = userAnswer.Where(x => x.Type == SWOTTypes.Strength).Select(x => x.Name).ToList(),
+                            Weaknesses = userAnswer.Where(x => x.Type == SWOTTypes.Weakness).Select(x => x.Name).ToList(),
+                            Opportunities = userAnswer.Where(x => x.Type == SWOTTypes.Opportunity).Select(x => x.Name).ToList(),
+                            Threats = userAnswer.Where(x => x.Type == SWOTTypes.Threat).Select(x => x.Name).ToList()
+                        },
                         Author = $"{otherUserStepResult.UserToPlan.User.FirstName} {otherUserStepResult.UserToPlan.User.LastName}"
                     };
 
