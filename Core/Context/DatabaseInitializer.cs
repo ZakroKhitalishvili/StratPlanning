@@ -46,6 +46,11 @@ namespace Core.Context
                 SeedValues();
             }
 
+            if (!Context.Dictionaries.Any(x => x.HasStakeholderCategory))
+            {
+                SeedStakeholderCategories();
+            }
+
             if (!Context.StepBlocks.Where(x => x.Step == Steps.Predeparture).Any())
             {
                 SeedPredepartureStep();
@@ -484,6 +489,27 @@ namespace Core.Context
             };
 
             Context.StepBlocks.AddRange(Blocks);
+        }
+
+        private void SeedStakeholderCategories()
+        {
+            Positions = new Dictionary[]
+            {
+                new Dictionary
+                {
+                    HasStakeholderCategory=true,Title="Stakeholder category 1",CreatedAt=DateTime.Now, CreatedBy=null,UpdatedAt=DateTime.Now,UpdatedBy=null
+                },
+                new Dictionary
+                {
+                    HasStakeholderCategory=true,Title="Stakeholder category 2",CreatedAt=DateTime.Now, CreatedBy=null,UpdatedAt=DateTime.Now,UpdatedBy=null
+                },
+                new Dictionary
+                {
+                    HasStakeholderCategory=true,Title="Stakeholder category 3",CreatedAt=DateTime.Now, CreatedBy=null,UpdatedAt=DateTime.Now,UpdatedBy=null
+                },
+            };
+
+            Context.Dictionaries.AddRange(Positions);
         }
     }
 }

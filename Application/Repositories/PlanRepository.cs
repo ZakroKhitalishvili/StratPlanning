@@ -397,7 +397,7 @@ namespace Application.Repositories
                     .Include(x => x.StepTaskAnswers).ThenInclude(x => x.StepTask)
                     .Include(x => x.StepTaskAnswers).ThenInclude(x => x.UserToPlan)
                     .Include(x => x.ValueAnswers)
-                    .Include(x => x.StakeholderAnswers).ToList();
+                    .Include(x => x.StakeholderAnswers).ThenInclude(x => x.Category).ToList();
         }
 
         private UserStepResult GetUserStepResult(int planId, string stepIndex, int userId)

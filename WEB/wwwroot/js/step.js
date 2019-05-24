@@ -519,6 +519,10 @@ function editRecord(modalId, targetId) {
         data[$(el).attr('name')] = $(el).val();
     });
 
+    modal.find('select.m-input').each(function (i, el) {
+        data[$(el).attr('name') + '_label'] = $(el).find('option:selected').text();
+    });
+
     var index = modal.find('.m-index').val();
 
     if (index) {
