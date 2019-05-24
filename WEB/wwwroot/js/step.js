@@ -7,6 +7,9 @@ function initializeStep() {
         minimumResultsForSearch: Infinity
     });
 
+
+    $('.sp-tooltip').tooltip();
+
     /////////////
     //stakeholders analysis worksheet
     //////////
@@ -216,12 +219,44 @@ function initializeStep() {
             .addClass('dropzone');
     });
 
+    //////
+    /// list-items events
+    ///
+
     $(document).on('click', '.list-item-delete', function (e) {
 
         let listItem = $(this).closest('.list-item');
         listItem.remove();
 
     });
+
+    $(document).on('click', '.list-add-button', function (e) {
+        e.preventDefault();
+        let inputName = $(this).data('input-name');
+        let value = $(this).parents('.list-items-add-group').first().find('.list-add-input').val();
+        let val = $(this).parents('.list-items-add-group').first().find('.list-items').find('.list-item').has(`input[name="${inputName}"][value="${value}"]`);
+        console.log(val);
+        if (!!value) {
+            let html = `<a class="m-list-badge__item m-list-badge__item--default list-item">
+                            <input type="hidden" name="${inputName}" value="${value}"/>
+                            ${value}
+                            <span class="list-item-delete fa fa-close"></span>
+                        </a>`;
+
+            $(this).parents('.list-items-add-group').first().find('.list-items').append(html);
+            $(this).parents('.list-items-add-group').first().find('.list-add-input').val('')
+        }
+    });
+
+    $(document).on('keyup', '.list-add-input', function (e) {
+        if (e.which == 13) {
+            e.preventDefault();
+            $(this).parents('.list-items-add-group').first().find('.list-add-button').click();
+        }
+    })
+
+    //////
+    ////
 }
 
 

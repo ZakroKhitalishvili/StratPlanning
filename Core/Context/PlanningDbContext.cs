@@ -66,6 +66,8 @@ namespace Core.Context
 
         public DbSet<StakeholderAnswer> StakeholderAnswers { get; set; }
 
+        public DbSet<SWOTAnswer> SWOTAnswers { get; set; }
+
         /// <summary>
         /// Relations' tables
         /// </summary>

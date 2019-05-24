@@ -21,6 +21,21 @@
         </a>
     </div>
     <div class="m-portlet__body">
+
+        @if (Model.StepBlocks[blockIndex].Description != null)
+        {
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="alert m-alert m-alert--default" role="alert">
+                        <div class="m-scrollable" data-scrollable="true" data-max-height="200"
+                             data-mobile-max-height="200">
+                            @Model.StepBlocks[blockIndex].Description
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
         @{
             var questions = Model.StepBlocks[blockIndex].Questions;
         }
@@ -80,6 +95,13 @@
             if (questions[i].Type == QuestionTypes.Values)
             {
                 <partial name="~/Views/Worksheet/Partials/Questions/_ValuesQuestion.cshtml"
+                         model="Model"
+                         view-data='new ViewDataDictionary(ViewData) {  {"QuestionIndex", i } }' />
+            }
+
+            if (questions[i].Type == QuestionTypes.SWOT)
+            {
+                <partial name="~/Views/Worksheet/Partials/Questions/_SWOTQuestion.cshtml"
                          model="Model"
                          view-data='new ViewDataDictionary(ViewData) {  {"QuestionIndex", i } }' />
             }

@@ -1,0 +1,396 @@
+﻿@model Application.DTOs.PlanStepDTO
+
+@{
+    var blockIndex = (int)ViewData["BlockIndex"];
+    var questionIndex = (int)ViewData["QuestionIndex"];
+
+    var questionIndexOffset = (int)ViewData["QuestionIndexOffset"];
+
+    var question = Model.StepBlocks[blockIndex].Questions[questionIndex];
+
+    var answerGroup = Model.AnswerGroups.Where(x => x.QuestionId == question.Id).FirstOrDefault();
+
+    var filledAnswer = Model.AnswerGroups[questionIndexOffset + questionIndex];
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="m-demo">
+            <div class="m-demo__preview">
+
+                <div class="form-group m-form__group">
+                    <label>
+                        Combined result
+                    </label>
+                    <div class="swot col-sm-12 m--margin-bottom-20">
+                        <div class="row">
+                            <div class="d-none d-md-block col-md-2 swot-cell">
+
+                            </div>
+                            <div class="d-none d-md-block col-md-5  swot-cell bg-color-lightgreen">
+                                <h5>Helpful</h5>
+                                <span>to achieving the objective</span>
+                            </div>
+                            <div class="d-none d-md-block col-md-5 swot-cell bg-color-lightred">
+                                <h5>Harmful</h5>
+                                <span>to achieving the objective</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="d-none d-md-block col-md-2 swot-cell bg-color-lightyellow">
+                                <h5>Internal origin</h5>
+                                <span>attributes of the system</span>
+                            </div>
+                            <div class="col-sm-12 col-md-5 swot-cell bg-color-greenyellow">
+                                <div class="row swot-add ">
+                                    <div class="col-12">
+                                        <h5 class="pull-left"> Strengths</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 ">
+                                        <div class="m-list-badge m-list-badge--light-bg">
+                                            <div class="m-list-badge__items">
+                                                @if (answerGroup.DefinitiveAnswer?.SwotAnswer.Strengths != null)
+                                                {
+                                                    foreach (var strength in answerGroup.DefinitiveAnswer?.SwotAnswer.Strengths)
+                                                    {
+                                                        <span class="m-list-badge__item m-list-badge__item--warning">
+                                                            @strength
+                                                        </span>
+                                                    }
+                                                }
+                                                @if (answerGroup.OtherAnswers != null)
+                                                {
+                                                    foreach (var otherAnswer in answerGroup.OtherAnswers)
+                                                    {
+                                                        foreach (var strength in otherAnswer.SwotAnswer.Strengths)
+                                                        {
+                                                            <span title="@otherAnswer.Author"
+                                                                  data-toggle="tooltip"
+                                                                  class="m-list-badge__item m-list-badge__item--default sp-tooltip">
+                                                                @strength
+                                                            </span>
+                                                        }
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 col-md-5  swot-cell  bg-color-redyellow">
+                                <div class="row swot-add">
+                                    <div class="col-12">
+                                        <h5 class="pull-left"> Weaknesses</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 ">
+                                        <div class="m-list-badge m-list-badge--light-bg">
+                                            <div class="m-list-badge__items">
+                                                @if (answerGroup.DefinitiveAnswer?.SwotAnswer.Weaknesses != null)
+                                                {
+                                                    foreach (var weakness in answerGroup.DefinitiveAnswer?.SwotAnswer.Weaknesses)
+                                                    {
+                                                        <span class="m-list-badge__item m-list-badge__item--warning">
+                                                            @weakness
+                                                        </span>
+                                                    }
+                                                }
+                                                @if (answerGroup.OtherAnswers != null)
+                                                {
+                                                    foreach (var otherAnswer in answerGroup.OtherAnswers)
+                                                    {
+                                                        foreach (var weakness in otherAnswer.SwotAnswer.Weaknesses)
+                                                        {
+                                                            <span title="@otherAnswer.Author"
+                                                                  data-toggle="tooltip"
+                                                                  class="m-list-badge__item m-list-badge__item--default sp-tooltip">
+                                                                @weakness
+                                                            </span>
+                                                        }
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="d-none d-md-block col-md-2 swot-cell  bg-color-lightblue">
+                                <h5>External origin</h5>
+                                <span>attributes of the environment</span>
+                            </div>
+                            <div class="col-sm-12 col-md-5  swot-cell  bg-color-greenblue">
+                                <div class="row swot-add">
+                                    <div class="col-12">
+                                        <h5 class="pull-left"> Opportunities</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-sm-12 ">
+                                        <div class="m-list-badge m-list-badge--light-bg">
+                                            <div class="m-list-badge__items">
+                                                @if (answerGroup.DefinitiveAnswer?.SwotAnswer.Opportunities != null)
+                                                {
+                                                    foreach (var opportunity in answerGroup.DefinitiveAnswer?.SwotAnswer.Opportunities)
+                                                    {
+                                                        <span class="m-list-badge__item m-list-badge__item--warning">
+                                                            @opportunity
+                                                        </span>
+                                                    }
+                                                }
+                                                @if (answerGroup.OtherAnswers != null)
+                                                {
+                                                    foreach (var otherAnswer in answerGroup.OtherAnswers)
+                                                    {
+                                                        foreach (var opportunity in otherAnswer.SwotAnswer.Opportunities)
+                                                        {
+                                                            <span title="@otherAnswer.Author"
+                                                                  data-toggle="tooltip"
+                                                                  class="m-list-badge__item m-list-badge__item--default sp-tooltip">
+                                                                @opportunity
+                                                            </span>
+                                                        }
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-5  swot-cell  bg-color-redblue">
+                                <div class="row swot-add">
+                                    <div class="col-12">
+                                        <h5 class="pull-left"> Threats</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 ">
+                                        <div class="m-list-badge m-list-badge--light-bg">
+                                            <div class="m-list-badge__items">
+                                                @if (answerGroup.DefinitiveAnswer?.SwotAnswer.Threats != null)
+                                                {
+                                                    foreach (var threat in answerGroup.DefinitiveAnswer?.SwotAnswer.Threats)
+                                                    {
+                                                        <span class="m-list-badge__item m-list-badge__item--warning">
+                                                            @threat
+                                                        </span>
+                                                    }
+                                                }
+                                                @if (answerGroup.OtherAnswers != null)
+                                                {
+                                                    foreach (var otherAnswer in answerGroup.OtherAnswers)
+                                                    {
+                                                        foreach (var threat in otherAnswer.SwotAnswer.Threats)
+                                                        {
+                                                            <span title="@otherAnswer.Author"
+                                                                  data-toggle="tooltip"
+                                                                  class="m-list-badge__item m-list-badge__item--default sp-tooltip">
+                                                                @threat
+                                                            </span>
+                                                        }
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="form-group m-form__group">
+            <label>
+                Your answer
+            </label>
+            <div>
+                <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].QuestionId" value="@answerGroup.QuestionId" />
+                <div class="swot col-sm-12 m--margin-bottom-20">
+
+                    <div class="row">
+                        <div class="d-none d-md-block col-md-2 swot-cell">
+
+                        </div>
+                        <div class="d-none d-md-block col-md-5  swot-cell bg-color-lightgreen">
+                            <h5>Helpful</h5>
+                            <span>to achieving the objective</span>
+                        </div>
+                        <div class="d-none d-md-block col-md-5 swot-cell bg-color-lightred">
+                            <h5>Harmful</h5>
+                            <span>to achieving the objective</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="d-none d-md-block col-md-2 swot-cell bg-color-lightyellow">
+                            <h5>Internal origin</h5>
+                            <span>attributes of the system</span>
+                        </div>
+                        <div class="col-sm-12 col-md-5 swot-cell bg-color-greenyellow">
+                            <div class="row swot-add ">
+                                <div class="col-12">
+                                    <h5 class="pull-left"> Strengths</h5>
+                                </div>
+                            </div>
+                            <div class="row list-items-add-group">
+                                <div class="col-sm-12 swot-inputs">
+                                    <div class="input-group m--margin-bottom-10">
+                                        <input type="text"
+                                               class="form-control m-input m-input--air form-control-danger list-add-input">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-sp m-btn m-btn--icon list-add-button" data-input-name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.SwotAnswer.Strengths">
+                                                add
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 ">
+                                    <div class="m-list-badge m-list-badge--light-bg">
+                                        <div class="m-list-badge__items list-items">
+                                            @if (answerGroup.Answer?.SwotAnswer.Strengths != null)
+                                            {
+                                                foreach (var strength in answerGroup.Answer.SwotAnswer.Strengths)
+                                                {
+                                                    <a class="m-list-badge__item m-list-badge__item--default list-item">
+                                                        <input type="hidden" asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.SwotAnswer.Strengths" value="@strength" />
+                                                        @strength
+                                                        <span class="list-item-delete fa fa-close"></span>
+                                                    </a>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-5  swot-cell  bg-color-redyellow">
+                            <div class="row swot-add">
+                                <div class="col-12">
+                                    <h5 class="pull-left"> Weaknesses</h5>
+                                </div>
+                            </div>
+                            <div class="row list-items-add-group">
+                                <div class="col-sm-12 swot-inputs">
+                                    <div class="input-group m--margin-bottom-10">
+                                        <input type="text"
+                                               class="form-control m-input m-input--air form-control-danger list-add-input">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-sp m-btn m-btn--icon list-add-button" data-input-name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.SwotAnswer.Weaknesses">
+                                                add
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 ">
+                                    <div class="m-list-badge m-list-badge--light-bg">
+                                        <div class="m-list-badge__items list-items">
+                                            @if (answerGroup.Answer?.SwotAnswer.Weaknesses != null)
+                                            {
+                                                foreach (var weakness in answerGroup.Answer.SwotAnswer.Weaknesses)
+                                                {
+                                                    <a class="m-list-badge__item m-list-badge__item--default list-item">
+                                                        <input type="hidden" asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.SwotAnswer.Weaknesses" value="@weakness" />
+                                                        @weakness
+                                                        <span class="list-item-delete fa fa-close"></span>
+                                                    </a>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="d-none d-md-block col-md-2 swot-cell  bg-color-lightblue">
+                            <h5>External origin</h5>
+                            <span>attributes of the environment</span>
+                        </div>
+                        <div class="col-sm-12 col-md-5  swot-cell  bg-color-greenblue">
+                            <div class="row swot-add">
+                                <div class="col-12">
+                                    <h5 class="pull-left"> Opportunities</h5>
+                                </div>
+                            </div>
+                            <div class="row list-items-add-group">
+                                <div class="col-sm-12 swot-inputs">
+                                    <div class="input-group m--margin-bottom-10">
+                                        <input type="text"
+                                               class="form-control m-input m-input--air form-control-danger list-add-input">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-sp m-btn m-btn--icon list-add-button" data-input-name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.SwotAnswer.Opportunities">
+                                                add
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 ">
+                                    <div class="m-list-badge m-list-badge--light-bg">
+                                        <div class="m-list-badge__items list-items">
+                                            @if (answerGroup.Answer?.SwotAnswer.Opportunities != null)
+                                            {
+                                                foreach (var opportunity in answerGroup.Answer.SwotAnswer.Opportunities)
+                                                {
+                                                    <a class="m-list-badge__item m-list-badge__item--default list-item">
+                                                        <input type="hidden" asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.SwotAnswer.Opportunities" value="@opportunity" />
+                                                        @opportunity
+                                                        <span class="list-item-delete fa fa-close"></span>
+                                                    </a>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-5  swot-cell  bg-color-redblue">
+                            <div class="row swot-add">
+                                <div class="col-12">
+                                    <h5 class="pull-left">Threats</h5>
+                                </div>
+                            </div>
+                            <div class="row list-items-add-group">
+                                <div class="col-sm-12 swot-inputs">
+                                    <div class="input-group m--margin-bottom-10">
+                                        <input type="text"
+                                               class="form-control m-input m-input--air form-control-danger list-add-input">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-sp m-btn m-btn--icon list-add-button" data-input-name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.SwotAnswer.Threats">
+                                                add
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 ">
+                                    <div class="m-list-badge m-list-badge--light-bg">
+                                        <div class="m-list-badge__items list-items">
+                                            @if (answerGroup.Answer?.SwotAnswer.Threats != null)
+                                            {
+                                                foreach (var threat in answerGroup.Answer.SwotAnswer.Threats)
+                                                {
+                                                    <a class="m-list-badge__item m-list-badge__item--default list-item">
+                                                        <input type="hidden" asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.SwotAnswer.Threats" value="@threat" />
+                                                        @threat
+                                                        <span class="list-item-delete fa fa-close"></span>
+                                                    </a>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

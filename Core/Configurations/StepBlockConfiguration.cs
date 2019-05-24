@@ -16,7 +16,7 @@ namespace Core.Configurations
 
             builder.Property(x => x.Description)
                 .IsRequired(false)
-                .HasMaxLength(EntityConfigs.TextAreaMaxLength);
+                .HasMaxLength(EntityConfigs.LargeTextMaxLength);
 
             builder.Property(x => x.Step)
                 .IsRequired()
@@ -24,7 +24,7 @@ namespace Core.Configurations
 
             builder.Property(x => x.Instruction)
                .IsRequired(false)
-               .HasMaxLength(EntityConfigs.TextAreaMaxLength);
+               .HasMaxLength(EntityConfigs.LargeTextMaxLength);
 
             builder.Property(x => x.Order)
               .IsRequired();

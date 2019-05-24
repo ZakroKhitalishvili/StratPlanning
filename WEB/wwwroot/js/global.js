@@ -14,11 +14,11 @@ function initializeInputs(selector) {
         minimumResultsForSearch: Infinity
     });
 
-    if (valueAnswerOptions !== undefined) {
-        $(element).find('.m-values-autocomplete').autocomplete({
+    if (typeof valueAnswerOptions !== 'undefined') {
+        $(selector).find('.m-values-autocomplete').autocomplete({
             source: valueAnswerOptions.valuesDictionary
         });
-        $(element).find('.m-values-autocomplete').autocomplete('option', 'appendTo', '.modal');
+        $(selector).find('.m-values-autocomplete').autocomplete('option', 'appendTo', '.modal');
     }
 
     $.validator.unobtrusive.parse(selector);
@@ -38,8 +38,6 @@ $(document).ready(function () {
     //    }
     //});
     initializeInputs(document);
-
-    $('.sp-tooltip').tooltip();
 
     $.fn.dataTable.ext.order['dom-select'] = function (settings, col) {
         return this.api().column(col, { order: 'index' }).nodes().map(function (td, i) {
