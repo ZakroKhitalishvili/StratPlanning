@@ -19,7 +19,11 @@ namespace Core.Entities
 
         public string Email { get; set; }
 
-        public string IsInternal { get; set; }
+        public bool IsInternal { get; set; }
+
+        public int? CategoryId { get; set; }
+
+        public virtual Dictionary Category { get; set; }
 
         public virtual User User { get; set; }
 

@@ -599,6 +599,11 @@ namespace Application.Repositories
                 {
                     SaveValueAnswer(answerGroup, userStepResult);
                 }
+
+                if (question.Type == QuestionTypes.Stakeholder)
+                {
+                    SaveStakeholderAnswer(answerGroup, userStepResult);
+                }
             }
         }
 
@@ -897,6 +902,47 @@ namespace Application.Repositories
             }
         }
 
+        private void SaveStakeholderAnswer(AnswerGroupDTO answerGroup, UserStepResult userStepResult)
+        {
+            IList<StakeholderAnswer> dbAnswers = null;
+
+            dbAnswers = userStepResult.StakeholderAnswers.Where(x => x.QuestionId == answerGroup.QuestionId).ToList();
+
+            foreach (var dbAnswer in dbAnswers)
+            {
+                var updateAnswer = answerGroup.Answer.StakeholderAnswers.Where(x => x.Id == dbAnswer.Id).FirstOrDefault();
+
+                if (updateAnswer == null)
+                {
+                    Context.StakeholderAnswers.Remove(dbAnswer);
+                    Context.SaveChanges();
+                    //userStepResult.SelectAnswers.Remove(dbAnswer);
+                }
+            }
+
+            foreach (var answer in answerGroup.Answer.StakeholderAnswers)
+            {
+                if (!dbAnswers.Any(x => x.Id == answer.Id))
+                {
+                    var newAnswer = new StakeholderAnswer
+                    {
+                        QuestionId = answerGroup.QuestionId,
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now,
+                        CreatedBy = userStepResult.UpdatedBy,
+                        UpdatedBy = userStepResult.UpdatedBy,
+                        UserId = answer.UserId,
+                        CategoryId = answer.CategoryId,
+                        FirstName = answer.FirstName,
+                        LastName = answer.LastName,
+                        Email = answer.LastName
+                    };
+
+                    userStepResult.StakeholderAnswers.Add(newAnswer);
+                }
+            }
+        }
+
         #endregion
 
         #region Reading methods
@@ -941,6 +987,10 @@ namespace Application.Repositories
                     if (questions[j].Type == QuestionTypes.Values)
                     {
                         planStep.AnswerGroups.Add(GetValueAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
+                    }
+                    if (questions[j].Type == QuestionTypes.Stakeholder)
+                    {
+                        planStep.AnswerGroups.Add(GetStakeholderAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
                     }
                 }
             }
@@ -1369,6 +1419,88 @@ namespace Application.Repositories
 
             answerGroup.OtherAnswers = otherAnswers;
             
+            return answerGroup;
+        }
+
+        private AnswerGroupDTO GetStakeholderAnswers(int questionId, UserStepResult currentUserStepResult, IList<UserStepResult> otherUserStepResults)
+        {
+            AnswerGroupDTO answerGroup = new AnswerGroupDTO
+            {
+                QuestionId = questionId
+            };
+
+            var currentUserAnswer = currentUserStepResult.StakeholderAnswers.Where(x => x.QuestionId == questionId);
+
+            if (currentUserAnswer != null && currentUserAnswer.Any())
+            {
+                answerGroup.Answer = new AnswerDTO
+                {
+                    StakeholderAnswers = currentUserAnswer.Select(x => new StakeholderAnswerDTO
+                    {
+                        Id = x.Id,
+                        FirstName = x.FirstName,
+                        LastName = x.LastName,
+                        Email = x.Email,
+                        IsInternal = x.IsInternal,
+                        UserId = x.UserId,
+                        CategoryId = x.CategoryId,
+                        Category = x.Category?.Title
+                    }).ToList()
+                };
+            }
+
+            var definitiveStepResult = otherUserStepResults.Where(x => x.IsDefinitive).SingleOrDefault();
+
+            var definitiveAnswer = definitiveStepResult?.StakeholderAnswers.Where(x => x.QuestionId == questionId);
+
+            if (definitiveAnswer != null && definitiveAnswer.Any())
+            {
+                answerGroup.DefinitiveAnswer = new AnswerDTO
+                {
+                    StakeholderAnswers = definitiveAnswer.Select(x => new StakeholderAnswerDTO
+                    {
+                        Id = x.Id,
+                        FirstName = x.FirstName,
+                        LastName = x.LastName,
+                        Email = x.Email,
+                        IsInternal = x.IsInternal,
+                        UserId = x.UserId,
+                        CategoryId = x.CategoryId,
+                        Category = x.Category?.Title
+                    }).ToList()
+                };
+            }
+
+            var otherAnswers = new List<AnswerDTO>();
+
+            foreach (var otherUserStepResult in otherUserStepResults.Where(x => !x.IsDefinitive))
+            {
+                var userAnswer = otherUserStepResult.StakeholderAnswers.Where(x => x.QuestionId == questionId);
+
+                if (userAnswer != null && userAnswer.Any())
+                {
+                    var answerDTO = new AnswerDTO
+                    {
+                        StakeholderAnswers = userAnswer.Select(x => new StakeholderAnswerDTO
+                        {
+                            Id = x.Id,
+                            FirstName = x.FirstName,
+                            LastName = x.LastName,
+                            Email = x.Email,
+                            IsInternal = x.IsInternal,
+                            UserId = x.UserId,
+                            CategoryId = x.CategoryId,
+                            Category = x.Category?.Title
+                        }).ToList(),
+                        Author = $"{otherUserStepResult.UserToPlan.User.FirstName} {otherUserStepResult.UserToPlan.User.LastName}"
+                    };
+
+                    otherAnswers.Add(answerDTO);
+                }
+            }
+
+            answerGroup.OtherAnswers = otherAnswers;
+
             return answerGroup;
         }
 

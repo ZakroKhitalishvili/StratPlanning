@@ -25,5 +25,7 @@ namespace Application.DTOs
         public IList<StepTaskAnswerDTO> StepTaskAnswers { get; set; }
 
         public IList<ValueAnswerDTO> ValueAnswer { get; set; }
+
+        public IList<StakeholderAnswerDTO> StakeholderAnswers { get; set; }
     }
 }

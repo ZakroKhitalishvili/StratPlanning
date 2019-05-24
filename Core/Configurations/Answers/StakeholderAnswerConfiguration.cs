@@ -13,6 +13,7 @@ namespace Core.Configurations
             builder.AnswersBaseConfigure();
 
             builder.Property(x => x.IsInternal)
+                .HasDefaultValue(false)
                 .IsRequired(true);
 
             builder.Property(x => x.LastName)
@@ -26,6 +27,11 @@ namespace Core.Configurations
             builder.Property(x => x.Email)
                .IsRequired(false)
                .HasMaxLength(EntityConfigs.TextMaxLength);
+
+            builder.HasOne(x => x.Category)
+                .WithMany(x => x.CategoryStakeholders)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(x => x.User)
                 .WithMany(s => s.StakeholderAnswers)

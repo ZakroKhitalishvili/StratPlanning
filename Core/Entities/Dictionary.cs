@@ -33,6 +33,8 @@ namespace Core.Entities
 
         public int? UpdatedBy { get; set; }
 
+        public virtual ICollection<StakeholderAnswer> CategoryStakeholders { get; set; }
+
         public virtual ICollection<User> Users { get; set; }
 
         public virtual ICollection<StakeholderRatingAnswerToDictionary> StakeholderRatingAnswersToDictionaries { get; set; }
