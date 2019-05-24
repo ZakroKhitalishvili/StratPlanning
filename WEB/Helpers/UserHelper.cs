@@ -46,5 +46,14 @@ namespace Web.Helpers
 
             return selectList;
         }
+
+        public static IEnumerable<SelectListItem> GetCategoriesSelectList(HttpContext context)
+        {
+            var dictionaryRepository = context.RequestServices.GetService<IDictionaryRepository>();
+
+            var selectList = dictionaryRepository.GetCategories().Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Title });
+
+            return selectList;
+        }
     }
 }

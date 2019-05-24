@@ -10,5 +10,7 @@ namespace Application.Interfaces.Repositories
         IEnumerable<PositionDTO> GetPositions();
 
         IEnumerable<string> GetValues();
+
+        IEnumerable<CategoryDTO> GetCategories();
     }
 }

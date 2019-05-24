@@ -26,6 +26,9 @@ namespace Core.Configurations
             builder.Property(x => x.HasValue)
                 .HasDefaultValue(false);
 
+            builder.Property(x => x.HasStakeholderCategory)
+                .HasDefaultValue(false);
+
             builder.Property(x => x.CreatedAt)
                 .IsRequired();
 

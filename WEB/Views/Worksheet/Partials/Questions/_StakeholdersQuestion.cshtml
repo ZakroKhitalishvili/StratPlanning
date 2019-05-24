@@ -13,6 +13,8 @@
     var filledAnswer = Model.AnswerGroups[questionIndexOffset + questionIndex];
 
     var stakeholderUsers = Web.Helpers.UserHelper.GetUsersSelectList(Context);
+
+    var categories = Web.Helpers.UserHelper.GetCategoriesSelectList(Context);
 }
 <div class="m-demo">
     <div class="m-demo__preview">
@@ -208,7 +210,12 @@
                             Category
                         </label>
                         <div class="col-lg-9 col-md-9 col-sm-12">
-                            <input class="form-control m-input" name="value" />
+                            <select name="category" class="m-input">
+                                @foreach(var category in categories)
+                                {
+                                    <option value="@(category.Value)">@category.Text</option>
+                                }
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -256,6 +263,7 @@
                     <input type="hidden" value="${data.firstName}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers[${index}].FirstName"/>
                     <input type="hidden" value="${data.lastName}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers[${index}].LastName"/>
                     <input type="hidden" value="${data.email}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers[${index}].Email"/>
+                    <input type="hidden" value="${data.category}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers[${index}].CategoryId"/>
                 </a>
             `;
         }
