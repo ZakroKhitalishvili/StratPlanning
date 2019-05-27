@@ -255,6 +255,10 @@
 
         fieldOptions['#s_@(question.Id)_list'] = {
             template: function (data, index) {
+                if (!data.stakeholderId) return null;
+
+                if ($('#s_@(question.Id)_list').find(`input[value="${data.stakeholderId}"]`).length > 0) return null;
+
                 return `
                     <a class="m-list-badge__item m-list-badge__item--default">
                         ${data.stakeholderName} <span class="fa fa-close" onclick="deleteRecord(this, 'a')"></span>

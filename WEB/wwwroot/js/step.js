@@ -562,8 +562,11 @@ function editRecord(modalId, targetId) {
     }
     else {
         index = guid();
+        var temp = options.template(data, index);
 
-        list.append(options.template(data, index));
+        if (temp) {
+            list.append(temp);
+        }
     }
 
     if (modal.hasClass('modal')) {
