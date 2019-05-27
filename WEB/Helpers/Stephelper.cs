@@ -24,5 +24,11 @@ namespace Web.Helpers
             var dictionaryRepository = context.RequestServices.GetService<IDictionaryRepository>();
             return dictionaryRepository.GetValues();
         }
+
+        public static IEnumerable<IssueDTO> GetIssues(HttpContext context, int planId)
+        {
+            var planRepository = context.RequestServices.GetService<IPlanRepository>();
+            return planRepository.GetIssues(planId);
+        }
     }
 }

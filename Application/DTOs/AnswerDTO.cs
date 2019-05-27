@@ -29,5 +29,7 @@ namespace Application.DTOs
         public IList<StakeholderAnswerDTO> StakeholderAnswers { get; set; }
 
         public SWOTAnswerDTO SwotAnswer { get; set; }
+
+        public IList<StrategicIssueAnswerDTO> StrategicIssueAnswers { get; set; }
     }
 }

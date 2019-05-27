@@ -245,7 +245,7 @@ namespace Application.Repositories
                 SaveAnswers(planStep.AnswerGroups, finalDefinitiveStepResult);
 
                 //delete old stepResults that are neither submitted nor final
-                var otherDefinitiveResult = Context.UserStepResults.Where(x => x.IsFinal.HasValue && !x.IsFinal.Value && !x.IsSubmitted && x.IsDefinitive).SingleOrDefault();
+                var otherDefinitiveResult = Context.UserStepResults.Where(x => x.IsFinal.HasValue && !x.IsFinal.Value && !x.IsSubmitted && x.IsDefinitive && x.Step == planStep.Step).SingleOrDefault();
 
                 if (otherDefinitiveResult != null)
                 {
@@ -283,6 +283,15 @@ namespace Application.Repositories
                     .Select(x => Mapper.Map<FileDTO>(x.File)).ToList();
         }
 
+        public IList<IssueDTO> GetIssues(int planId)
+        {
+            var swotDefinitiveAnswer = GetSubmittedDefinitiveStepResult(planId, Steps.SWOT);
+            return (swotDefinitiveAnswer?.SWOTAnswers.Where(x => x.IsIssue)
+                .Select(x => new IssueDTO { Id = x.Id, Name = x.Name })
+                ?? Enumerable.Empty<IssueDTO>())
+                .ToList();
+        }
+
         #region Private methods
         #region General methods
 
@@ -298,28 +307,28 @@ namespace Application.Repositories
                     {
                         if (x.Schedule >= DateTime.Now)
                         {
-                            status = StepTaskStatus.Completed;
+                            status = StepTaskStatus.Complete;
                         }
                         else
                         {
-                            status = StepTaskStatus.OverdueCompleted;
+                            status = StepTaskStatus.OverdueComplete;
                         }
                     }
                     else
                     {
                         if (x.Schedule >= DateTime.Now)
                         {
-                            status = StepTaskStatus.Uncompleted;
+                            status = StepTaskStatus.Incomplete;
                         }
                         else
                         {
-                            status = StepTaskStatus.OverdueUnCompleted;
+                            status = StepTaskStatus.OverdueIncomplete;
                         }
                     }
                 }
                 else
                 {
-                    status = StepTaskStatus.Uncompleted;
+                    status = StepTaskStatus.Incomplete;
                 }
 
                 return new StepTaskDTO
@@ -332,7 +341,7 @@ namespace Application.Repositories
                     Step = x.Step,
                     Status = status
                 };
-            }).ToList();
+            }).OrderBy(x => Array.IndexOf(GetStepList().ToArray(), x.Step)).ToList();
         }
 
         private UserStepResult GetOrCreateUserStepResult(int planId, string stepIndex, bool isDefinitive, int userId)
@@ -398,7 +407,8 @@ namespace Application.Repositories
                     .Include(x => x.StepTaskAnswers).ThenInclude(x => x.UserToPlan)
                     .Include(x => x.ValueAnswers)
                     .Include(x => x.StakeholderAnswers).ThenInclude(x => x.Category)
-                    .Include(x => x.SWOTAnswers).ToList();
+                    .Include(x => x.SWOTAnswers)
+                    .Include(x => x.StrategicIssueAnswers).ThenInclude(x => x.Issue).ToList();
         }
 
         private UserStepResult GetUserStepResult(int planId, string stepIndex, int userId)
@@ -439,14 +449,18 @@ namespace Application.Repositories
 
         private bool DeleteUserStepResult(int id)
         {
-            var userStepResult = Context.UserStepResults.Where(x => x.Id == id)
-                .Include(x => x.BooleanAnswers).Include(x => x.SelectAnswers).SingleOrDefault();
+            var userStepResult = GetUserStepResultByCondition(x => x.Id == id).SingleOrDefault();
 
             if (userStepResult != null)
             {
 
                 Context.BooleanAnswers.RemoveRange(userStepResult.BooleanAnswers);
                 Context.SelectAnswers.RemoveRange(userStepResult.SelectAnswers);
+                Context.ValueAnswers.RemoveRange(userStepResult.ValueAnswers);
+                Context.StrategicIssueAnswers.RemoveRange(userStepResult.StrategicIssueAnswers);
+
+                Context.SWOTAnswers.RemoveRange(userStepResult.SWOTAnswers);
+                Context.StakeholderAnswers.RemoveRange(userStepResult.StakeholderAnswers);
                 Context.UserStepResults.Remove(userStepResult);
 
                 Context.SaveChanges();
@@ -610,6 +624,11 @@ namespace Application.Repositories
                 if (question.Type == QuestionTypes.SWOT)
                 {
                     SaveSwotAnswers(answerGroup, userStepResult);
+                }
+
+                if (question.Type == QuestionTypes.StrategicIssues)
+                {
+                    SaveStrategicIssueAnswers(answerGroup, userStepResult);
                 }
             }
         }
@@ -1002,7 +1021,7 @@ namespace Application.Repositories
             }
             var swotAnswers = new List<SWOTAnswer>();
             swotAnswers.AddRange(answerGroup.Answer.SwotAnswer.Strengths?.Select(x => new SWOTAnswer { Type = SWOTTypes.Strength, Name = x }));
-            swotAnswers.AddRange(answerGroup.Answer.SwotAnswer.Threats?.Select(x => new SWOTAnswer { Type = SWOTTypes.Threat, Name = x }) );
+            swotAnswers.AddRange(answerGroup.Answer.SwotAnswer.Threats?.Select(x => new SWOTAnswer { Type = SWOTTypes.Threat, Name = x }));
             swotAnswers.AddRange(answerGroup.Answer.SwotAnswer.Opportunities?.Select(x => new SWOTAnswer { Type = SWOTTypes.Opportunity, Name = x }));
             swotAnswers.AddRange(answerGroup.Answer.SwotAnswer.Weaknesses?.Select(x => new SWOTAnswer { Type = SWOTTypes.Weakness, Name = x }));
 
@@ -1021,6 +1040,49 @@ namespace Application.Repositories
             }
         }
 
+        private void SaveStrategicIssueAnswers(AnswerGroupDTO answerGroup, UserStepResult userStepResult)
+        {
+            var dbAnswers = userStepResult.StrategicIssueAnswers.Where(x => x.QuestionId == answerGroup.QuestionId);
+
+            if (answerGroup.Answer?.StrategicIssueAnswers == null)
+            {
+                return;
+            }
+
+            foreach (var strategicIssueAnswer in answerGroup.Answer.StrategicIssueAnswers)
+            {
+                var dbAnswer = dbAnswers.Where(x => x.IssueId == strategicIssueAnswer.IssueId).SingleOrDefault();
+                if (dbAnswer != null)
+                {
+                    dbAnswer.Goal = strategicIssueAnswer.Goal;
+                    dbAnswer.Result = strategicIssueAnswer.Result;
+                    dbAnswer.Solution = strategicIssueAnswer.Solution;
+                    dbAnswer.Why = strategicIssueAnswer.Why;
+                    dbAnswer.Ranking = strategicIssueAnswer.Ranking;
+                    dbAnswer.UpdatedAt = DateTime.Now;
+                    dbAnswer.UpdatedBy = userStepResult.UpdatedBy;
+                }
+                else
+                {
+                    dbAnswer = new StrategicIssueAnswer
+                    {
+                        Goal = strategicIssueAnswer.Goal,
+                        Result = strategicIssueAnswer.Result,
+                        Solution = strategicIssueAnswer.Solution,
+                        Why = strategicIssueAnswer.Why,
+                        Ranking = strategicIssueAnswer.Ranking,
+                        UpdatedAt = DateTime.Now,
+                        UpdatedBy = userStepResult.UpdatedBy,
+                        CreatedAt = DateTime.Now,
+                        CreatedBy = userStepResult.UpdatedBy,
+                        IssueId = strategicIssueAnswer.IssueId,
+                        QuestionId = answerGroup.QuestionId
+                    };
+
+                    userStepResult.StrategicIssueAnswers.Add(dbAnswer);
+                }
+            }
+        }
         #endregion
 
         #region Reading methods
@@ -1074,6 +1136,11 @@ namespace Application.Repositories
                     if (questions[j].Type == QuestionTypes.SWOT)
                     {
                         planStep.AnswerGroups.Add(GetSWOTAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
+                    }
+
+                    if (questions[j].Type == QuestionTypes.StrategicIssues)
+                    {
+                        planStep.AnswerGroups.Add(GetStrategicIssueAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
                     }
                 }
             }
@@ -1129,7 +1196,6 @@ namespace Application.Repositories
 
             return answerGroup;
         }
-
 
         private AnswerGroupDTO GetSelectAnswers(int questionId, UserStepResult currentUserStepResult, IList<UserStepResult> otherUserStepResults)
         {
@@ -1641,6 +1707,85 @@ namespace Application.Repositories
                             CategoryId = x.CategoryId,
                             Category = x.Category?.Title
                         }).ToList(),
+                        Author = $"{otherUserStepResult.UserToPlan.User.FirstName} {otherUserStepResult.UserToPlan.User.LastName}"
+                    };
+
+                    otherAnswers.Add(answerDTO);
+                }
+            }
+
+            answerGroup.OtherAnswers = otherAnswers;
+
+            return answerGroup;
+        }
+
+        private AnswerGroupDTO GetStrategicIssueAnswers(int questionId, UserStepResult currentUserStepResult, IList<UserStepResult> otherUserStepResults)
+        {
+            AnswerGroupDTO answerGroup = new AnswerGroupDTO
+            {
+                QuestionId = questionId
+            };
+
+            var currentUserAnswers = currentUserStepResult.StrategicIssueAnswers.Where(x => x.QuestionId == questionId);
+
+            if (currentUserAnswers.Any())
+            {
+                answerGroup.Answer = new AnswerDTO
+                {
+                    StrategicIssueAnswers = currentUserAnswers.Select(x => new StrategicIssueAnswerDTO
+                    {
+                        Goal = x.Goal,
+                        Ranking = x.Ranking,
+                        Result = x.Result,
+                        Solution = x.Solution,
+                        Why = x.Why,
+                        IssueId = x.IssueId,
+                        Issue = x.Issue.Name
+                    }).OrderBy(x => x.Ranking).ToList()
+                };
+            }
+
+            var definitiveStepResult = otherUserStepResults.Where(x => x.IsDefinitive).SingleOrDefault();
+
+            var definitiveAnswers = definitiveStepResult?.StrategicIssueAnswers.Where(x => x.QuestionId == questionId);
+
+            if (definitiveAnswers != null)
+            {
+                answerGroup.DefinitiveAnswer = new AnswerDTO
+                {
+                    StrategicIssueAnswers = definitiveAnswers.Select(x => new StrategicIssueAnswerDTO
+                    {
+                        Goal = x.Goal,
+                        Ranking = x.Ranking,
+                        Result = x.Result,
+                        Solution = x.Solution,
+                        Why = x.Why,
+                        IssueId = x.IssueId,
+                        Issue = x.Issue.Name
+                    }).OrderBy(x => x.Ranking).ToList()
+                };
+            }
+
+            var otherAnswers = new List<AnswerDTO>();
+
+            foreach (var otherUserStepResult in otherUserStepResults.Where(x => !x.IsDefinitive))
+            {
+                var userAnswers = otherUserStepResult.StrategicIssueAnswers.Where(a => a.QuestionId == questionId);
+
+                if (userAnswers != null)
+                {
+                    var answerDTO = new AnswerDTO
+                    {
+                        StrategicIssueAnswers = userAnswers.Select(x => new StrategicIssueAnswerDTO
+                        {
+                            Goal = x.Goal,
+                            Ranking = x.Ranking,
+                            Result = x.Result,
+                            Solution = x.Solution,
+                            Why = x.Why,
+                            IssueId = x.IssueId,
+                            Issue = x.Issue.Name
+                        }).OrderBy(x=>x.Ranking).ToList(),
                         Author = $"{otherUserStepResult.UserToPlan.User.FirstName} {otherUserStepResult.UserToPlan.User.LastName}"
                     };
 

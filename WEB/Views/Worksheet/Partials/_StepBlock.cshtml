@@ -112,6 +112,13 @@
                          model="Model"
                          view-data='new ViewDataDictionary(ViewData) {  {"QuestionIndex", i } }' />
             }
+
+            if (questions[i].Type == QuestionTypes.StrategicIssues)
+            {
+                <partial name="~/Views/Worksheet/Partials/Questions/_StrategicIssuesQuestion.cshtml"
+                         model="Model"
+                         view-data='new ViewDataDictionary(ViewData) {  {"QuestionIndex", i } }' />
+            }
         }
     </div>
 </div>

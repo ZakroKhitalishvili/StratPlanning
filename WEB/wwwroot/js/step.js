@@ -7,7 +7,6 @@ function initializeStep() {
         minimumResultsForSearch: Infinity
     });
 
-
     $('.sp-tooltip').tooltip();
 
     /////////////
@@ -24,7 +23,6 @@ function initializeStep() {
     //             [{ "orderDataType": "dom-select", targets: [1, 2, 3, 4, 5, 6, 7, 9] }],
     //     }
     // );
-
 
     /////////////////////
     ////////////
@@ -51,11 +49,11 @@ function initializeStep() {
     );
 
     $('#issues-master-list-table tr td:nth-child(6) input').blur(function (e) {
-        $('#issues-master-list-table').DataTable().column(6).order().draw();
+        $('#issues-master-list-table').DataTable().column(6).order('asc').draw();
     }).on('keyup', function (e) {
         if (e.keyCode == 13)//enter button
         {
-            $('#issues-master-list-table').DataTable().column(6).order().draw();
+            $('#issues-master-list-table').DataTable().column(6).order('asc').draw();
         }
     });
 
@@ -251,7 +249,6 @@ function initializeStep() {
             $(this).parents('.list-items-add-group').first().find('.list-add-button').click();
         }
     })
-
     //////
     ////
 }
@@ -652,8 +649,7 @@ $(document).on('click', 'input.step-complete-checkbox', function (e) {
                         }
                     });
             }
-        }
-        );
+        });
     }
 });
 ///////
@@ -662,7 +658,6 @@ $(document).on('click', 'input.step-complete-checkbox', function (e) {
 /////////////////////////
 ////// step form refresh
 ////////
-
 function refreshStepForm(keepFilled = false) {
     let formData = new FormData(document.querySelector('form#step_form'));
     formData.append('keepFilled', keepFilled);
@@ -690,9 +685,7 @@ function refreshStepForm(keepFilled = false) {
                 notify("An Error occured on the request", "danger", 5);
             }
         });
-
 }
-
 //////////
 //////
 ////

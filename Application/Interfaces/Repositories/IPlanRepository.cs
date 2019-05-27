@@ -27,5 +27,7 @@ namespace Application.Interfaces.Repositories
         IEnumerable<PlanDTO> GetPlanListForUser(int userId);
 
         IList<FileDTO> GetFileAnswers(int questionId, int userId);
+
+        IList<IssueDTO> GetIssues(int planId);
     }
 }

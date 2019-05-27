@@ -92,6 +92,7 @@ namespace Web.Controllers
 
                 if (result)
                 {
+                    ModelState.Clear();
                     HttpContext.Response.StatusCode = StatusCodes.Status200OK;
                 }
             }
