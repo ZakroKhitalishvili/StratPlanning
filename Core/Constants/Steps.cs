@@ -4,6 +4,10 @@ using System.Text;
 
 namespace Core.Constants
 {
+    /*
+     * The order of these properties determines an order of respecting step tasks
+     * 
+     */
     public class Steps
     {
         public const string Predeparture = "Predeparture";
@@ -20,9 +24,9 @@ namespace Core.Constants
 
         public const string StakeholdersAnalysis = "StakeholdersAnalysis";
 
-        public const string IssuesDistinguish = "IssuesDistinguish";
-
         public const string StrategicIssues = "StrategicIssues";
+
+        public const string IssuesDistinguish = "IssuesDistinguish";
 
         public const string ActionPlanKeyQuestions = "ActionPlanKeyQuestions";
 
