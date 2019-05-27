@@ -22,7 +22,12 @@ function initializeInputs(selector) {
 
         $(selector).find('.m-stakeholders-autocomplete').autocomplete({
             source: fieldOptions.stakeholderUsers,
-            select: function (event, ui) {
+            change: function (event, ui) {
+                if (!ui.item) {
+                    $(this).val('');
+                    return;
+                }
+
                 $(event.target).next("[name='stakeholderId']").val(ui.item.id);
             }
         });
