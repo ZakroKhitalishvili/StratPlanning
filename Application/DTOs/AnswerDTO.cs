@@ -30,6 +30,8 @@ namespace Application.DTOs
 
         public SWOTAnswerDTO SwotAnswer { get; set; }
 
+        public IList<StrategicIssueAnswerDTO> StrategicIssueAnswers { get; set; }
+
         public IList<StakeholderRatingAnswerDTO> StakeholderRatingAnswers { get; set; }
     }
 }

@@ -8,6 +8,8 @@ namespace Application.DTOs
     {
         public int IssueId { get; set; }
 
+        public string Issue { get; set; }
+
         public string Why { get; set; }
 
         public string Result { get; set; }

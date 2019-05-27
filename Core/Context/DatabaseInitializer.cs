@@ -80,11 +80,16 @@ namespace Core.Context
             {
                 SeedStakeholdersIdentifyStep();
             }
+
             if (!Context.StepBlocks.Where(x => x.Step == Steps.SWOT).Any())
             {
                 SeedSWOTStep();
             }
 
+            if (!Context.StepBlocks.Where(x => x.Step == Steps.StrategicIssues).Any())
+            {
+                SeedStrategicIssuesStep();
+            }
             if (!Context.StepBlocks.Where(x => x.Step == Steps.StakeholdersAnalysis).Any())
             {
                 SeedStakeholdersAnalysisStep();
@@ -598,6 +603,31 @@ namespace Core.Context
             };
 
             Context.Dictionaries.AddRange(Positions);
+        }
+
+        private void SeedStrategicIssuesStep()
+        {
+            Blocks = new StepBlock[]
+            {
+                new StepBlock
+                {
+                    Title = "Strategic issues",
+                    Instruction = "sagittis. In dignissim commodo hendrerit. Sed congue purus luctus mi feugiat, ut consequat nisi porttitor",
+                    Order=1,
+                    Step=Steps.StrategicIssues,
+                    Description=null,
+                    UpdatedAt =DateTime.Now,
+                    CreatedAt=DateTime.Now,
+                    CreatedBy=null,
+                    UpdatedBy=null,
+                    Questions=new List<Question>()
+                    {
+                        new Question{ Type=QuestionTypes.StrategicIssues, Order=1, Title="Your answer", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false }
+                    }
+                }
+            };
+
+            Context.StepBlocks.AddRange(Blocks);
         }
     }
 }

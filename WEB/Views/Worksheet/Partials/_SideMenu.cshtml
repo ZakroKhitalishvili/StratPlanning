@@ -35,16 +35,16 @@
                 <i class="m-menu__section-icon flaticon-more-v3"></i>
             </li>
 
-            @foreach (var stepTask in Model.StepTasks.OrderBy(x => Array.IndexOf(sortedSteps, x.Step)))
+            @foreach (var stepTask in Model.StepTasks)
             {
                 var statusClass = "";
 
                 switch(stepTask.Status)
                 {
-                    case StepTaskStatus.Completed: statusClass = "fa-check m--font-success";break;
-                    case StepTaskStatus.Uncompleted: statusClass = ""; break;
-                    case StepTaskStatus.OverdueCompleted: statusClass = "fa-warning m--font-warning"; break;
-                    case StepTaskStatus.OverdueUnCompleted: statusClass = "fa-remove m--font-danger"; break;
+                    case StepTaskStatus.Complete: statusClass = "fa-check m--font-success";break;
+                    case StepTaskStatus.Incomplete: statusClass = ""; break;
+                    case StepTaskStatus.OverdueComplete: statusClass = "fa-warning m--font-warning"; break;
+                    case StepTaskStatus.OverdueIncomplete: statusClass = "fa-remove m--font-danger"; break;
                 }
 
                 <li class="m-menu__item @(Model.Step == stepTask.Step ? "m-menu__item--active" : "")" aria-haspopup="true" data-redirect="true">

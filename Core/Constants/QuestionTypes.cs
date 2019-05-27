@@ -30,6 +30,8 @@ namespace Core.Constants
 
         public const string Stakeholder = "Stakeholder";
 
+        public const string StrategicIssues = "StrategicIssues";
+
         public const string InternalStakeholdersRating = "InternalStakeholderRating";
 
         public const string ExternalStakeholdersRating = "ExternalStakeholderRating";

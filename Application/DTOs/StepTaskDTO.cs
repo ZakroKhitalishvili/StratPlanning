@@ -25,9 +25,9 @@ namespace Application.DTOs
 
     public enum StepTaskStatus
     {
-        Completed,
-        OverdueCompleted,
-        OverdueUnCompleted,
-        Uncompleted
+        Complete,
+        OverdueComplete,
+        OverdueIncomplete,
+        Incomplete
     }
 }

@@ -28,6 +28,8 @@ namespace Application.Interfaces.Repositories
 
         IList<FileDTO> GetFileAnswers(int questionId, int userId);
 
+        IList<IssueDTO> GetIssues(int planId);
+
         IList<StakeholderDTO> GetDefinitiveStakehloders(int planId, bool isInternal);
     }
 }

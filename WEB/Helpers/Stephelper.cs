@@ -36,5 +36,11 @@ namespace Web.Helpers
             var planRepository = context.RequestServices.GetService<IPlanRepository>();
             return planRepository.GetDefinitiveStakehloders(planId, isInternal);
         }
+
+        public static IEnumerable<IssueDTO> GetIssues(HttpContext context, int planId)
+        {
+            var planRepository = context.RequestServices.GetService<IPlanRepository>();
+            return planRepository.GetIssues(planId);
+        }
     }
 }

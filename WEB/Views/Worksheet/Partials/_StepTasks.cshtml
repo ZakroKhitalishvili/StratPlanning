@@ -170,10 +170,10 @@
 
                                             switch (stepTask.Status)
                                             {
-                                                case StepTaskStatus.Completed: statusClass = "fa-check m--font-success"; break;
-                                                case StepTaskStatus.Uncompleted: statusClass = ""; break;
-                                                case StepTaskStatus.OverdueCompleted: statusClass = "fa-warning m--font-warning"; break;
-                                                case StepTaskStatus.OverdueUnCompleted: statusClass = "fa-remove m--font-danger"; break;
+                                                case StepTaskStatus.Complete: statusClass = "fa-check m--font-success"; break;
+                                                case StepTaskStatus.Incomplete: statusClass = ""; break;
+                                                case StepTaskStatus.OverdueComplete: statusClass = "fa-warning m--font-warning"; break;
+                                                case StepTaskStatus.OverdueIncomplete: statusClass = "fa-remove m--font-danger"; break;
                                             }
                                         }
                                         <span class="fa @statusClass">
