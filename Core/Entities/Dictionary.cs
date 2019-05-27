@@ -27,6 +27,8 @@ namespace Core.Entities
 
         public bool HasStakeholderCategory { get; set; }
 
+        public bool HasStakeholderCriteria { get; set; }
+
         public DateTime CreatedAt { get; set; }
     
         public DateTime UpdatedAt { get; set; }

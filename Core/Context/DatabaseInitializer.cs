@@ -51,6 +51,11 @@ namespace Core.Context
                 SeedStakeholderCategories();
             }
 
+            if (!Context.Dictionaries.Any(x => x.HasStakeholderCriteria))
+            {
+                SeedStakeholderCriterions();
+            }
+
             if (!Context.StepBlocks.Where(x => x.Step == Steps.Predeparture).Any())
             {
                 SeedPredepartureStep();
@@ -507,6 +512,43 @@ namespace Core.Context
                 {
                     HasStakeholderCategory=true,Title="Stakeholder category 3",CreatedAt=DateTime.Now, CreatedBy=null,UpdatedAt=DateTime.Now,UpdatedBy=null
                 },
+            };
+
+            Context.Dictionaries.AddRange(Positions);
+        }
+
+        private void SeedStakeholderCriterions()
+        {
+            Positions = new Dictionary[]
+            {
+                new Dictionary
+                {
+                    HasStakeholderCriteria=true,Title="Professionalism",CreatedAt=DateTime.Now, CreatedBy=null,UpdatedAt=DateTime.Now,UpdatedBy=null
+                },
+                new Dictionary
+                {
+                    HasStakeholderCriteria=true,Title="Transparency",CreatedAt=DateTime.Now, CreatedBy=null,UpdatedAt=DateTime.Now,UpdatedBy=null
+                },
+                new Dictionary
+                {
+                    HasStakeholderCriteria=true,Title="Democracy",CreatedAt=DateTime.Now, CreatedBy=null,UpdatedAt=DateTime.Now,UpdatedBy=null
+                },
+                new Dictionary
+                {
+                    HasStakeholderCriteria=true,Title="Information",CreatedAt=DateTime.Now, CreatedBy=null,UpdatedAt=DateTime.Now,UpdatedBy=null
+                },
+                new Dictionary
+                {
+                    HasStakeholderCriteria=true,Title="Input in public",CreatedAt=DateTime.Now, CreatedBy=null,UpdatedAt=DateTime.Now,UpdatedBy=null
+                },
+                new Dictionary
+                {
+                    HasStakeholderCriteria=true,Title="Representing societal interest",CreatedAt=DateTime.Now, CreatedBy=null,UpdatedAt=DateTime.Now,UpdatedBy=null
+                },
+                new Dictionary
+                {
+                    HasStakeholderCriteria=true,Title="Training political leaders",CreatedAt=DateTime.Now, CreatedBy=null,UpdatedAt=DateTime.Now,UpdatedBy=null
+                }
             };
 
             Context.Dictionaries.AddRange(Positions);
