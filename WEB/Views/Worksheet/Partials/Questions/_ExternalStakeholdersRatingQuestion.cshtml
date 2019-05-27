@@ -58,27 +58,27 @@
                                                     <div class="m-list-badge__items">
                                                         <span title="@String.Join(',', answerGroup.OtherAnswers.Where(x => x.StakeholderRatingAnswers.Any(y => y.StakeholderId == stakeholder.Id && y.CriterionsRates.Where(z => z.CriterionId == criterions[i].Id && z.Rate == 1).Any())).Select(x => x.Author).ToArray())"
                                                               data-toggle="tooltip"
-                                                              class="m-list-badge__item m-list-badge__item--default sp-tooltip @(answerGroup.DefinitiveAnswer?.StakeholderRatingAnswers?.Where(x => x.CriterionsRates.Any(y => y.CriterionId == criterions[i].Id && y.Rate == 1)).Count() > 0 ? "m-list-badge__item--warning" : "")">
+                                                              class="m-list-badge__item @(answerGroup.DefinitiveAnswer?.StakeholderRatingAnswers?.Where(x => x.StakeholderId == stakeholder.Id && x.CriterionsRates.Any(y => y.CriterionId == criterions[i].Id && y.Rate == 1)).Count() > 0 ? "m-list-badge__item--warning" : "")">
                                                             1
                                                         </span>
                                                         <span title="@String.Join(',', answerGroup.OtherAnswers.Where(x => x.StakeholderRatingAnswers.Any(y => y.StakeholderId == stakeholder.Id && y.CriterionsRates.Where(z => z.CriterionId == criterions[i].Id && z.Rate == 2).Any())).Select(x => x.Author).ToArray())"
                                                               data-toggle="tooltip"
-                                                              class="m-list-badge__item m-list-badge__item--default sp-tooltip @(answerGroup.DefinitiveAnswer?.StakeholderRatingAnswers?.Where(x => x.CriterionsRates.Any(y => y.CriterionId == criterions[i].Id && y.Rate == 2)).Count() > 0 ? "m-list-badge__item--warning" : "")">
+                                                              class="m-list-badge__item @(answerGroup.DefinitiveAnswer?.StakeholderRatingAnswers?.Where(x => x.StakeholderId == stakeholder.Id && x.CriterionsRates.Any(y => y.CriterionId == criterions[i].Id && y.Rate == 2)).Count() > 0 ? "m-list-badge__item--warning" : "")">
                                                             2
                                                         </span>
                                                         <span title="@String.Join(',', answerGroup.OtherAnswers.Where(x => x.StakeholderRatingAnswers.Any(y => y.StakeholderId == stakeholder.Id && y.CriterionsRates.Where(z => z.CriterionId == criterions[i].Id && z.Rate == 3).Any())).Select(x => x.Author).ToArray())"
                                                               data-toggle="tooltip"
-                                                              class="m-list-badge__item m-list-badge__item--default sp-tooltip @(answerGroup.DefinitiveAnswer?.StakeholderRatingAnswers?.Where(x => x.CriterionsRates.Any(y => y.CriterionId == criterions[i].Id && y.Rate == 3)).Count() > 0 ? "m-list-badge__item--warning" : "")">
+                                                              class="m-list-badge__item @(answerGroup.DefinitiveAnswer?.StakeholderRatingAnswers?.Where(x => x.StakeholderId == stakeholder.Id && x.CriterionsRates.Any(y => y.CriterionId == criterions[i].Id && y.Rate == 3)).Count() > 0 ? "m-list-badge__item--warning" : "")">
                                                             3
                                                         </span>
                                                         <span title="@String.Join(',', answerGroup.OtherAnswers.Where(x => x.StakeholderRatingAnswers.Any(y => y.StakeholderId == stakeholder.Id && y.CriterionsRates.Where(z => z.CriterionId == criterions[i].Id && z.Rate == 4).Any())).Select(x => x.Author).ToArray())"
                                                               data-toggle="tooltip"
-                                                              class="m-list-badge__item m-list-badge__item--default sp-tooltip @(answerGroup.DefinitiveAnswer?.StakeholderRatingAnswers?.Where(x => x.CriterionsRates.Any(y => y.CriterionId == criterions[i].Id && y.Rate == 4)).Count() > 0 ? "m-list-badge__item--warning" : "")">
+                                                              class="m-list-badge__item @(answerGroup.DefinitiveAnswer?.StakeholderRatingAnswers?.Where(x => x.StakeholderId == stakeholder.Id && x.CriterionsRates.Any(y => y.CriterionId == criterions[i].Id && y.Rate == 4)).Count() > 0 ? "m-list-badge__item--warning" : "")">
                                                             4
                                                         </span>
                                                         <span title="@String.Join(',', answerGroup.OtherAnswers.Where(x => x.StakeholderRatingAnswers.Any(y => y.StakeholderId == stakeholder.Id && y.CriterionsRates.Where(z => z.CriterionId == criterions[i].Id && z.Rate == 5).Any())).Select(x => x.Author).ToArray())"
                                                               data-toggle="tooltip"
-                                                              class="m-list-badge__item m-list-badge__item--default sp-tooltip @(answerGroup.DefinitiveAnswer?.StakeholderRatingAnswers?.Where(x => x.CriterionsRates.Any(y => y.CriterionId == criterions[i].Id && y.Rate == 5)).Count() > 0 ? "m-list-badge__item--warning" : "")">
+                                                              class="m-list-badge__item @(answerGroup.DefinitiveAnswer?.StakeholderRatingAnswers?.Where(x => x.StakeholderId == stakeholder.Id && x.CriterionsRates.Any(y => y.CriterionId == criterions[i].Id && y.Rate == 5)).Count() > 0 ? "m-list-badge__item--warning" : "")">
                                                             5
                                                         </span>
                                                     </div>
