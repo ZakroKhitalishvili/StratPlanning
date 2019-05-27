@@ -643,8 +643,6 @@ namespace Application.Repositories
                 {
                     SaveStrategicIssueAnswers(answerGroup, userStepResult);
                 }
-            }
-        }
 
                 if (question.Type == QuestionTypes.InternalStakeholdersRating || question.Type == QuestionTypes.ExternalStakeholdersRating)
                 {
@@ -1218,8 +1216,6 @@ namespace Application.Repositories
                     {
                         planStep.AnswerGroups.Add(GetStrategicIssueAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
                     }
-                }
-            }
 
                     if (questions[j].Type == QuestionTypes.InternalStakeholdersRating)
                     {
