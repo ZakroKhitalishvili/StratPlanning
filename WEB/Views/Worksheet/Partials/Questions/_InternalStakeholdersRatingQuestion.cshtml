@@ -1,0 +1,188 @@
+﻿@model Application.DTOs.PlanStepDTO
+
+@{
+    var blockIndex = (int)ViewData["BlockIndex"];
+    var questionIndex = (int)ViewData["QuestionIndex"];
+
+    var questionIndexOffset = (int)ViewData["QuestionIndexOffset"];
+
+    var question = Model.StepBlocks[blockIndex].Questions[questionIndex];
+
+    var answerGroup = Model.AnswerGroups.Where(x => x.QuestionId == question.Id).FirstOrDefault();
+
+    var filledAnswer = Model.AnswerGroups[questionIndexOffset + questionIndex];
+
+    var stakeholders = Web.Helpers.StepHelper.GetDefinitifeStakeholders(Context, Model.PlanId, true).OrderBy(x => x.Id).ToArray();
+
+    var criterions = Web.Helpers.StepHelper.GetCriterionsDictionary(Context).OrderBy(x => x.Id).ToArray();
+}
+
+@if (stakeholders.Count() > 0)
+{
+    <div class="m-accordion m-accordion--default" id="m_accordion_@(question.Id)" role="tablist">
+        <!--begin::Item-->
+        <div class="m-accordion__item">
+            <div class="m-accordion__item-head collapsed" role="tab" id="m_accordion_@(question.Id)_item_1_head"
+                 data-toggle="collapse" href="#m_accordion_@(question.Id)_item_1_body" aria-expanded="false">
+                <span class="m-accordion__item-title">
+                    Combined Internal stakeholder ratings
+                </span>
+                <span class="m-accordion__item-mode"></span>
+            </div>
+            <div class="m-accordion__item-body collapse" id="m_accordion_@(question.Id)_item_1_body" role="tabpanel"
+                 aria-labelledby="#m_accordion_@(question.Id)_item_1_head" data-parent="#m_accordion_@(question.Id)">
+                <div class="m-accordion__item-content">
+                    <div class="m-scrollable " data-scrollable="true" data-axis="xy">
+
+                        <table class="stakeholders-rating-table table  m-table  table-bordered m--margin-top-10 m--margin-bottom-20">
+                            <tbody>
+                                <tr>
+                                    <th title="Name">
+                                        Stakeholder name
+                                    </th>
+                                    @foreach (var stakeholder in stakeholders)
+                                    {
+                                        <td>@stakeholder.Name</td>
+                                    }
+                                </tr>
+                                @for (var i = 0; i < criterions.Count(); i++)
+                                {
+                                    <tr>
+                                        <th>
+                                            @criterions[i].Title
+                                        </th>
+                                        @foreach(var stakeholder in stakeholders)
+                                        {
+                                            <td>
+                                                <div class="m-list-badge m-list-badge--light-bg">
+                                                    <div class="m-list-badge__items">
+                                                        <span title="@String.Join(',', answerGroup.OtherAnswers.Where(x => x.StakeholderRatingAnswers.Any(y => y.StakeholderId == stakeholder.Id && y.CriterionsRates.Where(z => z.CriterionId == criterions[i].Id && z.Rate == 1).Any())).Select(x => x.Author).ToArray())"
+                                                              data-toggle="tooltip"
+                                                              class="m-list-badge__item m-list-badge__item--default sp-tooltip @(answerGroup.DefinitiveAnswer?.StakeholderRatingAnswers?.Where(x => x.StakeholderId == stakeholder.Id && x.CriterionsRates.Any(y => y.CriterionId == criterions[i].Id && y.Rate == 1)).Count() > 0 ? "m-list-badge__item--warning" : "")">
+                                                            1
+                                                        </span>
+                                                        <span title="@String.Join(',', answerGroup.OtherAnswers.Where(x => x.StakeholderRatingAnswers.Any(y => y.StakeholderId == stakeholder.Id && y.CriterionsRates.Where(z => z.CriterionId == criterions[i].Id && z.Rate == 2).Any())).Select(x => x.Author).ToArray())"
+                                                              data-toggle="tooltip"
+                                                              class="m-list-badge__item m-list-badge__item--default sp-tooltip @(answerGroup.DefinitiveAnswer?.StakeholderRatingAnswers?.Where(x => x.StakeholderId == stakeholder.Id && x.CriterionsRates.Any(y => y.CriterionId == criterions[i].Id && y.Rate == 2)).Count() > 0 ? "m-list-badge__item--warning" : "")">
+                                                            2
+                                                        </span>
+                                                        <span title="@String.Join(',', answerGroup.OtherAnswers.Where(x => x.StakeholderRatingAnswers.Any(y => y.StakeholderId == stakeholder.Id && y.CriterionsRates.Where(z => z.CriterionId == criterions[i].Id && z.Rate == 3).Any())).Select(x => x.Author).ToArray())"
+                                                              data-toggle="tooltip"
+                                                              class="m-list-badge__item m-list-badge__item--default sp-tooltip @(answerGroup.DefinitiveAnswer?.StakeholderRatingAnswers?.Where(x => x.StakeholderId == stakeholder.Id && x.CriterionsRates.Any(y => y.CriterionId == criterions[i].Id && y.Rate == 3)).Count() > 0 ? "m-list-badge__item--warning" : "")">
+                                                            3
+                                                        </span>
+                                                        <span title="@String.Join(',', answerGroup.OtherAnswers.Where(x => x.StakeholderRatingAnswers.Any(y => y.StakeholderId == stakeholder.Id && y.CriterionsRates.Where(z => z.CriterionId == criterions[i].Id && z.Rate == 4).Any())).Select(x => x.Author).ToArray())"
+                                                              data-toggle="tooltip"
+                                                              class="m-list-badge__item m-list-badge__item--default sp-tooltip @(answerGroup.DefinitiveAnswer?.StakeholderRatingAnswers?.Where(x => x.StakeholderId == stakeholder.Id && x.CriterionsRates.Any(y => y.CriterionId == criterions[i].Id && y.Rate == 4)).Count() > 0 ? "m-list-badge__item--warning" : "")">
+                                                            4
+                                                        </span>
+                                                        <span title="@String.Join(',', answerGroup.OtherAnswers.Where(x => x.StakeholderRatingAnswers.Any(y => y.StakeholderId == stakeholder.Id && y.CriterionsRates.Where(z => z.CriterionId == criterions[i].Id && z.Rate == 5).Any())).Select(x => x.Author).ToArray())"
+                                                              data-toggle="tooltip"
+                                                              class="m-list-badge__item m-list-badge__item--default sp-tooltip @(answerGroup.DefinitiveAnswer?.StakeholderRatingAnswers?.Where(x => x.StakeholderId == stakeholder.Id && x.CriterionsRates.Any(y => y.CriterionId == criterions[i].Id && y.Rate == 5)).Count() > 0 ? "m-list-badge__item--warning" : "")">
+                                                            5
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                                <tr>
+                                    <th title="Grade">
+                                        Grade
+                                    </th>
+                                    @foreach (var stakeholder in stakeholders)
+                                     {
+                                         <td>
+                                            3.5
+                                        </td>
+                                     }
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Priority
+                                    </th>
+                                    @foreach (var stakeholder in stakeholders)
+                                    {
+                                        <td>
+                                            3.5
+                                        </td>
+                                    }
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end::Item-->
+    </div>
+
+    <div class="m-scrollable " data-scrollable="true" data-axis="xy">
+
+        <table id="internal-stakeholders-rating-table"
+               class="stakeholders-rating-table table  m-table  table-bordered m--margin-top-10 m--margin-bottom-20">
+            <tbody>
+                <tr>
+                    <th title="Name">
+                        Stakeholder name
+                    </th>
+                    @for (var i = 0; i < stakeholders.Count(); i++)
+                    {
+                        <td>
+                            <input type="hidden" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderRatingAnswers[@i].StakeholderId" value="@stakeholders[i].Id" />
+                            @stakeholders[i].Name
+                        </td>
+                    }
+                </tr>
+                @for (var i = 0; i < criterions.Count(); i++)
+                {
+                    <tr>
+                        <th>
+                            @criterions[i].Title
+                        </th>
+                        @for (var j = 0; j < stakeholders.Count(); j++)
+                        {
+                            var currentRate = answerGroup.Answer?.StakeholderRatingAnswers?.Where(x => x.StakeholderId == stakeholders[j].Id).SelectMany(x => x.CriterionsRates).Where(x => x.CriterionId == criterions[i].Id).Select(x => x.Rate).FirstOrDefault();
+                            <td>
+                                <input type="hidden" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderRatingAnswers[@j].CriterionsRates[@i].CriterionId" value="@criterions[i].Id" />
+                                <select class="form-control m-select2" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderRatingAnswers[@j].CriterionsRates[@i].Rate">
+                                    <!option value="1" @(currentRate == 1 ? "selected" : "")>1</!option>
+                                    <!option value="2" @(currentRate == 2 ? "selected" : "")>2</!option>
+                                    <!option value="3" @(currentRate == 3 ? "selected" : "")>3</!option>
+                                    <!option value="4" @(currentRate == 4 ? "selected" : "")>4</!option>
+                                    <!option value="5" @(currentRate == 5 ? "selected='true'" : "")>5</!option>
+                                </select>
+                            </td>
+                        }
+                    </tr>
+                }
+                <tr>
+                    <th title="Grade">
+                        Grade
+                    </th>
+                    @foreach (var stakeholder in stakeholders)
+                    {
+                        <td>@(answerGroup.Answer?.StakeholderRatingAnswers.Where(x => x.StakeholderId == stakeholder.Id).FirstOrDefault()?.Grade)</td>
+                    }
+                </tr>
+                <tr>
+                    <th>
+                        Priority
+                    </th>
+                    @for (var j = 0; j < stakeholders.Count(); j++)
+                    {
+                        <td>
+                            <input type="number" class="form-control" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderRatingAnswers[@j].Priority"
+                                   value="@((answerGroup.Answer?.StakeholderRatingAnswers?.Where(x => x.StakeholderId == stakeholders[j].Id).Select(x => x.Priority).FirstOrDefault()) ?? 0)">
+                        </td>
+                    }
+                </tr>
+
+            </tbody>
+        </table>
+        <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].QuestionId" value="@question.Id" />
+    </div>
+}

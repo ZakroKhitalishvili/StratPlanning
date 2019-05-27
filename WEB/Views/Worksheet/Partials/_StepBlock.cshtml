@@ -112,6 +112,20 @@
                          model="Model"
                          view-data='new ViewDataDictionary(ViewData) {  {"QuestionIndex", i } }' />
             }
+
+            if (questions[i].Type == QuestionTypes.InternalStakeholdersRating)
+            {
+                <partial name="~/Views/Worksheet/Partials/Questions/_InternalStakeholdersRatingQuestion.cshtml"
+                         model="Model"
+                         view-data='new ViewDataDictionary(ViewData) {  {"QuestionIndex", i } }' />
+            }
+
+            if (questions[i].Type == QuestionTypes.ExternalStakeholdersRating)
+            {
+                <partial name="~/Views/Worksheet/Partials/Questions/_ExternalStakeholdersRatingQuestion.cshtml"
+                         model="Model"
+                         view-data='new ViewDataDictionary(ViewData) {  {"QuestionIndex", i } }' />
+            }
         }
     </div>
 </div>

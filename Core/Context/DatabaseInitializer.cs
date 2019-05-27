@@ -85,6 +85,11 @@ namespace Core.Context
                 SeedSWOTStep();
             }
 
+            if (!Context.StepBlocks.Where(x => x.Step == Steps.StakeholdersAnalysis).Any())
+            {
+                SeedStakeholdersAnalysisStep();
+            }
+
 
             Context.SaveChanges();
 
@@ -489,6 +494,47 @@ namespace Core.Context
                     Questions=new List<Question>()
                     {
                         new Question{ Type=QuestionTypes.SWOT, Order=1, Title="Your answer", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false }
+                    }
+                }
+            };
+
+            Context.StepBlocks.AddRange(Blocks);
+        }
+
+        private void SeedStakeholdersAnalysisStep()
+        {
+            Blocks = new StepBlock[]
+            {
+                new StepBlock
+                {
+                    Title = "Internal stakeholders rating",
+                    Instruction = "sagittis. In dignissim commodo hendrerit. Sed congue purus luctus mi feugiat, ut consequat nisi porttitor",
+                    Order=1,
+                    Step=Steps.StakeholdersAnalysis,
+                    Description=null,
+                    UpdatedAt=DateTime.Now,
+                    CreatedAt=DateTime.Now,
+                    CreatedBy=null,
+                    UpdatedBy=null,
+                    Questions=new List<Question>()
+                    {
+                        new Question{ Type=QuestionTypes.InternalStakeholdersRating, Order=1, Title="", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description="", HasFiles=false }
+                    }
+                },
+                new StepBlock
+                {
+                    Title = "External stakeholders rating",
+                    Instruction = "sagittis. In dignissim commodo hendrerit. Sed congue purus luctus mi feugiat, ut consequat nisi porttitor",
+                    Order=1,
+                    Step=Steps.StakeholdersAnalysis,
+                    Description=null,
+                    UpdatedAt=DateTime.Now,
+                    CreatedAt=DateTime.Now,
+                    CreatedBy=null,
+                    UpdatedBy=null,
+                    Questions=new List<Question>()
+                    {
+                        new Question{ Type=QuestionTypes.ExternalStakeholdersRating, Order=2, Title="", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description="", HasFiles=false }
                     }
                 }
             };

@@ -257,13 +257,13 @@
             template: function (data, index) {
                 if (!data.stakeholderId) return null;
 
-                if ($('#s_@(question.Id)_list').find(`input[value="${data.stakeholderId}"]`).length > 0) return null;
+                if ($('#s_@(question.Id)_list').find(`input.i-stakeholder[value="${data.stakeholderId}"]`).length > 0) return null;
 
                 return `
                     <a class="m-list-badge__item m-list-badge__item--default">
                         ${data.stakeholderName} <span class="fa fa-close" onclick="deleteRecord(this, 'a')"></span>
                         <input type="hidden" value="${index}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers.index"/>
-                        <input type="hidden" value="${data.stakeholderId}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers[${index}].UserId"/>
+                        <input type="hidden" value="${data.stakeholderId}" class="i-stakeholder" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers[${index}].UserId"/>
                     </a>
                 `;
             }

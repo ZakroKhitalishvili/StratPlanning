@@ -29,5 +29,9 @@ namespace Core.Constants
         public const string SWOT = "SWOT";
 
         public const string Stakeholder = "Stakeholder";
+
+        public const string InternalStakeholdersRating = "InternalStakeholderRating";
+
+        public const string ExternalStakeholdersRating = "ExternalStakeholderRating";
     }
 }

@@ -398,7 +398,9 @@ namespace Application.Repositories
                     .Include(x => x.StepTaskAnswers).ThenInclude(x => x.UserToPlan)
                     .Include(x => x.ValueAnswers)
                     .Include(x => x.StakeholderAnswers).ThenInclude(x => x.Category)
-                    .Include(x => x.SWOTAnswers).ToList();
+                    .Include(x => x.SWOTAnswers)
+                    .Include(x => x.StakeholderRatingAnswers).ThenInclude(x => x.Criteria)
+                    .Include(x => x.StakeholderRatingAnswers).ThenInclude(x => x.Stakeholder).ToList();
         }
 
         private UserStepResult GetUserStepResult(int planId, string stepIndex, int userId)
@@ -537,6 +539,17 @@ namespace Application.Repositories
             return planStep;
         }
 
+        public IList<StakeholderDTO> GetDefinitiveStakehloders(int planId, bool isInternal)
+        {
+            return Context.UserStepResults.Where(x => x.PlanId == planId && x.IsDefinitive && x.IsSubmitted && x.Step == Steps.StakeholdersIdentify).SelectMany(x => x.StakeholderAnswers)
+                .Where(x => x.IsInternal == isInternal)
+                .Select(x => new StakeholderDTO
+            {
+                Id = x.Id,
+                Name = x.FirstName + " " + x.LastName
+            }).ToList();
+        }
+
         #endregion
 
         #region Saving methods
@@ -610,6 +623,11 @@ namespace Application.Repositories
                 if (question.Type == QuestionTypes.SWOT)
                 {
                     SaveSwotAnswers(answerGroup, userStepResult);
+                }
+
+                if (question.Type == QuestionTypes.InternalStakeholdersRating || question.Type == QuestionTypes.ExternalStakeholdersRating)
+                {
+                    SaveStakeholdersRatingAnswer(answerGroup, userStepResult);
                 }
             }
         }
@@ -1021,6 +1039,61 @@ namespace Application.Repositories
             }
         }
 
+        private void SaveStakeholdersRatingAnswer(AnswerGroupDTO answerGroup, UserStepResult userStepResult)
+        {
+            IList<StakeholderRatingAnswer> dbAnswers = null;
+
+            dbAnswers = userStepResult.StakeholderRatingAnswers.Where(x => x.QuestionId == answerGroup.QuestionId).ToList();
+
+            foreach (var dbAnswer in dbAnswers)
+            {
+                var updateAnswer = answerGroup.Answer.StakeholderRatingAnswers.Where(x => x.StakeholderId == dbAnswer.StakeholderId && dbAnswer.CreatedBy == userStepResult.UpdatedBy).FirstOrDefault();
+
+                if (updateAnswer == null)
+                {
+                    Context.StakeholderRatingAnswers.Remove(dbAnswer);
+                    Context.SaveChanges();
+                }
+                else
+                {
+                    dbAnswer.Priority = updateAnswer.Priority;
+                    dbAnswer.Criteria = updateAnswer.CriterionsRates.Select(x => new StakeholderRatingAnswerToDictionary
+                    {
+                        CriterionId = x.CriterionId,
+                        Rate = x.Rate
+                    }).ToList();
+                    dbAnswer.Grade = updateAnswer.CriterionsRates.Sum(x => x.Rate) / updateAnswer.CriterionsRates.Count();
+                    dbAnswer.UpdatedAt = userStepResult.UpdatedAt;
+                    dbAnswer.UpdatedBy = userStepResult.UpdatedBy;
+                }
+            }
+
+            foreach (var answer in answerGroup.Answer.StakeholderRatingAnswers)
+            {
+                if (!dbAnswers.Any(x => x.StakeholderId == answer.StakeholderId && x.CreatedBy == userStepResult.UpdatedBy))
+                {
+                    StakeholderRatingAnswer newAnswer = new StakeholderRatingAnswer
+                    {
+                        QuestionId = answerGroup.QuestionId,
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now,
+                        CreatedBy = userStepResult.UpdatedBy,
+                        UpdatedBy = userStepResult.UpdatedBy,
+                        StakeholderId = answer.StakeholderId,
+                        Priority = answer.Priority,
+                        Criteria = answer.CriterionsRates.Select(x => new StakeholderRatingAnswerToDictionary
+                        {
+                            CriterionId = x.CriterionId,
+                            Rate = x.Rate
+                        }).ToList(),
+                        Grade = answer.CriterionsRates.Sum(x => x.Rate) / answer.CriterionsRates.Count()
+                    };
+
+                    userStepResult.StakeholderRatingAnswers.Add(newAnswer);
+                }
+            }
+        }
+
         #endregion
 
         #region Reading methods
@@ -1074,6 +1147,16 @@ namespace Application.Repositories
                     if (questions[j].Type == QuestionTypes.SWOT)
                     {
                         planStep.AnswerGroups.Add(GetSWOTAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
+                    }
+
+                    if (questions[j].Type == QuestionTypes.InternalStakeholdersRating)
+                    {
+                        planStep.AnswerGroups.Add(GetStakeholdersRatingAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
+                    }
+
+                    if (questions[j].Type == QuestionTypes.ExternalStakeholdersRating)
+                    {
+                        planStep.AnswerGroups.Add(GetStakeholdersRatingAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
                     }
                 }
             }
@@ -1640,6 +1723,91 @@ namespace Application.Repositories
                             UserId = x.UserId,
                             CategoryId = x.CategoryId,
                             Category = x.Category?.Title
+                        }).ToList(),
+                        Author = $"{otherUserStepResult.UserToPlan.User.FirstName} {otherUserStepResult.UserToPlan.User.LastName}"
+                    };
+
+                    otherAnswers.Add(answerDTO);
+                }
+            }
+
+            answerGroup.OtherAnswers = otherAnswers;
+
+            return answerGroup;
+        }
+
+        private AnswerGroupDTO GetStakeholdersRatingAnswers(int questionId, UserStepResult currentUserStepResult, IList<UserStepResult> otherUserStepResults)
+        {
+            AnswerGroupDTO answerGroup = new AnswerGroupDTO
+            {
+                QuestionId = questionId
+            };
+
+            var currentUserAnswer = currentUserStepResult.StakeholderRatingAnswers.Where(x => x.QuestionId == questionId);
+
+            if (currentUserAnswer != null && currentUserAnswer.Any())
+            {
+                answerGroup.Answer = new AnswerDTO
+                {
+                    StakeholderRatingAnswers = currentUserAnswer.Select(x => new StakeholderRatingAnswerDTO
+                    {
+                        Grade = x.Grade,
+                        Priority = x.Priority,
+                        StakeholderId = x.StakeholderId,
+                        StakeholderName = x.Stakeholder.FirstName + " " + x.Stakeholder.LastName,
+                        CriterionsRates = x.Criteria.Select(y => new StakeholderRatingByCriterionDTO
+                        {
+                            CriterionId = y.CriterionId,
+                            Rate = y.Rate
+                        }).ToList()
+                    }).ToList()
+                };
+            }
+
+            var definitiveStepResult = otherUserStepResults.Where(x => x.IsDefinitive).SingleOrDefault();
+
+            var definitiveAnswer = definitiveStepResult?.StakeholderRatingAnswers.Where(x => x.QuestionId == questionId);
+
+            if (definitiveAnswer != null && definitiveAnswer.Any())
+            {
+                answerGroup.DefinitiveAnswer = new AnswerDTO
+                {
+                    StakeholderRatingAnswers = definitiveAnswer.Select(x => new StakeholderRatingAnswerDTO
+                    {
+                        Grade = x.Grade,
+                        Priority = x.Priority,
+                        StakeholderId = x.StakeholderId,
+                        StakeholderName = x.Stakeholder.FirstName + " " + x.Stakeholder.LastName,
+                        CriterionsRates = x.Criteria.Select(y => new StakeholderRatingByCriterionDTO
+                        {
+                            CriterionId = y.CriterionId,
+                            Rate = y.Rate
+                        }).ToList()
+                    }).ToList()
+                };
+            }
+
+            var otherAnswers = new List<AnswerDTO>();
+
+            foreach (var otherUserStepResult in otherUserStepResults.Where(x => !x.IsDefinitive))
+            {
+                var userAnswer = otherUserStepResult.StakeholderRatingAnswers.Where(x => x.QuestionId == questionId);
+
+                if (userAnswer != null && userAnswer.Any())
+                {
+                    var answerDTO = new AnswerDTO
+                    {
+                        StakeholderRatingAnswers = userAnswer.Select(x => new StakeholderRatingAnswerDTO
+                        {
+                            Grade = x.Grade,
+                            Priority = x.Priority,
+                            StakeholderId = x.StakeholderId,
+                            StakeholderName = x.Stakeholder.FirstName + " " + x.Stakeholder.LastName,
+                            CriterionsRates = x.Criteria.Select(y => new StakeholderRatingByCriterionDTO
+                            {
+                                CriterionId = y.CriterionId,
+                                Rate = y.Rate
+                            }).ToList()
                         }).ToList(),
                         Author = $"{otherUserStepResult.UserToPlan.User.FirstName} {otherUserStepResult.UserToPlan.User.LastName}"
                     };

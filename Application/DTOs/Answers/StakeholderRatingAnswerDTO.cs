@@ -12,7 +12,16 @@ namespace Application.DTOs
 
         public int Priority { get; set; }
 
-        //public virtual ICollection<StakeholderRatingAnswerToDictionary> Criteria { get; set; }
+        public string StakeholderName { get; set; }
 
+        public IList<StakeholderRatingByCriterionDTO> CriterionsRates { get; set; }
+
+    }
+
+    public class StakeholderRatingByCriterionDTO
+    {
+        public int CriterionId { get; set; }
+
+        public int Rate { get; set; }
     }
 }

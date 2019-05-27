@@ -24,5 +24,17 @@ namespace Web.Helpers
             var dictionaryRepository = context.RequestServices.GetService<IDictionaryRepository>();
             return dictionaryRepository.GetValues();
         }
+
+        public static IEnumerable<CriterionDTO> GetCriterionsDictionary(HttpContext context)
+        {
+            var dictionaryRepository = context.RequestServices.GetService<IDictionaryRepository>();
+            return dictionaryRepository.GetCriterions();
+        }
+
+        public static IEnumerable<StakeholderDTO> GetDefinitifeStakeholders(HttpContext context, int planId, bool isInternal)
+        {
+            var planRepository = context.RequestServices.GetService<IPlanRepository>();
+            return planRepository.GetDefinitiveStakehloders(planId, isInternal);
+        }
     }
 }

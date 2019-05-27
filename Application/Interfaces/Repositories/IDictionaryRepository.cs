@@ -12,5 +12,7 @@ namespace Application.Interfaces.Repositories
         IEnumerable<string> GetValues();
 
         IEnumerable<CategoryDTO> GetCategories();
+
+        IEnumerable<CriterionDTO> GetCriterions();
     }
 }
