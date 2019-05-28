@@ -648,6 +648,11 @@ namespace Application.Repositories
                 {
                     SaveStakeholdersRatingAnswer(answerGroup, userStepResult);
                 }
+
+                if (question.Type == QuestionTypes.IssueOptions)
+                {
+                    SaveIssueOptionAnswer(answerGroup, userStepResult);
+                }
             }
         }
 
@@ -1157,6 +1162,11 @@ namespace Application.Repositories
             }
         }
 
+        private void SaveIssueOptionAnswer(AnswerGroupDTO answerGroup, UserStepResult userStepResult)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region Reading methods
@@ -1225,6 +1235,11 @@ namespace Application.Repositories
                     if (questions[j].Type == QuestionTypes.ExternalStakeholdersRating)
                     {
                         planStep.AnswerGroups.Add(GetStakeholdersRatingAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
+                    }
+
+                    if (questions[j].Type == QuestionTypes.IssueOptions)
+                    {
+                        planStep.AnswerGroups.Add(GetIssueOptionsAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults));
                     }
                 }
             }
@@ -1963,6 +1978,16 @@ namespace Application.Repositories
             }
 
             answerGroup.OtherAnswers = otherAnswers;
+
+            return answerGroup;
+        }
+
+        private AnswerGroupDTO GetIssueOptionsAnswers(int questionId, UserStepResult currentUserStepResult, IList<UserStepResult> otherUserStepResults)
+        {
+            AnswerGroupDTO answerGroup = new AnswerGroupDTO
+            {
+                QuestionId = questionId
+            };
 
             return answerGroup;
         }

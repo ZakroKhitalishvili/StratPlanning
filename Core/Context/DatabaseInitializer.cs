@@ -672,25 +672,9 @@ namespace Core.Context
             {
                 new StepBlock
                 {
-                    Title = "Low quality of back-office staff",
+                    Title = "Key questions for drafting the action plan ",
                     Instruction = "sagittis. In dignissim commodo hendrerit. Sed congue purus luctus mi feugiat, ut consequat nisi porttitor",
                     Order=1,
-                    Step=Steps.ActionPlanKeyQuestions,
-                    Description=null,
-                    UpdatedAt =DateTime.Now,
-                    CreatedAt=DateTime.Now,
-                    CreatedBy=null,
-                    UpdatedBy=null,
-                    Questions=new List<Question>()
-                    {
-                        new Question{ Type=QuestionTypes.IssueOptions, Order=1, Title="Your answer", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false }
-                    }
-                },
-                new StepBlock
-                {
-                    Title = "Low member involvement",
-                    Instruction = "sagittis. In dignissim commodo hendrerit. Sed congue purus luctus mi feugiat, ut consequat nisi porttitor",
-                    Order=2,
                     Step=Steps.ActionPlanKeyQuestions,
                     Description=null,
                     UpdatedAt =DateTime.Now,

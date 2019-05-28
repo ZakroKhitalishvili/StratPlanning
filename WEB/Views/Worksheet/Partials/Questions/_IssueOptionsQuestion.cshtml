@@ -1,0 +1,674 @@
+﻿@model Application.DTOs.PlanStepDTO
+
+@{
+    var blockIndex = (int)ViewData["BlockIndex"];
+    var questionIndex = (int)ViewData["QuestionIndex"];
+
+    var questionIndexOffset = (int)ViewData["QuestionIndexOffset"];
+
+    var question = Model.StepBlocks[blockIndex].Questions[questionIndex];
+
+    var answerGroup = Model.AnswerGroups.Where(x => x.QuestionId == question.Id).FirstOrDefault();
+
+    var filledAnswer = Model.AnswerGroups[questionIndexOffset + questionIndex];
+}
+
+<div class="m-accordion m-accordion--default" id="issue_accordions" role="tablist">
+
+    <div class="m-accordion__item">
+        <div class="m-accordion__item-head collapsed" role="tab"
+             id="issue_accordion_1_head" data-toggle="collapse"
+             href="#issue_accordion_1_body" aria-expanded="false">
+            <span class="m-accordion__item-title">
+                Low quality of back-office staff
+            </span>
+            <span class="m-accordion__item-mode"></span>
+        </div>
+        <div class="m-accordion__item-body collapse" id="issue_accordion_1_body"
+             role="tabpanel" aria-labelledby="issue_accordion_1_head"
+             data-parent="#issue_accordions" style="">
+            <div class="m-accordion__item-content">
+                <div class="m-demo">
+                    <div class="m-demo__preview">
+
+                        <div class="m-scrollable " data-scrollable="true"
+                             data-axis="xy">
+                            <table class="issue-actions-datatable table m-table  table-bordered m--margin-top-10 m--margin-bottom-20">
+                                <thead>
+                                    <tr>
+                                        <th title="Option">
+                                            Option
+                                        </th>
+                                        <th title="ResponsiblePeople">
+                                            Actor responsible
+                                        </th>
+                                        <th title="IssueValue2">
+                                            Required resources
+                                        </th>
+                                        <th title="IssueValue3">
+                                            Best option
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="author">
+                                        <td colspan="4"> Giorgi Giorganashvili</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Restructuring
+                                        </td>
+                                        <td>
+                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                <div class="m-list-badge__items">
+                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                        Giorgi Giorganashvili
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                <div class="m-list-badge__items">
+                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                        International assistance
+                                                        providers
+                                                    </span>
+                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                        Party leadership
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <i class="fa fa-check-square-o sp-font-md"></i>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Hiring new staff
+                                        </td>
+                                        <td>
+                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                <div class="m-list-badge__items">
+                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                        Giorgi Giorganashvili
+                                                    </span>
+                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                        Mariam kelaptrishvili
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                <div class="m-list-badge__items">
+                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                        Party leadership
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <i class="fa fa-square-o sp-font-md"></i>
+                                        </td>
+
+                                    </tr>
+                                    <tr class="author">
+                                        <td colspan="4">Mariam Merabishvili</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Training remaining staff
+                                        </td>
+                                        <td>
+                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                <div class="m-list-badge__items">
+                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                        Giorgi Giorganashvili
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                <div class="m-list-badge__items">
+                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                        International assistance
+                                                        providers
+                                                    </span>
+                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                        Party leadership
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <i class="fa fa-check-square-o sp-font-md"></i>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Hiring new staff
+                                        </td>
+                                        <td>
+                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                <div class="m-list-badge__items">
+                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                        Giorgi Giorganashvili
+                                                    </span>
+                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                        Mariam kelaptrishvili
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                <div class="m-list-badge__items">
+                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                        Party leadership
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <i class="fa fa-square-o sp-font-md"></i>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group m-form__group">
+                    <label>
+                        Your answer
+                    </label>
+                    <div>
+                        <div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <a href=""
+                                       class="btn btn-sp m-btn m-btn--pill m--pull-right"
+                                       data-toggle="modal"
+                                       data-target="#issue_option_add_modal">
+                                        Add
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="m-scrollable " data-scrollable="true"
+                                 data-axis="xy">
+                                <table class="issue-actions-datatable table m-table  table-bordered m--margin-top-10 m--margin-bottom-20">
+                                    <thead>
+                                        <tr>
+                                            <th title="Option">
+                                                Option
+                                            </th>
+                                            <th title="ResponsiblePeople">
+                                                Actor responsible
+                                            </th>
+                                            <th title="IssueValue2">
+                                                Required resources
+                                            </th>
+                                            <th title="IssueValue3">
+                                                Best option
+                                            </th>
+                                            <th>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                Training remaining staff
+                                            </td>
+                                            <td>
+                                                <div class="m-list-badge m-list-badge--light-bg">
+                                                    <div class="m-list-badge__items">
+                                                        <span class="m-list-badge__item m-list-badge__item--default">
+                                                            Giorgi Giorganashvili
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="m-list-badge m-list-badge--light-bg">
+                                                    <div class="m-list-badge__items">
+                                                        <span class="m-list-badge__item m-list-badge__item--default">
+                                                            International assistance
+                                                            providers
+                                                        </span>
+                                                        <span class="m-list-badge__item m-list-badge__item--default">
+                                                            Grant scheme offered by the
+                                                            election commission
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <label class="m-radio radio-sp m-radio--solid">
+                                                    <input type="radio" name="issue_1"
+                                                           value="1">
+
+                                                    <span></span>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <span class="table-row-actions">
+                                                    <a href="#"
+                                                       class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
+                                                       title="Delete">
+                                                        <i class="la la-trash"></i>
+                                                    </a>
+
+                                                    <a href="#"
+                                                       class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
+                                                       title="Edit" data-toggle="modal"
+                                                       data-target="#issue_option_add_modal">
+                                                        <i class="la la-edit"></i>
+                                                    </a>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                clarify membership list
+                                            </td>
+                                            <td>
+                                                <div class="m-list-badge m-list-badge--light-bg">
+                                                    <div class="m-list-badge__items">
+                                                        <span class="m-list-badge__item m-list-badge__item--default">
+                                                            Giorgi Giorganashvili
+                                                        </span>
+                                                        <span class="m-list-badge__item m-list-badge__item--default">
+                                                            Mariam kelaptrishvili
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="m-list-badge m-list-badge--light-bg">
+                                                    <div class="m-list-badge__items">
+                                                        <span class="m-list-badge__item m-list-badge__item--default">
+                                                            Grant scheme offered by the
+                                                            election commission
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <label class="m-radio radio-sp m-radio--solid">
+                                                    <input type="radio" name="issue_1"
+                                                           value="1">
+
+                                                    <span></span>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <span class="table-row-actions">
+                                                    <a href="#"
+                                                       class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
+                                                       title="Delete">
+                                                        <i class="la la-trash"></i>
+                                                    </a>
+
+                                                    <a href="#"
+                                                       class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
+                                                       title="Edit" data-toggle="modal"
+                                                       data-target="#issue_option_add_modal">
+                                                        <i class="la la-edit"></i>
+                                                    </a>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="m-accordion__item">
+        <div class="m-accordion__item-head collapsed" role="tab"
+             id="issue_accordion_2_head" data-toggle="collapse"
+             href="#issue_accordion_2_body" aria-expanded="false">
+            <span class="m-accordion__item-title">
+                Low member involvement
+            </span>
+            <span class="m-accordion__item-mode"></span>
+        </div>
+        <div class="m-accordion__item-body collapse" id="issue_accordion_2_body"
+             role="tabpanel" aria-labelledby="issue_accordion_2_head"
+             data-parent="#issue_accordions" style="">
+            <div class="m-accordion__item-content">
+                <div class="m-demo">
+                    <div class="m-demo__preview">
+
+                        <div class="m-scrollable " data-scrollable="true"
+                             data-axis="xy">
+                            <table class="issue-actions-datatable table m-table  table-bordered m--margin-top-10 m--margin-bottom-20">
+                                <thead>
+                                    <tr>
+                                        <th title="Option">
+                                            Option
+                                        </th>
+                                        <th title="ResponsiblePeople">
+                                            Actor responsible
+                                        </th>
+                                        <th title="IssueValue2">
+                                            Required resources
+                                        </th>
+                                        <th title="IssueValue3">
+                                            Best option
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="author">
+                                        <td colspan="4">Giorgi Giorganashvili</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Restructuring
+                                        </td>
+                                        <td>
+                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                <div class="m-list-badge__items">
+                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                        Giorgi
+                                                        Giorganashvili
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                <div class="m-list-badge__items">
+                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                        Donor support
+                                                    </span>
+                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                        Grant scheme offered by
+                                                        the election commission
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <i class="fa fa-check-square-o sp-font-md"></i>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            clarify membership list
+                                        </td>
+                                        <td>
+                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                <div class="m-list-badge__items">
+                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                        Giorgi
+                                                        Giorganashvili
+                                                    </span>
+                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                        Mariam
+                                                        kelaptrishvili
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                <div class="m-list-badge__items">
+                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                        Grant scheme offered by
+                                                        the election commission
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <i class="fa fa-square-o sp-font-md"></i>
+                                        </td>
+
+                                    </tr>
+                                    <tr class="author">
+                                        <td colspan="4">Mariam Merabishvili</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Restructuring
+                                        </td>
+                                        <td>
+                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                <div class="m-list-badge__items">
+                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                        Giorgi
+                                                        Giorganashvili
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                <div class="m-list-badge__items">
+                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                        International assistance
+                                                        providers
+                                                    </span>
+                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                        Party leadership
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <i class="fa fa-check-square-o sp-font-md"></i>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            define membership rules
+                                        </td>
+                                        <td>
+                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                <div class="m-list-badge__items">
+                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                        Giorgi
+                                                        Giorganashvili
+                                                    </span>
+                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                        Mariam
+                                                        kelaptrishvili
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                <div class="m-list-badge__items">
+                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                        Grant scheme offered by
+                                                        the election commission
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <i class="fa fa-square-o sp-font-md"></i>
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group m-form__group">
+                    <label>
+                        Your answer
+                    </label>
+                    <div>
+                        <div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <a href=""
+                                       class="btn btn-sp m-btn m-btn--pill m--pull-right"
+                                       data-toggle="modal"
+                                       data-target="#issue_option_add_modal">
+                                        Add
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="m-scrollable " data-scrollable="true"
+                                 data-axis="xy">
+                                <table class="issue-actions-datatable table m-table  table-bordered m--margin-top-10 m--margin-bottom-20">
+                                    <thead>
+                                        <tr>
+                                            <th title="Option">
+                                                Option
+                                            </th>
+                                            <th title="ResponsiblePeople">
+                                                Actor responsible
+                                            </th>
+                                            <th title="IssueValue2">
+                                                Required resources
+                                            </th>
+                                            <th title="IssueValue3">
+                                                Best option
+                                            </th>
+                                            <th>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                Training remaining staff
+                                            </td>
+                                            <td>
+                                                <div class="m-list-badge m-list-badge--light-bg">
+                                                    <div class="m-list-badge__items">
+                                                        <span class="m-list-badge__item m-list-badge__item--default">
+                                                            Giorgi Giorganashvili
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="m-list-badge m-list-badge--light-bg">
+                                                    <div class="m-list-badge__items">
+                                                        <span class="m-list-badge__item m-list-badge__item--default">
+                                                            Donor support
+                                                        </span>
+                                                        <span class="m-list-badge__item m-list-badge__item--default">
+                                                            Grant scheme offered by the
+                                                            election commission
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <label class="m-radio radio-sp m-radio--solid">
+                                                    <input type="radio" name="issue_1"
+                                                           value="1">
+
+                                                    <span></span>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <span class="table-row-actions">
+                                                    <a href="#"
+                                                       class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
+                                                       title="Delete">
+                                                        <i class="la la-trash"></i>
+                                                    </a>
+
+                                                    <a href="#"
+                                                       class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
+                                                       title="Edit" data-toggle="modal"
+                                                       data-target="#issue_option_add_modal">
+                                                        <i class="la la-edit"></i>
+                                                    </a>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                define membership rules
+                                            </td>
+                                            <td>
+                                                <div class="m-list-badge m-list-badge--light-bg">
+                                                    <div class="m-list-badge__items">
+                                                        <span class="m-list-badge__item m-list-badge__item--default">
+                                                            Giorgi Giorganashvili
+                                                        </span>
+                                                        <span class="m-list-badge__item m-list-badge__item--default">
+                                                            Mariam kelaptrishvili
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="m-list-badge m-list-badge--light-bg">
+                                                    <div class="m-list-badge__items">
+                                                        <span class="m-list-badge__item m-list-badge__item--default">
+                                                            Grant scheme offered by the
+                                                            election commission
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <label class="m-radio radio-sp m-radio--solid">
+                                                    <input type="radio" name="issue_1"
+                                                           value="1">
+
+                                                    <span></span>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <span class="table-row-actions">
+                                                    <a href="#"
+                                                       class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
+                                                       title="Delete">
+                                                        <i class="la la-trash"></i>
+                                                    </a>
+
+                                                    <a href="#"
+                                                       class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
+                                                       title="Edit" data-toggle="modal"
+                                                       data-target="#issue_option_add_modal">
+                                                        <i class="la la-edit"></i>
+                                                    </a>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
