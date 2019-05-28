@@ -154,7 +154,7 @@
                     </th>
                     @foreach (var stakeholder in stakeholders)
                     {
-                        <td>@(answerGroup.Answer?.StakeholderRatingAnswers.Where(x => x.StakeholderId == stakeholder.Id).FirstOrDefault()?.Grade)</td>
+                        <td>@(string.Format("{0:0.00}", answerGroup.Answer?.StakeholderRatingAnswers.Where(x => x.StakeholderId == stakeholder.Id).FirstOrDefault()?.Grade))</td>
                     }
                 </tr>
 

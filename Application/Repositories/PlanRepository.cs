@@ -1141,7 +1141,7 @@ namespace Application.Repositories
                         CriterionId = x.CriterionId,
                         Rate = x.Rate
                     }).ToList();
-                    dbAnswer.Grade = updateAnswer.CriterionsRates.Sum(x => x.Rate) / updateAnswer.CriterionsRates.Count();
+                    dbAnswer.Grade = (double)updateAnswer.CriterionsRates.Sum(x => x.Rate) / updateAnswer.CriterionsRates.Count();
                     dbAnswer.UpdatedAt = userStepResult.UpdatedAt;
                     dbAnswer.UpdatedBy = userStepResult.UpdatedBy;
                 }
@@ -1165,7 +1165,7 @@ namespace Application.Repositories
                             CriterionId = x.CriterionId,
                             Rate = x.Rate
                         }).ToList(),
-                        Grade = answer.CriterionsRates.Sum(x => x.Rate) / answer.CriterionsRates.Count()
+                        Grade = (double)answer.CriterionsRates.Sum(x => x.Rate) / answer.CriterionsRates.Count()
                     };
 
                     userStepResult.StakeholderRatingAnswers.Add(newAnswer);
