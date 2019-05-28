@@ -36,6 +36,8 @@ namespace Core.Constants
 
         public const string ExternalStakeholdersRating = "ExternalStakeholderRating";
 
+        public const string IssueOptions = "IssueOptions";
+
         public const string IssueDistinguish = "IssueDistinguish";
 
         public const string IssueDistinguishSelect = "IssueDistinguishSelect";

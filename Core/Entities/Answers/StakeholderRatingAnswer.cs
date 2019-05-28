@@ -13,7 +13,7 @@ namespace Core.Entities
 
         public int StakeholderId { get; set; }
 
-        public int? Grade { get; set; }
+        public double? Grade { get; set; }
 
         public int Priority { get; set; }
 

@@ -532,6 +532,11 @@ $(document).on('hidden.bs.modal', function (event) {
         $(el).val("");
     });
 
+    modal.find('select.m-select2').each(function (i, el) {
+        $(el).select2('val', "");
+        $(el).trigger('change');
+    });
+
     modal.find('.m-index').val("");
 });
 
@@ -590,6 +595,11 @@ function showRecordDetail(source, modalId) {
         $(el).val(data[$(el).attr('name')]);
     });
 
+    modal.find('select.m-select2.m-input[multiple]').each(function (i, el) {
+        $(el).val(data[$(el).attr('name')].split(','));
+        $(el).trigger('change');
+    });
+
     modal.find('.m-index').val(index);
 
     modal.modal('show');
@@ -603,6 +613,16 @@ function deleteRecord(source, targetSelector = false) {
     }
 
     $(record).remove();
+}
+
+function checkLikeRadio(el) {
+    if ($(el).is(':checked')) {
+        $('.radio-checkbox[data-group="' + $(el).attr('data-group') + '"]').each(function () {
+            if (this !== el) {
+                $(this).prop('checked', false);
+            }
+        });
+    }
 }
 
 function guid() {
