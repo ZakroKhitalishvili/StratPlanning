@@ -35,5 +35,7 @@ namespace Core.Constants
         public const string InternalStakeholdersRating = "InternalStakeholderRating";
 
         public const string ExternalStakeholdersRating = "ExternalStakeholderRating";
+
+        public const string IssueOptions = "IssueOptions";
     }
 }

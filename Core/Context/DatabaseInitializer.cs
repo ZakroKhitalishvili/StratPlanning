@@ -14,6 +14,7 @@ namespace Core.Context
         private Plan[] Plans { get; set; }
         private StepBlock[] Blocks { get; set; }
         private Dictionary[] Positions { get; set; }
+        private Resource[] Resources { get; set; }
         private PlanningDbContext Context { get; set; }
 
         public static void Initialize(PlanningDbContext context)
@@ -56,6 +57,11 @@ namespace Core.Context
                 SeedStakeholderCriterions();
             }
 
+            if (!Context.Resources.Any())
+            {
+                SeedResources();
+            }
+
             if (!Context.StepBlocks.Where(x => x.Step == Steps.Predeparture).Any())
             {
                 SeedPredepartureStep();
@@ -93,6 +99,11 @@ namespace Core.Context
             if (!Context.StepBlocks.Where(x => x.Step == Steps.StakeholdersAnalysis).Any())
             {
                 SeedStakeholdersAnalysisStep();
+            }
+
+            if (!Context.StepBlocks.Where(x => x.Step == Steps.ActionPlanKeyQuestions).Any())
+            {
+                SeedActionPlanKeyQuestionsStep();
             }
 
 
@@ -140,6 +151,31 @@ namespace Core.Context
             };
 
             Context.Dictionaries.AddRange(Positions);
+        }
+
+        private void SeedResources()
+        {
+            Resources = new Resource[]
+            {
+                new Resource
+                {
+                    Title="Donor support",CreatedAt=DateTime.Now, CreatedBy=null
+                },
+                new Resource
+                {
+                    Title="Grant scheme offered by the election commission",CreatedAt=DateTime.Now, CreatedBy=null
+                },
+                new Resource
+                {
+                    Title="International assistance providers",CreatedAt=DateTime.Now, CreatedBy=null
+                },
+                new Resource
+                {
+                    Title="Party leadership",CreatedAt=DateTime.Now, CreatedBy=null
+                },
+            };
+
+            Context.Resources.AddRange(Resources);
         }
 
         private void SeedUsers()
@@ -623,6 +659,47 @@ namespace Core.Context
                     Questions=new List<Question>()
                     {
                         new Question{ Type=QuestionTypes.StrategicIssues, Order=1, Title="Your answer", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false }
+                    }
+                }
+            };
+
+            Context.StepBlocks.AddRange(Blocks);
+        }
+
+        private void SeedActionPlanKeyQuestionsStep()
+        {
+            Blocks = new StepBlock[]
+            {
+                new StepBlock
+                {
+                    Title = "Low quality of back-office staff",
+                    Instruction = "sagittis. In dignissim commodo hendrerit. Sed congue purus luctus mi feugiat, ut consequat nisi porttitor",
+                    Order=1,
+                    Step=Steps.ActionPlanKeyQuestions,
+                    Description=null,
+                    UpdatedAt =DateTime.Now,
+                    CreatedAt=DateTime.Now,
+                    CreatedBy=null,
+                    UpdatedBy=null,
+                    Questions=new List<Question>()
+                    {
+                        new Question{ Type=QuestionTypes.IssueOptions, Order=1, Title="Your answer", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false }
+                    }
+                },
+                new StepBlock
+                {
+                    Title = "Low member involvement",
+                    Instruction = "sagittis. In dignissim commodo hendrerit. Sed congue purus luctus mi feugiat, ut consequat nisi porttitor",
+                    Order=2,
+                    Step=Steps.ActionPlanKeyQuestions,
+                    Description=null,
+                    UpdatedAt =DateTime.Now,
+                    CreatedAt=DateTime.Now,
+                    CreatedBy=null,
+                    UpdatedBy=null,
+                    Questions=new List<Question>()
+                    {
+                        new Question{ Type=QuestionTypes.IssueOptions, Order=1, Title="Your answer", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false }
                     }
                 }
             };
