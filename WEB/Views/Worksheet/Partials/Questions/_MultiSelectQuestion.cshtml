@@ -39,7 +39,7 @@
                                                         @otherAnswer.Author
                                                     </span>
                                                     <span class="m-list-timeline__text">
-                                                        @foreach (var optionid in otherAnswer.SelectAnswers)
+                                                        @foreach (var optionid in otherAnswer.MultiSelectAnswer.SelectAnswers)
                                                         {
                                                             var option = question.Options.Where(x => x.Id == optionid).FirstOrDefault();
                                                             <span>@option.Title;</span>
@@ -55,7 +55,7 @@
                                                         <b>Definitive answer</b>
                                                     </span>
                                                     <span class="m-list-timeline__text">
-                                                        @foreach (var optionid in answerGroup.DefinitiveAnswer.SelectAnswers)
+                                                        @foreach (var optionid in answerGroup.DefinitiveAnswer.MultiSelectAnswer.SelectAnswers)
                                                         {
                                                             var option = question.Options.Where(x => x.Id == optionid).FirstOrDefault();
                                                             <span>@option.Title;</span>
@@ -75,10 +75,10 @@
         </div>
         <div class="col-10 col-md-11">
             <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].QuestionId" value="@question.Id" />
-            <select asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.SelectAnswers"
+            <select asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.MultiSelectAnswer.SelectAnswers"
                     asp-items="question.Options.Select(o=>new SelectListItem {Text= o.Title ,Value=o.Id.ToString()})" multiple class="form-control m-select2"></select>
             <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer"></span>
-            <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.SelectAnswers"></span>
+            <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.MultiSelectAnswer.SelectAnswers"></span>
         </div>
     </div>
     @if (!string.IsNullOrEmpty(question.Description))

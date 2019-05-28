@@ -95,6 +95,10 @@ namespace Core.Context
                 SeedStakeholdersAnalysisStep();
             }
 
+            if (!Context.StepBlocks.Where(x => x.Step == Steps.IssuesDistinguish).Any())
+            {
+                SeedDistinguishIssuesStep();
+            }
 
             Context.SaveChanges();
 
@@ -628,6 +632,111 @@ namespace Core.Context
             };
 
             Context.StepBlocks.AddRange(Blocks);
+        }
+
+        private void SeedDistinguishIssuesStep()
+        {
+            Blocks = new StepBlock[]
+            {
+                new StepBlock
+                {
+                    Title = "Operational and strategic issues",
+                    Instruction = "sagittis. In dignissim commodo hendrerit. Sed congue purus luctus mi feugiat, ut consequat nisi porttitor",
+                    Order=1,
+                    Step=Steps.IssuesDistinguish,
+                    Description=null,
+                    UpdatedAt =DateTime.Now,
+                    CreatedAt=DateTime.Now,
+                    CreatedBy=null,
+                    UpdatedBy=null,
+                    Questions=new List<Question>()
+                    {
+                        new Question{ Type=QuestionTypes.IssueDistinguish, Order=1, Title=string.Empty, CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false }
+                    }
+                }
+            };
+
+            Context.StepBlocks.AddRange(Blocks);
+
+            var questions = new Question[]
+            {
+                new Question{ Type=QuestionTypes.IssueDistinguishSelect, Order=1, Title="Is the issue worthy of the attention of the party’s leadership?", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false ,HasOptions=true,
+                Options= new Option[]
+                {
+                    new Option{ Title="Yes", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null},
+                    new Option{ Title="No", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null}
+                } },
+                new Question{ Type=QuestionTypes.IssueDistinguishSelect, Order=2, Title="When will the strategic issue’s challenge or opportunity confront your party?", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false ,HasOptions=true,
+                Options= new Option[]
+                {
+                    new Option{ Title="Only now", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null},
+                    new Option{ Title="Nest year", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null},
+                    new Option{ Title="2 years or more", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null}
+                } },
+                new Question{ Type=QuestionTypes.IssueDistinguishSelect, Order=3, Title="How broad an impact will the issue have?", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false ,HasOptions=true,
+                Options= new Option[]
+                {
+                    new Option{ Title="Single unit or division", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null},
+                    new Option{ Title="Entire organisation", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null}
+                } },
+               new Question{ Type=QuestionTypes.IssueDistinguishSelect, Order=4, Title="How large is your party’s financial risk or opportunity deriving from this issue?", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false ,HasOptions=true,
+                Options= new Option[]
+                {
+                    new Option{ Title="Minor", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null},
+                    new Option{ Title="Moderate", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null},
+                    new Option{ Title="Major", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null}
+                } },
+                new Question{ Type=QuestionTypes.IssueDistinguishMultiSelect, Order=5, Title="Are strategies for issue resolution likely to require:", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false ,HasOptions=true,
+                Options= new Option[]
+                {
+                    new Option{ Title="Significant amendment to formal statuses of the party", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null},
+                    new Option{ Title="Significant staff changes", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null},
+                    new Option{ Title="Major facilities changes", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null},
+                    new Option{ Title="Major changes in stakeholder relationships", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null}
+                } },
+                new Question{ Type=QuestionTypes.IssueDistinguishSelect, Order=6, Title="How apparent is the best approach for issue resolution?", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false ,HasOptions=true,
+                Options= new Option[]
+                {
+                    new Option{ Title="Obvious, ready to implement", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null},
+                    new Option{ Title="Wide open", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null}
+                } },
+                new Question{ Type=QuestionTypes.IssueDistinguishSelect, Order=7, Title="What is the lowest level of management that can decide how to deal with this issue?", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false ,HasOptions=true,
+                Options= new Option[]
+                {
+                    new Option{ Title="Line staff supervisor", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null},
+                    new Option{ Title="Head of major department", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null}
+                } },
+                new Question{ Type=QuestionTypes.IssueDistinguishSelect, Order=8, Title="What are the probable consequences of not addressing the issue?", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false ,HasOptions=true,
+                Options= new Option[]
+                {
+                    new Option{ Title="Inconvenience, inefficiency", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null},
+                    new Option{ Title="Significant loss of credibility /  electoral support", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null},
+                    new Option{ Title="Major loss of credibility /  electoral support", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null}
+                } },
+                new Question{ Type=QuestionTypes.IssueDistinguishSelect, Order=9, Title="How many other groups in the party (head office, regional branches) are affected by this issue and must be involved in its resolution?", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false ,HasOptions=true,
+                Options= new Option[]
+                {
+                    new Option{ Title="None", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null},
+                    new Option{ Title="Few", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null},
+                    new Option{ Title="Most", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null}
+                } },
+                new Question{ Type=QuestionTypes.IssueDistinguishSelect, Order=10, Title="How sensitive or ‘charged’ is this issue relative to community, social, political and cultural values?", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false ,HasOptions=true,
+                Options= new Option[]
+                {
+                    new Option{ Title="Benign", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null},
+                    new Option{ Title="Touchy", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null},
+                    new Option{ Title="Explosive", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null}
+                } },
+                new Question{ Type=QuestionTypes.IssueDistinguishTypeSelect, Order=11, Title="Type", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false ,HasOptions=true,
+                Options= new Option[]
+                {
+                    new Option{ Title="Operational", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null},
+                    new Option{ Title="Strategic", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now,UpdatedBy=null, CreatedBy=null}
+                } }
+            };
+
+            Context.Questions.AddRange(questions);
+
         }
     }
 }

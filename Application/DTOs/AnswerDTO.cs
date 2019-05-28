@@ -12,7 +12,7 @@ namespace Application.DTOs
 
         public SelectAnswerDTO SelectAnswer { get; set; }
 
-        public IList<int> SelectAnswers { get; set; }
+        public MultiSelectAnswerDTO MultiSelectAnswer { get; set; }
 
         public IList<string> TagSelectAnswers { get; set; }
 
@@ -33,5 +33,7 @@ namespace Application.DTOs
         public IList<StrategicIssueAnswerDTO> StrategicIssueAnswers { get; set; }
 
         public IList<StakeholderRatingAnswerDTO> StakeholderRatingAnswers { get; set; }
+
+        public IList<IssueDistinguishAnswerDTO> IssueDistinguishAnswers { get; set; }
     }
 }

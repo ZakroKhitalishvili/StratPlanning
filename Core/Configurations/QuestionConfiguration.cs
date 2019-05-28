@@ -54,7 +54,7 @@ namespace Core.Configurations
             builder.HasOne(x => x.StepBlock)
                 .WithMany(s => s.Questions)
                 .HasForeignKey(x => x.StepBlockId)
-                .IsRequired()
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.Cascade);
 
         }

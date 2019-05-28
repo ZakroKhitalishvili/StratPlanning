@@ -26,7 +26,7 @@ namespace Core.Entities
 
         public int Id { get; set; }
 
-        public int StepBlockId { get; set; }
+        public int? StepBlockId { get; set; }
 
         public string Title { get; set; }
 

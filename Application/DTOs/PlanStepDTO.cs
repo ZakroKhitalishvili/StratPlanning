@@ -15,6 +15,8 @@ namespace Application.DTOs
 
         public IList<StepBlockDTO> StepBlocks { get; set; }
 
+        public IList<QuestionDTO> AdditionalQuestions { get; set; }
+
         public IList<AnswerGroupDTO> AnswerGroups { get; set; }
 
         public IList<AnswerGroupDTO> FilledAnswers { get; set; }

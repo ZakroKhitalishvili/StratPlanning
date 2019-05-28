@@ -8,6 +8,8 @@ namespace Application.DTOs
     {
         public int? OptionId { get; set; }
 
+        public int? IssueId { get; set; }
+
         public string AltOption { get; set; }
     }
 }
