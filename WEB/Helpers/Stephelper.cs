@@ -42,5 +42,11 @@ namespace Web.Helpers
             var planRepository = context.RequestServices.GetService<IPlanRepository>();
             return planRepository.GetIssues(planId);
         }
+
+        public static IEnumerable<ResourceDTO> GetResources(HttpContext context)
+        {
+            var planRepository = context.RequestServices.GetService<IPlanRepository>();
+            return planRepository.GetResources();
+        }
     }
 }

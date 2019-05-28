@@ -11,197 +11,32 @@
     var answerGroup = Model.AnswerGroups.Where(x => x.QuestionId == question.Id).FirstOrDefault();
 
     var filledAnswer = Model.AnswerGroups[questionIndexOffset + questionIndex];
+
+    var issues = Web.Helpers.StepHelper.GetIssues(Context, Model.PlanId).ToArray();
+
+    var resources = Web.Helpers.StepHelper.GetResources(Context);
 }
 
 <div class="m-accordion m-accordion--default" id="issue_accordions" role="tablist">
 
-    <div class="m-accordion__item">
-        <div class="m-accordion__item-head collapsed" role="tab"
-             id="issue_accordion_1_head" data-toggle="collapse"
-             href="#issue_accordion_1_body" aria-expanded="false">
-            <span class="m-accordion__item-title">
-                Low quality of back-office staff
-            </span>
-            <span class="m-accordion__item-mode"></span>
-        </div>
-        <div class="m-accordion__item-body collapse" id="issue_accordion_1_body"
-             role="tabpanel" aria-labelledby="issue_accordion_1_head"
-             data-parent="#issue_accordions" style="">
-            <div class="m-accordion__item-content">
-                <div class="m-demo">
-                    <div class="m-demo__preview">
+    @for (var i = 0; i < issues.Count(); i++)
+    {
+        <div class="m-accordion__item">
+            <div class="m-accordion__item-head collapsed" role="tab"
+                 id="issue_accordion_@(i)_head" data-toggle="collapse"
+                 href="#issue_accordion_@(i)_body" aria-expanded="false">
+                <span class="m-accordion__item-title">
+                    @(issues[i].Name)
+                </span>
+                <span class="m-accordion__item-mode"></span>
+            </div>
+            <div class="m-accordion__item-body collapse" id="issue_accordion_@(i)_body"
+                 role="tabpanel" aria-labelledby="issue_accordion_@(i)_head"
+                 data-parent="#issue_accordions" style="">
+                <div class="m-accordion__item-content">
+                    <div class="m-demo">
+                        <div class="m-demo__preview">
 
-                        <div class="m-scrollable " data-scrollable="true"
-                             data-axis="xy">
-                            <table class="issue-actions-datatable table m-table  table-bordered m--margin-top-10 m--margin-bottom-20">
-                                <thead>
-                                    <tr>
-                                        <th title="Option">
-                                            Option
-                                        </th>
-                                        <th title="ResponsiblePeople">
-                                            Actor responsible
-                                        </th>
-                                        <th title="IssueValue2">
-                                            Required resources
-                                        </th>
-                                        <th title="IssueValue3">
-                                            Best option
-                                        </th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="author">
-                                        <td colspan="4"> Giorgi Giorganashvili</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Restructuring
-                                        </td>
-                                        <td>
-                                            <div class="m-list-badge m-list-badge--light-bg">
-                                                <div class="m-list-badge__items">
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        Giorgi Giorganashvili
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="m-list-badge m-list-badge--light-bg">
-                                                <div class="m-list-badge__items">
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        International assistance
-                                                        providers
-                                                    </span>
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        Party leadership
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <i class="fa fa-check-square-o sp-font-md"></i>
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Hiring new staff
-                                        </td>
-                                        <td>
-                                            <div class="m-list-badge m-list-badge--light-bg">
-                                                <div class="m-list-badge__items">
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        Giorgi Giorganashvili
-                                                    </span>
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        Mariam kelaptrishvili
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="m-list-badge m-list-badge--light-bg">
-                                                <div class="m-list-badge__items">
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        Party leadership
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <i class="fa fa-square-o sp-font-md"></i>
-                                        </td>
-
-                                    </tr>
-                                    <tr class="author">
-                                        <td colspan="4">Mariam Merabishvili</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Training remaining staff
-                                        </td>
-                                        <td>
-                                            <div class="m-list-badge m-list-badge--light-bg">
-                                                <div class="m-list-badge__items">
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        Giorgi Giorganashvili
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="m-list-badge m-list-badge--light-bg">
-                                                <div class="m-list-badge__items">
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        International assistance
-                                                        providers
-                                                    </span>
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        Party leadership
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <i class="fa fa-check-square-o sp-font-md"></i>
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Hiring new staff
-                                        </td>
-                                        <td>
-                                            <div class="m-list-badge m-list-badge--light-bg">
-                                                <div class="m-list-badge__items">
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        Giorgi Giorganashvili
-                                                    </span>
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        Mariam kelaptrishvili
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="m-list-badge m-list-badge--light-bg">
-                                                <div class="m-list-badge__items">
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        Party leadership
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <i class="fa fa-square-o sp-font-md"></i>
-                                        </td>
-
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group m-form__group">
-                    <label>
-                        Your answer
-                    </label>
-                    <div>
-                        <div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <a href=""
-                                       class="btn btn-sp m-btn m-btn--pill m--pull-right"
-                                       data-toggle="modal"
-                                       data-target="#issue_option_add_modal">
-                                        Add
-                                    </a>
-                                </div>
-                            </div>
                             <div class="m-scrollable " data-scrollable="true"
                                  data-axis="xy">
                                 <table class="issue-actions-datatable table m-table  table-bordered m--margin-top-10 m--margin-bottom-20">
@@ -219,456 +54,360 @@
                                             <th title="IssueValue3">
                                                 Best option
                                             </th>
-                                            <th>
-                                            </th>
+
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>
-                                                Training remaining staff
-                                            </td>
-                                            <td>
-                                                <div class="m-list-badge m-list-badge--light-bg">
-                                                    <div class="m-list-badge__items">
-                                                        <span class="m-list-badge__item m-list-badge__item--default">
-                                                            Giorgi Giorganashvili
-                                                        </span>
+                                        @if (filledAnswer.DefinitiveAnswer != null)
+                                        {
+                                            foreach (var answer in filledAnswer.DefinitiveAnswer.IssueOptionAnswers.Where(x => x.IssueId == issues[i].Id).ToList())
+                                            {
+                                                <tr class="author">
+                                                    <td colspan="4">Definitive answer</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        @answer.Option
+                                                    </td>
+                                                    <td>
+                                                        <div class="m-list-badge m-list-badge--light-bg">
+                                                            <div class="m-list-badge__items">
+                                                                <span class="m-list-badge__item m-list-badge__item--default">
+                                                                    @answer.Actors
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="m-list-badge m-list-badge--light-bg">
+                                                            <div class="m-list-badge__items">
+                                                                @foreach (var res in answer.Resources.Split(','))
+                                                                {
+                                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                                        @res
+                                                                    </span>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        @if (answer.IsBestOption)
+                                                        {
+                                                            <i class="fa fa-check-square-o sp-font-md"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="fa fa-square-o sp-font-md"></i>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                        @foreach (var answer in filledAnswer.OtherAnswers.SelectMany(x => x.IssueOptionAnswers.Select(y => new { author = x.Author, info = y })).Where(x => x.info.IssueId == issues[i].Id).ToList())
+                                        {
+                                            <tr class="author">
+                                                <td colspan="4">@answer.author</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @answer.info.Option
+                                                </td>
+                                                <td>
+                                                    <div class="m-list-badge m-list-badge--light-bg">
+                                                        <div class="m-list-badge__items">
+                                                            <span class="m-list-badge__item m-list-badge__item--default">
+                                                                @answer.info.Actors
+                                                            </span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="m-list-badge m-list-badge--light-bg">
-                                                    <div class="m-list-badge__items">
-                                                        <span class="m-list-badge__item m-list-badge__item--default">
-                                                            International assistance
-                                                            providers
-                                                        </span>
-                                                        <span class="m-list-badge__item m-list-badge__item--default">
-                                                            Grant scheme offered by the
-                                                            election commission
-                                                        </span>
+                                                </td>
+                                                <td>
+                                                    <div class="m-list-badge m-list-badge--light-bg">
+                                                        <div class="m-list-badge__items">
+                                                            @foreach (var res in answer.info.Resources.Split(','))
+                                                            {
+                                                                <span class="m-list-badge__item m-list-badge__item--default">
+                                                                    @res
+                                                                </span>
+                                                            }
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <label class="m-radio radio-sp m-radio--solid">
-                                                    <input type="radio" name="issue_1"
-                                                           value="1">
-
-                                                    <span></span>
-                                                </label>
-                                            </td>
-                                            <td>
-                                                <span class="table-row-actions">
-                                                    <a href="#"
-                                                       class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
-                                                       title="Delete">
-                                                        <i class="la la-trash"></i>
-                                                    </a>
-
-                                                    <a href="#"
-                                                       class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
-                                                       title="Edit" data-toggle="modal"
-                                                       data-target="#issue_option_add_modal">
-                                                        <i class="la la-edit"></i>
-                                                    </a>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                clarify membership list
-                                            </td>
-                                            <td>
-                                                <div class="m-list-badge m-list-badge--light-bg">
-                                                    <div class="m-list-badge__items">
-                                                        <span class="m-list-badge__item m-list-badge__item--default">
-                                                            Giorgi Giorganashvili
-                                                        </span>
-                                                        <span class="m-list-badge__item m-list-badge__item--default">
-                                                            Mariam kelaptrishvili
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="m-list-badge m-list-badge--light-bg">
-                                                    <div class="m-list-badge__items">
-                                                        <span class="m-list-badge__item m-list-badge__item--default">
-                                                            Grant scheme offered by the
-                                                            election commission
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <label class="m-radio radio-sp m-radio--solid">
-                                                    <input type="radio" name="issue_1"
-                                                           value="1">
-
-                                                    <span></span>
-                                                </label>
-                                            </td>
-                                            <td>
-                                                <span class="table-row-actions">
-                                                    <a href="#"
-                                                       class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
-                                                       title="Delete">
-                                                        <i class="la la-trash"></i>
-                                                    </a>
-
-                                                    <a href="#"
-                                                       class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
-                                                       title="Edit" data-toggle="modal"
-                                                       data-target="#issue_option_add_modal">
-                                                        <i class="la la-edit"></i>
-                                                    </a>
-                                                </span>
-                                            </td>
-                                        </tr>
+                                                </td>
+                                                <td>
+                                                    @if (answer.info.IsBestOption)
+                                                    {
+                                                        <i class="fa fa-check-square-o sp-font-md"></i>
+                                                    }
+                                                    else
+                                                    {
+                                                        <i class="fa fa-square-o sp-font-md"></i>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
                                     </tbody>
                                 </table>
                             </div>
+                        </div>
+                    </div>
 
+                    <div class="form-group m-form__group">
+                        <label>
+                            @question.Title
+                        </label>
+                        <div>
+                            <div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
+                                        {
+                                            <a href="" class="btn btn-sp m-btn m-btn--pill m--pull-right" data-toggle="modal" data-target="#m_@(question.Id)_@(issues[i].Id)_issueOptionModal">
+                                                Add
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="m-scrollable " data-scrollable="true"
+                                     data-axis="xy">
+                                    <table class="issue-actions-datatable table m-table  table-bordered m--margin-top-10 m--margin-bottom-20">
+                                        <thead>
+                                            <tr>
+                                                <th title="Option">
+                                                    Option
+                                                </th>
+                                                <th title="ResponsiblePeople">
+                                                    Actor responsible
+                                                </th>
+                                                <th title="IssueValue2">
+                                                    Required resources
+                                                </th>
+                                                <th title="IssueValue3">
+                                                    Best option
+                                                </th>
+                                                <th>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="o_@(question.Id)_@(issues[i].Id)_list">
+                                            @if (filledAnswer.Answer != null)
+                                            {
+                                                string guid = "";
+                                                foreach (var answer in filledAnswer.Answer.IssueOptionAnswers.Where(x => x.IssueId == issues[i].Id).ToList())
+                                                {
+                                                    guid = Guid.NewGuid().ToString();
+                                                    <tr id="@guid" data-val='@Json.Serialize(answer)'>
+                                                        <td>
+                                                            @answer.Option
+                                                        </td>
+                                                        <td>
+                                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                                <div class="m-list-badge__items">
+                                                                    <span class="m-list-badge__item m-list-badge__item--default">
+                                                                        @answer.Actors
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                                <div class="m-list-badge__items">
+                                                                    @foreach (var res in answer.Resources.Split(','))
+                                                                    {
+                                                                        <span class="m-list-badge__item m-list-badge__item--default">
+                                                                            @res
+                                                                        </span>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
+                                                            {
+                                                                <label class="m-radio radio-sp m-radio--solid">
+                                                                    <input type="checkbox" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssueOptionAnswers[@guid].IsBestOption" @(answer.IsBestOption ? "checked=true" : "") value="true" class="radio-checkbox" data-group="@(issues[i].Id)" onchange="checkLikeRadio(this)">
+
+                                                                    <span></span>
+                                                                </label>
+                                                            }
+                                                            else if (answer.IsBestOption)
+                                                            {
+                                                                <i class="fa fa-check-square-o sp-font-md"></i>
+                                                            }
+                                                            else
+                                                            {
+                                                                <i class="fa fa-square-o sp-font-md"></i>
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
+                                                            {
+                                                                <span class="table-row-actions">
+                                                                    <button type="button"
+                                                                            class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
+                                                                            title="Delete" onclick="deleteRecord(this, 'tr')">
+                                                                        <i class="la la-trash"></i>
+                                                                    </button>
+
+                                                                    <button type="button"
+                                                                            class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
+                                                                            onclick="showRecordDetail(this, '#m_@(question.Id)_@(issues[i].Id)_issueOptionModal')">
+                                                                        <i class="la la-edit"></i>
+                                                                    </button>
+                                                                </span>
+                                                            }
+                                                            <input type="hidden" value="@guid" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssueOptionAnswers.index" />
+                                                            <input type="hidden" value="@answer.Id" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssueOptionAnswers[@guid].Id" />
+                                                            <input type="hidden" value="@issues[i].Id" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssueOptionAnswers[@guid].IssueId" />
+                                                            <input type="hidden" value="@answer.Option" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssueOptionAnswers[@guid].Option" />
+                                                            <input type="hidden" value="@answer.Actors" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssueOptionAnswers[@guid].Actors" />
+                                                            <input type="hidden" value="@answer.Resources" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssueOptionAnswers[@guid].Resources" />
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="m-accordion__item">
-        <div class="m-accordion__item-head collapsed" role="tab"
-             id="issue_accordion_2_head" data-toggle="collapse"
-             href="#issue_accordion_2_body" aria-expanded="false">
-            <span class="m-accordion__item-title">
-                Low member involvement
-            </span>
-            <span class="m-accordion__item-mode"></span>
-        </div>
-        <div class="m-accordion__item-body collapse" id="issue_accordion_2_body"
-             role="tabpanel" aria-labelledby="issue_accordion_2_head"
-             data-parent="#issue_accordions" style="">
-            <div class="m-accordion__item-content">
-                <div class="m-demo">
-                    <div class="m-demo__preview">
-
-                        <div class="m-scrollable " data-scrollable="true"
-                             data-axis="xy">
-                            <table class="issue-actions-datatable table m-table  table-bordered m--margin-top-10 m--margin-bottom-20">
-                                <thead>
-                                    <tr>
-                                        <th title="Option">
-                                            Option
-                                        </th>
-                                        <th title="ResponsiblePeople">
-                                            Actor responsible
-                                        </th>
-                                        <th title="IssueValue2">
-                                            Required resources
-                                        </th>
-                                        <th title="IssueValue3">
-                                            Best option
-                                        </th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="author">
-                                        <td colspan="4">Giorgi Giorganashvili</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Restructuring
-                                        </td>
-                                        <td>
-                                            <div class="m-list-badge m-list-badge--light-bg">
-                                                <div class="m-list-badge__items">
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        Giorgi
-                                                        Giorganashvili
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="m-list-badge m-list-badge--light-bg">
-                                                <div class="m-list-badge__items">
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        Donor support
-                                                    </span>
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        Grant scheme offered by
-                                                        the election commission
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <i class="fa fa-check-square-o sp-font-md"></i>
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            clarify membership list
-                                        </td>
-                                        <td>
-                                            <div class="m-list-badge m-list-badge--light-bg">
-                                                <div class="m-list-badge__items">
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        Giorgi
-                                                        Giorganashvili
-                                                    </span>
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        Mariam
-                                                        kelaptrishvili
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="m-list-badge m-list-badge--light-bg">
-                                                <div class="m-list-badge__items">
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        Grant scheme offered by
-                                                        the election commission
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <i class="fa fa-square-o sp-font-md"></i>
-                                        </td>
-
-                                    </tr>
-                                    <tr class="author">
-                                        <td colspan="4">Mariam Merabishvili</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Restructuring
-                                        </td>
-                                        <td>
-                                            <div class="m-list-badge m-list-badge--light-bg">
-                                                <div class="m-list-badge__items">
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        Giorgi
-                                                        Giorganashvili
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="m-list-badge m-list-badge--light-bg">
-                                                <div class="m-list-badge__items">
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        International assistance
-                                                        providers
-                                                    </span>
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        Party leadership
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <i class="fa fa-check-square-o sp-font-md"></i>
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            define membership rules
-                                        </td>
-                                        <td>
-                                            <div class="m-list-badge m-list-badge--light-bg">
-                                                <div class="m-list-badge__items">
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        Giorgi
-                                                        Giorganashvili
-                                                    </span>
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        Mariam
-                                                        kelaptrishvili
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="m-list-badge m-list-badge--light-bg">
-                                                <div class="m-list-badge__items">
-                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                        Grant scheme offered by
-                                                        the election commission
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <i class="fa fa-square-o sp-font-md"></i>
-                                        </td>
-
-                                    </tr>
-
-                                </tbody>
-                            </table>
+        @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
+        {
+            <div class="modal fade" id="m_@(question.Id)_@(issues[i].Id)_issueOptionModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="">
+                                Add an option
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="la la-remove"></span>
+                            </button>
                         </div>
-                    </div>
-                </div>
-
-                <div class="form-group m-form__group">
-                    <label>
-                        Your answer
-                    </label>
-                    <div>
-                        <div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <a href=""
-                                       class="btn btn-sp m-btn m-btn--pill m--pull-right"
-                                       data-toggle="modal"
-                                       data-target="#issue_option_add_modal">
-                                        Add
-                                    </a>
+                        <div class="m-form m-form--fit m-form--label-align-right">
+                            <div class="modal-body">
+                                <input type="hidden" class="m-index" />
+                                <input type="hidden" class="m-input" name="id" />
+                                <div class="form-group m-form__group row m--margin-top-20">
+                                    <label class="col-form-label col-lg-3 col-sm-12">
+                                        Option
+                                    </label>
+                                    <div class="col-lg-9 col-md-9 col-sm-12">
+                                        <input class="form-control m-input" name="option" />
+                                    </div>
+                                </div>
+                                <div class="form-group m-form__group row m--margin-top-20">
+                                    <label class="col-form-label col-lg-3 col-sm-12">
+                                        Actor Responsible
+                                    </label>
+                                    <div class="col-lg-9 col-md-9 col-sm-12">
+                                        <textarea class="form-control m-input" rows="3" name="actors"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group m-form__group row m--margin-top-20">
+                                    <label class="col-form-label col-lg-3 col-sm-12">
+                                        Required resources
+                                    </label>
+                                    <div class="col-lg-9 col-md-9 col-sm-12">
+                                        <select name="resources" class="form-control m-select2 tag-select m-input" style="width:100%;" multiple>
+                                            @foreach (var res in resources)
+                                            {
+                                                <option value="@(res.Title)">@res.Title</option>
+                                            }
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="m-scrollable " data-scrollable="true"
-                                 data-axis="xy">
-                                <table class="issue-actions-datatable table m-table  table-bordered m--margin-top-10 m--margin-bottom-20">
-                                    <thead>
-                                        <tr>
-                                            <th title="Option">
-                                                Option
-                                            </th>
-                                            <th title="ResponsiblePeople">
-                                                Actor responsible
-                                            </th>
-                                            <th title="IssueValue2">
-                                                Required resources
-                                            </th>
-                                            <th title="IssueValue3">
-                                                Best option
-                                            </th>
-                                            <th>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                Training remaining staff
-                                            </td>
-                                            <td>
-                                                <div class="m-list-badge m-list-badge--light-bg">
-                                                    <div class="m-list-badge__items">
-                                                        <span class="m-list-badge__item m-list-badge__item--default">
-                                                            Giorgi Giorganashvili
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="m-list-badge m-list-badge--light-bg">
-                                                    <div class="m-list-badge__items">
-                                                        <span class="m-list-badge__item m-list-badge__item--default">
-                                                            Donor support
-                                                        </span>
-                                                        <span class="m-list-badge__item m-list-badge__item--default">
-                                                            Grant scheme offered by the
-                                                            election commission
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <label class="m-radio radio-sp m-radio--solid">
-                                                    <input type="radio" name="issue_1"
-                                                           value="1">
-
-                                                    <span></span>
-                                                </label>
-                                            </td>
-                                            <td>
-                                                <span class="table-row-actions">
-                                                    <a href="#"
-                                                       class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
-                                                       title="Delete">
-                                                        <i class="la la-trash"></i>
-                                                    </a>
-
-                                                    <a href="#"
-                                                       class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
-                                                       title="Edit" data-toggle="modal"
-                                                       data-target="#issue_option_add_modal">
-                                                        <i class="la la-edit"></i>
-                                                    </a>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                define membership rules
-                                            </td>
-                                            <td>
-                                                <div class="m-list-badge m-list-badge--light-bg">
-                                                    <div class="m-list-badge__items">
-                                                        <span class="m-list-badge__item m-list-badge__item--default">
-                                                            Giorgi Giorganashvili
-                                                        </span>
-                                                        <span class="m-list-badge__item m-list-badge__item--default">
-                                                            Mariam kelaptrishvili
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="m-list-badge m-list-badge--light-bg">
-                                                    <div class="m-list-badge__items">
-                                                        <span class="m-list-badge__item m-list-badge__item--default">
-                                                            Grant scheme offered by the
-                                                            election commission
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <label class="m-radio radio-sp m-radio--solid">
-                                                    <input type="radio" name="issue_1"
-                                                           value="1">
-
-                                                    <span></span>
-                                                </label>
-                                            </td>
-                                            <td>
-                                                <span class="table-row-actions">
-                                                    <a href="#"
-                                                       class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
-                                                       title="Delete">
-                                                        <i class="la la-trash"></i>
-                                                    </a>
-
-                                                    <a href="#"
-                                                       class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
-                                                       title="Edit" data-toggle="modal"
-                                                       data-target="#issue_option_add_modal">
-                                                        <i class="la la-edit"></i>
-                                                    </a>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-sp m-btn submit-btn" onclick="editRecord('#m_@(question.Id)_@(issues[i].Id)_issueOptionModal','#o_@(question.Id)_@(issues[i].Id)_list');">
+                                    Submit
+                                </button>
+                                <button type="button" class="btn btn-secondary m-btn" data-dismiss="modal">
+                                    Close
+                                </button>
                             </div>
-
                         </div>
                     </div>
                 </div>
-
             </div>
-        </div>
-    </div>
+            <script>
+                if (typeof fieldOptions === 'undefined') {
+                    var fieldOptions = {};
+                }
 
+                fieldOptions['#o_@(question.Id)_@(issues[i].Id)_list'] = {
+                    template: function (data, index) {
+                        var resourcesTempl = "";
 
+                        data.resources.forEach(function (v) {
+                            resourcesTempl += `
+                                <span class="m-list-badge__item m-list-badge__item--default">
+                                    ${v}
+                                </span>
+                            `;
+                        })
+
+                        data.resources = data.resources.join(',');
+
+                        return `
+                            <tr id="${index}" data-val='${JSON.stringify(data)}'>
+                                <td>
+                                    ${data.option}
+                                </td>
+                                <td>
+                                    <div class="m-list-badge m-list-badge--light-bg">
+                                        <div class="m-list-badge__items">
+                                            <span class="m-list-badge__item m-list-badge__item--default">
+                                                ${data.actors}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="m-list-badge m-list-badge--light-bg">
+                                        <div class="m-list-badge__items">
+                                            ${resourcesTempl}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <label class="m-radio radio-sp m-radio--solid">
+                                        <input type="checkbox" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssueOptionAnswers[${data.index}].IsBestOption" value="true" class="radio-checkbox" data-group="@(issues[i].Id)" onchange="checkLikeRadio(this)">
+
+                                        <span></span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <span class="table-row-actions">
+                                        <button type="button"
+                                            class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
+                                            title="Delete" onclick="deleteRecord(this, 'tr')">
+                                            <i class="la la-trash"></i>
+                                        </button>
+
+                                        <button type="button"
+                                            class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
+                                            onclick="showRecordDetail(this, '#m_@(question.Id)_@(issues[i].Id)_issueOptionModal')">
+                                            <i class="la la-edit"></i>
+                                        </button>
+                                    </span>
+                                    <input type="hidden" value="${index}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssueOptionAnswers.index" />
+                                    <input type="hidden" value="${data.id ? data.id : 0}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssueOptionAnswers[${index}].Id" />
+                                    <input type="hidden" value="@(issues[i].Id)" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssueOptionAnswers[${index}].IssueId" />
+                                    <input type="hidden" value="${data.option}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssueOptionAnswers[${index}].Option" />
+                                    <input type="hidden" value="${data.actors}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssueOptionAnswers[${index}].Actors" />
+                                    <input type="hidden" value="${data.resources}" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssueOptionAnswers[${index}].Resources" />
+                                </td>
+                            </tr>
+                        `;
+                    }
+                };
+            </script>
+        }
+    }
+    <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].QuestionId" value="@question.Id" />
 </div>

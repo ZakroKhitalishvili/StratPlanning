@@ -410,7 +410,9 @@ namespace Application.Repositories
                     .Include(x => x.SWOTAnswers)
                     .Include(x => x.StrategicIssueAnswers).ThenInclude(x => x.Issue)
                     .Include(x => x.StakeholderRatingAnswers).ThenInclude(x => x.Criteria)
-                    .Include(x => x.StakeholderRatingAnswers).ThenInclude(x => x.Stakeholder).ToList();
+                    .Include(x => x.StakeholderRatingAnswers).ThenInclude(x => x.Stakeholder)
+                    .Include(x => x.IssueOptionAnswers).ThenInclude(x => x.IssueOptionAnswersToResources).ThenInclude(x => x.Resource)
+                    .Include(x => x.IssueOptionAnswers).ThenInclude(x => x.Issue).ToList();
         }
 
         private UserStepResult GetUserStepResult(int planId, string stepIndex, int userId)
@@ -561,6 +563,15 @@ namespace Application.Repositories
             {
                 Id = x.Id,
                 Name = x.FirstName + " " + x.LastName
+            }).ToList();
+        }
+
+        public IList<ResourceDTO> GetResources()
+        {
+            return Context.Resources.Select(x => new ResourceDTO
+            {
+                Id = x.Id,
+                Title = x.Title
             }).ToList();
         }
 
@@ -1164,7 +1175,84 @@ namespace Application.Repositories
 
         private void SaveIssueOptionAnswer(AnswerGroupDTO answerGroup, UserStepResult userStepResult)
         {
-            throw new NotImplementedException();
+            IList<IssueOptionAnswer> dbAnswers = null;
+
+            dbAnswers = userStepResult.IssueOptionAnswers.Where(x => x.QuestionId == answerGroup.QuestionId).ToList();
+
+            foreach (var dbAnswer in dbAnswers)
+            {
+                var updateAnswer = answerGroup.Answer.IssueOptionAnswers.Where(x => x.Id == dbAnswer.Id).FirstOrDefault();
+
+                if (updateAnswer == null)
+                {
+                    Context.IssueOptionAnswers.Remove(dbAnswer);
+                    Context.SaveChanges();
+                }
+                else
+                {
+                    dbAnswer.IssueId = updateAnswer.IssueId;
+                    dbAnswer.IsBestOption = updateAnswer.IsBestOption;
+                    dbAnswer.Actors = updateAnswer.Actors;
+                    dbAnswer.Option = updateAnswer.Option;
+                    dbAnswer.IssueOptionAnswersToResources = InitIssueResources(updateAnswer.Resources, dbAnswer);
+                    dbAnswer.UpdatedAt = userStepResult.UpdatedAt;
+                    dbAnswer.UpdatedBy = userStepResult.UpdatedBy;
+                }
+            }
+
+            foreach (var answer in answerGroup.Answer.IssueOptionAnswers)
+            {
+                if (!dbAnswers.Any(x => x.Id == answer.Id))
+                {
+                    IssueOptionAnswer newAnswer = new IssueOptionAnswer
+                    {
+                        QuestionId = answerGroup.QuestionId,
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now,
+                        CreatedBy = userStepResult.UpdatedBy,
+                        UpdatedBy = userStepResult.UpdatedBy,
+                        IssueId = answer.IssueId,
+                        IsBestOption = answer.IsBestOption,
+                        Actors = answer.Actors,
+                        Option = answer.Option
+                    };
+
+                    newAnswer.IssueOptionAnswersToResources = InitIssueResources(answer.Resources, newAnswer);
+
+                    userStepResult.IssueOptionAnswers.Add(newAnswer);
+                }
+            }
+        }
+
+        private IList<IssueOptionAnswerToResource> InitIssueResources(string resources, IssueOptionAnswer answer)
+        {
+            IList<IssueOptionAnswerToResource> result = new List<IssueOptionAnswerToResource>();
+
+            resources.Split(',').ToList().ForEach(y =>
+            {
+                var issueRes = answer.IssueOptionAnswersToResources.Where(x => x.Resource.Title == y).FirstOrDefault();
+
+                if (issueRes == null)
+                {
+                    var res = Context.Resources.Where(x => x.Title == y).FirstOrDefault();
+
+                    if (res == null)
+                    {
+                        res = new Resource { Title = y };
+
+                        Context.Attach(res);
+                    }
+
+                    issueRes = new IssueOptionAnswerToResource
+                    {
+                        Resource = res
+                    };
+                }
+
+                result.Add(issueRes);
+            });
+
+            return result;
         }
 
         #endregion
@@ -1989,6 +2077,72 @@ namespace Application.Repositories
                 QuestionId = questionId
             };
 
+            var currentUserAnswer = currentUserStepResult.IssueOptionAnswers.Where(x => x.QuestionId == questionId);
+
+            if (currentUserAnswer != null && currentUserAnswer.Any())
+            {
+                answerGroup.Answer = new AnswerDTO
+                {
+                    IssueOptionAnswers = currentUserAnswer.Select(x => new IssueOptionAnsweDTO
+                    {
+                        Id = x.Id,
+                        IssueId = x.IssueId,
+                        Actors = x.Actors,
+                        IsBestOption = x.IsBestOption,
+                        Option = x.Option,
+                        Resources = String.Join(',', x.IssueOptionAnswersToResources.Select(y => y.Resource.Title).ToList())
+                    }).ToList()
+                };
+            }
+
+            var definitiveStepResult = otherUserStepResults.Where(x => x.IsDefinitive).SingleOrDefault();
+
+            var definitiveAnswer = definitiveStepResult?.IssueOptionAnswers.Where(x => x.QuestionId == questionId);
+
+            if (definitiveAnswer != null && definitiveAnswer.Any())
+            {
+                answerGroup.DefinitiveAnswer = new AnswerDTO
+                {
+                    IssueOptionAnswers = definitiveAnswer.Select(x => new IssueOptionAnsweDTO
+                    {
+                        Id = x.Id,
+                        IssueId = x.IssueId,
+                        Actors = x.Actors,
+                        IsBestOption = x.IsBestOption,
+                        Option = x.Option,
+                        Resources = String.Join(',', x.IssueOptionAnswersToResources.Select(y => y.Resource.Title).ToList())
+                    }).ToList()
+                };
+            }
+
+            var otherAnswers = new List<AnswerDTO>();
+
+            foreach (var otherUserStepResult in otherUserStepResults.Where(x => !x.IsDefinitive))
+            {
+                var userAnswer = otherUserStepResult.IssueOptionAnswers.Where(x => x.QuestionId == questionId);
+
+                if (userAnswer != null && userAnswer.Any())
+                {
+                    var answerDTO = new AnswerDTO
+                    {
+                        IssueOptionAnswers = userAnswer.Select(x => new IssueOptionAnsweDTO
+                        {
+                            Id = x.Id,
+                            IssueId = x.IssueId,
+                            Actors = x.Actors,
+                            IsBestOption = x.IsBestOption,
+                            Option = x.Option,
+                            Resources = String.Join(',', x.IssueOptionAnswersToResources.Select(y => y.Resource.Title).ToList())
+                        }).ToList(),
+                        Author = $"{otherUserStepResult.UserToPlan.User.FirstName} {otherUserStepResult.UserToPlan.User.LastName}"
+                    };
+
+                    otherAnswers.Add(answerDTO);
+                }
+            }
+
+            answerGroup.OtherAnswers = otherAnswers;
+            
             return answerGroup;
         }
 
