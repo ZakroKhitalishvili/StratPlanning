@@ -15,6 +15,9 @@
 
     var issues = StepHelper.GetIssues(Context, Model.PlanId);
 
+    IssueDistinguishAnswerDTO[] copiedAnswers=new IssueDistinguishAnswerDTO[answerGroup.Answer.IssueDistinguishAnswers.Count];
+    answerGroup.Answer.IssueDistinguishAnswers.CopyTo(copiedAnswers, 0);
+
     var issueCount = 0;
 
     var answerCount = 0;
@@ -39,12 +42,14 @@
 
                     @foreach (var issueQuestion in Model.AdditionalQuestions)
                     {
+                        if (answerCount > Model.AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers.Count - 1)
+                        {
+                            Model.AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers.Add(new IssueDistinguishAnswerDTO());
+                        }
+
                         if (issueQuestion.Type == QuestionTypes.IssueDistinguishSelect)
                         {
-                            if (answerCount > Model.AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers.Count - 1)
-                            {
-                                Model.AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers.Add(new IssueDistinguishAnswerDTO());
-                            }
+
                             <div class="form-group m-form__group">
                                 <label for="exampleSelect1">
                                     @(issueQuestion.Order). @issueQuestion.Title
@@ -96,11 +101,13 @@
                                     </div>
                                     <div class="col-10 col-md-11">
                                         @{
-                                            var answer = answerGroup.Answer.IssueDistinguishAnswers.Where(x => x.IssueId == issue.Id && x.QuestionId == issueQuestion.Id).SingleOrDefault();
-                                            var items = issueQuestion.Options.Select(o => new SelectListItem { Text = o.Title, Value = o.Id.ToString(), Selected = (o.Id == (answer?.SelectAnswer ?? 0)) });
+                                            Model.AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount]
+                                                = copiedAnswers.Where(x => x.IssueId == issue.Id && x.QuestionId == issueQuestion.Id).SingleOrDefault() ?? new IssueDistinguishAnswerDTO();
+                                            var items = issueQuestion.Options.Select(o => new SelectListItem { Text = o.Title, Value = o.Id.ToString() });
+
                                         }
-                                        <input type="hidden" asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount].QuestionId" values="@issueQuestion.Id" />
-                                        <input type="hidden" asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount].IssueId" values="@issue.Id" />
+                                        <input type="hidden" asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount].QuestionId" value="@issueQuestion.Id" />
+                                        <input type="hidden" asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount].IssueId" value="@issue.Id" />
                                         <select asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount].SelectAnswer"
                                                 asp-items="items" class="form-control m-select2" style="width:100%">
                                             <option value="">-- Specify --</option>
@@ -119,7 +126,7 @@
 
                         }
 
-                        if (issueQuestion.Type == QuestionTypes.IssueDistinguishSelect)
+                        if (issueQuestion.Type == QuestionTypes.IssueDistinguishMultiSelect)
                         {
                             <div class="form-group m-form__group">
                                 <label for="exampleSelect1">
@@ -157,18 +164,78 @@
                                                                                 </span>
                                                                             </div>
                                                                         }
-                                                                        @if (answerGroup.DefinitiveAnswer != null)
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <span class="m-dropdown__arrow m-dropdown__arrow--left"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-10 col-md-11">
+                                        @{
+                                            Model.AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount]
+                                                = copiedAnswers.Where(x => x.IssueId == issue.Id && x.QuestionId == issueQuestion.Id).SingleOrDefault() ?? new IssueDistinguishAnswerDTO();
+                                            var items = issueQuestion.Options.Select(o => new SelectListItem { Text = o.Title, Value = o.Id.ToString() });
+
+                                        }
+                                        <input type="hidden" asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount].QuestionId" value="@issueQuestion.Id" />
+                                        <input type="hidden" asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount].IssueId" value="@issue.Id" />
+                                        <select asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount].SelectAnswers"
+                                                asp-items="items" multiple class="form-control m-select2" style="width:100%"></select>
+                                        <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset + questionIndex].Answer"></span>
+                                        <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount].SelectAnswers"></span>
+                                    </div>
+                                </div>
+                                @if (!string.IsNullOrEmpty(question.Description))
+                                {
+                                    <span class="m-form__help">
+                                        @question.Description
+                                    </span>
+                                }
+                            </div>
+
+                        }
+
+                        if (issueQuestion.Type == QuestionTypes.IssueDistinguishTypeSelect)
+                        {
+                            <div class="form-group m-form__group">
+                                <label for="exampleSelect1">
+                                    @(issueQuestion.Order). @issueQuestion.Title
+                                </label>
+                                <div class="row">
+                                    <div class="col-2 col-md-1">
+                                        <div class="m-dropdown m-dropdown--up m-dropdown--inline m-dropdown--huge"
+                                             data-dropdown-toggle="click" data-dropdown-persistent="true">
+                                            <a href="#"
+                                               class=" m-dropdown__toggle  combined_result margin-top-0 dropdown-toggle">
+                                                <i class="fa fa-info"></i>
+                                            </a>
+                                            <div class="m-dropdown__wrapper">
+                                                <div class="m-dropdown__inner">
+                                                    <div class="m-dropdown__body">
+                                                        <div class="m-dropdown__content">
+                                                            <div class="m-scrollable" data-scrollable="true"
+                                                                 data-max-height="200">
+                                                                <div class="m-list-timeline">
+                                                                    <div class="m-list-timeline__items">
+                                                                        @foreach (var otherAnswer in answerGroup.OtherAnswers)
                                                                         {
                                                                             <div class="m-list-timeline__item">
                                                                                 <span class="m-list-timeline__badge"></span>
                                                                                 <span class="m-list-timeline__text">
-                                                                                    <b>Definitive answer</b>
+                                                                                    @otherAnswer.Author
                                                                                 </span>
                                                                                 <span class="m-list-timeline__text">
-                                                                                    @foreach (var optionid in answerGroup.DefinitiveAnswer.MultiSelectAnswer.SelectAnswers)
+                                                                                    @if (otherAnswer.BooleanAnswer)
                                                                                     {
-                                                                                        var option = question.Options.Where(x => x.Id == optionid).FirstOrDefault();
-                                                                                        <span>@option.Title;</span>
+                                                                                        <span>Strategic plan with action plan(s)</span>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <span>Strategic plan without action plan(s)</span>
                                                                                     }
                                                                                 </span>
                                                                             </div>
@@ -184,20 +251,37 @@
                                         </div>
                                     </div>
                                     <div class="col-10 col-md-11">
-                                        <input type="hidden" asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount].QuestionId" values="@issueQuestion.Id" />
-                                        <input type="hidden" asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount].IssueId" values="@issue.Id" />
-                                        <select asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount].SelectAnswers"
-                                                asp-items="question.Options.Select(o=>new SelectListItem {Text= o.Title ,Value=o.Id.ToString()})" multiple class="form-control m-select2"></select>
-                                        <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset + questionIndex]"></span>
-                                        <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount].SelectAnswers"></span>
+                                        <div class="row">
+                                            @foreach (var option in issueQuestion.Options)
+                                            {
+                                                <div class="col-lg-6">
+                                                    <label class="m-option">
+                                                        <span class="m-option__control">
+                                                            <span class="m-radio radio-sp m-radio--check-bold">
+                                                                <input type="radio"
+                                                                       asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount].SelectAnswer"
+                                                                       value="@option.Id" checked>
+                                                                <span></span>
+                                                            </span>
+                                                        </span>
+                                                        <span class="m-option__label">
+                                                            <span class="m-option__head">
+                                                                <span class="m-option__title">
+                                                                    @option.Title
+                                                                </span>
+                                                            </span>
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            }
+                                        </div>
+                                        <input type="hidden" asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount].QuestionId" value="@issueQuestion.Id" />
+                                        <input type="hidden" asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount].IssueId" value="@issue.Id" />
+
+                                        <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer"></span>
+                                        <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount].SelectAnswer"></span>
                                     </div>
                                 </div>
-                                @if (!string.IsNullOrEmpty(question.Description))
-                                {
-                                    <span class="m-form__help">
-                                        @question.Description
-                                    </span>
-                                }
                             </div>
 
                         }
@@ -207,226 +291,10 @@
 
 
 
-                    <div class="form-group m-form__group">
-                        <label for="exampleSelect1">
-                            5. Are strategies for issue resolution likely to require:
-                        </label>
-
-                        <div class="row">
-                            <div class="col-2 col-md-1">
-                                <div class="m-dropdown m-dropdown--up m-dropdown--inline m-dropdown--huge"
-                                     data-dropdown-toggle="click"
-                                     data-dropdown-persistent="true">
-                                    <a href="#"
-                                       class=" m-dropdown__toggle  combined_result margin-top-0 dropdown-toggle">
-                                        <i class="fa fa-info"></i>
-                                    </a>
-                                    <div class="m-dropdown__wrapper">
-                                        <div class="m-dropdown__inner">
-                                            <div class="m-dropdown__body">
-                                                <div class="m-dropdown__content">
-                                                    <div class="m-scrollable"
-                                                         data-scrollable="true"
-                                                         data-max-height="200">
-                                                        <div class="m-list-timeline">
-                                                            <div class="m-list-timeline__items">
-                                                                <div class="m-list-timeline__item">
-                                                                    <span class="m-list-timeline__badge"></span>
-                                                                    <span class="m-list-timeline__text">
-                                                                        Giorgi
-                                                                        Giorganashvili
-                                                                    </span>
-                                                                    <span class="m-list-timeline__text">
-                                                                        Major facilities
-                                                                        changes
-                                                                    </span>
-                                                                </div>
-                                                                <div class="m-list-timeline__item">
-                                                                    <span class="m-list-timeline__badge"></span>
-                                                                    <span class="m-list-timeline__text">
-                                                                        Tamar
-                                                                        Cereteli
-                                                                    </span>
-                                                                    <span class="m-list-timeline__text">
-                                                                        Major facilities
-                                                                        changes
-                                                                    </span>
-                                                                </div>
-                                                                <div class="m-list-timeline__item">
-                                                                    <span class="m-list-timeline__badge"></span>
-                                                                    <span class="m-list-timeline__text">
-                                                                        Levan
-                                                                        Gvaramia
-                                                                    </span>
-                                                                    <span class="m-list-timeline__text">
-                                                                        Major facilities
-                                                                        changes
-                                                                    </span>
-                                                                </div>
-                                                                <div class="m-list-timeline__item">
-                                                                    <span class="m-list-timeline__badge"></span>
-                                                                    <span class="m-list-timeline__text">
-                                                                        Ioseb
-                                                                        Ciklauri
-                                                                    </span>
-                                                                    <span class="m-list-timeline__text">
-                                                                        Significant staff
-                                                                        changes, Major
-                                                                        facilities changes
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <span class="m-dropdown__arrow m-dropdown__arrow--left"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-10 col-md-11">
-                                <select class="form-control m-select2 select2-without-search"
-                                        style="width:100%" multiple>
-                                    <option>
-                                        Significant amendments to formal statutes of the
-                                        party
-                                    </option>
-                                    <option>
-                                        Significant staff changes
-                                    </option>
-                                    <option>
-                                        Major facilities changes
-                                    </option>
-                                    <option>
-                                        Major changes in stakeholder relationships
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="form-group m-form__group">
-                        <label for="exampleSelect1">
-                            issue's type
-                        </label>
-                        <div class="row">
-                            <div class="col-2 col-md-1">
-                                <div class="m-dropdown m-dropdown--up m-dropdown--inline m-dropdown--huge"
-                                     data-dropdown-toggle="click"
-                                     data-dropdown-persistent="true">
-                                    <a href="#"
-                                       class=" m-dropdown__toggle  combined_result margin-top-0 dropdown-toggle">
-                                        <i class="fa fa-info"></i>
-                                    </a>
-                                    <div class="m-dropdown__wrapper">
-                                        <div class="m-dropdown__inner">
-                                            <div class="m-dropdown__body">
-                                                <div class="m-dropdown__content">
-                                                    <div class="m-scrollable"
-                                                         data-scrollable="true"
-                                                         data-max-height="200">
-                                                        <div class="m-list-timeline">
-                                                            <div class="m-list-timeline__items">
-                                                                <div class="m-list-timeline__item">
-                                                                    <span class="m-list-timeline__badge"></span>
-                                                                    <span class="m-list-timeline__text">
-                                                                        Giorgi
-                                                                        Giorganashvili
-                                                                    </span>
-                                                                    <span class="m-list-timeline__text">
-                                                                        Operational
-                                                                    </span>
-                                                                </div>
-                                                                <div class="m-list-timeline__item">
-                                                                    <span class="m-list-timeline__badge"></span>
-                                                                    <span class="m-list-timeline__text">
-                                                                        Tamar
-                                                                        Cereteli
-                                                                    </span>
-                                                                    <span class="m-list-timeline__text">
-                                                                        Strategic
-                                                                    </span>
-                                                                </div>
-                                                                <div class="m-list-timeline__item">
-                                                                    <span class="m-list-timeline__badge"></span>
-                                                                    <span class="m-list-timeline__text">
-                                                                        Levan
-                                                                        Gvaramia
-                                                                    </span>
-                                                                    <span class="m-list-timeline__text">
-                                                                        Strategic
-                                                                    </span>
-                                                                </div>
-                                                                <div class="m-list-timeline__item">
-                                                                    <span class="m-list-timeline__badge"></span>
-                                                                    <span class="m-list-timeline__text">
-                                                                        Ioseb
-                                                                        Ciklauri
-                                                                    </span>
-                                                                    <span class="m-list-timeline__text">
-                                                                        Strategic
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <span class="m-dropdown__arrow m-dropdown__arrow--left"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-10 col-md-11">
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <label class="m-option">
-                                            <span class="m-option__control">
-                                                <span class="m-radio radio-sp m-radio--check-bold">
-                                                    <input type="radio" name="m_option_1"
-                                                           value="1">
-                                                    <span></span>
-                                                </span>
-                                            </span>
-                                            <span class="m-option__label">
-                                                <span class="m-option__head">
-                                                    <span class="m-option__title">
-                                                        Operational
-                                                    </span>
-                                                </span>
-
-                                            </span>
-                                        </label>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <label class="m-option">
-                                            <span class="m-option__control">
-                                                <span class="m-radio radio-sp m-radio--check-bold">
-                                                    <input type="radio" name="m_option_1"
-                                                           value="1">
-                                                    <span></span>
-                                                </span>
-                                            </span>
-                                            <span class="m-option__label">
-                                                <span class="m-option__head">
-                                                    <span class="m-option__title">
-                                                        Strategic
-                                                    </span>
-                                                </span>
-
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
                 </div>
             </div>
         </div>
 
+        issueCount++;
     }
 </div>

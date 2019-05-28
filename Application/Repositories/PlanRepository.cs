@@ -1328,37 +1328,67 @@ namespace Application.Repositories
 
             foreach (var issueDistinguishAnswer in answerGroup.Answer.IssueDistinguishAnswers)
             {
-                var dbAnswer = dbAnswers.Where(x => x.IssueId == issueDistinguishAnswer.IssueId).SingleOrDefault();
 
                 if (issueDistinguishAnswer.SelectAnswer > 0)
                 {
-                    SaveSelectAnswer(new AnswerGroupDTO
-                    {
-                        QuestionId = issueDistinguishAnswer.QuestionId,
-                        Answer = new AnswerDTO
-                        {
-                            SelectAnswer = new SelectAnswerDTO
-                            { OptionId = issueDistinguishAnswer.SelectAnswer, IssueId = issueDistinguishAnswer.IssueId }
-                        }
-                    }, userStepResult);
+                    var questionDbAnswer = dbAnswers.Where(x => x.IssueId == issueDistinguishAnswer.IssueId && x.QuestionId == issueDistinguishAnswer.QuestionId).SingleOrDefault();
 
-                    return;
+                    if (questionDbAnswer != null)
+                    {
+                        questionDbAnswer.UpdatedAt = DateTime.Now;
+                        questionDbAnswer.UpdatedBy = userStepResult.UpdatedBy;
+                        questionDbAnswer.OptionId = issueDistinguishAnswer.SelectAnswer;
+                    }
+                    else
+                    {
+                        questionDbAnswer = new SelectAnswer
+                        {
+                            QuestionId = issueDistinguishAnswer.QuestionId,
+                            IssueId = issueDistinguishAnswer.IssueId,
+                            OptionId = issueDistinguishAnswer.SelectAnswer,
+                            UpdatedAt = DateTime.Now,
+                            UpdatedBy = userStepResult.UpdatedBy,
+                            CreatedAt = DateTime.Now,
+                            CreatedBy = userStepResult.UpdatedBy
+                        };
+
+                        userStepResult.SelectAnswers.Add(questionDbAnswer);
+                    }
+
                 }
 
                 if (issueDistinguishAnswer.SelectAnswers != null)
                 {
-                    SaveMultiSelectAnswer(new AnswerGroupDTO
+                    var questionDbAnswers = dbAnswers.Where(x => x.IssueId == issueDistinguishAnswer.IssueId && x.QuestionId == issueDistinguishAnswer.QuestionId);
+
+                    foreach (var questionDbAnswer in questionDbAnswers.ToList())
                     {
-                        QuestionId = issueDistinguishAnswer.QuestionId,
-                        Answer = new AnswerDTO
+                        if (!issueDistinguishAnswer.SelectAnswers.Contains(questionDbAnswer.OptionId.Value))
                         {
-                            MultiSelectAnswer = new MultiSelectAnswerDTO
-                            {
-                                SelectAnswers = issueDistinguishAnswer.SelectAnswers,
-                                IssueId = issueDistinguishAnswer.IssueId
-                            }
+                            userStepResult.SelectAnswers.Remove(questionDbAnswer);
                         }
-                    }, userStepResult);
+                    }
+
+                    foreach (var selectAnswer in issueDistinguishAnswer.SelectAnswers)
+                    {
+
+                        if (!questionDbAnswers.Any(x => x.OptionId == selectAnswer) && selectAnswer > 0)
+                        {
+
+                            var newAnswer = new SelectAnswer
+                            {
+                                QuestionId = issueDistinguishAnswer.QuestionId,
+                                IssueId = issueDistinguishAnswer.IssueId,
+                                OptionId = selectAnswer,
+                                UpdatedAt = DateTime.Now,
+                                UpdatedBy = userStepResult.UpdatedBy,
+                                CreatedAt = DateTime.Now,
+                                CreatedBy = userStepResult.UpdatedBy
+                            };
+
+                            userStepResult.SelectAnswers.Add(newAnswer);
+                        }
+                    }
                 }
 
             }
@@ -2331,7 +2361,7 @@ namespace Application.Repositories
             }
 
             answerGroup.OtherAnswers = otherAnswers;
-            
+
             return answerGroup;
         }
 
