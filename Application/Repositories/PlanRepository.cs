@@ -117,9 +117,9 @@ namespace Application.Repositories
 
             var planStep = GetPlanStep(planId, stepIndex, isDefinitive);
 
-            var otherUserStepResults = GetPlanStepResults(planId, stepIndex).Where(x => x.IsSubmitted).ToList();
-
             UserStepResult currentUserStepResult = GetOrCreateUserStepResult(planId, stepIndex, isDefinitive, userId);
+
+            IList<UserStepResult> otherUserStepResults = GetPlanStepResults(planId, stepIndex).Where(x => x.IsSubmitted).ToList();
 
             if (!isDefinitive)
             {
@@ -441,7 +441,7 @@ namespace Application.Repositories
                     .Include(x => x.StakeholderRatingAnswers).ThenInclude(x => x.Stakeholder)
                     .Include(x => x.IssueOptionAnswers).ThenInclude(x => x.IssueOptionAnswersToResources).ThenInclude(x => x.Resource)
                     .Include(x => x.IssueOptionAnswers).ThenInclude(x => x.Issue)
-                    .Include(x => x.PreparingAnswers).ThenInclude(x => x.IssueOptionAnswer).ThenInclude(x => x.Issue).ToList();
+                    .Include(x => x.PreparingAnswers).ThenInclude(x => x.IssueOptionAnswer.Issue).ToList();
         }
 
         private UserStepResult GetUserStepResult(int planId, string stepIndex, int userId)
@@ -847,12 +847,14 @@ namespace Application.Repositories
             {
                 var answerText = dbAnswer.Option != null ? dbAnswer.Option.Title : dbAnswer.AltOption;
 
-                if (!answerGroup.Answer.TagSelectAnswers.Contains(answerText))
+                if (answerGroup.Answer == null || !answerGroup.Answer.TagSelectAnswers.Contains(answerText))
                 {
                     Context.SelectAnswers.Remove(dbAnswer);
                     Context.SaveChanges();
                 }
             }
+
+            if (answerGroup.Answer == null) return;
 
             foreach (var answer in answerGroup.Answer.TagSelectAnswers)
             {
@@ -970,7 +972,7 @@ namespace Application.Repositories
             {
                 var answerFileId = dbAnswer.FileId;
 
-                if (!answerGroup.Answer.InputFileAnswer.Contains(answerFileId))
+                if (answerGroup.Answer == null || !answerGroup.Answer.InputFileAnswer.Contains(answerFileId))
                 {
                     Context.FileAnswers.Remove(dbAnswer);
                     Context.SaveChanges();
@@ -978,6 +980,8 @@ namespace Application.Repositories
                 }
             }
 
+            if (answerGroup.Answer == null) return;
+            
             foreach (var answer in answerGroup.Answer.InputFileAnswer)
             {
                 if (!dbAnswers.Any(x => x.FileId == answer))
@@ -1061,7 +1065,7 @@ namespace Application.Repositories
 
             foreach (var dbAnswer in dbAnswers)
             {
-                var updateAnswer = answerGroup.Answer.ValueAnswer.Where(x => x.Id == dbAnswer.Id).FirstOrDefault();
+                var updateAnswer = answerGroup.Answer?.ValueAnswer.Where(x => x.Id == dbAnswer.Id).FirstOrDefault();
 
                 if (updateAnswer == null)
                 {
@@ -1078,6 +1082,8 @@ namespace Application.Repositories
                     dbAnswer.UpdatedBy = userStepResult.UpdatedBy;
                 }
             }
+
+            if (answerGroup.Answer == null) return;
 
             foreach (var answer in answerGroup.Answer.ValueAnswer)
             {
@@ -1108,7 +1114,7 @@ namespace Application.Repositories
 
             foreach (var dbAnswer in dbAnswers)
             {
-                var updateAnswer = answerGroup.Answer.StakeholderAnswers.Where(x => x.Id == dbAnswer.Id).FirstOrDefault();
+                var updateAnswer = answerGroup.Answer?.StakeholderAnswers.Where(x => x.Id == dbAnswer.Id).FirstOrDefault();
 
                 if (updateAnswer == null)
                 {
@@ -1117,6 +1123,8 @@ namespace Application.Repositories
                     //userStepResult.SelectAnswers.Remove(dbAnswer);
                 }
             }
+
+            if (answerGroup.Answer == null) return;
 
             foreach (var answer in answerGroup.Answer.StakeholderAnswers)
             {
@@ -1161,29 +1169,32 @@ namespace Application.Repositories
 
             dbAnswers = userStepResult.SWOTAnswers.Where(x => x.QuestionId == answerGroup.QuestionId).ToList();
 
-            answerGroup.Answer.SwotAnswer.Strengths = answerGroup.Answer.SwotAnswer.Strengths?.Distinct().ToList() ?? Enumerable.Empty<string>().ToList();
-            answerGroup.Answer.SwotAnswer.Opportunities = answerGroup.Answer.SwotAnswer.Opportunities?.Distinct().ToList() ?? Enumerable.Empty<string>().ToList();
-            answerGroup.Answer.SwotAnswer.Threats = answerGroup.Answer.SwotAnswer.Threats?.Distinct().ToList() ?? Enumerable.Empty<string>().ToList();
-            answerGroup.Answer.SwotAnswer.Weaknesses = answerGroup.Answer.SwotAnswer.Weaknesses?.Distinct().ToList() ?? Enumerable.Empty<string>().ToList();
+            if (answerGroup.Answer != null)
+            {
+                answerGroup.Answer.SwotAnswer.Strengths = answerGroup.Answer.SwotAnswer.Strengths?.Distinct().ToList() ?? Enumerable.Empty<string>().ToList();
+                answerGroup.Answer.SwotAnswer.Opportunities = answerGroup.Answer.SwotAnswer.Opportunities?.Distinct().ToList() ?? Enumerable.Empty<string>().ToList();
+                answerGroup.Answer.SwotAnswer.Threats = answerGroup.Answer.SwotAnswer.Threats?.Distinct().ToList() ?? Enumerable.Empty<string>().ToList();
+                answerGroup.Answer.SwotAnswer.Weaknesses = answerGroup.Answer.SwotAnswer.Weaknesses?.Distinct().ToList() ?? Enumerable.Empty<string>().ToList();
+            }
 
             foreach (var dbAnswer in dbAnswers)
             {
                 var isContained = false;
                 if (dbAnswer.Type == SWOTTypes.Strength)
                 {
-                    isContained = answerGroup.Answer.SwotAnswer.Strengths.Contains(dbAnswer.Name);
+                    isContained = answerGroup.Answer?.SwotAnswer.Strengths.Contains(dbAnswer.Name) ?? false;
                 }
                 if (dbAnswer.Type == SWOTTypes.Weakness)
                 {
-                    isContained = answerGroup.Answer.SwotAnswer.Weaknesses.Contains(dbAnswer.Name);
+                    isContained = answerGroup.Answer?.SwotAnswer.Weaknesses.Contains(dbAnswer.Name) ?? false;
                 }
                 if (dbAnswer.Type == SWOTTypes.Opportunity)
                 {
-                    isContained = answerGroup.Answer.SwotAnswer.Opportunities.Contains(dbAnswer.Name);
+                    isContained = answerGroup.Answer?.SwotAnswer.Opportunities.Contains(dbAnswer.Name) ?? false;
                 }
                 if (dbAnswer.Type == SWOTTypes.Threat)
                 {
-                    isContained = answerGroup.Answer.SwotAnswer.Threats.Contains(dbAnswer.Name);
+                    isContained = answerGroup.Answer?.SwotAnswer.Threats.Contains(dbAnswer.Name) ?? false;
                 }
 
                 if (!isContained)
@@ -1192,6 +1203,9 @@ namespace Application.Repositories
                     Context.SaveChanges();
                 }
             }
+
+            if (answerGroup.Answer == null) return;
+
             var swotAnswers = new List<SWOTAnswer>();
             swotAnswers.AddRange(answerGroup.Answer.SwotAnswer.Strengths?.Select(x => new SWOTAnswer { Type = SWOTTypes.Strength, Name = x }));
             swotAnswers.AddRange(answerGroup.Answer.SwotAnswer.Threats?.Select(x => new SWOTAnswer { Type = SWOTTypes.Threat, Name = x }));
@@ -1264,7 +1278,7 @@ namespace Application.Repositories
 
             foreach (var dbAnswer in dbAnswers)
             {
-                var updateAnswer = answerGroup.Answer.StakeholderRatingAnswers.Where(x => x.StakeholderId == dbAnswer.StakeholderId && dbAnswer.CreatedBy == userStepResult.UpdatedBy).FirstOrDefault();
+                var updateAnswer = answerGroup.Answer?.StakeholderRatingAnswers.Where(x => x.StakeholderId == dbAnswer.StakeholderId && dbAnswer.CreatedBy == userStepResult.UpdatedBy).FirstOrDefault();
 
                 if (updateAnswer == null)
                 {
@@ -1284,6 +1298,8 @@ namespace Application.Repositories
                     dbAnswer.UpdatedBy = userStepResult.UpdatedBy;
                 }
             }
+
+            if (answerGroup.Answer == null) return;
 
             foreach (var answer in answerGroup.Answer.StakeholderRatingAnswers)
             {
@@ -1319,7 +1335,7 @@ namespace Application.Repositories
 
             foreach (var dbAnswer in dbAnswers)
             {
-                var updateAnswer = answerGroup.Answer.IssueOptionAnswers.Where(x => x.Id == dbAnswer.Id).FirstOrDefault();
+                var updateAnswer = answerGroup.Answer?.IssueOptionAnswers.Where(x => x.Id == dbAnswer.Id).FirstOrDefault();
 
                 if (updateAnswer == null)
                 {
@@ -1337,6 +1353,8 @@ namespace Application.Repositories
                     dbAnswer.UpdatedBy = userStepResult.UpdatedBy;
                 }
             }
+
+            if (answerGroup.Answer == null) return;
 
             foreach (var answer in answerGroup.Answer.IssueOptionAnswers)
             {
