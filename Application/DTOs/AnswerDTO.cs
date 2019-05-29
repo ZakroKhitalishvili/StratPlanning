@@ -37,5 +37,7 @@ namespace Application.DTOs
         public IList<IssueOptionAnsweDTO> IssueOptionAnswers { get; set; }
 
         public IList<IssueDistinguishAnswerDTO> IssueDistinguishAnswers { get; set; }
+
+        public IList<PreparingAnswerDTO> IssuePreparingAnswers { get; set; }
     }
 }
