@@ -12,8 +12,8 @@ namespace Core.Configurations
             builder.AnswersBaseConfigure();
 
             builder.HasOne(x => x.Resource)
-                .WithOne(s => s.BooleanAnswer)
-                .HasForeignKey<BooleanAnswer>(x => x.ResourceId)
+                .WithMany(s => s.BooleanAnswers)
+                .HasForeignKey(x => x.ResourceId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
 

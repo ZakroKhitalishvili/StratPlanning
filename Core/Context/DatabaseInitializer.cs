@@ -116,8 +116,11 @@ namespace Core.Context
             {
                 SeedActionPlanDetailedStep();
             }
-
-
+            
+            if (!Context.StepBlocks.Where(x => x.Step == Steps.Review).Any())
+            {
+                SeedReviewStep();
+            }
 
             Context.SaveChanges();
 
@@ -826,6 +829,31 @@ namespace Core.Context
                     Questions=new List<Question>()
                     {
                         new Question{ Type=QuestionTypes.IssuePreparing, Order=1, Title="Your answer", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false }
+                    }
+                }
+            };
+
+            Context.StepBlocks.AddRange(Blocks);
+        }
+
+        private void SeedReviewStep()
+        {
+            Blocks = new StepBlock[]
+            {
+                new StepBlock
+                {
+                    Title = "Review resources",
+                    Instruction = "sagittis. In dignissim commodo hendrerit. Sed congue purus luctus mi feugiat, ut consequat nisi porttitor",
+                    Order=1,
+                    Step=Steps.Review,
+                    Description=null,
+                    UpdatedAt =DateTime.Now,
+                    CreatedAt=DateTime.Now,
+                    CreatedBy=null,
+                    UpdatedBy=null,
+                    Questions=new List<Question>()
+                    {
+                        new Question{ Type=QuestionTypes.ResourceReview, Order=1, Title=string.Empty, CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false }
                     }
                 }
             };

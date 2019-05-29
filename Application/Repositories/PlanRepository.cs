@@ -606,12 +606,24 @@ namespace Application.Repositories
 
         public IList<ResourceDTO> GetResourcesByPlan(int planId)
         {
-            return null;
-            //var submittedStepResult = GetSubmittedDefinitiveStepResult(planId, Steps.ActionPlanKeyQuestions);
+            var submittedStepResult = GetSubmittedDefinitiveStepResult(planId, Steps.ActionPlanKeyQuestions);
 
-            //var issueOptions = submittedStepResult.IssueOptionAnswers.Where(x => x.IsBestOption);
+            var issueOptions = submittedStepResult.IssueOptionAnswers.Where(x => x.IsBestOption);
 
-            
+            var resources = new List<Resource>();
+
+            foreach (var resource in issueOptions.SelectMany(x => x.IssueOptionAnswersToResources.Select(s => s.Resource)))
+            {
+                if (!resources.Any(x => x.Id == resource.Id))
+                {
+                    resources.Add(resource);
+                }
+            }
+            return resources.Select(x => new ResourceDTO
+            {
+                Id = x.Id,
+                Title = x.Title
+            }).ToList();
         }
 
         #endregion
@@ -2693,7 +2705,7 @@ namespace Application.Repositories
 
             var definitiveAnswers = definitiveStepResult?.BooleanAnswers.Where(x => x.QuestionId == questionId);
 
-            if (definitiveAnswers.Any())
+            if (definitiveAnswers!=null && definitiveAnswers.Any())
             {
                 answerGroup.DefinitiveAnswer = new AnswerDTO
                 {
