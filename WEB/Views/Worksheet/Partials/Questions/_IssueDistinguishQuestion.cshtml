@@ -15,7 +15,7 @@
 
     var issues = StepHelper.GetIssues(Context, Model.PlanId);
 
-    IssueDistinguishAnswerDTO[] copiedAnswers=new IssueDistinguishAnswerDTO[answerGroup.Answer.IssueDistinguishAnswers.Count];
+    IssueDistinguishAnswerDTO[] copiedAnswers = new IssueDistinguishAnswerDTO[answerGroup.Answer.IssueDistinguishAnswers.Count];
     answerGroup.Answer.IssueDistinguishAnswers.CopyTo(copiedAnswers, 0);
 
     var issueCount = 0;
@@ -81,10 +81,12 @@
                                                                                     @if (otherAnswer.IssueDistinguishAnswers != null)
                                                                                     {
                                                                                         var issueDistinguishAnswer = otherAnswer.IssueDistinguishAnswers.Where(x => x.QuestionId == issueQuestion.Id && x.IssueId == issue.Id).SingleOrDefault();
+                                                                                        if (issueDistinguishAnswer != null)
+                                                                                        {
+                                                                                            var option = issueQuestion.Options.Where(x => x.Id == issueDistinguishAnswer.SelectAnswer).FirstOrDefault();
 
-                                                                                        var option = question.Options.Where(x => x.Id == issueDistinguishAnswer.SelectAnswer).FirstOrDefault();
-
-                                                                                        <span>@option?.Title</span>
+                                                                                            <span>@option?.Title</span>
+                                                                                        }
                                                                                     }
                                                                                 </span>
                                                                             </div>
@@ -156,10 +158,17 @@
                                                                                     @otherAnswer.Author
                                                                                 </span>
                                                                                 <span class="m-list-timeline__text">
-                                                                                    @foreach (var optionid in otherAnswer.MultiSelectAnswer.SelectAnswers)
-                                                                                    {
-                                                                                        var option = question.Options.Where(x => x.Id == optionid).FirstOrDefault();
-                                                                                        <span>@option.Title;</span>
+                                                                                    @{
+                                                                                        var issueDistinguishAnswer = otherAnswer.IssueDistinguishAnswers.Where(x => x.IssueId == issue.Id && x.QuestionId == issueQuestion.Id).SingleOrDefault();
+                                                                                        if (issueDistinguishAnswer != null)
+                                                                                        {
+                                                                                            foreach (var selectAnswer in issueDistinguishAnswer.SelectAnswers)
+                                                                                            {
+
+                                                                                                var option = issueQuestion.Options.Where(x => x.Id == selectAnswer).FirstOrDefault();
+                                                                                                <span>@option.Title;</span>
+                                                                                            }
+                                                                                        }
                                                                                     }
                                                                                 </span>
                                                                             </div>
@@ -229,13 +238,16 @@
                                                                                     @otherAnswer.Author
                                                                                 </span>
                                                                                 <span class="m-list-timeline__text">
-                                                                                    @if (otherAnswer.BooleanAnswer)
+                                                                                    @if (otherAnswer.IssueDistinguishAnswers != null)
                                                                                     {
-                                                                                        <span>Strategic plan with action plan(s)</span>
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        <span>Strategic plan without action plan(s)</span>
+                                                                                        var issueDistinguishAnswer = otherAnswer.IssueDistinguishAnswers.Where(x => x.QuestionId == issueQuestion.Id && x.IssueId == issue.Id).SingleOrDefault();
+
+                                                                                        if (issueDistinguishAnswer != null)
+                                                                                        {
+                                                                                            var option = issueQuestion.Options.Where(x => x.Id == issueDistinguishAnswer.SelectAnswer).FirstOrDefault();
+
+                                                                                            <span>@option?.Title</span>
+                                                                                        }
                                                                                     }
                                                                                 </span>
                                                                             </div>
@@ -252,27 +264,32 @@
                                     </div>
                                     <div class="col-10 col-md-11">
                                         <div class="row">
-                                            @foreach (var option in issueQuestion.Options)
-                                            {
-                                                <div class="col-lg-6">
-                                                    <label class="m-option">
-                                                        <span class="m-option__control">
-                                                            <span class="m-radio radio-sp m-radio--check-bold">
-                                                                <input type="radio"
-                                                                       asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount].SelectAnswer"
-                                                                       value="@option.Id" checked>
-                                                                <span></span>
-                                                            </span>
-                                                        </span>
-                                                        <span class="m-option__label">
-                                                            <span class="m-option__head">
-                                                                <span class="m-option__title">
-                                                                    @option.Title
+                                            @{
+                                                Model.AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount]
+                                                        = copiedAnswers.Where(x => x.IssueId == issue.Id && x.QuestionId == issueQuestion.Id).SingleOrDefault() ?? new IssueDistinguishAnswerDTO();
+
+                                                foreach (var option in issueQuestion.Options)
+                                                {
+                                                    <div class="col-lg-6">
+                                                        <label class="m-option">
+                                                            <span class="m-option__control">
+                                                                <span class="m-radio radio-sp m-radio--check-bold">
+                                                                    <input type="radio"
+                                                                           asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount].SelectAnswer"
+                                                                           value="@option.Id" checked="@(Model.AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount].SelectAnswer == option.Id)">
+                                                                    <span></span>
                                                                 </span>
                                                             </span>
-                                                        </span>
-                                                    </label>
-                                                </div>
+                                                            <span class="m-option__label">
+                                                                <span class="m-option__head">
+                                                                    <span class="m-option__title">
+                                                                        @option.Title
+                                                                    </span>
+                                                                </span>
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                }
                                             }
                                         </div>
                                         <input type="hidden" asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount].QuestionId" value="@issueQuestion.Id" />

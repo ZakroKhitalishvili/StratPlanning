@@ -439,7 +439,7 @@ function updateStep(isSubmitted) {
                 }
 
                 $('#step_form_container').html(data);
-                initializeInputs($('form#step_form'));
+                initializeInputs('#step_form_container');
                 initializeStep();
             },
             error: function (xhr, statusText, error) {
