@@ -35,5 +35,7 @@ namespace Application.Interfaces.Repositories
         IList<IssueOptionAnsweDTO> GetDefinitiveIssueOptions(int planId);
 
         IList<ResourceDTO> GetResources();
+
+        IList<ResourceDTO> GetResourcesByPlan(int planId);
     }
 }

@@ -11,6 +11,8 @@ namespace Core.Entities
             UsersToIssueOptionAnswers = new HashSet<UserToIssueOptionAnswer>();
 
             IssueOptionAnswersToResources = new HashSet<IssueOptionAnswerToResource>();
+
+            PreparingAnswers = new HashSet<PreparingAnswer>();
         }
 
         public int IssueId { get; set; }
@@ -27,6 +29,6 @@ namespace Core.Entities
 
         public virtual SWOTAnswer Issue { get; set; }
 
-        public virtual PreparingAnswer PreparingAnswer { get; set; }
+        public virtual ICollection<PreparingAnswer> PreparingAnswers { get; set; }
     }
 }

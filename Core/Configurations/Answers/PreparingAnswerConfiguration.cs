@@ -25,8 +25,8 @@ namespace Core.Configurations
                 .HasDefaultValue(false);
 
             builder.HasOne(x => x.IssueOptionAnswer)
-                .WithOne(s => s.PreparingAnswer)
-                .HasForeignKey<PreparingAnswer>(x => x.IssueOptionAnswerId)
+                .WithMany(s => s.PreparingAnswers)
+                .HasForeignKey(x => x.IssueOptionAnswerId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
