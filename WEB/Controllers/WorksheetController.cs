@@ -138,6 +138,7 @@ namespace Web.Controllers
 
             foreach (var file in files)
             {
+                //Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Uploads",
                                        file.FileName);
 

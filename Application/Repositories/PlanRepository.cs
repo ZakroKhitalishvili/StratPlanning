@@ -554,15 +554,15 @@ namespace Application.Repositories
                     .Where(x => x.PlanId == planId)
                     .Include(x => x.User);
 
-                var userStepResults = Context.UserStepResults.Where(x => x.PlanId == planId && x.Step == stepIndex && !x.IsDefinitive).ToList();
+                var userStepResults = Context.UserStepResults.Include(x=>x.UserToPlan).Where(x => x.Step == stepIndex && !x.IsDefinitive && x.UserToPlan.PlanId==planId).ToList();
 
-                planStep.SubmittedUsers = involvedUsers.Where(involvedUser => userStepResults.Where(x => x.UserToPlanId == involvedUser.Id && x.IsSubmitted).Any())
+                planStep.SubmittedUsers = involvedUsers.Where(involvedUser => userStepResults.Any(x => x.UserToPlanId == involvedUser.Id && x.IsSubmitted))
                     .Select(x => new UserPlanningMemberDTO
                     {
                         FullName = $"{x.User.FirstName} {x.User.LastName}"
                     });
 
-                planStep.NotSubmittedUsers = involvedUsers.Where(involvedUser => !userStepResults.Where(x => x.UserToPlanId == involvedUser.Id && x.IsSubmitted).Any())
+                planStep.NotSubmittedUsers = involvedUsers.Where(involvedUser => !userStepResults.Any(x => x.UserToPlanId == involvedUser.Id && x.IsSubmitted))
                    .Select(x => new UserPlanningMemberDTO
                    {
                        FullName = $"{x.User.FirstName} {x.User.LastName}"
@@ -1359,13 +1359,14 @@ namespace Application.Repositories
 
                 if (issueDistinguishAnswer.SelectAnswers != null)
                 {
-                    var questionDbAnswers = dbAnswers.Where(x => x.IssueId == issueDistinguishAnswer.IssueId && x.QuestionId == issueDistinguishAnswer.QuestionId);
+                    var questionDbAnswers = dbAnswers.Where(x => x.IssueId == issueDistinguishAnswer.IssueId && x.QuestionId == issueDistinguishAnswer.QuestionId).ToList();
 
-                    foreach (var questionDbAnswer in questionDbAnswers.ToList())
+                    foreach (var questionDbAnswer in questionDbAnswers)
                     {
                         if (!issueDistinguishAnswer.SelectAnswers.Contains(questionDbAnswer.OptionId.Value))
                         {
-                            userStepResult.SelectAnswers.Remove(questionDbAnswer);
+                            Context.SelectAnswers.Remove(questionDbAnswer);
+                            Context.SaveChanges();
                         }
                     }
 
@@ -2383,6 +2384,8 @@ namespace Application.Repositories
 
             var questions = GetIssueDistinguishQuestions();
 
+            var userStepResultIssueDistinguishAnswers = new Dictionary<int, List<IssueDistinguishAnswerDTO>>();
+
             foreach (var question in questions)
             {
                 if (question.Type == QuestionTypes.IssueDistinguishSelect || question.Type == QuestionTypes.IssueDistinguishTypeSelect)
@@ -2417,69 +2420,101 @@ namespace Application.Repositories
 
                     foreach (var otherUserStepResult in otherUserStepResults)
                     {
-                        var otherAnswers = otherUserStepResult.SelectAnswers.Where(x => x.QuestionId == question.Id);
+                        var otherSelectAnswers = otherUserStepResult.SelectAnswers.Where(x => x.QuestionId == question.Id);
 
-                        answerGroup.OtherAnswers = answerGroup.OtherAnswers.Append(new AnswerDTO
+                        var issueDistinguishAnswers = otherSelectAnswers.Select(x => new IssueDistinguishAnswerDTO
                         {
-                            Author = $"{otherUserStepResult.UserToPlan.User.FirstName} {otherUserStepResult.UserToPlan.User.LastName}",
-                            IssueDistinguishAnswers = otherAnswers.Select(x => new IssueDistinguishAnswerDTO
-                            {
-                                QuestionId = question.Id,
-                                IssueId = x.IssueId ?? 0,
-                                SelectAnswer = x.OptionId ?? 0
-                            }).ToList()
-                        });
+                            QuestionId = question.Id,
+                            IssueId = x.IssueId ?? 0,
+                            SelectAnswer = x.OptionId ?? 0
+                        }).ToList();
+
+                        if (userStepResultIssueDistinguishAnswers.ContainsKey(otherUserStepResult.Id))
+                        {
+                            userStepResultIssueDistinguishAnswers[otherUserStepResult.Id].AddRange(issueDistinguishAnswers);
+                        }
+                        else
+                        {
+                            userStepResultIssueDistinguishAnswers.Add(otherUserStepResult.Id, issueDistinguishAnswers);
+                        }
+
                     }
 
                 }
 
                 if (question.Type == QuestionTypes.IssueDistinguishMultiSelect)
                 {
-                    var selectAnswers = currentUserStepResult.SelectAnswers.Where(x => x.QuestionId == question.Id);
+                    var selectAnswersGroups = currentUserStepResult.SelectAnswers.Where(x => x.QuestionId == question.Id).GroupBy(x => x.IssueId);
 
-                    answerGroup.Answer.IssueDistinguishAnswers.Add(new IssueDistinguishAnswerDTO
+                    foreach (var selectAnswersGroup in selectAnswersGroups)
                     {
-                        QuestionId = question.Id,
-                        IssueId = selectAnswers.FirstOrDefault()?.IssueId ?? 0,
-                        SelectAnswers = selectAnswers.Select(x => x.OptionId.Value).ToList()
-                    });
+                        answerGroup.Answer.IssueDistinguishAnswers.Add(new IssueDistinguishAnswerDTO
+                        {
+                            QuestionId = question.Id,
+                            IssueId = selectAnswersGroup.Key.Value,
+                            SelectAnswers = selectAnswersGroup.Select(x => x.OptionId.Value).ToList()
+                        });
+                    }
 
 
                     var definitiveResult = otherUserStepResults.Where(x => x.IsDefinitive).SingleOrDefault();
 
                     if (definitiveResult != null)
                     {
-                        var definitiveAnswers = definitiveResult.SelectAnswers.Where(x => x.QuestionId == question.Id);
+                        var definitiveAnswerGroups = definitiveResult.SelectAnswers.Where(x => x.QuestionId == question.Id).GroupBy(x => x.IssueId);
 
-                        answerGroup.DefinitiveAnswer.IssueDistinguishAnswers.Add(new IssueDistinguishAnswerDTO
+                        foreach (var definitiveAnswerGroup in definitiveAnswerGroups)
                         {
-                            QuestionId = question.Id,
-                            IssueId = definitiveAnswers.FirstOrDefault()?.IssueId ?? 0,
-                            SelectAnswers = definitiveAnswers.Select(x => x.OptionId.Value).ToList()
-                        });
+                            answerGroup.DefinitiveAnswer.IssueDistinguishAnswers.Add(new IssueDistinguishAnswerDTO
+                            {
+                                QuestionId = question.Id,
+                                IssueId = definitiveAnswerGroup.Key.Value,
+                                SelectAnswers = definitiveAnswerGroup.Select(x => x.OptionId.Value).ToList()
+                            });
+                        }
 
                     }
 
                     foreach (var otherUserStepResult in otherUserStepResults)
                     {
-                        var otherAnswers = otherUserStepResult.SelectAnswers.Where(x => x.QuestionId == question.Id);
+                        var otherSelectAnswers = otherUserStepResult.SelectAnswers.Where(x => x.QuestionId == question.Id);
 
-                        answerGroup.OtherAnswers = answerGroup.OtherAnswers.Append(new AnswerDTO
+                        var issueDistinguishAnswers = otherSelectAnswers.GroupBy(x => x.IssueId).Select(x => new IssueDistinguishAnswerDTO
                         {
-                            Author = $"{otherUserStepResult.UserToPlan.User.FirstName} {otherUserStepResult.UserToPlan.User.LastName}",
-                            IssueDistinguishAnswers = new List<IssueDistinguishAnswerDTO>
-                            { new IssueDistinguishAnswerDTO
-                                {
-                                    QuestionId = question.Id,
-                                    IssueId = otherAnswers.FirstOrDefault()?.IssueId ?? 0,
-                                    SelectAnswers = otherAnswers.Select(x => x.OptionId.Value).ToList()
-                                }
-                            }
-                        });
+                            QuestionId = question.Id,
+                            IssueId = x.Key ?? 0,
+                            SelectAnswers = x.Select(k => k.OptionId.Value).ToList()
+                        }).ToList();
+
+                        if (userStepResultIssueDistinguishAnswers.ContainsKey(otherUserStepResult.Id))
+                        {
+                            userStepResultIssueDistinguishAnswers[otherUserStepResult.Id].AddRange(issueDistinguishAnswers);
+                        }
+                        else
+                        {
+                            userStepResultIssueDistinguishAnswers.Add(otherUserStepResult.Id, issueDistinguishAnswers);
+                        }
                     }
 
                 }
             }
+
+            var otherAnswers = new List<AnswerDTO>();
+
+            foreach (var otherUserStepResult in otherUserStepResults)
+            {
+                var selectAnswers = otherUserStepResult.SelectAnswers.Where(x => questions.Any(s => s.Id == x.QuestionId));
+
+                otherAnswers.Add(
+                     new AnswerDTO
+                     {
+                         Author = $"{otherUserStepResult.UserToPlan.User.FirstName} {otherUserStepResult.UserToPlan.User.LastName}",
+                         IssueDistinguishAnswers = userStepResultIssueDistinguishAnswers[otherUserStepResult.Id]
+                     });
+            }
+
+            answerGroup.OtherAnswers = otherAnswers;
+
             return answerGroup;
         }
         #endregion

@@ -6,6 +6,10 @@ namespace Application.DTOs
 {
     public class IssueDistinguishAnswerDTO
     {
+        public IssueDistinguishAnswerDTO()
+        {
+
+        }
         public int IssueId { get; set; }
 
         public int QuestionId { get; set; }
