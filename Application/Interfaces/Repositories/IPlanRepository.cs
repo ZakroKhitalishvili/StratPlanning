@@ -32,6 +32,8 @@ namespace Application.Interfaces.Repositories
 
         IList<StakeholderDTO> GetDefinitiveStakehloders(int planId, bool isInternal);
 
+        IList<IssueOptionAnsweDTO> GetDefinitiveIssueOptions(int planId);
+
         IList<ResourceDTO> GetResources();
     }
 }

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Web.Extensions;
 using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Web.Controllers
 {
@@ -18,10 +19,13 @@ namespace Web.Controllers
 
         public readonly IFileRepository _fileRepository;
 
-        public WorksheetController(IPlanRepository planRepository, ILoggerManager loggerManager, IFileRepository fileRepository) : base(loggerManager)
+        public readonly IHostingEnvironment _hostingEnvironment;
+
+        public WorksheetController(IPlanRepository planRepository, ILoggerManager loggerManager, IFileRepository fileRepository, IHostingEnvironment hostingEnvironment) : base(loggerManager)
         {
             _planRepository = planRepository;
             _fileRepository = fileRepository;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public IActionResult GetStep(string stepIndex, int planId)
@@ -138,8 +142,7 @@ namespace Web.Controllers
 
             foreach (var file in files)
             {
-                //Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Uploads",
+                var path = Path.Combine(_hostingEnvironment.WebRootPath, "Uploads",
                                        file.FileName);
 
                 using (var stream = new FileStream(path, FileMode.Create))

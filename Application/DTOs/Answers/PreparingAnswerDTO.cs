@@ -14,5 +14,7 @@ namespace Application.DTOs
 
         public bool IsCompleted { get; set; }
 
+        public string IssueName { get; set; }
+
     }
 }

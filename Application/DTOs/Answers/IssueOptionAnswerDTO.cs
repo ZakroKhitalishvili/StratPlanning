@@ -17,6 +17,8 @@ namespace Application.DTOs
         public string Actors { get; set; }
 
         public string Resources { get; set; }
+
+        public string IssueName { get; set; }
     }
 
     public class ResourceDTO

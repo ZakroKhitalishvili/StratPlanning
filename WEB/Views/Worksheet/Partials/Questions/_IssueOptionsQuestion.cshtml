@@ -66,7 +66,7 @@
                                                 <td colspan="4">Definitive answer</td>
                                             </tr>
 
-                                            @foreach (var answer in definitiveAnswers)
+                                            @foreach (var answer in definitiveAnswers.OrderByDescending(x => x.IsBestOption))
                                             {
                                                 <tr>
                                                     <td>
@@ -112,7 +112,7 @@
                                                 <td colspan="4">@authorAnswer.Key</td>
                                             </tr>
 
-                                            @foreach (var answer in authorAnswer)
+                                            @foreach (var answer in authorAnswer.OrderByDescending(x => x.info.IsBestOption))
                                             {
                                                 <tr>
                                                     <td>

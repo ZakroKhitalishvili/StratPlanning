@@ -45,5 +45,7 @@ namespace Core.Constants
         public const string IssueDistinguishMultiSelect = "IssueDistinguishMultiSelect";
 
         public const string IssueDistinguishTypeSelect = "IssueDistinguishTypeSelect";
+
+        public const string IssuePreparing = "IssuePreparing";
     }
 }

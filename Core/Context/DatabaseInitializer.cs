@@ -96,6 +96,7 @@ namespace Core.Context
             {
                 SeedStrategicIssuesStep();
             }
+
             if (!Context.StepBlocks.Where(x => x.Step == Steps.StakeholdersAnalysis).Any())
             {
                 SeedStakeholdersAnalysisStep();
@@ -105,10 +106,17 @@ namespace Core.Context
             {
                 SeedActionPlanKeyQuestionsStep();
             }
+
             if (!Context.StepBlocks.Where(x => x.Step == Steps.IssuesDistinguish).Any())
             {
                 SeedDistinguishIssuesStep();
             }
+
+            if (!Context.StepBlocks.Where(x => x.Step == Steps.ActionPlanDetailed).Any())
+            {
+                SeedActionPlanDetailedStep();
+            }
+
 
 
             Context.SaveChanges();
@@ -781,7 +789,7 @@ namespace Core.Context
             {
                 new StepBlock
                 {
-                    Title = "Key questions for drafting the action plan ",
+                    Title = "Key questions for drafting the action plan",
                     Instruction = "sagittis. In dignissim commodo hendrerit. Sed congue purus luctus mi feugiat, ut consequat nisi porttitor",
                     Order=1,
                     Step=Steps.ActionPlanKeyQuestions,
@@ -793,6 +801,31 @@ namespace Core.Context
                     Questions=new List<Question>()
                     {
                         new Question{ Type=QuestionTypes.IssueOptions, Order=1, Title="Your answer", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false }
+                    }
+                }
+            };
+
+            Context.StepBlocks.AddRange(Blocks);
+        }
+
+        private void SeedActionPlanDetailedStep()
+        {
+            Blocks = new StepBlock[]
+            {
+                new StepBlock
+                {
+                    Title = "Preparing an action plan",
+                    Instruction = "sagittis. In dignissim commodo hendrerit. Sed congue purus luctus mi feugiat, ut consequat nisi porttitor",
+                    Order=1,
+                    Step=Steps.ActionPlanDetailed,
+                    Description=null,
+                    UpdatedAt =DateTime.Now,
+                    CreatedAt=DateTime.Now,
+                    CreatedBy=null,
+                    UpdatedBy=null,
+                    Questions=new List<Question>()
+                    {
+                        new Question{ Type=QuestionTypes.IssuePreparing, Order=1, Title="Your answer", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false }
                     }
                 }
             };

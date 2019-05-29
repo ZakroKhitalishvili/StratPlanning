@@ -1,0 +1,197 @@
+﻿@model Application.DTOs.PlanStepDTO
+
+@{
+    var blockIndex = (int)ViewData["BlockIndex"];
+    var questionIndex = (int)ViewData["QuestionIndex"];
+
+    var questionIndexOffset = (int)ViewData["QuestionIndexOffset"];
+
+    var question = Model.StepBlocks[blockIndex].Questions[questionIndex];
+
+    var answerGroup = Model.AnswerGroups.Where(x => x.QuestionId == question.Id).FirstOrDefault();
+
+    var filledAnswer = Model.AnswerGroups[questionIndexOffset + questionIndex];
+
+    var options = Web.Helpers.StepHelper.GetDefinitifeIssueOptions(Context, Model.PlanId).ToArray();
+}
+
+
+<div class="m-demo">
+    <div class="m-demo__preview">
+
+        <div class="m-scrollable " data-scrollable="true" data-axis="xy">
+            <table class="table m-table table-bordered m--margin-top-10 m--margin-bottom-20">
+                <thead>
+                    <tr>
+                        <th>
+                            Issue
+                        </th>
+
+                        <th>
+                            When will it be done
+                        </th>
+                        <th>
+                            How will it be done
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (filledAnswer.DefinitiveAnswer != null)
+                    {
+                        <tr class="author">
+                            <td colspan="3">Definitive Answer</td>
+                        </tr>
+                        @foreach (var answer in filledAnswer.DefinitiveAnswer.IssuePreparingAnswers)
+                        {
+                            <tr>
+                                <td>@answer.IssueName</td>
+                                <td>@answer.Date.ToString("dd-MM-yyyy")</td>
+                                <td>@answer.HowItWillBeDone</td>
+                            </tr>
+                        }
+                    }
+                    @if (filledAnswer.OtherAnswers != null)
+                    {
+                        @foreach (var answerAuthor in filledAnswer.OtherAnswers)
+                        {
+                            <tr class="author">
+                                <td colspan="3">@answerAuthor.Author</td>
+                            </tr>
+                            @foreach (var answer in answerAuthor.IssuePreparingAnswers)
+                            {
+                                <tr>
+                                    <td>@answer.IssueName</td>
+                                    <td>@answer.Date.ToString("dd-MM-yyyy")</td>
+                                    <td>@answer.HowItWillBeDone</td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div>
+    <label>
+        @question.Title
+    </label>
+    <div>
+        <div>
+            <div class="m-scrollable " data-scrollable="true" data-axis="xy">
+                <table class="table m-table table-bordered m--margin-top-10 m--margin-bottom-20">
+                    <thead>
+                        <tr>
+                            <th>
+                                Issue
+                            </th>
+                            <th>
+                                What will be done
+                            </th>
+                            <th>
+                                Who will do to
+                            </th>
+
+                            <th>
+                                When will it be done
+                            </th>
+                            <th>
+                                How will it be done
+                            </th>
+                            <th>
+                                Resources
+                            </th>
+                            <th>
+                                Completed
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var i = 0; i < options.Length; i++)
+                        {
+                            var answer = filledAnswer.Answer?.IssuePreparingAnswers.Where(x => x.IssueOptionAnswerId == options[i].Id).FirstOrDefault();
+                            <tr>
+                                <td>@options[i].IssueName</td>
+                                <td>@options[i].Option</td>
+                                <td>
+                                    <div class="m-list-badge m-list-badge--light-bg">
+                                        <div class="m-list-badge__items">
+                                            <span class="m-list-badge__item m-list-badge__item--default">
+                                                @options[i].Actors
+                                            </span>
+                                        </div>
+                                    </div>
+                                </td>
+                                @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
+                                {
+                                    <td>
+                                        <input type="text" class="datepicker form-control" value="@(answer != null ? answer.Date.ToString("dd-MM-yyyy") : "")"
+                                               name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssuePreparingAnswers[@i].Date">
+                                        <input type="hidden" value="@options[i].Id"
+                                               name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssuePreparingAnswers[@i].IssueOptionAnswerId" />
+                                    </td>
+
+                                    <td>
+                                        <textarea class="form-control m-input" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssuePreparingAnswers[@i].HowItWillBeDone">@(answer != null ? answer.HowItWillBeDone : "")</textarea>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>@(answer != null ? answer.Date.ToString("dd-MM-yyyy") : "")</td>
+                                    <td>@(answer != null ? answer.HowItWillBeDone : "")</td>
+                                }
+                                <td>
+                                    <div class="m-list-badge m-list-badge--light-bg">
+                                        <div class="m-list-badge__items">
+                                            @foreach (var res in options[i].Resources.Split(','))
+                                            {
+                                                <span class="m-list-badge__item m-list-badge__item--default">@res</span>
+                                            }
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
+                                    {
+                                        <label class="m-checkbox checkbox-sp m-checkbox--solid">
+                                            <input type="checkbox" @(answer != null && answer.IsCompleted ? "checked=true" : "") value="true"
+                                                   name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssuePreparingAnswers[@i].IsCompleted">
+                                            <span></span>
+                                        </label>
+                                    }
+                                    else if (answer != null && answer.IsCompleted)
+                                    {
+                                        <i class="fa fa-check-square-o sp-font-md"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa fa-square-o sp-font-md"></i>
+                                    }
+                                </td>
+                                <td>
+                                    @if (answer != null && answer.IsCompleted)
+                                    {
+                                        <span class="fa fa-check m--font-success">
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="fa fa-warning m--font-warning">
+                                        </span>
+                                    }
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].QuestionId" value="@question.Id" />
+</div>
