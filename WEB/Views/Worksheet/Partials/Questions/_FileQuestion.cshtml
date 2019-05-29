@@ -88,6 +88,7 @@
         </div>
         <div class="col-10 col-md-11">
             <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].QuestionId" value="@question.Id" />
+            <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer" />
             <div class="m-dropzone dropzone-sp m-dropzone--default m--margin-top-20"
                  data-initurl="@Url.Action("GetAnswerFiles", "Worksheet", new { questionId = question.Id })"
                  data-inputname="@Html.NameFor(x => x.AnswerGroups[questionIndexOffset + questionIndex].Answer.InputFileAnswer)">
