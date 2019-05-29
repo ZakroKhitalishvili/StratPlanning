@@ -142,7 +142,10 @@ namespace Web.Controllers
 
             foreach (var file in files)
             {
-                var path = Path.Combine(_hostingEnvironment.WebRootPath, "Uploads",
+                //var path = Path.Combine(_hostingEnvironment.WebRootPath, "Uploads",
+                //                       file.FileName);
+
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Uploads",
                                        file.FileName);
 
                 using (var stream = new FileStream(path, FileMode.Create))

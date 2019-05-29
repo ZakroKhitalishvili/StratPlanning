@@ -12,6 +12,7 @@ using Application.Mappers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Web.Helpers;
 
 namespace Web
 {
@@ -52,6 +53,10 @@ namespace Web
             //});
 
             MapperInitializer.Initialize();
+
+            // This code fixs a bug in providing current directory
+            //https://stackoverflow.com/questions/54508735/directory-getcurrentdirectory-doesnt-return-the-correct-directory
+            CurrentDirectoryHelper.SetCurrentDirectory();
 
         }
 
