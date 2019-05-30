@@ -371,7 +371,6 @@ $(document).on('click', '.remove-user-from-plan', function (e) {
 });
 
 function updatePlanningTeam() {
-
     $.ajax(
         {
             url: GetPlanningTeamURL,
@@ -393,7 +392,6 @@ function updatePlanningTeam() {
                 $('#planning_team_portlet').find('.m-select2').select2();
 
                 $.validator.unobtrusive.parse('#planning_team_portlet form');
-
             },
             error: function (xhr, statusText, error) {
                 notify("An Error occured during updating the planning plan's view", "danger", 5);
@@ -639,41 +637,78 @@ function guid() {
 ///////////////////////////
 //// steptask completion event
 ////////
-$(document).on('click', 'input.step-complete-checkbox', function (e) {
+//$(document).on('click', 'button#.step-complete-checkbox', function (e) {
+//    e.preventDefault();
+
+//    let completeCheckBox = $(this);
+//    let stepTaskId = completeCheckBox.data('id');
+
+//    if ($(this).val()) {
+//        submitConfirm("You won't be able to change it after").then(function (result) {
+//            if (result) {
+//                $.ajax(
+//                    {
+//                        url: CompleteStepTaskURL,
+//                        method: "post",
+//                        data: {
+//                            stepTaskId
+//                        },
+//                        processData: true,
+//                        success: function (data, statusText, xhr) {
+//                            if (xhr.status == 200) {
+//                                notify("Successfully completed", "success", 5);
+//                                completeCheckBox.prop('checked', true);
+//                            }
+
+//                            if (xhr.status == 202 || xhr.status == 400) {
+//                                notify("Input data are not valid ", "danger", 5);
+//                            }
+
+//                        },
+//                        error: function (xhr, statusText, error) {
+//                            notify("An Error occured on the request", "danger", 5);
+//                        }
+//                    });
+//            }
+//        });
+//    }
+//});
+
+$(document).on('click', 'button#step_form_complete', function (e) {
     e.preventDefault();
 
-    let completeCheckBox = $(this);
-    let stepTaskId = completeCheckBox.data('id');
+    let formData = new FormData(document.querySelector('form#step_form'));
+    let planId = formData['PlanId'];
+    let stepIndex = formData['Step'];
 
-    if ($(this).val()) {
-        submitConfirm("You won't be able to change it after").then(function (result) {
-            if (result) {
-                $.ajax(
-                    {
-                        url: CompleteStepTaskURL,
-                        method: "post",
-                        data: {
-                            stepTaskId
-                        },
-                        processData: true,
-                        success: function (data, statusText, xhr) {
-                            if (xhr.status == 200) {
-                                notify("Successfully completed", "success", 5);
-                                completeCheckBox.prop('checked', true);
-                            }
-
-                            if (xhr.status == 202 || xhr.status == 400) {
-                                notify("Input data are not valid ", "danger", 5);
-                            }
-
-                        },
-                        error: function (xhr, statusText, error) {
-                            notify("An Error occured on the request", "danger", 5);
+    submitConfirm("You won't be able to change it after").then(function (result) {
+        if (result) {
+            $.ajax(
+                {
+                    url: CompleteStepTaskURL,
+                    method: "post",
+                    data: {
+                        planId,
+                        stepIndex
+                    },
+                    processData: true,
+                    success: function (data, statusText, xhr) {
+                        if (xhr.status == 200) {
+                            notify("Successfully completed", "success", 5);
+                            completeCheckBox.prop('checked', true);
                         }
-                    });
-            }
-        });
-    }
+
+                        if (xhr.status == 202 || xhr.status == 400) {
+                            notify("Input data are not valid ", "danger", 5);
+                        }
+
+                    },
+                    error: function (xhr, statusText, error) {
+                        notify("An Error occured on the request", "danger", 5);
+                    }
+                });
+        }
+    });
 });
 ///////
 ////

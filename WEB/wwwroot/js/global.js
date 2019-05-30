@@ -28,15 +28,21 @@ function initializeInputs(selector) {
             }),
             connect: [true, false]
         });
-        
+
         slider.noUiSlider.on('change.one', function (value) {
             $(this.target).parent().find('input').val(value);
         });
 
         var val = $(slider).next('input[type="hidden"]').val();
 
-        if (val) {
+        console.log(val);
+        if (!!val) {
+            console.log('set val');
             slider.noUiSlider.set(val);
+        }
+        else {
+            slider.noUiSlider.set(5);
+            $(slider).next('input[type="hidden"]').val(5)
         }
     });
 
@@ -281,7 +287,7 @@ $(document).on('click', '.delete-plan', function (e) {
                     success: function (data, statusText, xhr) {
                         if (xhr.status == 400) {
                             notify("An Error occured during sending a request", "danger", 5);
-                            
+
                         }
 
                         if (data.result) {
@@ -289,10 +295,10 @@ $(document).on('click', '.delete-plan', function (e) {
                             setTimeout(function () {
                                 document.location.reload(false)
                             }, 3000);
-                            
+
                         }
                         else {
-                            notify("Deleting the plan is not possible", "danger", 5);
+                            notify("Deleting the plan is not possible due to existing answers", "danger", 5);
                         }
 
                     },

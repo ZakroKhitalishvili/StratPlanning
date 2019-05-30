@@ -22,6 +22,8 @@ namespace Application.Interfaces.Repositories
 
         bool RemoveUserFromPlan(int userId, int planId);
 
+        bool CompleteStep(int planid, string stepIndex);
+
         IEnumerable<UserPlanningMemberDTO> GetPlanningTeam(int planId);
 
         bool SaveStep(PlanStepDTO planStep, bool isDefinitive, bool isSubmitted, int userId);

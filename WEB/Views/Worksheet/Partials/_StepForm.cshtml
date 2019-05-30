@@ -26,14 +26,17 @@
 
     @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
     {
-        <div class="form-group m-form__group m--img-centered">
-            <button type="button" id="step_form_save_button" class="btn m-btn--pill btn-sp m--margin-right-10">
-                Save
-            </button>
-            <button type="button" id="step_form_submit_button" class="btn m-btn--pill btn-sp">
-                Submit
-            </button>
-        </div>
+    <div class="form-group m-form__group m--img-centered">
+        <button type="button" id="step_form_save_button" class="btn m-btn--pill btn-sp m--margin-right-10">
+            Save
+        </button>
+        <button type="button" id="step_form_submit_button" class="btn m-btn--pill btn-sp">
+            Submit
+        </button>
+        @*<button type="button" id="step_form_complete" class="btn m-btn--pill btn-success pull-right">
+            Complete
+        </button>*@
+    </div>
     }
 </form>
 

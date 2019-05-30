@@ -37,6 +37,7 @@ namespace Application.Repositories
 
             return true;
         }
+
         public bool AddUserToPlanPlanStep(int userId, int planId, string step)
         {
             if (Context.UsersToPlans.Where(x => x.UserId == userId && x.PlanId == planId && x.Step == step).Any())
@@ -91,7 +92,6 @@ namespace Application.Repositories
             return true;
         }
 
-
         public bool DeletePlan(int planId)
         {
             var plan = Get(planId);
@@ -107,6 +107,11 @@ namespace Application.Repositories
             {
                 Context.StepTasks.RemoveRange(stepTasks);
 
+                var userStepResults = Context.UserStepResults.Include(x => x.UserToPlan)
+                    .Where(x => (x.UserToPlan != null && x.UserToPlan.PlanId == planId) || x.PlanId.Value == planId);
+
+                Context.UserStepResults.RemoveRange(userStepResults);
+
                 Delete(plan);
 
                 Context.SaveChanges();
@@ -117,6 +122,23 @@ namespace Application.Repositories
             }
 
             return true;
+        }
+
+        public bool CompleteStep(int planId, string stepIndex)
+        {
+            if (IsAvailableStep(planId, stepIndex))
+            {
+                var stepTask = GetStepTask(planId, stepIndex);
+
+                if(!stepTask.IsCompleted)
+                {
+                    stepTask.IsCompleted = true;
+                    Context.SaveChanges();
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public IEnumerable<PlanDTO> GetPlanList()
@@ -135,13 +157,10 @@ namespace Application.Repositories
 
         public PlanStepDTO GetStep(string stepIndex, int planId, bool isDefinitive, int userId)
         {
-            //checks if a requested step is active in plan's tasks or just planid or/and stepindex are wrong
-            var stepTask = GetStepTask(planId, stepIndex);
-
-            if (stepTask == null)
-            {
-                return null;
-            }
+            //if(!IsAvailableStep(planId,stepIndex))
+            //{
+            //    return null;
+            //}
 
             var planStep = GetPlanStep(planId, stepIndex, isDefinitive);
 
@@ -200,12 +219,10 @@ namespace Application.Repositories
 
         public bool SaveStep(PlanStepDTO planStep, bool isDefinitive, bool isSubmitted, int userId)
         {
-            var stepTask = GetStepTask(planStep.PlanId, planStep.Step);
-
-            if (stepTask == null)
-            {
-                return false;
-            }
+            //if (!IsAvailableStep(planStep.PlanId, planStep.Step))
+            //{
+            //    return false;
+            //}
 
             if (!isDefinitive)
             {
@@ -394,7 +411,41 @@ namespace Application.Repositories
         }
 
         #region Private methods
+
         #region General methods
+
+        private bool IsAvailableStep(int planId, string stepIndex)
+        {
+            var plan = Get(planId);
+
+            if ((stepIndex == Steps.ActionPlanKeyQuestions || stepIndex == Steps.ActionPlanDetailed || stepIndex == Steps.Review)
+                && plan.IsWithActionPlan.HasValue && !plan.IsWithActionPlan.Value)
+            {
+                return true;
+            }
+
+            var stepTask = GetStepTask(planId, stepIndex);
+
+            if (stepTask.IsCompleted)
+            {
+                return true;
+            }
+
+            var sortedStepArray = GetStepList().ToArray();
+
+            var index = Array.IndexOf(sortedStepArray, stepIndex);
+
+            if (index == 0)
+            {
+                return true;
+            }
+
+            var previousStep = sortedStepArray[index - 1];
+
+            var previousStepTask = GetStepTask(planId, stepIndex);
+
+            return previousStepTask.IsCompleted;
+        }
 
         private IList<StepTaskDTO> GetStepTasks(int planId)
         {
@@ -667,8 +718,6 @@ namespace Application.Repositories
             return Context.Questions.Where(x => x.Type == QuestionTypes.IssueDistinguishMultiSelect || x.Type == QuestionTypes.IssueDistinguishSelect || x.Type == QuestionTypes.IssueDistinguishTypeSelect)
                         .Include(x => x.Options).AsEnumerable().Select(x => Mapper.Map<QuestionDTO>(x)).ToList();
         }
-
-
 
         #endregion
 

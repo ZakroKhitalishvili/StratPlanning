@@ -168,14 +168,21 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult CompleteStepTask(int stepTaskId)
+        public IActionResult CompleteStepTask(int planId, string stepIndex)
         {
-            if (stepTaskId <= 0)
+            if (planId <= 0 || string.IsNullOrEmpty(stepIndex))
             {
                 return BadRequest();
             }
 
-            return Ok();
+            var result = _planRepository.CompleteStep(planId, stepIndex);
+
+            if (result)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
         }
 
         [HttpPost]
