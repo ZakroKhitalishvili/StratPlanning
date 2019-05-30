@@ -694,6 +694,9 @@ namespace Application.Repositories
 
                     case QuestionTypes.ResourceReview:
                         SaveResourceReviewAnswers(answerGroup, userStepResult); break;
+
+                    case QuestionTypes.RateSlider:
+                        SaveTextAnswer(answerGroup, userStepResult); break;
                 }
             }
         }
@@ -1577,6 +1580,9 @@ namespace Application.Repositories
 
                         case QuestionTypes.ResourceReview:
                             planStep.AnswerGroups.Add(GetResourceReviewAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults)); break;
+
+                        case QuestionTypes.RateSlider:
+                            planStep.AnswerGroups.Add(GetTextAnswers(questions[j].Id, currentUserStepResult, otherUserStepResults)); break;
                     }
                 }
             }

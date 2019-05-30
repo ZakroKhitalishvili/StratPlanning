@@ -118,6 +118,11 @@ namespace Core.Context
             }
 
 
+            if (!Context.StepBlocks.Where(x => x.Step == Steps.Evalution).Any())
+            {
+                SeedEvalutionStep();
+            }
+
 
             Context.SaveChanges();
 
@@ -826,6 +831,37 @@ namespace Core.Context
                     Questions=new List<Question>()
                     {
                         new Question{ Type=QuestionTypes.IssuePreparing, Order=1, Title="Your answer", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false }
+                    }
+                }
+            };
+
+            Context.StepBlocks.AddRange(Blocks);
+        }
+
+        private void SeedEvalutionStep()
+        {
+            Blocks = new StepBlock[]
+            {
+                new StepBlock
+                {
+                    Title = "Evaluation ",
+                    Instruction = "sagittis. In dignissim commodo hendrerit. Sed congue purus luctus mi feugiat, ut consequat nisi porttitor",
+                    Order=1,
+                    Step=Steps.Evalution,
+                    Description="We want to learn from you. Your answers will help us improve the tool and make it more useful in the future. Please provide your answers on the scale from 1 to 10 where 1 is the most negative and 10 is the most positive.",
+                    UpdatedAt =DateTime.Now,
+                    CreatedAt=DateTime.Now,
+                    CreatedBy=null,
+                    UpdatedBy=null,
+                    Questions=new List<Question>()
+                    {
+                        new Question{ Type=QuestionTypes.RateSlider, Order=1, Title="Did you find the planning process useful?", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false },
+                        new Question{ Type=QuestionTypes.RateSlider, Order=2, Title="Do you plan to rely on the plan you have created?", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false },
+                        new Question{ Type=QuestionTypes.RateSlider, Order=3, Title="Do you believe the plan will help your organization?", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false },
+                        new Question{ Type=QuestionTypes.RateSlider, Order=4, Title="Are you likely to use the planning tool again in the future?", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false },
+                        new Question{ Type=QuestionTypes.RateSlider, Order=5, Title="Would you recommend the planning tool to others?", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false },
+                        new Question{ Type=QuestionTypes.TextArea, Order=6, Title="What did you like about the planning tool? Which part was particularly useful? How is the plan going to help your organization? ", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false },
+                        new Question{ Type=QuestionTypes.TextArea, Order=7, Title="What did you not like about the tool? Do you have any suggestions how it could be made better?", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false },
                     }
                 }
             };

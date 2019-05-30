@@ -49,5 +49,7 @@ namespace Core.Constants
         public const string IssuePreparing = "IssuePreparing";
 
         public const string ResourceReview = "ResourceReview";
+
+        public const string RateSlider = "RateSlider";
     }
 }

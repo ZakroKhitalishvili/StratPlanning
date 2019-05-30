@@ -68,30 +68,30 @@ function initializeStep() {
     /////////////
     ///////
 
-    //////
-    /// evalution sliders
-    ///
+    ////////
+    ///// evalution sliders
+    /////
 
-    $(".evalution-slider").each(function (ind, slider) {
-        noUiSlider.create(slider, {
-            start: [5],
-            step: 1,
-            range: {
-                min: [1],
-                max: [10]
-            },
-            tooltips: true,
-            format: wNumb({
-                decimals: 0
-            }),
-            connect: [true, false]
-        });
+    //$(".evalution-slider").each(function (ind, slider) {
+    //    noUiSlider.create(slider, {
+    //        start: [5],
+    //        step: 1,
+    //        range: {
+    //            min: [1],
+    //            max: [10]
+    //        },
+    //        tooltips: true,
+    //        format: wNumb({
+    //            decimals: 0
+    //        }),
+    //        connect: [true, false]
+    //    });
 
-        slider.noUiSlider.on('change.one', function (value) {
+    //    slider.noUiSlider.on('change.one', function (value) {
 
-            $(this.target).parent().find('input').val(value);
-        });
-    });
+    //        $(this.target).parent().find('input').val(value);
+    //    });
+    //});
     ///////////
     //// selects speficy-other event
     //////////////
