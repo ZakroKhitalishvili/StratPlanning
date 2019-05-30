@@ -1,0 +1,40 @@
+﻿@model Application.DTOs.PlanStepDTO
+
+@{
+    var blockIndex = (int)ViewData["BlockIndex"];
+    var questionIndex = (int)ViewData["QuestionIndex"];
+
+    var questionIndexOffset = (int)ViewData["QuestionIndexOffset"];
+
+    var question = Model.StepBlocks[blockIndex].Questions[questionIndex];
+
+    var answerGroup = Model.AnswerGroups.Where(x => x.QuestionId == question.Id).FirstOrDefault();
+
+    var filledAnswer = Model.AnswerGroups[questionIndexOffset + questionIndex];
+}
+
+<div class="form-group m-form__group">
+    <label for="exampleSelect1">
+        @question.Title
+    </label>
+    <div class="poll-item m--margin-bottom-10 m--margin-top-10">
+        <div class="row">
+            <div class="col-sm-12">
+                <span class="pull-left">
+                    Very negative
+                </span>
+                <span class="m--pull-right">
+                    Very positive
+                </span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="evalution-slider"></div>
+                <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.TextAnswer.Text"/>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].QuestionId" value="@question.Id" />
+</div>

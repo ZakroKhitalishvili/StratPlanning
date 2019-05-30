@@ -12,6 +12,17 @@
     "sourceMap": false
   },
   {
+    "outputFileName": "wwwroot/css/styles.bundle.css",
+    "inputFiles": [
+      "wwwroot/lib/noUiSlider/nouislider.min.css"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
     "outputFileName": "wwwroot/lib/lib.bundle.min.js",
     "inputFiles": [
       "wwwroot/lib/jquery/jquery-3.3.1.min.js",
@@ -27,7 +38,9 @@
       "wwwroot/lib/dropzone/dropzone.js",
       "wwwroot/lib/jqeury-timepicker/jquery.timepicker.min.js",
       "wwwroot/lib/bootstrap-datepicker/bootstrap-datepicker.min.js",
-      "wwwroot/lib/DataTables/datatables.min.js"
+      "wwwroot/lib/DataTables/datatables.min.js",
+      "wwwroot/lib/noUiSlider/nouislider.min.js",
+      "wwwroot/lib/wnumb/wNumb.js"
     ],
     "minify": {
       "enabled": true,

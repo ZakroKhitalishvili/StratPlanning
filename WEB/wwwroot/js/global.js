@@ -14,6 +14,32 @@ function initializeInputs(selector) {
         minimumResultsForSearch: Infinity
     });
 
+    $(selector).find('.evalution-slider').each(function (ind, slider) {
+        noUiSlider.create(slider, {
+            start: [5],
+            step: 1,
+            range: {
+                min: [1],
+                max: [10]
+            },
+            tooltips: true,
+            format: wNumb({
+                decimals: 0
+            }),
+            connect: [true, false]
+        });
+        
+        slider.noUiSlider.on('change.one', function (value) {
+            $(this.target).parent().find('input').val(value);
+        });
+
+        var val = $(slider).next('input[type="hidden"]').val();
+
+        if (val) {
+            slider.noUiSlider.set(val);
+        }
+    });
+
     if (typeof fieldOptions !== 'undefined') {
         $(selector).find('.m-values-autocomplete').autocomplete({
             source: fieldOptions.valuesDictionary
