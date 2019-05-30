@@ -8,6 +8,8 @@ namespace Application.Interfaces.Repositories
     {
         bool CreatePlan(PlanDTO plan, int userId);
 
+        bool DeletePlan(int planId);
+
         PlanStepDTO GetStep(string stepIndex, int planId, bool isDefinitive, int userId);
 
         IEnumerable<string> GetStepList();

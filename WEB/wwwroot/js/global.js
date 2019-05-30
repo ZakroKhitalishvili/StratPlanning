@@ -34,6 +34,8 @@ function initializeInputs(selector) {
     }
 
     $.validator.unobtrusive.parse(selector);
+
+    $('.sp-tooltip').tooltip();
 }
 
 
@@ -171,18 +173,111 @@ function notify(text, type, seconds = 5) {
         // options
         message: text
     },
-    {
-        // settings
-        type: type,
-        delay: seconds * 1000,
-        placement: {
-            from: "bottom",
-            align: "right"
-        },
-        offset:
         {
-            x: 20,
-            y: 100
-        }
-    });
+            // settings
+            type: type,
+            delay: seconds * 1000,
+            placement: {
+                from: "bottom",
+                align: "right"
+            },
+            offset:
+            {
+                x: 20,
+                y: 100
+            }
+        });
 }
+
+////////////
+//// plan create ajax
+///
+
+
+$(document).on('submit', 'form#add_plan_form', function (e) {
+    e.preventDefault();
+
+    if (!$('#add_plan_form').valid()) {
+        return;
+    }
+
+    let formData = new FormData(document.querySelector('form#add_plan_form'));
+
+    $.ajax(
+        {
+            url: CreatePlanURL,
+            method: "post",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data, statusText, xhr) {
+                if (xhr.status == 201) {
+                    notify("Successfully created", "success", 5);
+                    setTimeout(function () {
+                        document.location.reload(false)
+                    }, 3000);
+                }
+                if (xhr.status == 202 || xhr.status == 400) {
+                    notify("Input data are not valid ", "danger", 5);
+                }
+
+                $('#add_plan_form').html(data);
+                initializeInputs('#add_plan_form');
+            },
+            error: function (xhr, statusText, error) {
+                notify("An Error occured on the request", "danger", 5);
+            }
+        });
+});
+
+////
+///
+
+
+///////
+/// plan delete ajax
+///
+
+$(document).on('click', '.delete-plan', function (e) {
+    e.preventDefault();
+
+    let planId = $(this).data('id');
+
+    deleteConfirm().then(result => {
+        if (result) {
+            $.ajax(
+                {
+                    url: DeletePlanURL,
+                    method: "post",
+                    data: {
+                        planId
+                    },
+                    success: function (data, statusText, xhr) {
+                        if (xhr.status == 400) {
+                            notify("An Error occured during sending a request", "danger", 5);
+                            
+                        }
+
+                        if (data.result) {
+                            notify("Successfully deleted", "success", 5);
+                            setTimeout(function () {
+                                document.location.reload(false)
+                            }, 3000);
+                            
+                        }
+                        else {
+                            notify("Deleting the plan is not possible", "danger", 5);
+                        }
+
+                    },
+                    error: function (xhr, statusText, error) {
+                        notify("An Error occured during sending a request", "danger", 5);
+                    }
+                })
+        }
+    })
+
+});
+
+//////
+///

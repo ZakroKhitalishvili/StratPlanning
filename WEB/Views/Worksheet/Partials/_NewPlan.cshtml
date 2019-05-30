@@ -1,0 +1,39 @@
+﻿@model PlanDTO
+
+@{
+    Layout = null;
+}
+<form class="m-form m-form--fit m-form--label-align-right" id="add_plan_form">
+    <div class="m-portlet__body">
+        <div class="form-group m-form__group">
+            <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+        </div>
+        <div class="form-group m-form__group row">
+            <label asp-for="Name" class="col-2 col-form-label">
+                Title
+            </label>
+            <div class="col-10">
+                <input type="text" asp-for="Name" class="form-control m-input" />
+                <span class="text-danger" asp-validation-for="Name"></span>
+            </div>
+
+        </div>
+        <div class="form-group m-form__group row">
+            <label asp-for="Description" class="col-2 col-form-label">
+                Description
+            </label>
+            <div class="col-10">
+                <textarea asp-for="Description" class="form-control m-input" ></textarea>
+                <span class="text-danger" asp-validation-for="Description"></span>
+            </div>
+
+        </div>
+    </div>
+    <div class="m-portlet__foot m-portlet__foot--fit">
+        <div class="m-form__actions pull-right">
+            <button type="submit" class="btn btn-sp m-btn m-btn--icon">
+                Add
+            </button>
+        </div>
+    </div>
+</form>

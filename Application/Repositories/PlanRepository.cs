@@ -91,9 +91,37 @@ namespace Application.Repositories
             return true;
         }
 
+
+        public bool DeletePlan(int planId)
+        {
+            var plan = Get(planId);
+
+            if (plan == null)
+            {
+                return false;
+            }
+
+            var stepTasks = Context.StepTasks.Where(x => x.PlanId == planId);
+
+            try
+            {
+                Context.StepTasks.RemoveRange(stepTasks);
+
+                Delete(plan);
+
+                Context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public IEnumerable<PlanDTO> GetPlanList()
         {
-            return FindAll().Select(p => Mapper.Map<PlanDTO>(p));
+            return FindAll().OrderByDescending(x => x.CreatedAt).Select(p => Mapper.Map<PlanDTO>(p));
         }
 
         public IEnumerable<UserPlanningMemberDTO> GetPlanningTeam(int planId)
@@ -296,17 +324,26 @@ namespace Application.Repositories
         {
             var adminStepResult = GetSubmittedDefinitiveStepResult(planId, Steps.StakeholdersIdentify);
 
+            if (adminStepResult == null)
+            {
+                return new List<StakeholderDTO>();
+            }
             return adminStepResult.StakeholderAnswers.Where(x => x.IsInternal == isInternal)
-                    .Select(x => new StakeholderDTO
-                    {
-                        Id = x.Id,
-                        Name = x.FirstName + " " + x.LastName
-                    }).ToList();
+                .Select(x => new StakeholderDTO
+                {
+                    Id = x.Id,
+                    Name = x.FirstName + " " + x.LastName
+                }).ToList();
         }
 
         public IList<IssueOptionAnsweDTO> GetDefinitiveIssueOptions(int planId)
         {
             var adminStepResult = GetSubmittedDefinitiveStepResult(planId, Steps.ActionPlanKeyQuestions);
+
+            if (adminStepResult == null)
+            {
+                return new List<IssueOptionAnsweDTO>();
+            }
 
             return adminStepResult.IssueOptionAnswers.Where(x => x.IsBestOption)
                     .Select(x => new IssueOptionAnsweDTO
@@ -318,6 +355,42 @@ namespace Application.Repositories
                         Resources = String.Join(',', x.IssueOptionAnswersToResources.Select(y => y.Resource.Title).ToList()),
                         IssueName = x.Issue.Name
                     }).ToList();
+        }
+
+        public IList<ResourceDTO> GetResources()
+        {
+            return Context.Resources.Select(x => new ResourceDTO
+            {
+                Id = x.Id,
+                Title = x.Title
+            }).ToList();
+        }
+
+        public IList<ResourceDTO> GetResourcesByPlan(int planId)
+        {
+            var submittedStepResult = GetSubmittedDefinitiveStepResult(planId, Steps.ActionPlanKeyQuestions);
+
+            if (submittedStepResult == null)
+            {
+                return new List<ResourceDTO>();
+            }
+
+            var issueOptions = submittedStepResult.IssueOptionAnswers.Where(x => x.IsBestOption);
+
+            var resources = new List<Resource>();
+
+            foreach (var resource in issueOptions.SelectMany(x => x.IssueOptionAnswersToResources.Select(s => s.Resource)))
+            {
+                if (!resources.Any(x => x.Id == resource.Id))
+                {
+                    resources.Add(resource);
+                }
+            }
+            return resources.Select(x => new ResourceDTO
+            {
+                Id = x.Id,
+                Title = x.Title
+            }).ToList();
         }
 
         #region Private methods
@@ -595,36 +668,7 @@ namespace Application.Repositories
                         .Include(x => x.Options).AsEnumerable().Select(x => Mapper.Map<QuestionDTO>(x)).ToList();
         }
 
-        public IList<ResourceDTO> GetResources()
-        {
-            return Context.Resources.Select(x => new ResourceDTO
-            {
-                Id = x.Id,
-                Title = x.Title
-            }).ToList();
-        }
 
-        public IList<ResourceDTO> GetResourcesByPlan(int planId)
-        {
-            var submittedStepResult = GetSubmittedDefinitiveStepResult(planId, Steps.ActionPlanKeyQuestions);
-
-            var issueOptions = submittedStepResult.IssueOptionAnswers.Where(x => x.IsBestOption);
-
-            var resources = new List<Resource>();
-
-            foreach (var resource in issueOptions.SelectMany(x => x.IssueOptionAnswersToResources.Select(s => s.Resource)))
-            {
-                if (!resources.Any(x => x.Id == resource.Id))
-                {
-                    resources.Add(resource);
-                }
-            }
-            return resources.Select(x => new ResourceDTO
-            {
-                Id = x.Id,
-                Title = x.Title
-            }).ToList();
-        }
 
         #endregion
 
@@ -981,7 +1025,7 @@ namespace Application.Repositories
             }
 
             if (answerGroup.Answer == null) return;
-            
+
             foreach (var answer in answerGroup.Answer.InputFileAnswer)
             {
                 if (!dbAnswers.Any(x => x.FileId == answer))
@@ -2723,7 +2767,7 @@ namespace Application.Repositories
 
             var definitiveAnswers = definitiveStepResult?.BooleanAnswers.Where(x => x.QuestionId == questionId);
 
-            if (definitiveAnswers!=null && definitiveAnswers.Any())
+            if (definitiveAnswers != null && definitiveAnswers.Any())
             {
                 answerGroup.DefinitiveAnswer = new AnswerDTO
                 {

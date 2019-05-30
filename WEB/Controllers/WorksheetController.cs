@@ -188,9 +188,12 @@ namespace Web.Controllers
             if (keepFilled != null && keepFilled.Value)
             {
                 newPlanStep.FilledAnswers = planStep.AnswerGroups;
-                foreach (var stepTaskAnswer in planStep.StepTaskAnswers.Answer.StepTaskAnswers.Where(x => x.Id == 0))
+                if (planStep.StepTaskAnswers?.Answer?.StepTaskAnswers != null)
                 {
-                    newPlanStep.StepTaskAnswers.Answer.StepTaskAnswers?.Add(stepTaskAnswer);
+                    foreach (var stepTaskAnswer in planStep.StepTaskAnswers.Answer.StepTaskAnswers.Where(x => x.Id == 0))
+                    {
+                        newPlanStep.StepTaskAnswers.Answer.StepTaskAnswers?.Add(stepTaskAnswer);
+                    }
                 }
 
             }
@@ -198,5 +201,44 @@ namespace Web.Controllers
             return PartialView("~/Views/Worksheet/Partials/_StepForm.cshtml", newPlanStep);
         }
 
+        [HttpPost]
+        [Authorize(Roles = Roles.Admin)]
+        public IActionResult CreatePlan(PlanDTO plan)
+        {
+            Response.StatusCode = StatusCodes.Status202Accepted;
+
+            if (ModelState.IsValid)
+            {
+                var result = _planRepository.CreatePlan(plan, HttpContext.GetUserId());
+
+                if (result)
+                {
+                    Response.StatusCode = StatusCodes.Status201Created;
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Something went wrong during creating plan");
+                }
+            }
+
+            return PartialView("~/Views/Worksheet/Partials/_NewPlan.cshtml");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = Roles.Admin)]
+        public IActionResult DeletePlan(int planId)
+        {
+            Response.StatusCode = StatusCodes.Status202Accepted;
+
+            if (planId <= 0)
+            {
+                return BadRequest();
+            }
+
+            var result = _planRepository.DeletePlan(planId);
+
+            return new JsonResult(new { result });
+
+        }
     }
 }

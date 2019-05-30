@@ -79,9 +79,9 @@
 
                                                     foreach (var definitiveAnswer in definitiveAnswers)
                                                     {
-                                                        <span class="m-list-badge__item m-list-badge__item--warning">
-                                                            @definitiveAnswer.FirstName @definitiveAnswer.LastName (@definitiveAnswer.Email)
-                                                        </span>
+                                            <span class="m-list-badge__item m-list-badge__item--warning">
+                                                @definitiveAnswer.FirstName @definitiveAnswer.LastName  @(definitiveAnswer.UserToPlanId == null ? $"({definitiveAnswer.Email})" : "")
+                                            </span>
                                                     }
                                                 }
 
@@ -96,7 +96,7 @@
                                                         <span title="@otherAnswer.Author"
                                                               data-toggle="tooltip"
                                                               class="m-list-badge__item m-list-badge__item--default sp-tooltip">
-                                                            @stepTaskAnswer.FirstName @stepTaskAnswer.LastName (@stepTaskAnswer.Email)
+                                                            @stepTaskAnswer.FirstName @stepTaskAnswer.LastName @(stepTaskAnswer.UserToPlanId==null?$"({stepTaskAnswer.Email})":"")
                                                         </span>
                                                     }
                                                 }

@@ -11,6 +11,13 @@
                     <div class="mr-auto">
                         <h2>Plans</h2>
                     </div>
+                    @if (User.IsInRole(Roles.Admin))
+                    {
+                        <a href="" class="btn btn-sp m-btn m-btn--pill m--pull-right m--margin-bottom-10"
+                           data-toggle="modal" data-target="#add_plan_modal">
+                            Add new
+                        </a>
+                    }
                 </div>
             </div>
         </div>
@@ -18,74 +25,59 @@
             <div class="list-group">
                 @foreach (var plan in Model)
                 {
-                    <a asp-controller="Worksheet" asp-action="GetPlan" asp-route-id="@plan.Id" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="list-group-item list-group-item-action flex-column align-items-start">
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1">@plan.Name</h5>
                             <small>@plan.StartDate.ToString("dd/MM/yyyy")</small>
                         </div>
-                        <p class="mb-1">@plan.Description</p>
+                        <div class="d-flex w-100 justify-content-between">
+                            <p class="mb-1">@plan.Description</p>
+                            <span>
+                                <a asp-controller="Worksheet" asp-action="GetPlan" asp-route-id="@plan.Id"
+                                   class="m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
+                                   title="View"
+                                   data-toggle="tooltip">
+                                    <i class="la la-eye"></i>
+                                </a>
+                                <a href="" class="delete-plan m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip" 
+                                   title="Delete"
+                                   data-toggle="tooltip" data-id="@plan.Id">
+                                    <i class="la la-trash"></i>
+                                </a>
+                            </span>
+                        </div>
                         <small>
                             @(plan.IsCompleted ? plan.EndDate?.ToString("dd/MM/yyyy") : "In progress")
                         </small>
-                    </a>
+                    </div>
                 }
             </div>
-            @*<div class="m-scrollable " data-scrollable="true" data-axis="xy">
+        </div>
+    </div>
+</div>
 
-                    <table class="table m-table  table-bordered m--margin-top-10">
-                        <thead>
-                            <tr>
-                                <th>
-                                    Plan name
-                                </th>
-                                <th>
-                                    Description
-                                </th>
-                                <th>
-                                    Started
-                                </th>
-                                <th>
-                                    Ended
-                                </th>
-                                <th>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var plan in Model)
-                            {
-                                <tr>
-                                    <td>
-                                        @plan.Name
-                                    </td>
-                                    <td>
-                                        @plan.Description
-                                    </td>
-                                    <td>
-                                        @plan.StartDate.ToString("dd/MM/yyyy")
-                                    </td>
-                                    <td>
-                                        @(plan.IsCompleted ? plan.EndDate?.ToString("dd/MM/yyyy") : "In progress")
-                                    </td>
-                                    <td>
-                                        <a href="#" class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill">
-                                            <i class="la la-edit"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>*@
+<div class="modal fade" id="add_plan_modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="">
+                    Add a plan
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="la la-remove"></span>
+                </button>
+            </div>
+            <partial name="~/Views/Worksheet/Partials/_NewPlan.cshtml" view-data="ViewData" model="new PlanDTO()" />
         </div>
     </div>
 </div>
 
 
-
 @section scripts{
     <script>
         $('#menu_worksheet').addClass('m-menu__item--active');
+        var CreatePlanURL = '@Url.Action("CreatePlan","Worksheet")';
+        var DeletePlanURL = '@Url.Action("DeletePlan", "Worksheet")';
     </script>
 }
 
