@@ -116,7 +116,11 @@ namespace Core.Context
             {
                 SeedActionPlanDetailedStep();
             }
-
+            
+            if (!Context.StepBlocks.Where(x => x.Step == Steps.Review).Any())
+            {
+                SeedReviewStep();
+            }
 
             if (!Context.StepBlocks.Where(x => x.Step == Steps.Evalution).Any())
             {
@@ -862,6 +866,31 @@ namespace Core.Context
                         new Question{ Type=QuestionTypes.RateSlider, Order=5, Title="Would you recommend the planning tool to others?", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false },
                         new Question{ Type=QuestionTypes.TextArea, Order=6, Title="What did you like about the planning tool? Which part was particularly useful? How is the plan going to help your organization? ", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false },
                         new Question{ Type=QuestionTypes.TextArea, Order=7, Title="What did you not like about the tool? Do you have any suggestions how it could be made better?", CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false },
+                    }
+                }
+            };
+
+            Context.StepBlocks.AddRange(Blocks);
+        }
+
+        private void SeedReviewStep()
+        {
+            Blocks = new StepBlock[]
+            {
+                new StepBlock
+                {
+                    Title = "Review resources",
+                    Instruction = "sagittis. In dignissim commodo hendrerit. Sed congue purus luctus mi feugiat, ut consequat nisi porttitor",
+                    Order=1,
+                    Step=Steps.Review,
+                    Description=null,
+                    UpdatedAt =DateTime.Now,
+                    CreatedAt=DateTime.Now,
+                    CreatedBy=null,
+                    UpdatedBy=null,
+                    Questions=new List<Question>()
+                    {
+                        new Question{ Type=QuestionTypes.ResourceReview, Order=1, Title=string.Empty, CreatedAt=DateTime.Now, UpdatedAt=DateTime.Now, CreatedBy=null, UpdatedBy=null, Description=null, HasFiles=false }
                     }
                 }
             };

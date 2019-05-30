@@ -1,5 +1,7 @@
 ﻿@model Application.DTOs.PlanStepDTO
 
+@inject Application.Interfaces.Repositories.IPlanRepository  planRepository
+
 @{
     var blockIndex = (int)ViewData["BlockIndex"];
 
@@ -12,85 +14,98 @@
     var answerGroup = Model.AnswerGroups.Where(x => x.QuestionId == question.Id).FirstOrDefault();
 
     var filledAnswer = Model.AnswerGroups[questionIndexOffset + questionIndex];
+
+    var resources = planRepository.GetResourcesByPlan(Model.PlanId);
+
+    Model.AnswerGroups[questionIndexOffset + questionIndex].Answer = answerGroup.Answer ?? new AnswerDTO { ResourceReviewAnswers = new List<ResourceReviewAnswerDTO>() };
+
 }
 
-<div class="form-group m-form__group">
-    <div class="row">
-        <div class="col-2 col-md-1">
-            <div class="m-dropdown m-dropdown--up m-dropdown--inline m-dropdown--huge"
-                 data-dropdown-toggle="click" data-dropdown-persistent="true">
-                <a href="#"
-                   class=" m-dropdown__toggle  combined_result dropdown-toggle">
-                    <i class="fa fa-info"></i>
-                </a>
-                <div class="m-dropdown__wrapper">
-                    <div class="m-dropdown__inner">
-                        <div class="m-dropdown__body">
-                            <div class="m-dropdown__content">
-                                <div class="m-scrollable" data-scrollable="true"
-                                     data-max-height="200">
-                                    <div class="m-list-timeline">
-                                        <div class="m-list-timeline__items">
-                                            <div class="m-list-timeline__item">
-                                                <span class="m-list-timeline__badge"></span>
-                                                <span class="m-list-timeline__text">
-                                                    Giorgi
-                                                    Giorganashvili
-                                                </span>
-                                                <span class="m-list-timeline__text">
-                                                    Yes
-                                                </span>
-                                            </div>
-                                            <div class="m-list-timeline__item">
-                                                <span class="m-list-timeline__badge"></span>
-                                                <span class="m-list-timeline__text">
-                                                    Tamar
-                                                    Cereteli
-                                                </span>
-                                                <span class="m-list-timeline__text">
-                                                    Yes
-                                                </span>
-                                            </div>
-                                            <div class="m-list-timeline__item">
-                                                <span class="m-list-timeline__badge"></span>
-                                                <span class="m-list-timeline__text">
-                                                    Levan
-                                                    Gvaramia
-                                                </span>
-                                                <span class="m-list-timeline__text">
-                                                    Yes
-                                                </span>
-                                            </div>
-                                            <div class="m-list-timeline__item">
-                                                <span class="m-list-timeline__badge"></span>
-                                                <span class="m-list-timeline__text">
-                                                    Ioseb
-                                                    Ciklauri
-                                                </span>
-                                                <span class="m-list-timeline__text">
-                                                    Yes
-                                                </span>
+@for (int i = 0; i < resources.Count; i++)
+{
+    if (Model.AnswerGroups[questionIndexOffset + questionIndex].Answer.ResourceReviewAnswers.Count - 1 < i)
+    {
+        Model.AnswerGroups[questionIndexOffset + questionIndex].Answer.ResourceReviewAnswers.Add(new ResourceReviewAnswerDTO());
+    }
+    <div class="form-group m-form__group">
+        <div class="row">
+            <div class="col-2 col-md-1">
+                <div class="m-dropdown m-dropdown--up m-dropdown--inline m-dropdown--huge"
+                     data-dropdown-toggle="click" data-dropdown-persistent="true">
+                    <a href="#"
+                       class=" m-dropdown__toggle  combined_result dropdown-toggle">
+                        <i class="fa fa-info"></i>
+                    </a>
+                    <div class="m-dropdown__wrapper">
+                        <div class="m-dropdown__inner">
+                            <div class="m-dropdown__body">
+                                <div class="m-dropdown__content">
+                                    <div class="m-scrollable" data-scrollable="true"
+                                         data-max-height="200">
+                                        <div class="m-list-timeline">
+                                            <div class="m-list-timeline__items">
+                                                @foreach (var otherAnswer in answerGroup.OtherAnswers)
+                                                {
+                                                    <div class="m-list-timeline__item">
+                                                        <span class="m-list-timeline__badge"></span>
+                                                        <span class="m-list-timeline__text">
+                                                            @otherAnswer.Author
+                                                        </span>
+                                                        <span class="m-list-timeline__text">
+                                                            @{
+                                                                var resourceReviewAnswer = otherAnswer.ResourceReviewAnswers.Where(x => x.ResourceId == resources[i].Id).SingleOrDefault();
+                                                            }
+                                                            @(resourceReviewAnswer?.Assured??false?"Yes":"No")
+                                                        </span>
+                                                    </div>
+                                                }
+                                                @if (answerGroup.DefinitiveAnswer?.ResourceReviewAnswers != null)
+                                                {
+                                                    <div class="m-list-timeline__item">
+                                                        <span class="m-list-timeline__badge"></span>
+                                                        <span class="m-list-timeline__text">
+                                                            <b>Definitive answer</b>
+                                                        </span>
+                                                        <span class="m-list-timeline__text">
+                                                            @{
+                                                                var resourceReviewAnswer = answerGroup.DefinitiveAnswer.ResourceReviewAnswers.Where(x => x.ResourceId == resources[i].Id).SingleOrDefault();
+                                                            }
+                                                            @(resourceReviewAnswer?.Assured ?? false?"Yes":"No")
+                                                        </span>
+                                                    </div>
+                                                }
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <span class="m-dropdown__arrow m-dropdown__arrow--left"></span>
                     </div>
-                    <span class="m-dropdown__arrow m-dropdown__arrow--left"></span>
                 </div>
             </div>
-        </div>
-        <div class="col-7 col-md-9">
-            International assistance providers
-        </div>
-        <div class="col-4 col-md-2 m-align--center">
-            <span class="m-switch m-switch--icon">
-                <label>
-                    <input type="checkbox" name="">
-                    <span></span>
-                </label>
-            </span>
+            <div class="col-7 col-md-9">
+                @resources[i].Title
+                <br>
+                <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer"></span>
+                <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.ResourceReviewAnswers[i]"></span>
+            </div>
+            <div class="col-3 col-md-2 m-align--center">
+                <span class="m-switch m-switch--icon">
+                    <label>
+                        @{
+                            Model.AnswerGroups[questionIndexOffset + questionIndex].Answer.ResourceReviewAnswers[i]
+                                = answerGroup.Answer?.ResourceReviewAnswers.Where(x => x.ResourceId == resources[i].Id).SingleOrDefault() ?? new ResourceReviewAnswerDTO();
+                        }
+                        <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].QuestionId" value="@question.Id" />
+                        <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.ResourceReviewAnswers[i].ResourceId" value="@resources[i].Id" />
+                        <input asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.ResourceReviewAnswers[i].Assured"
+                               type="checkbox">
+                        <span></span>
+                    </label>
+                </span>
+            </div>
         </div>
     </div>
-</div>
+
+}

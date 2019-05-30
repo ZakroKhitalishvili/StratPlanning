@@ -155,6 +155,13 @@
                          view-data='new ViewDataDictionary(ViewData) {  {"QuestionIndex", i } }' />
             }
 
+            if (questions[i].Type == QuestionTypes.ResourceReview)
+            {
+                <partial name="~/Views/Worksheet/Partials/Questions/_ResourceReviewQuestion.cshtml"
+                         model="Model"
+                         view-data='new ViewDataDictionary(ViewData) {  {"QuestionIndex", i } }' />
+            }
+
             if (questions[i].Type == QuestionTypes.RateSlider)
             {
                 <partial name="~/Views/Worksheet/Partials/Questions/_RateSliderQuestion.cshtml"

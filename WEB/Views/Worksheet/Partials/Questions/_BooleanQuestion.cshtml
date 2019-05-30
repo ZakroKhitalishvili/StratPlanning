@@ -37,7 +37,7 @@
                                                         @otherAnswer.Author
                                                     </span>
                                                     <span class="m-list-timeline__text">
-                                                        @otherAnswer.BooleanAnswer
+                                                        @(otherAnswer.BooleanAnswer?"Yes":"No")
                                                     </span>
                                                 </div>
                                             }
@@ -49,7 +49,7 @@
                                                         <b>Definitive answer</b>
                                                     </span>
                                                     <span class="m-list-timeline__text">
-                                                        @answerGroup.DefinitiveAnswer.BooleanAnswer
+                                                        @(answerGroup.DefinitiveAnswer.BooleanAnswer?"Yes":"No")
                                                     </span>
                                                 </div>
                                             }
