@@ -58,7 +58,7 @@ function initializeInputs(selector) {
         });
 
         var val = $(slider).next('input[type="hidden"]').val();
-        
+
         if (val) {
             slider.noUiSlider.set(val);
         }
@@ -88,7 +88,13 @@ function initializeInputs(selector) {
 
     $.validator.unobtrusive.parse(selector);
 
-    $('.sp-tooltip').tooltip();
+    $(selector).find('.sp-tooltip').tooltip();
+
+    //$(selector).find('[maxlength],[data-val-maxlength-max]').maxlength(
+    //    {
+    //        alwaysShow: true,
+    //        warningClass: "alert alert-primary"
+    //    });
 }
 //////
 /// read more/less for large texts

@@ -9,6 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="wwwroot\lib\bootstrap-maxlength\bower_components\qunit\qunit\qunit.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\lib\bootstrap-maxlength\bower_components\qunit\qunit\qunit.js" />
     <None Include="wwwroot\lib\bootstrap\.github\CODEOWNERS" />
     <None Include="wwwroot\lib\bootstrap\.github\CONTRIBUTING.md" />
     <None Include="wwwroot\lib\bootstrap\.github\ISSUE_TEMPLATE\bug.md" />

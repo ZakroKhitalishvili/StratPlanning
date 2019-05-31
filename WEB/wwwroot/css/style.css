@@ -163,6 +163,11 @@ a {
     background-color: #fcfcfc;
 }
 
+.bootstrap-maxlength
+{
+    z-index:2000;
+}
+
 .m-header .m-header__bottom {
     /* background-color: #808084; */
     background-color: #636466;
