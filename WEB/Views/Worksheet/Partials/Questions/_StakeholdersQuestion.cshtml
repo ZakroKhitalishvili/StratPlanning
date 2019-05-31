@@ -181,64 +181,66 @@
 </div>
 @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
 {
-    <div class="modal fade" id="s_@(question.Id)_externalsModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="">
-                        Add value statement
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true" class="la la-remove"></span>
-                    </button>
-                </div>
-                <div class="m-form m-form--fit m-form--label-align-right">
-                    <div class="modal-body">
-                        <div class="form-group m-form__group row m--margin-top-20">
-                            <label class="col-form-label col-lg-3 col-sm-12">
-                                First name
-                            </label>
-                            <div class="col-lg-9 col-md-9 col-sm-12">
-                                <input class="form-control m-input" name="firstName" />
-                            </div>
-                        </div>
-                        <div class="form-group m-form__group row m--margin-top-20">
-                            <label class="col-form-label col-lg-3 col-sm-12">
-                                Last name
-                            </label>
-                            <div class="col-lg-9 col-md-9 col-sm-12">
-                                <input class="form-control m-input" name="lastName" />
-                            </div>
-                        </div>
-                        <div class="form-group m-form__group row m--margin-top-20">
-                            <label class="col-form-label col-lg-3 col-sm-12">
-                                Email
-                            </label>
-                            <div class="col-lg-9 col-md-9 col-sm-12">
-                                <input class="form-control m-input" name="email" />
-                            </div>
-                        </div>
-                        <div class="form-group m-form__group row m--margin-top-20">
-                            <label class="col-form-label col-lg-3 col-sm-12">
-                                Category
-                            </label>
-                            <div class="col-lg-9 col-md-9 col-sm-12">
-                                <select name="category" class="form-control m-select2 m-input" style="width:100%;">
-                                    @foreach (var category in categories)
-                                    {
-                                        <option value="@(category.Value)">@category.Text</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>
+    <div class="dynamic-modal" data-id="s_@(question.Id)_externalsModal">
+        <div class="modal fade" id="s_@(question.Id)_externalsModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="">
+                            Add value statement
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="la la-remove"></span>
+                        </button>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-sp m-btn submit-btn" onclick="editRecord('#s_@(question.Id)_externalsModal', '#s_@(question.Id)_externals');">
-                            Submit
-                        </button>
-                        <button type="button" class="btn btn-secondary m-btn" data-dismiss="modal">
-                            Close
-                        </button>
+                    <div class="m-form m-form--fit m-form--label-align-right">
+                        <div class="modal-body">
+                            <div class="form-group m-form__group row m--margin-top-20">
+                                <label class="col-form-label col-lg-3 col-sm-12">
+                                    First name
+                                </label>
+                                <div class="col-lg-9 col-md-9 col-sm-12">
+                                    <input class="form-control m-input" name="firstName" />
+                                </div>
+                            </div>
+                            <div class="form-group m-form__group row m--margin-top-20">
+                                <label class="col-form-label col-lg-3 col-sm-12">
+                                    Last name
+                                </label>
+                                <div class="col-lg-9 col-md-9 col-sm-12">
+                                    <input class="form-control m-input" name="lastName" />
+                                </div>
+                            </div>
+                            <div class="form-group m-form__group row m--margin-top-20">
+                                <label class="col-form-label col-lg-3 col-sm-12">
+                                    Email
+                                </label>
+                                <div class="col-lg-9 col-md-9 col-sm-12">
+                                    <input class="form-control m-input" name="email" />
+                                </div>
+                            </div>
+                            <div class="form-group m-form__group row m--margin-top-20">
+                                <label class="col-form-label col-lg-3 col-sm-12">
+                                    Category
+                                </label>
+                                <div class="col-lg-9 col-md-9 col-sm-12">
+                                    <select name="category" class="form-control m-select2 m-input" style="width:100%;">
+                                        @foreach (var category in categories)
+                                        {
+                                            <option value="@(category.Value)">@category.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sp m-btn submit-btn" onclick="editRecord('#s_@(question.Id)_externalsModal', '#s_@(question.Id)_externals');">
+                                Submit
+                            </button>
+                            <button type="button" class="btn btn-secondary m-btn" data-dismiss="modal">
+                                Close
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

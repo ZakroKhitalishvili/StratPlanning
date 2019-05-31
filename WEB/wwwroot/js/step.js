@@ -536,6 +536,8 @@ $(document).on('hidden.bs.modal', function (event) {
     });
 
     modal.find('.m-index').val("");
+
+    modal.find('.form-control-feedback').remove();
 });
 
 function editRecord(modalId, targetId) {
@@ -544,6 +546,8 @@ function editRecord(modalId, targetId) {
     var options = fieldOptions[targetId];
     var modal = $(modalId);
     var list = $(targetId);
+
+    if (!modal.valid()) return;
 
     var data = {};
 

@@ -317,15 +317,20 @@ namespace Application.Repositories
         {
             return Context.UsersToPlans
                 .Where(x => x.UserId == userId)
-                .Include(x => x.Plan)
+                .Include(x => x.Plan).Include(x => x.UserStepResults).AsEnumerable()
+                .OrderByDescending(x => {
+                    if (x.UserStepResults.Any()) return x.UserStepResults.Max(y => y.UpdatedAt);
+
+                    return DateTime.MinValue;
+                })
                 .Select(x => Mapper.Map<PlanDTO>(x.Plan)).ToList();
         }
 
-        public IList<FileDTO> GetFileAnswers(int questionId, int userId)
+        public IList<FileDTO> GetFileAnswers(int questionId, int planId, int userId)
         {
-            return Context.Questions.Where(x => x.Id == questionId)
-                    .SelectMany(x => x.FileAnswers).Where(x => x.CreatedBy == userId)
-                    .Select(x => Mapper.Map<FileDTO>(x.File)).ToList();
+            return Context.UsersToPlans.Where(x => x.PlanId == planId && x.UserId == userId)
+                .SelectMany(x => x.UserStepResults).SelectMany(x => x.FileAnswers).Where(x => x.QuestionId == questionId)
+                .Select(x => Mapper.Map<FileDTO>(x.File)).ToList();
         }
 
         public IList<IssueDTO> GetIssues(int planId)
@@ -818,12 +823,18 @@ namespace Application.Repositories
 
                 if (updateAnswer == null)
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     Context.PreparingAnswers.Remove(dbAnswer);
                     Context.SaveChanges();
-                    //userStepResult.SelectAnswers.Remove(dbAnswer);
                 }
-                else
+                else if (dbAnswer.IssueOptionAnswerId != updateAnswer.IssueOptionAnswerId ||
+                        !dbAnswer.Date.Equals(updateAnswer.Date) ||
+                        !dbAnswer.HowItWillBeDone.Equals(updateAnswer.HowItWillBeDone) ||
+                        dbAnswer.IsCompleted != updateAnswer.IsCompleted)
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     dbAnswer.IssueOptionAnswerId = updateAnswer.IssueOptionAnswerId;
                     dbAnswer.Date = updateAnswer.Date;
                     dbAnswer.HowItWillBeDone = updateAnswer.HowItWillBeDone;
@@ -837,6 +848,8 @@ namespace Application.Repositories
             {
                 if (!dbAnswers.Any(x => x.IssueOptionAnswerId == answer.IssueOptionAnswerId))
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     var newAnswer = new PreparingAnswer
                     {
                         QuestionId = answerGroup.QuestionId,
@@ -865,6 +878,8 @@ namespace Application.Repositories
             {
                 if (dbAnswer.Answer != answerGroup.Answer.BooleanAnswer)
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     dbAnswer.Answer = answerGroup.Answer.BooleanAnswer;
                     dbAnswer.UpdatedAt = DateTime.Now;
                     dbAnswer.UpdatedBy = userStepResult.UpdatedBy;
@@ -872,6 +887,8 @@ namespace Application.Repositories
             }
             else
             {
+                userStepResult.UpdatedAt = DateTime.Now;
+
                 var newAnswer = new BooleanAnswer
                 {
                     Answer = answerGroup.Answer.BooleanAnswer,
@@ -908,6 +925,8 @@ namespace Application.Repositories
                 if (!(dbAnswer.OptionId == answerGroup.Answer.SelectAnswer.OptionId
                     && dbAnswer.AltOption == answerGroup.Answer.SelectAnswer.AltOption))
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     dbAnswer.OptionId = answerGroup.Answer.SelectAnswer.OptionId;
                     dbAnswer.AltOption = answerGroup.Answer.SelectAnswer.AltOption;
                     dbAnswer.UpdatedAt = DateTime.Now;
@@ -916,6 +935,8 @@ namespace Application.Repositories
             }
             else
             {
+                userStepResult.UpdatedAt = DateTime.Now;
+
                 var newAnswer = new SelectAnswer
                 {
                     OptionId = answerGroup.Answer.SelectAnswer.OptionId,
@@ -945,6 +966,8 @@ namespace Application.Repositories
 
                 if (answerGroup.Answer == null || !answerGroup.Answer.TagSelectAnswers.Contains(answerText))
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     Context.SelectAnswers.Remove(dbAnswer);
                     Context.SaveChanges();
                 }
@@ -956,6 +979,8 @@ namespace Application.Repositories
             {
                 if (!dbAnswers.Any(x => x.Option?.Title == answer || x.AltOption == answer))
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     var dbOption = Context.Options.Where(x => x.QuestionId == answerGroup.QuestionId && x.Title == answer).FirstOrDefault();
 
                     var newAnswer = new SelectAnswer
@@ -992,6 +1017,8 @@ namespace Application.Repositories
                 if (answerGroup.Answer.MultiSelectAnswer?.SelectAnswers == null
                     || !answerGroup.Answer.MultiSelectAnswer.SelectAnswers.Contains(dbAnswer.OptionId.Value))
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     Context.SelectAnswers.Remove(dbAnswer);
                     Context.SaveChanges();
                 }
@@ -1010,6 +1037,8 @@ namespace Application.Repositories
 
                     if (dbOption != null)
                     {
+                        userStepResult.UpdatedAt = DateTime.Now;
+
                         var newAnswer = new SelectAnswer
                         {
                             QuestionId = answerGroup.QuestionId,
@@ -1037,6 +1066,7 @@ namespace Application.Repositories
             {
                 if (!dbAnswer.Text.Equals(answerGroup.Answer.TextAnswer.Text))
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
                     dbAnswer.Text = answerGroup.Answer.TextAnswer.Text ?? String.Empty;
                     dbAnswer.UpdatedAt = DateTime.Now;
                     dbAnswer.UpdatedBy = userStepResult.UpdatedBy;
@@ -1044,6 +1074,8 @@ namespace Application.Repositories
             }
             else
             {
+                userStepResult.UpdatedAt = DateTime.Now;
+
                 var newAnswer = new TextAnswer
                 {
                     Text = answerGroup.Answer.TextAnswer.Text ?? String.Empty,
@@ -1070,9 +1102,10 @@ namespace Application.Repositories
 
                 if (answerGroup.Answer == null || !answerGroup.Answer.InputFileAnswer.Contains(answerFileId))
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     Context.FileAnswers.Remove(dbAnswer);
                     Context.SaveChanges();
-                    //userStepResult.SelectAnswers.Remove(dbAnswer);
                 }
             }
 
@@ -1085,6 +1118,8 @@ namespace Application.Repositories
                     var dbFile = Context.Files.Where(x => x.Id == answer).FirstOrDefault();
 
                     if (dbFile == null) continue;
+
+                    userStepResult.UpdatedAt = DateTime.Now;
 
                     var newAnswer = new FileAnswer
                     {
@@ -1109,6 +1144,8 @@ namespace Application.Repositories
             {
                 if (answerGroup?.Answer.StepTaskAnswers == null || !answerGroup.Answer.StepTaskAnswers.Any(x => x.Id == dbStepTaskAnswer.Id))
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     Context.StepTaskAnswers.Remove(dbStepTaskAnswer);
                 }
             }
@@ -1135,6 +1172,8 @@ namespace Application.Repositories
 
             foreach (var steptaskAnswer in answerGroup.Answer.StepTaskAnswers.Where(x => x.Id == 0))
             {
+                userStepResult.UpdatedAt = DateTime.Now;
+
                 var newAnswer = new StepTaskAnswer
                 {
                     CreatedAt = DateTime.Now,
@@ -1165,12 +1204,17 @@ namespace Application.Repositories
 
                 if (updateAnswer == null)
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     Context.ValueAnswers.Remove(dbAnswer);
                     Context.SaveChanges();
-                    //userStepResult.SelectAnswers.Remove(dbAnswer);
                 }
-                else
+                else if (!dbAnswer.Value.Equals(updateAnswer.Value) ||
+                        !dbAnswer.Definition.Equals(updateAnswer.Definition) ||
+                        !dbAnswer.Description.Equals(updateAnswer.Description))
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     dbAnswer.Value = updateAnswer.Value;
                     dbAnswer.Definition = updateAnswer.Definition;
                     dbAnswer.Description = updateAnswer.Description;
@@ -1185,6 +1229,8 @@ namespace Application.Repositories
             {
                 if (!dbAnswers.Any(x => x.Id == answer.Id))
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     var newAnswer = new ValueAnswer
                     {
                         QuestionId = answerGroup.QuestionId,
@@ -1214,9 +1260,10 @@ namespace Application.Repositories
 
                 if (updateAnswer == null)
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     Context.StakeholderAnswers.Remove(dbAnswer);
                     Context.SaveChanges();
-                    //userStepResult.SelectAnswers.Remove(dbAnswer);
                 }
             }
 
@@ -1226,6 +1273,8 @@ namespace Application.Repositories
             {
                 if (!dbAnswers.Any(x => x.Id == answer.Id))
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     StakeholderAnswer newAnswer = new StakeholderAnswer
                     {
                         QuestionId = answerGroup.QuestionId,
@@ -1295,6 +1344,8 @@ namespace Application.Repositories
 
                 if (!isContained)
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     Context.SWOTAnswers.Remove(dbAnswer);
                     Context.SaveChanges();
                 }
@@ -1312,6 +1363,8 @@ namespace Application.Repositories
             {
                 if (!dbAnswers.Any(x => x.Name == answer.Name && x.Type == answer.Type))
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     answer.QuestionId = answerGroup.QuestionId;
                     answer.CreatedAt = DateTime.Now;
                     answer.UpdatedAt = DateTime.Now;
@@ -1336,6 +1389,8 @@ namespace Application.Repositories
                 var dbAnswer = dbAnswers.Where(x => x.IssueId == strategicIssueAnswer.IssueId).SingleOrDefault();
                 if (dbAnswer != null)
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     dbAnswer.Goal = strategicIssueAnswer.Goal ?? string.Empty;
                     dbAnswer.Result = strategicIssueAnswer.Result ?? string.Empty;
                     dbAnswer.Solution = strategicIssueAnswer.Solution ?? string.Empty;
@@ -1346,6 +1401,8 @@ namespace Application.Repositories
                 }
                 else
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     dbAnswer = new StrategicIssueAnswer
                     {
                         Goal = strategicIssueAnswer.Goal ?? string.Empty,
@@ -1378,11 +1435,18 @@ namespace Application.Repositories
 
                 if (updateAnswer == null)
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     Context.StakeholderRatingAnswers.Remove(dbAnswer);
                     Context.SaveChanges();
                 }
-                else
+                else if (
+                        dbAnswer.Priority != updateAnswer.Priority ||
+                        dbAnswer.Criteria.Any(x => updateAnswer.CriterionsRates.Where(y => y.CriterionId == x.Id && y.Rate != x.Rate).Count() > 0)
+                    )
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     dbAnswer.Priority = updateAnswer.Priority;
                     dbAnswer.Criteria = updateAnswer.CriterionsRates.Select(x => new StakeholderRatingAnswerToDictionary
                     {
@@ -1401,6 +1465,8 @@ namespace Application.Repositories
             {
                 if (!dbAnswers.Any(x => x.StakeholderId == answer.StakeholderId && x.CreatedBy == userStepResult.UpdatedBy))
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     StakeholderRatingAnswer newAnswer = new StakeholderRatingAnswer
                     {
                         QuestionId = answerGroup.QuestionId,
@@ -1433,13 +1499,25 @@ namespace Application.Repositories
             {
                 var updateAnswer = answerGroup.Answer?.IssueOptionAnswers.Where(x => x.Id == dbAnswer.Id).FirstOrDefault();
 
+                var resources = updateAnswer.Resources.Split(',');
+
                 if (updateAnswer == null)
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     Context.IssueOptionAnswers.Remove(dbAnswer);
                     Context.SaveChanges();
                 }
-                else
+                else if (dbAnswer.IssueId != updateAnswer.IssueId ||
+                        dbAnswer.IsBestOption != updateAnswer.IsBestOption ||
+                        !dbAnswer.Actors.Equals(updateAnswer.Actors) ||
+                        !dbAnswer.Option.Equals(updateAnswer.Option) ||
+                        dbAnswer.IssueOptionAnswersToResources.Count() != resources.Count() ||
+                        dbAnswer.IssueOptionAnswersToResources.Select(x => x.IssueOptionAnswer.Issue).Any(x => !resources.Contains(x.Name))
+                     )
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     dbAnswer.IssueId = updateAnswer.IssueId;
                     dbAnswer.IsBestOption = updateAnswer.IsBestOption;
                     dbAnswer.Actors = updateAnswer.Actors;
@@ -1456,6 +1534,8 @@ namespace Application.Repositories
             {
                 if (!dbAnswers.Any(x => x.Id == answer.Id))
                 {
+                    userStepResult.UpdatedAt = DateTime.Now;
+
                     IssueOptionAnswer newAnswer = new IssueOptionAnswer
                     {
                         QuestionId = answerGroup.QuestionId,
@@ -1527,12 +1607,16 @@ namespace Application.Repositories
 
                     if (questionDbAnswer != null)
                     {
+                        userStepResult.UpdatedAt = DateTime.Now;
+
                         questionDbAnswer.UpdatedAt = DateTime.Now;
                         questionDbAnswer.UpdatedBy = userStepResult.UpdatedBy;
                         questionDbAnswer.OptionId = issueDistinguishAnswer.SelectAnswer;
                     }
                     else
                     {
+                        userStepResult.UpdatedAt = DateTime.Now;
+
                         questionDbAnswer = new SelectAnswer
                         {
                             QuestionId = issueDistinguishAnswer.QuestionId,
@@ -1566,6 +1650,7 @@ namespace Application.Repositories
 
                         if (!questionDbAnswers.Any(x => x.OptionId == selectAnswer) && selectAnswer > 0)
                         {
+                            userStepResult.UpdatedAt = DateTime.Now;
 
                             var newAnswer = new SelectAnswer
                             {
@@ -1599,6 +1684,8 @@ namespace Application.Repositories
                     {
                         if (dbBooleanAnswer.Answer != answer.Assured)
                         {
+                            userStepResult.UpdatedAt = DateTime.Now;
+
                             dbBooleanAnswer.Answer = answer.Assured;
                             dbBooleanAnswer.UpdatedAt = DateTime.Now;
                             dbBooleanAnswer.UpdatedBy = userStepResult.UpdatedBy;
@@ -1606,6 +1693,8 @@ namespace Application.Repositories
                     }
                     else
                     {
+                        userStepResult.UpdatedAt = DateTime.Now;
+
                         dbBooleanAnswer = new BooleanAnswer
                         {
                             Answer = answer.Assured,

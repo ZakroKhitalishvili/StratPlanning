@@ -162,53 +162,55 @@
 </div>
 @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
 {
-    <div class="modal fade" id="v_@(question.Id)_modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="">
-                        Add value statement
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true" class="la la-remove"></span>
-                    </button>
-                </div>
-                <div class="m-form m-form--fit m-form--label-align-right">
-                    <div class="modal-body">
-                        <input type="hidden" class="m-index" />
-                        <input type="hidden" class="m-input" name="id" />
-                        <div class="form-group m-form__group row m--margin-top-20">
-                            <label class="col-form-label col-lg-3 col-sm-12">
-                                Value
-                            </label>
-                            <div class="col-lg-9 col-md-9 col-sm-12">
-                                <input class="form-control m-input m-values-autocomplete" name="value" />
-                            </div>
-                        </div>
-                        <div class="form-group m-form__group row m--margin-top-20">
-                            <label class="col-form-label col-lg-3 col-sm-12">
-                                Definition
-                            </label>
-                            <div class="col-lg-9 col-md-9 col-sm-12">
-                                <textarea class="form-control m-input" rows="3" name="definition"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group m-form__group row m--margin-top-20">
-                            <label class="col-form-label col-lg-3 col-sm-12">
-                                How is this value expressed in our party life?
-                            </label>
-                            <div class="col-lg-9 col-md-9 col-sm-12">
-                                <textarea class="form-control m-input" rows="3" name="description"></textarea>
-                            </div>
-                        </div>
+    <div class="dynamic-modal" data-id="v_@(question.Id)_modal">
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="">
+                            Add value statement
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="la la-remove"></span>
+                        </button>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-sp m-btn submit-btn" onclick="editRecord('#v_@(question.Id)_modal', '#v_@(question.Id)_list');">
-                            Add
-                        </button>
-                        <button type="button" class="btn btn-secondary m-btn" data-dismiss="modal">
-                            Close
-                        </button>
+                    <div class="m-form m-form--fit m-form--label-align-right">
+                        <div class="modal-body">
+                            <input type="hidden" class="m-index" />
+                            <input type="hidden" class="m-input" name="id" />
+                            <div class="form-group m-form__group row m--margin-top-20">
+                                <label class="col-form-label col-lg-3 col-sm-12">
+                                    Value
+                                </label>
+                                <div class="col-lg-9 col-md-9 col-sm-12">
+                                    <input class="form-control m-input m-values-autocomplete" name="value" required/>
+                                </div>
+                            </div>
+                            <div class="form-group m-form__group row m--margin-top-20">
+                                <label class="col-form-label col-lg-3 col-sm-12">
+                                    Definition
+                                </label>
+                                <div class="col-lg-9 col-md-9 col-sm-12">
+                                    <textarea class="form-control m-input" rows="3" name="definition" required></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group m-form__group row m--margin-top-20">
+                                <label class="col-form-label col-lg-3 col-sm-12">
+                                    How is this value expressed in our party life?
+                                </label>
+                                <div class="col-lg-9 col-md-9 col-sm-12">
+                                    <textarea class="form-control m-input" rows="3" name="description" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sp m-btn submit-btn" onclick="editRecord('#v_@(question.Id)_modal', '#v_@(question.Id)_list');">
+                                Add
+                            </button>
+                            <button type="button" class="btn btn-secondary m-btn" data-dismiss="modal">
+                                Close
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

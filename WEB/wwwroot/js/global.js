@@ -1,5 +1,29 @@
 function initializeInputs(selector) {
 
+    $(selector).find('.dynamic-modal').each(function () {
+        var targetId = $(this).attr('data-id');
+
+        if ($('#' + 'targetId').length > 0) {
+            $('#' + 'targetId').remove();
+        }
+
+        var modalElement = $(this).children().detach();
+
+        $('body').append(modalElement);
+
+        var modalAttrs = {
+            id: targetId
+        };
+
+        $.each(modalElement[0].attributes, function (idx, attr) {
+            modalAttrs[attr.nodeName] = attr.nodeValue;
+        });
+
+        modalElement.replaceWith(function () {
+            return $("<form />", modalAttrs).append(modalElement.contents());
+        });
+    });
+
     $(selector).find('.m-select2').select2();
 
     $(selector).find(".tag-select").select2({
@@ -34,15 +58,13 @@ function initializeInputs(selector) {
         });
 
         var val = $(slider).next('input[type="hidden"]').val();
-
-        console.log(val);
-        if (!!val) {
-            console.log('set val');
+        
+        if (val) {
             slider.noUiSlider.set(val);
         }
         else {
             slider.noUiSlider.set(5);
-            $(slider).next('input[type="hidden"]').val(5)
+            $(slider).next('input[type="hidden"]').val(5);
         }
     });
 
