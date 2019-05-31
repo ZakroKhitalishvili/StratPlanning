@@ -72,7 +72,6 @@ function initializeInputs(selector) {
         $(selector).find('.m-values-autocomplete').autocomplete({
             source: fieldOptions.valuesDictionary
         });
-        $(selector).find('.m-values-autocomplete').autocomplete('option', 'appendTo', '.modal');
 
         $(selector).find('.m-stakeholders-autocomplete').autocomplete({
             source: fieldOptions.stakeholderUsers,

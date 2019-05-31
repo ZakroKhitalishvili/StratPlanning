@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Core.Constants;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Application.DTOs
@@ -8,10 +10,16 @@ namespace Application.DTOs
     {
         public int Id { get; set; }
 
+        [Required]
+        [MaxLength(EntityConfigs.TextMaxLength)]
         public string Value { get; set; }
 
+        [Required]
+        [MaxLength(EntityConfigs.TextAreaMaxLength)]
         public string Definition { get; set; }
 
+        [Required]
+        [MaxLength(EntityConfigs.TextAreaMaxLength)]
         public string Description { get; set; }
     }
 }

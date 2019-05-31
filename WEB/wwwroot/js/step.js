@@ -537,7 +537,7 @@ $(document).on('hidden.bs.modal', function (event) {
 
     modal.find('.m-index').val("");
 
-    modal.find('.form-control-feedback').remove();
+    modal.find('.field-validation-error').text("");
 });
 
 function editRecord(modalId, targetId) {
@@ -552,11 +552,11 @@ function editRecord(modalId, targetId) {
     var data = {};
 
     modal.find('.m-input').each(function (i, el) {
-        data[$(el).attr('name')] = $(el).val();
+        data[$(el).attr('data-name')] = $(el).val();
     });
 
     modal.find('select.m-input').each(function (i, el) {
-        data[$(el).attr('name') + '_label'] = $(el).find('option:selected').text();
+        data[$(el).attr('data-name') + '_label'] = $(el).find('option:selected').text();
     });
 
     var index = modal.find('.m-index').val();
@@ -594,11 +594,11 @@ function showRecordDetail(source, modalId) {
     var index = $(record).attr('id');
 
     modal.find('.m-input').each(function (i, el) {
-        $(el).val(data[$(el).attr('name')]);
+        $(el).val(data[$(el).attr('data-name')]);
     });
 
     modal.find('select.m-select2.m-input[multiple]').each(function (i, el) {
-        $(el).val(data[$(el).attr('name')].split(','));
+        $(el).val(data[$(el).attr('data-name')].split(','));
         $(el).trigger('change');
     });
 
