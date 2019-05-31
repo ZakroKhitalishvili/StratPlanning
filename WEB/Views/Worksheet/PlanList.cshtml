@@ -30,21 +30,44 @@
                             <h5 class="mb-1">@plan.Name</h5>
                             <small>@plan.StartDate.ToString("dd/MM/yyyy")</small>
                         </div>
-                        <div class="d-flex w-100 justify-content-between">
-                            <p class="mb-1">@plan.Description</p>
-                            <span>
+                        <div class="row">
+                            <div class="col-10 mb-1">
+                                <div class="container">
+                                    <div class="row">
+
+                                        @if (plan.Description.Length > 100)
+                                        {
+                                            <p>@(new String(plan.Description.Take(100).ToArray()))</p>
+
+                                            <div id="collapse_@plan.Id" style="display:none">
+                                                <p>@(new String(plan.Description.Skip(100).ToArray()))</p>
+                                            </div>
+                                            
+                                            <a href="#collapse_@plan.Id" class="nav-toggle m--margin-left-10">Read More</a>
+                                        }
+                                        else
+                                        {
+                                            <p>@plan.Description</p>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2 text-right">
                                 <a asp-controller="Worksheet" asp-action="GetPlan" asp-route-id="@plan.Id"
                                    class="m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
                                    title="View"
                                    data-toggle="tooltip">
                                     <i class="la la-eye"></i>
                                 </a>
-                                <a href="" class="delete-plan m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip" 
-                                   title="Delete"
-                                   data-toggle="tooltip" data-id="@plan.Id">
-                                    <i class="la la-trash"></i>
-                                </a>
-                            </span>
+                                @if (User.IsInRole(Roles.Admin))
+                                {
+                                    <a href="" class="delete-plan m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
+                                       title="Delete"
+                                       data-toggle="tooltip" data-id="@plan.Id">
+                                        <i class="la la-trash"></i>
+                                    </a>
+                                }
+                            </div>
                         </div>
                         <small>
                             @(plan.IsCompleted ? plan.EndDate?.ToString("dd/MM/yyyy") : "In progress")

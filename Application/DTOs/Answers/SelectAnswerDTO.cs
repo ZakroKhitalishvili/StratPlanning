@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Core.Constants;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Application.DTOs
@@ -10,6 +12,7 @@ namespace Application.DTOs
 
         public int? IssueId { get; set; }
 
+        [MaxLength(EntityConfigs.TextMaxLength)]
         public string AltOption { get; set; }
     }
 }

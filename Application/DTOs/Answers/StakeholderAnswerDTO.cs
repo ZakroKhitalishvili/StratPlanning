@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Core.Constants;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Application.DTOs
@@ -8,10 +10,13 @@ namespace Application.DTOs
     {
         public int Id { get; set; }
 
+        [MaxLength(EntityConfigs.TextMaxLength)]
         public string FirstName { get; set; }
 
+        [MaxLength(EntityConfigs.TextMaxLength)]
         public string LastName { get; set; }
 
+        [MaxLength(EntityConfigs.TextMaxLength)]
         public string Email { get; set; }
 
         public bool IsInternal { get; set; }

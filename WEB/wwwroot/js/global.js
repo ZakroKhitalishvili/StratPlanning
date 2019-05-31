@@ -69,7 +69,25 @@ function initializeInputs(selector) {
 
     $('.sp-tooltip').tooltip();
 }
+//////
+/// read more/less for large texts
+//
+$(document).ready(function () {
+    $('.nav-toggle').click(function () {
+        var collapse_content_selector = $(this).attr('href');
+        var toggle_switch = $(this);
+        $(collapse_content_selector).toggle(function () {
+            if ($(this).css('display') == 'none') {
+                toggle_switch.html('Read More');
+            } else {
+                toggle_switch.html('Read Less');
+            }
+        });
+    });
 
+});
+////
+//
 
 $(document).ready(function () {
 
@@ -217,7 +235,8 @@ function notify(text, type, seconds = 5) {
             {
                 x: 20,
                 y: 100
-            }
+            },
+            z_index: 5000,
         });
 }
 

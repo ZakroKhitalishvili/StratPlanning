@@ -129,6 +129,8 @@
 
 <div class="m-scrollable " data-scrollable="true" data-axis="xy">
     <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].QuestionId" value="@question.Id" />
+    <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer"></span>
+    <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.StrategicIssueAnswers"></span>
     <table id="issues-master-list-table"
            class="datatable table compact m-table  table-bordered m--margin-top-10 m--margin-bottom-20">
         <thead>
@@ -175,7 +177,7 @@
             @foreach (var issueAnswer in issueAnswers)
             {
                 <tr>
-                    
+
                     <td>@count</td>
                     <td>
                         @issueAnswer.Issue
@@ -183,18 +185,24 @@
                     </td>
                     <td>
                         <textarea asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.StrategicIssueAnswers[count].Why" class="form-control m-input" rows="3"></textarea>
+                        <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.StrategicIssueAnswers[count].Why"></span>
                     </td>
                     <td>
                         <textarea asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.StrategicIssueAnswers[count].Result" class="form-control m-input" rows="3"></textarea>
+                        <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.StrategicIssueAnswers[count].Result"></span>
                     </td>
                     <td>
                         <textarea asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.StrategicIssueAnswers[count].Goal" class="form-control m-input" rows="3"></textarea>
+                        <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.StrategicIssueAnswers[count].Goal"></span>
                     </td>
                     <td>
                         <textarea asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.StrategicIssueAnswers[count].Solution" class="form-control m-input" rows="3"></textarea>
+                        <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.StrategicIssueAnswers[count].Solution"></span>
+
                     </td>
                     <td>
-                        <input type="number" asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.StrategicIssueAnswers[count].Ranking" class="form-control m-input" autocomplete="off"/>
+                        <input type="number" asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.StrategicIssueAnswers[count].Ranking" class="form-control m-input" autocomplete="off" />
+                        <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.StrategicIssueAnswers[count].Ranking"></span>
                     </td>
                     <td class="d-none">
                         <input type="text" class="order" />

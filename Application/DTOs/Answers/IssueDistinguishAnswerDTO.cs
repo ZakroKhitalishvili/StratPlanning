@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Core.Constants;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Application.DTOs
@@ -14,10 +16,11 @@ namespace Application.DTOs
 
         public int QuestionId { get; set; }
 
+        [MaxLength(EntityConfigs.TextAreaMaxLength)]
         public string Issue { get; set; }
 
         public IList<int> SelectAnswers { get; set; }
 
-        public int SelectAnswer { get; set; }
+        public int? SelectAnswer { get; set; }
     }
 }

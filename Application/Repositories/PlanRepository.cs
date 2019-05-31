@@ -130,7 +130,7 @@ namespace Application.Repositories
             {
                 var stepTask = GetStepTask(planId, stepIndex);
 
-                if(!stepTask.IsCompleted)
+                if (!stepTask.IsCompleted)
                 {
                     stepTask.IsCompleted = true;
                     Context.SaveChanges();
@@ -1037,7 +1037,7 @@ namespace Application.Repositories
             {
                 if (!dbAnswer.Text.Equals(answerGroup.Answer.TextAnswer.Text))
                 {
-                    dbAnswer.Text = answerGroup.Answer.TextAnswer.Text;
+                    dbAnswer.Text = answerGroup.Answer.TextAnswer.Text ?? String.Empty;
                     dbAnswer.UpdatedAt = DateTime.Now;
                     dbAnswer.UpdatedBy = userStepResult.UpdatedBy;
                 }
@@ -1046,7 +1046,7 @@ namespace Application.Repositories
             {
                 var newAnswer = new TextAnswer
                 {
-                    Text = answerGroup.Answer.TextAnswer.Text,
+                    Text = answerGroup.Answer.TextAnswer.Text ?? String.Empty,
                     QuestionId = answerGroup.QuestionId,
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
@@ -1336,10 +1336,10 @@ namespace Application.Repositories
                 var dbAnswer = dbAnswers.Where(x => x.IssueId == strategicIssueAnswer.IssueId).SingleOrDefault();
                 if (dbAnswer != null)
                 {
-                    dbAnswer.Goal = strategicIssueAnswer.Goal;
-                    dbAnswer.Result = strategicIssueAnswer.Result;
-                    dbAnswer.Solution = strategicIssueAnswer.Solution;
-                    dbAnswer.Why = strategicIssueAnswer.Why;
+                    dbAnswer.Goal = strategicIssueAnswer.Goal ?? string.Empty;
+                    dbAnswer.Result = strategicIssueAnswer.Result ?? string.Empty;
+                    dbAnswer.Solution = strategicIssueAnswer.Solution ?? string.Empty;
+                    dbAnswer.Why = strategicIssueAnswer.Why ?? string.Empty;
                     dbAnswer.Ranking = strategicIssueAnswer.Ranking;
                     dbAnswer.UpdatedAt = DateTime.Now;
                     dbAnswer.UpdatedBy = userStepResult.UpdatedBy;
@@ -1348,10 +1348,10 @@ namespace Application.Repositories
                 {
                     dbAnswer = new StrategicIssueAnswer
                     {
-                        Goal = strategicIssueAnswer.Goal,
-                        Result = strategicIssueAnswer.Result,
-                        Solution = strategicIssueAnswer.Solution,
-                        Why = strategicIssueAnswer.Why,
+                        Goal = strategicIssueAnswer.Goal ?? string.Empty,
+                        Result = strategicIssueAnswer.Result ?? string.Empty,
+                        Solution = strategicIssueAnswer.Solution ?? string.Empty,
+                        Why = strategicIssueAnswer.Why ?? string.Empty,
                         Ranking = strategicIssueAnswer.Ranking,
                         UpdatedAt = DateTime.Now,
                         UpdatedBy = userStepResult.UpdatedBy,
@@ -1514,12 +1514,14 @@ namespace Application.Repositories
                 return;
             }
 
+            var questions = GetIssueDistinguishQuestions();
+
             var dbAnswers = userStepResult.SelectAnswers.Where(x => answerGroup.Answer.IssueDistinguishAnswers.Any(s => s.QuestionId == x.QuestionId));
 
             foreach (var issueDistinguishAnswer in answerGroup.Answer.IssueDistinguishAnswers)
             {
-
-                if (issueDistinguishAnswer.SelectAnswer > 0)
+                var question = questions.Where(x => x.Id == issueDistinguishAnswer.QuestionId).Single();
+                if (question.Type == QuestionTypes.IssueDistinguishSelect || question.Type == QuestionTypes.IssueDistinguishTypeSelect)
                 {
                     var questionDbAnswer = dbAnswers.Where(x => x.IssueId == issueDistinguishAnswer.IssueId && x.QuestionId == issueDistinguishAnswer.QuestionId).SingleOrDefault();
 
@@ -1546,7 +1548,7 @@ namespace Application.Repositories
                     }
                 }
 
-                if (issueDistinguishAnswer.SelectAnswers != null)
+                if (question.Type == QuestionTypes.IssueDistinguishMultiSelect)
                 {
                     var questionDbAnswers = dbAnswers.Where(x => x.IssueId == issueDistinguishAnswer.IssueId && x.QuestionId == issueDistinguishAnswer.QuestionId).ToList();
 
