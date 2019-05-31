@@ -12,6 +12,7 @@ namespace Application.DTOs
 
         public int IssueId { get; set; }
 
+        [Required]
         [MaxLength(EntityConfigs.TextMaxLength)]
         public string Option { get; set; }
 

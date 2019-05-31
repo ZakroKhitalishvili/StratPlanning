@@ -10,12 +10,15 @@ namespace Application.DTOs
     {
         public int Id { get; set; }
 
+        [Required]
         [MaxLength(EntityConfigs.TextMaxLength)]
         public string Value { get; set; }
 
+        [Required]
         [MaxLength(EntityConfigs.TextAreaMaxLength)]
         public string Definition { get; set; }
 
+        [Required]
         [MaxLength(EntityConfigs.TextAreaMaxLength)]
         public string Description { get; set; }
     }

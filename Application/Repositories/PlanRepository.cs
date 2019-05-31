@@ -620,8 +620,12 @@ namespace Application.Repositories
                 Context.SelectAnswers.RemoveRange(userStepResult.SelectAnswers);
                 Context.ValueAnswers.RemoveRange(userStepResult.ValueAnswers);
                 Context.StrategicIssueAnswers.RemoveRange(userStepResult.StrategicIssueAnswers);
-
+                Context.PreparingAnswers.RemoveRange(userStepResult.PreparingAnswers);
+                Context.IssueOptionAnswers.RemoveRange(userStepResult.IssueOptionAnswers);
+                Context.ValueAnswers.RemoveRange(userStepResult.ValueAnswers);
+                Context.FileAnswers.RemoveRange(userStepResult.FileAnswers);
                 Context.SWOTAnswers.RemoveRange(userStepResult.SWOTAnswers);
+                Context.StakeholderRatingAnswers.RemoveRange(userStepResult.StakeholderRatingAnswers);
                 Context.StakeholderAnswers.RemoveRange(userStepResult.StakeholderAnswers);
                 Context.UserStepResults.Remove(userStepResult);
 
@@ -1559,6 +1563,8 @@ namespace Application.Repositories
         private IList<IssueOptionAnswerToResource> InitIssueResources(string resources, IssueOptionAnswer answer)
         {
             IList<IssueOptionAnswerToResource> result = new List<IssueOptionAnswerToResource>();
+
+            if (resources == null) return result;
 
             resources.Split(',').ToList().ForEach(y =>
             {

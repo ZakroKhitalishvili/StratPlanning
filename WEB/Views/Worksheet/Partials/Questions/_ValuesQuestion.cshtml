@@ -162,6 +162,8 @@
 </div>
 @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
 {
+    var valueAnswerDTO = new ValueAnswerDTO();
+
     <div class="dynamic-modal" data-id="v_@(question.Id)_modal">
         <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -183,7 +185,8 @@
                                     Value
                                 </label>
                                 <div class="col-lg-9 col-md-9 col-sm-12">
-                                    <input class="form-control m-input m-values-autocomplete" name="value" required/>
+                                    @Html.TextBoxFor(x => valueAnswerDTO.Value, new { @class = "form-control m-input m-values-autocomplete", data_name = "value" })
+                                    @Html.ValidationMessageFor(x => valueAnswerDTO.Value, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="form-group m-form__group row m--margin-top-20">
@@ -191,7 +194,8 @@
                                     Definition
                                 </label>
                                 <div class="col-lg-9 col-md-9 col-sm-12">
-                                    <textarea class="form-control m-input" rows="3" name="definition" required></textarea>
+                                    @Html.TextAreaFor(x => valueAnswerDTO.Definition, new { @class = "form-control m-input", rows="3", data_name = "definition" })
+                                    @Html.ValidationMessageFor(x => valueAnswerDTO.Definition, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="form-group m-form__group row m--margin-top-20">
@@ -199,7 +203,8 @@
                                     How is this value expressed in our party life?
                                 </label>
                                 <div class="col-lg-9 col-md-9 col-sm-12">
-                                    <textarea class="form-control m-input" rows="3" name="description" required></textarea>
+                                    @Html.TextAreaFor(x => valueAnswerDTO.Description, new { @class = "form-control m-input", rows="3", data_name="description" })
+                                    @Html.ValidationMessageFor(x => valueAnswerDTO.Description, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                         </div>

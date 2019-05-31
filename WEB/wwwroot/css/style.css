@@ -734,6 +734,7 @@ table td .m-list-badge {
     background-clip: padding-box;
     *border-right-width: 2px;
     *border-bottom-width: 2px;
+    z-index: 2000;
 }
 
 .ui-menu-item > a.ui-corner-all {

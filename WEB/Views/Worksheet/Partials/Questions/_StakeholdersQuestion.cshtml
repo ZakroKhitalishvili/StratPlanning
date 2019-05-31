@@ -181,6 +181,8 @@
 </div>
 @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
 {
+    var stakeholderAnswerDTO = new StakeholderAnswerDTO();
+
     <div class="dynamic-modal" data-id="s_@(question.Id)_externalsModal">
         <div class="modal fade" id="s_@(question.Id)_externalsModal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -200,7 +202,8 @@
                                     First name
                                 </label>
                                 <div class="col-lg-9 col-md-9 col-sm-12">
-                                    <input class="form-control m-input" name="firstName" />
+                                    @Html.TextBoxFor(x => stakeholderAnswerDTO.FirstName, new { @class = "form-control m-input", data_name = "firstName" })
+                                    @Html.ValidationMessageFor(x => stakeholderAnswerDTO.FirstName, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="form-group m-form__group row m--margin-top-20">
@@ -208,7 +211,8 @@
                                     Last name
                                 </label>
                                 <div class="col-lg-9 col-md-9 col-sm-12">
-                                    <input class="form-control m-input" name="lastName" />
+                                    @Html.TextBoxFor(x => stakeholderAnswerDTO.LastName, new { @class = "form-control m-input", data_name = "lastName" })
+                                    @Html.ValidationMessageFor(x => stakeholderAnswerDTO.LastName, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="form-group m-form__group row m--margin-top-20">
@@ -216,7 +220,8 @@
                                     Email
                                 </label>
                                 <div class="col-lg-9 col-md-9 col-sm-12">
-                                    <input class="form-control m-input" name="email" />
+                                    @Html.TextBoxFor(x => stakeholderAnswerDTO.Email, new { @class = "form-control m-input", data_name = "email" })
+                                    @Html.ValidationMessageFor(x => stakeholderAnswerDTO.Email, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="form-group m-form__group row m--margin-top-20">
@@ -224,12 +229,8 @@
                                     Category
                                 </label>
                                 <div class="col-lg-9 col-md-9 col-sm-12">
-                                    <select name="category" class="form-control m-select2 m-input" style="width:100%;">
-                                        @foreach (var category in categories)
-                                        {
-                                            <option value="@(category.Value)">@category.Text</option>
-                                        }
-                                    </select>
+                                    @Html.DropDownListFor(x => stakeholderAnswerDTO.CategoryId, new SelectList(categories, "Value", "Text"), null, new { @class = "form-control m-select2 m-input", style = "width:100%", data_name = "category" })
+                                    @Html.ValidationMessageFor(x => stakeholderAnswerDTO.CategoryId, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                         </div>
