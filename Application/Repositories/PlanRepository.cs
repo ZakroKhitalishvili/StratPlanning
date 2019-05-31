@@ -841,7 +841,7 @@ namespace Application.Repositories
 
                     dbAnswer.IssueOptionAnswerId = updateAnswer.IssueOptionAnswerId;
                     dbAnswer.Date = updateAnswer.Date;
-                    dbAnswer.HowItWillBeDone = updateAnswer.HowItWillBeDone;
+                    dbAnswer.HowItWillBeDone = updateAnswer.HowItWillBeDone??string.Empty;
                     dbAnswer.IsCompleted = updateAnswer.IsCompleted;
                     dbAnswer.UpdatedAt = userStepResult.UpdatedAt;
                     dbAnswer.UpdatedBy = userStepResult.UpdatedBy;
@@ -1503,8 +1503,6 @@ namespace Application.Repositories
             {
                 var updateAnswer = answerGroup.Answer?.IssueOptionAnswers.Where(x => x.Id == dbAnswer.Id).FirstOrDefault();
 
-                var resources = updateAnswer.Resources.Split(',');
-
                 if (updateAnswer == null)
                 {
                     userStepResult.UpdatedAt = DateTime.Now;
@@ -1512,23 +1510,28 @@ namespace Application.Repositories
                     Context.IssueOptionAnswers.Remove(dbAnswer);
                     Context.SaveChanges();
                 }
-                else if (dbAnswer.IssueId != updateAnswer.IssueId ||
-                        dbAnswer.IsBestOption != updateAnswer.IsBestOption ||
-                        !dbAnswer.Actors.Equals(updateAnswer.Actors) ||
-                        !dbAnswer.Option.Equals(updateAnswer.Option) ||
-                        dbAnswer.IssueOptionAnswersToResources.Count() != resources.Count() ||
-                        dbAnswer.IssueOptionAnswersToResources.Select(x => x.IssueOptionAnswer.Issue).Any(x => !resources.Contains(x.Name))
-                     )
+                else
                 {
-                    userStepResult.UpdatedAt = DateTime.Now;
+                    var resources = updateAnswer.Resources?.Split(',')??Enumerable.Empty<string>();
 
-                    dbAnswer.IssueId = updateAnswer.IssueId;
-                    dbAnswer.IsBestOption = updateAnswer.IsBestOption;
-                    dbAnswer.Actors = updateAnswer.Actors;
-                    dbAnswer.Option = updateAnswer.Option;
-                    dbAnswer.IssueOptionAnswersToResources = InitIssueResources(updateAnswer.Resources, dbAnswer);
-                    dbAnswer.UpdatedAt = userStepResult.UpdatedAt;
-                    dbAnswer.UpdatedBy = userStepResult.UpdatedBy;
+                    if (dbAnswer.IssueId != updateAnswer.IssueId ||
+                          dbAnswer.IsBestOption != updateAnswer.IsBestOption ||
+                          !(dbAnswer.Actors == updateAnswer.Actors) ||
+                          !(dbAnswer.Option == updateAnswer.Option) ||
+                          dbAnswer.IssueOptionAnswersToResources.Count() != resources.Count() ||
+                          dbAnswer.IssueOptionAnswersToResources.Select(x => x.IssueOptionAnswer.Issue).Any(x => !resources.Contains(x.Name))
+                       )
+                    {
+                        userStepResult.UpdatedAt = DateTime.Now;
+
+                        dbAnswer.IssueId = updateAnswer.IssueId;
+                        dbAnswer.IsBestOption = updateAnswer.IsBestOption;
+                        dbAnswer.Actors = updateAnswer.Actors;
+                        dbAnswer.Option = updateAnswer.Option;
+                        dbAnswer.IssueOptionAnswersToResources = InitIssueResources(updateAnswer.Resources, dbAnswer);
+                        dbAnswer.UpdatedAt = userStepResult.UpdatedAt;
+                        dbAnswer.UpdatedBy = userStepResult.UpdatedBy;
+                    }
                 }
             }
 

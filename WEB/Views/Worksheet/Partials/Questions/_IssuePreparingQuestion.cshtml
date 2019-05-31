@@ -128,12 +128,13 @@
                                 </td>
                                 @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
                                 {
-                                    <td>
-                                        <input type="text" class="datepicker form-control" value="@(answer != null ? answer.Date.ToString("dd-MM-yyyy") : "")"
-                                               name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssuePreparingAnswers[@i].Date">
-                                        <input type="hidden" value="@options[i].Id"
-                                               name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssuePreparingAnswers[@i].IssueOptionAnswerId" />
-                                    </td>
+                                <td>
+                                    <input type="text" class="datepicker form-control" value="@(answer != null ? answer.Date.ToString("dd-MM-yyyy") : "")"
+                                           name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssuePreparingAnswers[@i].Date">
+                                    <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.IssuePreparingAnswers[i].Date"></span>
+                                    <input type="hidden" value="@options[i].Id"
+                                           name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssuePreparingAnswers[@i].IssueOptionAnswerId" />
+                                </td>
 
                                     <td>
                                         <textarea class="form-control m-input" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssuePreparingAnswers[@i].HowItWillBeDone">@(answer != null ? answer.HowItWillBeDone : "")</textarea>

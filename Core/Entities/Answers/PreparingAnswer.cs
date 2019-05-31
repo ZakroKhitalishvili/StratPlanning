@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Core.Entities
@@ -8,6 +9,7 @@ namespace Core.Entities
     {
         public int IssueOptionAnswerId { get; set; }
 
+        [Required]
         public DateTime Date { get; set; }
 
         public string HowItWillBeDone { get; set; }

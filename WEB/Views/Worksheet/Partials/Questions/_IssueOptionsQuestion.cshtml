@@ -15,6 +15,8 @@
     var issues = Web.Helpers.StepHelper.GetIssues(Context, Model.PlanId).ToArray();
 
     var resources = Web.Helpers.StepHelper.GetResources(Context);
+
+    var issueOptionAnswerDTOs = new IssueOptionAnsweDTO[issues.Count()];
 }
 
 <div class="m-accordion m-accordion--default" id="issue_accordions" role="tablist">
@@ -283,7 +285,7 @@
         </div>
         @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
         {
-            var issueOptionAnswerDTO = new IssueOptionAnsweDTO();
+            
 
             <div class="dynamic-modal" data-id="m_@(question.Id)_@(issues[i].Id)_issueOptionModal">
                 <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
@@ -306,8 +308,8 @@
                                             Option
                                         </label>
                                         <div class="col-lg-9 col-md-9 col-sm-12">
-                                            @Html.TextBoxFor(x => issueOptionAnswerDTO.Option, new { @class = "form-control m-input", data_name = "option" })
-                                            @Html.ValidationMessageFor(x => issueOptionAnswerDTO.Option, "", new { @class = "text-danger" })
+                                            @Html.TextBoxFor(x => issueOptionAnswerDTOs[i].Option, new { @class = "form-control m-input", data_name = "option" })
+                                            @Html.ValidationMessageFor(x => issueOptionAnswerDTOs[i].Option, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
                                     <div class="form-group m-form__group row m--margin-top-20">
@@ -315,8 +317,8 @@
                                             Actor Responsible
                                         </label>
                                         <div class="col-lg-9 col-md-9 col-sm-12">
-                                            @Html.TextAreaFor(x => issueOptionAnswerDTO.Actors, new { @class = "form-control m-input", rows="3", data_name = "actors" })
-                                            @Html.ValidationMessageFor(x => issueOptionAnswerDTO.Actors, "", new { @class = "text-danger" })
+                                            @Html.TextAreaFor(x => issueOptionAnswerDTOs[i].Actors, new { @class = "form-control m-input", rows="3", data_name = "actors" })
+                                            @Html.ValidationMessageFor(x => issueOptionAnswerDTOs[i].Actors, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
                                     <div class="form-group m-form__group row m--margin-top-20">
@@ -324,8 +326,8 @@
                                             Required resources
                                         </label>
                                         <div class="col-lg-9 col-md-9 col-sm-12">
-                                            @Html.DropDownListFor(x => issueOptionAnswerDTO.Resources, new SelectList(resources, "Title", "Title"), null, new { @class = "form-control m-select2 tag-select m-input", style = "width:100%", data_name = "resources", multiple = true })
-                                            @Html.ValidationMessageFor(x => issueOptionAnswerDTO.Resources, "", new { @class = "text-danger" })
+                                            @Html.DropDownListFor(x => issueOptionAnswerDTOs[i].Resources, new SelectList(resources, "Title", "Title"), null, new { @class = "form-control m-select2 tag-select m-input", style = "width:100%", data_name = "resources", multiple = true })
+                                            @Html.ValidationMessageFor(x => issueOptionAnswerDTOs[i].Resources, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
                                 </div>
