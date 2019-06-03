@@ -35,7 +35,7 @@
                                     {
                                         @foreach (var answer in answerGroup.DefinitiveAnswer.StakeholderAnswers.Where(x => x.IsInternal))
                                         {
-                                            <span title="" data-toggle="tooltip" class="m-list-badge__item m-list-badge__item--default sp-tooltip" data-original-title="Definitive answer">
+                                            <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip m-list-badge__item--warning" data-original-title="Definitive answer">
                                                 @(answer.FirstName + " " + answer.LastName)
                                             </span>
                                         }
@@ -64,8 +64,10 @@
                                     {
                                         @foreach (var answer in answerGroup.DefinitiveAnswer.StakeholderAnswers.Where(x => !x.IsInternal))
                                         {
-                                            <span title="" data-toggle="tooltip" class="m-list-badge__item m-list-badge__item--default sp-tooltip" data-original-title="Definitive answer">
-                                                @(answer.FirstName + " " + answer.LastName)
+                                            <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip m-list-badge__item--warning" data-original-title="Definitive answer">
+                                                <div>@(answer.FirstName + " " + answer.LastName)</div>
+                                                <div>@(answer.Email)</div>
+                                                <div>@(answer.Category)</div>
                                             </span>
                                         }
                                     }
@@ -74,7 +76,9 @@
                                         @foreach (var answer in otherAnswer.StakeholderAnswers.Where(x => !x.IsInternal))
                                         {
                                             <span title="" data-toggle="tooltip" class="m-list-badge__item m-list-badge__item--default sp-tooltip" data-original-title="@otherAnswer.Author">
-                                                @(answer.FirstName + " " + answer.LastName)
+                                                <div>@(answer.FirstName + " " + answer.LastName)</div>
+                                                <div>@(answer.Email)</div>
+                                                <div>@(answer.Category)</div>
                                             </span>
                                         }
                                     }

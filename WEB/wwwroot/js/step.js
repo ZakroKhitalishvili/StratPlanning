@@ -169,9 +169,7 @@ function initializeStep() {
             previewTemplate: `
                 <div class="dz-preview dz-file-preview dz-processing dz-error dz-complete">
                     <input class="sp-file-input" type="hidden" name="${inputname}"/>
-                    <div class="dz-image">
-                        <img data-dz-thumbnail="">
-                    </div>  
+                    <div class="dz-image"></div>  
                     <div class="dz-details">
                         <div class="dz-filename">
                             <a class="sp-file-link" href="#" target="_Blank"><span data-dz-name=""></span></a>
@@ -199,9 +197,7 @@ function initializeStep() {
                     $(this).append(`
                 <div class="dz-preview dz-file-preview dz-processing dz-error dz-complete">
                     <input class="sp-file-input" type="hidden" name="${inputname}"/>
-                    <div class="dz-image">
-                        <img data-dz-thumbnail=""/>
-                    </div>
+                    <div class="dz-image"></div>
                     <div class="dz-details">      
                         <div class="dz-filename">
                             <span data-dz-name="">${name}</span>
@@ -544,6 +540,7 @@ $(document).on('hidden.bs.modal', function (event) {
 
     modal.find('select.m-select2').each(function (i, el) {
         $(el).select2('val', "");
+        $(el).select2('close');
         $(el).trigger('change');
     });
 

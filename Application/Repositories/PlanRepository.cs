@@ -867,8 +867,8 @@ namespace Application.Repositories
                         UpdatedBy = userStepResult.UpdatedBy,
                         IssueOptionAnswerId = answer.IssueOptionAnswerId,
                         Date = answer.Date,
-                        HowItWillBeDone = answer.HowItWillBeDone,
-                        IsCompleted = answer.IsCompleted
+                        HowItWillBeDone = answer.HowItWillBeDone ?? string.Empty,
+                    IsCompleted = answer.IsCompleted
                     };
 
                     userStepResult.PreparingAnswers.Add(newAnswer);
@@ -1532,7 +1532,7 @@ namespace Application.Repositories
                         dbAnswer.IsBestOption = updateAnswer.IsBestOption;
                         dbAnswer.Actors = updateAnswer.Actors;
                         dbAnswer.Option = updateAnswer.Option;
-                        dbAnswer.IssueOptionAnswersToResources = InitIssueResources(updateAnswer.Resources, dbAnswer);
+                        dbAnswer.IssueOptionAnswersToResources = InitIssueResources(updateAnswer.Resources, dbAnswer, userStepResult.UpdatedBy);
                         dbAnswer.UpdatedAt = userStepResult.UpdatedAt;
                         dbAnswer.UpdatedBy = userStepResult.UpdatedBy;
                     }
@@ -1560,14 +1560,14 @@ namespace Application.Repositories
                         Option = answer.Option
                     };
 
-                    newAnswer.IssueOptionAnswersToResources = InitIssueResources(answer.Resources, newAnswer);
+                    newAnswer.IssueOptionAnswersToResources = InitIssueResources(answer.Resources, newAnswer, userStepResult.UpdatedBy);
 
                     userStepResult.IssueOptionAnswers.Add(newAnswer);
                 }
             }
         }
 
-        private IList<IssueOptionAnswerToResource> InitIssueResources(string resources, IssueOptionAnswer answer)
+        private IList<IssueOptionAnswerToResource> InitIssueResources(string resources, IssueOptionAnswer answer, int? userId)
         {
             IList<IssueOptionAnswerToResource> result = new List<IssueOptionAnswerToResource>();
 
@@ -1583,9 +1583,10 @@ namespace Application.Repositories
 
                     if (res == null)
                     {
-                        res = new Resource { Title = y };
-
-                        Context.Attach(res);
+                        res = new Resource { Title = y, CreatedAt = DateTime.Now, CreatedBy = userId };
+                        
+                        Context.Resources.Add(res);
+                        Context.SaveChanges();
                     }
 
                     issueRes = new IssueOptionAnswerToResource
@@ -2884,7 +2885,7 @@ namespace Application.Repositories
 
             var otherAnswers = new List<AnswerDTO>();
 
-            foreach (var otherUserStepResult in otherUserStepResults)
+            foreach (var otherUserStepResult in otherUserStepResults.Where(x => !x.IsDefinitive))
             {
                 var selectAnswers = otherUserStepResult.SelectAnswers.Where(x => questions.Any(s => s.Id == x.QuestionId));
 

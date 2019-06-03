@@ -76,9 +76,7 @@
                                                     <td>
                                                         <div class="m-list-badge m-list-badge--light-bg">
                                                             <div class="m-list-badge__items">
-                                                                <span class="m-list-badge__item m-list-badge__item--default">
-                                                                    @answer.Actors
-                                                                </span>
+                                                                @answer.Actors
                                                             </div>
                                                         </div>
                                                     </td>
@@ -122,9 +120,7 @@
                                                     <td>
                                                         <div class="m-list-badge m-list-badge--light-bg">
                                                             <div class="m-list-badge__items">
-                                                                <span class="m-list-badge__item m-list-badge__item--default">
-                                                                    @answer.info.Actors
-                                                                </span>
+                                                                @answer.info.Actors
                                                             </div>
                                                         </div>
                                                     </td>
@@ -210,9 +206,7 @@
                                                         <td>
                                                             <div class="m-list-badge m-list-badge--light-bg">
                                                                 <div class="m-list-badge__items">
-                                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                                        @answer.Actors
-                                                                    </span>
+                                                                    @answer.Actors
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -232,7 +226,7 @@
                                                             @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
                                                             {
                                                                 <label class="m-radio radio-sp m-radio--solid">
-                                                                    <input type="checkbox" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssueOptionAnswers[@guid].IsBestOption" @(answer.IsBestOption ? "checked=true" : "") value="true" class="radio-checkbox" data-group="@(issues[i].Id)" onchange="checkLikeRadio(this)">
+                                                                    <input type="checkbox" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssueOptionAnswers[@guid].IsBestOption" @(answer.IsBestOption ? "checked=true" : "") value="true" class="radio-checkbox isBestOption" data-group="@(issues[i].Id)" onchange="checkLikeRadio(this)">
 
                                                                     <span></span>
                                                                 </label>
@@ -302,7 +296,8 @@
                             <div class="m-form m-form--fit m-form--label-align-right">
                                 <div class="modal-body">
                                     <input type="hidden" class="m-index" />
-                                    <input type="hidden" class="m-input" name="id" />
+                                    <input type="hidden" class="m-input" data-name="id" />
+                                    <input type="hidden" class="m-input" data-name="isBestOption" />
                                     <div class="form-group m-form__group row m--margin-top-20">
                                         <label class="col-form-label col-lg-3 col-sm-12">
                                             Option
@@ -317,7 +312,7 @@
                                             Actor Responsible
                                         </label>
                                         <div class="col-lg-9 col-md-9 col-sm-12">
-                                            @Html.TextAreaFor(x => issueOptionAnswerDTOs[i].Actors, new { @class = "form-control m-input", rows="3", data_name = "actors" })
+                                            @Html.TextAreaFor(x => issueOptionAnswerDTOs[i].Actors, new { @class = "form-control m-input", rows = "3", data_name = "actors" })
                                             @Html.ValidationMessageFor(x => issueOptionAnswerDTOs[i].Actors, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
@@ -363,6 +358,12 @@
 
                         data.resources = data.resources.join(',');
 
+                        if (index) {
+                            var isBestOption = $('#' + index).find('.isBestOption').is(':checked');
+
+                            data.isBestOption = isBestOption;
+                        }
+
                         return `
                             <tr id="${index}" data-val='${JSON.stringify(data)}'>
                                 <td>
@@ -371,9 +372,7 @@
                                 <td>
                                     <div class="m-list-badge m-list-badge--light-bg">
                                         <div class="m-list-badge__items">
-                                            <span class="m-list-badge__item m-list-badge__item--default">
-                                                ${data.actors}
-                                            </span>
+                                            ${data.actors}
                                         </div>
                                     </div>
                                 </td>
@@ -386,7 +385,7 @@
                                 </td>
                                 <td>
                                     <label class="m-radio radio-sp m-radio--solid">
-                                        <input type="checkbox" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssueOptionAnswers[${data.index}].IsBestOption" value="true" class="radio-checkbox" data-group="@(issues[i].Id)" onchange="checkLikeRadio(this)">
+                                        <input type="checkbox" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssueOptionAnswers[${index}].IsBestOption" value="true" class="radio-checkbox isBestOption" data-group="@(issues[i].Id)" onchange="checkLikeRadio(this)" ${data.isBestOption ? 'checked' : ''}>
 
                                         <span></span>
                                     </label>

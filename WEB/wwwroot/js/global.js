@@ -70,10 +70,14 @@ function initializeInputs(selector) {
 
     if (typeof fieldOptions !== 'undefined') {
         $(selector).find('.m-values-autocomplete').autocomplete({
+            minLength: 0,
             source: fieldOptions.valuesDictionary
+        }).on('click', function () {
+            $(this).autocomplete("search", $(this).val());
         });
 
         $(selector).find('.m-stakeholders-autocomplete').autocomplete({
+            minLength: 0,
             source: fieldOptions.stakeholderUsers,
             change: function (event, ui) {
                 if (!ui.item) {
@@ -83,6 +87,8 @@ function initializeInputs(selector) {
 
                 $(event.target).next("[data-name='stakeholderId']").val(ui.item.id);
             }
+        }).on('click', function () {
+            $(this).autocomplete("search", $(this).val());
         });
     }
 
