@@ -424,8 +424,8 @@ function updateStep(isSubmitted) {
         overlayColor: '#000000',
         type: 'loader',
         state: 'success',
-        centerY: false,
-        centerX: false
+        centerY: true,
+        centerX: true
     });
 
     let formData = new FormData(document.querySelector('form#step_form'));
