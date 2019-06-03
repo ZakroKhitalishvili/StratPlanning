@@ -10,7 +10,7 @@ namespace Application.DTOs
     {
         public int IssueOptionAnswerId { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
 
         [MaxLength(EntityConfigs.TextAreaMaxLength)]
         public string HowItWillBeDone { get; set; }

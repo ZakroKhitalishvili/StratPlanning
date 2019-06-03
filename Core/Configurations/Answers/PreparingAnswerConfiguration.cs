@@ -14,7 +14,7 @@ namespace Core.Configurations
             builder.AnswersBaseConfigure();
 
             builder.Property(x => x.Date)
-                .IsRequired();
+                .IsRequired(false);
 
             builder.Property(x => x.HowItWillBeDone)
                 .IsRequired()

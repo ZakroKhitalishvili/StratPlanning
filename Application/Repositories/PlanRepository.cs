@@ -619,7 +619,6 @@ namespace Application.Repositories
 
             if (userStepResult != null)
             {
-
                 Context.BooleanAnswers.RemoveRange(userStepResult.BooleanAnswers);
                 Context.SelectAnswers.RemoveRange(userStepResult.SelectAnswers);
                 Context.ValueAnswers.RemoveRange(userStepResult.ValueAnswers);
@@ -631,7 +630,8 @@ namespace Application.Repositories
                 Context.SWOTAnswers.RemoveRange(userStepResult.SWOTAnswers);
                 Context.StakeholderRatingAnswers.RemoveRange(userStepResult.StakeholderRatingAnswers);
                 Context.StakeholderAnswers.RemoveRange(userStepResult.StakeholderAnswers);
-                Context.UserStepResults.Remove(userStepResult);
+                Context.StepTaskAnswers.RemoveRange(userStepResult.StepTaskAnswers);
+                Context.UserStepResults.Remove(userStepResult);          
 
                 Context.SaveChanges();
 
