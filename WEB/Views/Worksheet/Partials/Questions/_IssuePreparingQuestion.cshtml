@@ -45,7 +45,7 @@
                         {
                             <tr>
                                 <td>@answer.IssueName</td>
-                                <td>@answer.Date.ToString("dd-MM-yyyy")</td>
+                                <td>@answer.Date?.ToString("dd-MM-yyyy")</td>
                                 <td>@answer.HowItWillBeDone</td>
                             </tr>
                         }
@@ -61,7 +61,7 @@
                             {
                                 <tr>
                                     <td>@answer.IssueName</td>
-                                    <td>@answer.Date.ToString("dd-MM-yyyy")</td>
+                                    <td>@answer.Date?.ToString("dd-MM-yyyy")</td>
                                     <td>@answer.HowItWillBeDone</td>
                                 </tr>
                             }
@@ -129,7 +129,7 @@
                                 @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
                                 {
                                 <td>
-                                    <input type="text" class="datepicker form-control" value="@(answer != null ? answer.Date.ToString("dd-MM-yyyy") : "")"
+                                    <input type="text" class="datepicker form-control" value="@(answer != null ? answer.Date?.ToString("dd-MM-yyyy") : "")"
                                            name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssuePreparingAnswers[@i].Date">
                                     <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.IssuePreparingAnswers[i].Date"></span>
                                     <input type="hidden" value="@options[i].Id"
@@ -142,7 +142,7 @@
                                 }
                                 else
                                 {
-                                    <td>@(answer != null ? answer.Date.ToString("dd-MM-yyyy") : "")</td>
+                                    <td>@(answer != null ? answer.Date?.ToString("dd-MM-yyyy") : "")</td>
                                     <td>@(answer != null ? answer.HowItWillBeDone : "")</td>
                                 }
                                 <td>

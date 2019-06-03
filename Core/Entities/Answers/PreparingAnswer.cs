@@ -9,8 +9,7 @@ namespace Core.Entities
     {
         public int IssueOptionAnswerId { get; set; }
 
-        [Required]
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
 
         public string HowItWillBeDone { get; set; }
 

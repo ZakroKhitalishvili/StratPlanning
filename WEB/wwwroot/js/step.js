@@ -419,6 +419,16 @@ $(document).on('click', 'button#step_form_submit_button', function (e) {
 });
 
 function updateStep(isSubmitted) {
+
+    mApp.block('#step_form', {
+        overlayColor: '#000000',
+        type: 'loader',
+        state: 'success',
+        centerY: false,
+        centerX: false,
+        message: 'Please wait...'
+    });
+
     let formData = new FormData(document.querySelector('form#step_form'));
     formData.append('IsSubmitted', isSubmitted);
     $.ajax(
@@ -439,9 +449,12 @@ function updateStep(isSubmitted) {
                 $('#step_form_container').html(data);
                 initializeInputs('#step_form_container');
                 initializeStep();
+
+                mApp.unblock('#step_form');
             },
             error: function (xhr, statusText, error) {
                 notify("An Error occured on the request", "danger", 5);
+                mApp.unblock('#step_form');
             }
         });
 }
