@@ -553,14 +553,14 @@ $(document).on('hidden.bs.modal', function (event) {
     modal.find('.field-validation-error').text("");
 });
 
-function editRecord(modalId, targetId) {
+function editRecord(modalId, targetId, ) {
     if (fieldOptions[targetId] === undefined) return;
 
     var options = fieldOptions[targetId];
     var modal = $(modalId);
     var list = $(targetId);
 
-    if (!modal.valid()) return;
+    if (modal.is('form') && !modal.valid()) return;
 
     var data = {};
 

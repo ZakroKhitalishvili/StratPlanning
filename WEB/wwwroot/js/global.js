@@ -81,7 +81,7 @@ function initializeInputs(selector) {
                     return;
                 }
 
-                $(event.target).next("[name='stakeholderId']").val(ui.item.id);
+                $(event.target).next("[data-name='stakeholderId']").val(ui.item.id);
             }
         });
     }

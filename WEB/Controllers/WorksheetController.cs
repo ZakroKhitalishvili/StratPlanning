@@ -114,9 +114,11 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult GetAnswerFiles(int questionId, int planId)
         {
+            var isDefinitive = User.IsInRole(Roles.Admin);
+
             var userId = HttpContext.GetUserId();
 
-            var files = _planRepository.GetFileAnswers(questionId, planId, userId);
+            var files = _planRepository.GetFileAnswers(questionId, planId, userId, isDefinitive);
 
             return Ok(files.Select(x => new
             {

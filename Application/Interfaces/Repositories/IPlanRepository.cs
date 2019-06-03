@@ -30,7 +30,7 @@ namespace Application.Interfaces.Repositories
 
         IEnumerable<PlanDTO> GetPlanListForUser(int userId);
 
-        IList<FileDTO> GetFileAnswers(int questionId, int planId, int userId);
+        IList<FileDTO> GetFileAnswers(int questionId, int planId, int userId, bool isDefinitive);
 
         IList<IssueDTO> GetIssues(int planId);
 
