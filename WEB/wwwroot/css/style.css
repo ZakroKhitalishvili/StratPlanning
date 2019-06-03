@@ -769,3 +769,16 @@ table td .m-list-badge {
     -moz-border-radius: 5px;
     background-image: none;
 }
+
+
+.dropzone .dz-preview .dz-details {
+    opacity: 1 !important;
+}
+
+.dropzone .dz-preview.dz-complete .dz-image {
+    background-color: #e2e2e2;
+}
+
+.select2-selection__rendered {
+    min-height: 36px;
+}
