@@ -99,8 +99,8 @@
                     @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
                     {
                         <div id="s_@(question.Id)_form" class="input-group m--margin-bottom-10">
-                            <input type="text" class="form-control m-input  m-input--air form-control-danger m-stakeholders-autocomplete" name="stakeholderName">
-                            <input type="hidden" class="m-input" name="stakeholderId">
+                            <input type="text" class="form-control m-input  m-input--air form-control-danger m-stakeholders-autocomplete" data-name="stakeholderName">
+                            <input type="hidden" class="m-input" data-name="stakeholderId">
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-sp m-btn m-btn--icon" onclick="editRecord('#s_@(question.Id)_form', '#s_@(question.Id)_list');">
                                     add

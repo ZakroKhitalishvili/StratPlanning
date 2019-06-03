@@ -326,10 +326,14 @@ namespace Application.Repositories
                 .Select(x => Mapper.Map<PlanDTO>(x.Plan)).ToList();
         }
 
-        public IList<FileDTO> GetFileAnswers(int questionId, int planId, int userId)
+        public IList<FileDTO> GetFileAnswers(int questionId, int planId, int userId, bool isDefinitive)
         {
-            return Context.UsersToPlans.Where(x => x.PlanId == planId && x.UserId == userId)
-                .SelectMany(x => x.UserStepResults).SelectMany(x => x.FileAnswers).Where(x => x.QuestionId == questionId)
+            return Context.UserStepResults
+                .Include(x => x.UserToPlan)
+                .Include(x => x.FileAnswers)
+                .Where(x => (isDefinitive && x.PlanId == planId && x.IsDefinitive) || (x.UserToPlan.UserId == userId && x.UserToPlan.PlanId == planId))
+                .SelectMany(x => x.FileAnswers)
+                .Where(x => x.QuestionId == questionId)
                 .Select(x => Mapper.Map<FileDTO>(x.File)).ToList();
         }
 
