@@ -425,8 +425,7 @@ function updateStep(isSubmitted) {
         type: 'loader',
         state: 'success',
         centerY: false,
-        centerX: false,
-        message: 'Please wait...'
+        centerX: false
     });
 
     let formData = new FormData(document.querySelector('form#step_form'));
