@@ -1450,7 +1450,7 @@ namespace Application.Repositories
                 }
                 else if (
                         dbAnswer.Priority != updateAnswer.Priority ||
-                        dbAnswer.Criteria.Any(x => updateAnswer.CriterionsRates.Where(y => y.CriterionId == x.Id && y.Rate != x.Rate).Count() > 0)
+                        dbAnswer.Criteria.Any(x => updateAnswer.CriterionsRates.Where(y => y.CriterionId == x.CriterionId && y.Rate != x.Rate).Count() > 0)
                     )
                 {
                     userStepResult.UpdatedAt = DateTime.Now;
