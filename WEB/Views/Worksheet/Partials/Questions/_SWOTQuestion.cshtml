@@ -11,6 +11,69 @@
     var answerGroup = Model.AnswerGroups.Where(x => x.QuestionId == question.Id).FirstOrDefault();
 
     var filledAnswer = Model.AnswerGroups[questionIndexOffset + questionIndex];
+
+    var swotAnswers = answerGroup.OtherAnswers.SelectMany(x => x.SwotAnswer.Strengths.Select(y => new
+    {
+        author = x.Author,
+        value = y,
+        isDefinitive = false,
+        type = "Strengths"
+    }))
+    .Concat(answerGroup.OtherAnswers.SelectMany(x => x.SwotAnswer.Weaknesses.Select(y => new
+    {
+        author = x.Author,
+        value = y,
+        isDefinitive = false,
+        type = "Weaknesses"
+    })))
+    .Concat(answerGroup.OtherAnswers.SelectMany(x => x.SwotAnswer.Opportunities.Select(y => new
+    {
+        author = x.Author,
+        value = y,
+        isDefinitive = false,
+        type = "Opportunities"
+    })))
+    .Concat(answerGroup.OtherAnswers.SelectMany(x => x.SwotAnswer.Threats.Select(y => new
+    {
+        author = x.Author,
+        value = y,
+        isDefinitive = false,
+        type = "Threats"
+    }))).ToList();
+
+    if (answerGroup.DefinitiveAnswer != null)
+    {
+        swotAnswers.AddRange(answerGroup.DefinitiveAnswer.SwotAnswer.Strengths.Select(x => new
+        {
+            author = "Definitive Answer",
+            value = x,
+            isDefinitive = true,
+            type = "Strengths"
+        })
+        .Concat(answerGroup.DefinitiveAnswer.SwotAnswer.Weaknesses.Select(x => new
+        {
+            author = "Definitive Answer",
+            value = x,
+            isDefinitive = true,
+            type = "Weaknesses"
+        }))
+        .Concat(answerGroup.DefinitiveAnswer.SwotAnswer.Opportunities.Select(x => new
+        {
+            author = "Definitive Answer",
+            value = x,
+            isDefinitive = true,
+            type = "Opportunities"
+        }))
+        .Concat(answerGroup.DefinitiveAnswer.SwotAnswer.Threats.Select(x => new
+        {
+            author = "Definitive Answer",
+            value = x,
+            isDefinitive = true,
+            type = "Threats"
+        })));
+    }
+
+    swotAnswers = swotAnswers.OrderByDescending(x => x.isDefinitive).ToList();
 }
 
 <div class="row">
@@ -51,28 +114,11 @@
                                     <div class="col-sm-12 ">
                                         <div class="m-list-badge m-list-badge--light-bg">
                                             <div class="m-list-badge__items">
-                                                @if (answerGroup.DefinitiveAnswer?.SwotAnswer.Strengths != null)
+                                                @foreach (var answer in swotAnswers.Where(x => x.type == "Strengths").GroupBy(x => x.value))
                                                 {
-                                                    foreach (var strength in answerGroup.DefinitiveAnswer?.SwotAnswer.Strengths)
-                                                    {
-                                                        <span class="m-list-badge__item m-list-badge__item--warning">
-                                                            @strength
-                                                        </span>
-                                                    }
-                                                }
-                                                @if (answerGroup.OtherAnswers != null)
-                                                {
-                                                    foreach (var otherAnswer in answerGroup.OtherAnswers)
-                                                    {
-                                                        foreach (var strength in otherAnswer.SwotAnswer.Strengths)
-                                                        {
-                                                            <span title="@otherAnswer.Author"
-                                                                  data-toggle="tooltip"
-                                                                  class="m-list-badge__item m-list-badge__item--default sp-tooltip">
-                                                                @strength
-                                                            </span>
-                                                        }
-                                                    }
+                                                    <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
+                                                        @(answer.Key)
+                                                    </span>
                                                 }
                                             </div>
                                         </div>
@@ -90,28 +136,11 @@
                                     <div class="col-sm-12 ">
                                         <div class="m-list-badge m-list-badge--light-bg">
                                             <div class="m-list-badge__items">
-                                                @if (answerGroup.DefinitiveAnswer?.SwotAnswer.Weaknesses != null)
+                                                @foreach (var answer in swotAnswers.Where(x => x.type == "Weaknesses").GroupBy(x => x.value))
                                                 {
-                                                    foreach (var weakness in answerGroup.DefinitiveAnswer?.SwotAnswer.Weaknesses)
-                                                    {
-                                                        <span class="m-list-badge__item m-list-badge__item--warning">
-                                                            @weakness
-                                                        </span>
-                                                    }
-                                                }
-                                                @if (answerGroup.OtherAnswers != null)
-                                                {
-                                                    foreach (var otherAnswer in answerGroup.OtherAnswers)
-                                                    {
-                                                        foreach (var weakness in otherAnswer.SwotAnswer.Weaknesses)
-                                                        {
-                                                            <span title="@otherAnswer.Author"
-                                                                  data-toggle="tooltip"
-                                                                  class="m-list-badge__item m-list-badge__item--default sp-tooltip">
-                                                                @weakness
-                                                            </span>
-                                                        }
-                                                    }
+                                                    <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
+                                                        @(answer.Key)
+                                                    </span>
                                                 }
                                             </div>
                                         </div>
@@ -135,28 +164,11 @@
                                     <div class="col-sm-12 ">
                                         <div class="m-list-badge m-list-badge--light-bg">
                                             <div class="m-list-badge__items">
-                                                @if (answerGroup.DefinitiveAnswer?.SwotAnswer.Opportunities != null)
+                                                @foreach (var answer in swotAnswers.Where(x => x.type == "Opportunities").GroupBy(x => x.value))
                                                 {
-                                                    foreach (var opportunity in answerGroup.DefinitiveAnswer?.SwotAnswer.Opportunities)
-                                                    {
-                                                        <span class="m-list-badge__item m-list-badge__item--warning">
-                                                            @opportunity
-                                                        </span>
-                                                    }
-                                                }
-                                                @if (answerGroup.OtherAnswers != null)
-                                                {
-                                                    foreach (var otherAnswer in answerGroup.OtherAnswers)
-                                                    {
-                                                        foreach (var opportunity in otherAnswer.SwotAnswer.Opportunities)
-                                                        {
-                                                            <span title="@otherAnswer.Author"
-                                                                  data-toggle="tooltip"
-                                                                  class="m-list-badge__item m-list-badge__item--default sp-tooltip">
-                                                                @opportunity
-                                                            </span>
-                                                        }
-                                                    }
+                                                    <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
+                                                        @(answer.Key)
+                                                    </span>
                                                 }
                                             </div>
                                         </div>
@@ -173,28 +185,11 @@
                                     <div class="col-sm-12 ">
                                         <div class="m-list-badge m-list-badge--light-bg">
                                             <div class="m-list-badge__items">
-                                                @if (answerGroup.DefinitiveAnswer?.SwotAnswer.Threats != null)
+                                                @foreach (var answer in swotAnswers.Where(x => x.type == "Threats").GroupBy(x => x.value))
                                                 {
-                                                    foreach (var threat in answerGroup.DefinitiveAnswer?.SwotAnswer.Threats)
-                                                    {
-                                                        <span class="m-list-badge__item m-list-badge__item--warning">
-                                                            @threat
-                                                        </span>
-                                                    }
-                                                }
-                                                @if (answerGroup.OtherAnswers != null)
-                                                {
-                                                    foreach (var otherAnswer in answerGroup.OtherAnswers)
-                                                    {
-                                                        foreach (var threat in otherAnswer.SwotAnswer.Threats)
-                                                        {
-                                                            <span title="@otherAnswer.Author"
-                                                                  data-toggle="tooltip"
-                                                                  class="m-list-badge__item m-list-badge__item--default sp-tooltip">
-                                                                @threat
-                                                            </span>
-                                                        }
-                                                    }
+                                                    <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
+                                                        @(answer.Key)
+                                                    </span>
                                                 }
                                             </div>
                                         </div>
