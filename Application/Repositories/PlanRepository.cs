@@ -2537,7 +2537,7 @@ namespace Application.Repositories
                         Why = x.Why,
                         IssueId = x.IssueId,
                         Issue = x.Issue.Name
-                    }).OrderBy(x => x.Ranking).ToList()
+                    }).OrderByDescending(x => x.Ranking).ToList()
                 };
             }
 
@@ -2558,7 +2558,7 @@ namespace Application.Repositories
                         Why = x.Why,
                         IssueId = x.IssueId,
                         Issue = x.Issue.Name
-                    }).OrderBy(x => x.Ranking).ToList()
+                    }).OrderByDescending(x=>x.Ranking).ToList()
                 };
             }
 
@@ -2581,7 +2581,7 @@ namespace Application.Repositories
                             Why = x.Why,
                             IssueId = x.IssueId,
                             Issue = x.Issue.Name
-                        }).OrderBy(x => x.Ranking).ToList(),
+                        }).OrderByDescending(x => x.Ranking).ToList(),
                         Author = $"{otherUserStepResult.UserToPlan.User.FirstName} {otherUserStepResult.UserToPlan.User.LastName}"
                     };
 

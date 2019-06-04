@@ -49,20 +49,18 @@ function initializeStep() {
     );
 
     $('#issues-master-list-table tr td:nth-child(6) input').blur(function (e) {
-        $('#issues-master-list-table').DataTable().column(6).order('asc').draw();
+        $('#issues-master-list-table').DataTable().column(6).order('desc').draw();
     }).on('keyup', function (e) {
         if (e.keyCode == 13)//enter button
         {
-            $('#issues-master-list-table').DataTable().column(6).order('asc').draw();
+            $('#issues-master-list-table').DataTable().column(6).order('desc').draw();
         }
     });
 
     $('#issues-master-list-table').on('row-reordered.dt', function (e, details, edit) {
-
         details.map(function (el, ind) {
             $(el.node).find("input.order").val(el.newPosition);
         });
-
     });
 
     /////////////
@@ -741,7 +739,7 @@ function refreshStepForm(keepFilled = false) {
             contentType: false,
             success: function (data, statusText, xhr) {
                 if (xhr.status == 200) {
-                    notify("Step successfully refreshed", "success", 5);
+                    //notify("Step successfully refreshed", "success", 5);
                 }
 
                 if (xhr.status >= 400) {
