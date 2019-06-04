@@ -38,7 +38,7 @@ namespace Application.Repositories
             return true;
         }
 
-        public bool AddUserToPlanPlanStep(int userId, int planId, string step)
+        public bool AddUserToPlanStep(int userId, int planId, string step)
         {
             if (Context.UsersToPlans.Where(x => x.UserId == userId && x.PlanId == planId && x.Step == step).Any())
             {
@@ -141,9 +141,11 @@ namespace Application.Repositories
             return false;
         }
 
-        public IEnumerable<PlanDTO> GetPlanList()
+        public IEnumerable<PlanDTO> GetPlanList(int skipCount, int takeCount,out int totalCount)
         {
-            return FindAll().OrderByDescending(x => x.CreatedAt).Select(p => Mapper.Map<PlanDTO>(p));
+            totalCount = Context.Plans.Count();
+
+            return Context.Plans.OrderByDescending(x => x.CreatedAt).Skip(skipCount).Take(takeCount).Select(p => Mapper.Map<PlanDTO>(p));
         }
 
         public IEnumerable<UserPlanningMemberDTO> GetPlanningTeam(int planId)
@@ -313,16 +315,21 @@ namespace Application.Repositories
             return true;
         }
 
-        public IEnumerable<PlanDTO> GetPlanListForUser(int userId)
+        public IEnumerable<PlanDTO> GetPlanListForUser(int userId, int skipCount, int takeCount, out int totalCount)
         {
+            totalCount = Context.UsersToPlans
+                .Where(x => x.UserId == userId).Count();
+
             return Context.UsersToPlans
                 .Where(x => x.UserId == userId)
                 .Include(x => x.Plan).Include(x => x.UserStepResults).AsEnumerable()
-                .OrderByDescending(x => {
+                .OrderByDescending(x =>
+                {
                     if (x.UserStepResults.Any()) return x.UserStepResults.Max(y => y.UpdatedAt);
 
                     return DateTime.MinValue;
                 })
+                .Skip(skipCount).Take(takeCount)
                 .Select(x => Mapper.Map<PlanDTO>(x.Plan)).ToList();
         }
 
@@ -631,7 +638,7 @@ namespace Application.Repositories
                 Context.StakeholderRatingAnswers.RemoveRange(userStepResult.StakeholderRatingAnswers);
                 Context.StakeholderAnswers.RemoveRange(userStepResult.StakeholderAnswers);
                 Context.StepTaskAnswers.RemoveRange(userStepResult.StepTaskAnswers);
-                Context.UserStepResults.Remove(userStepResult);          
+                Context.UserStepResults.Remove(userStepResult);
 
                 Context.SaveChanges();
 
@@ -845,7 +852,7 @@ namespace Application.Repositories
 
                     dbAnswer.IssueOptionAnswerId = updateAnswer.IssueOptionAnswerId;
                     dbAnswer.Date = updateAnswer.Date;
-                    dbAnswer.HowItWillBeDone = updateAnswer.HowItWillBeDone??string.Empty;
+                    dbAnswer.HowItWillBeDone = updateAnswer.HowItWillBeDone ?? string.Empty;
                     dbAnswer.IsCompleted = updateAnswer.IsCompleted;
                     dbAnswer.UpdatedAt = userStepResult.UpdatedAt;
                     dbAnswer.UpdatedBy = userStepResult.UpdatedBy;
@@ -868,7 +875,7 @@ namespace Application.Repositories
                         IssueOptionAnswerId = answer.IssueOptionAnswerId,
                         Date = answer.Date,
                         HowItWillBeDone = answer.HowItWillBeDone ?? string.Empty,
-                    IsCompleted = answer.IsCompleted
+                        IsCompleted = answer.IsCompleted
                     };
 
                     userStepResult.PreparingAnswers.Add(newAnswer);
@@ -1516,7 +1523,7 @@ namespace Application.Repositories
                 }
                 else
                 {
-                    var resources = updateAnswer.Resources?.Split(',')??Enumerable.Empty<string>();
+                    var resources = updateAnswer.Resources?.Split(',') ?? Enumerable.Empty<string>();
 
                     if (dbAnswer.IssueId != updateAnswer.IssueId ||
                           dbAnswer.IsBestOption != updateAnswer.IsBestOption ||
@@ -1584,7 +1591,7 @@ namespace Application.Repositories
                     if (res == null)
                     {
                         res = new Resource { Title = y, CreatedAt = DateTime.Now, CreatedBy = userId };
-                        
+
                         Context.Resources.Add(res);
                         Context.SaveChanges();
                     }
@@ -2558,7 +2565,7 @@ namespace Application.Repositories
                         Why = x.Why,
                         IssueId = x.IssueId,
                         Issue = x.Issue.Name
-                    }).OrderByDescending(x=>x.Ranking).ToList()
+                    }).OrderByDescending(x => x.Ranking).ToList()
                 };
             }
 

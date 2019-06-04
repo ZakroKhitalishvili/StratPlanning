@@ -782,3 +782,14 @@ table td .m-list-badge {
 .select2-selection__rendered {
     min-height: 36px;
 }
+
+.page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #2b70ba;
+    border-color: #2b70b8;
+}
+
+.page-link , page-link:hover{
+    color: #2b70ba;
+}

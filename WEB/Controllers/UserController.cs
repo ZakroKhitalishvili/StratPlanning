@@ -185,7 +185,7 @@ namespace Web.Controllers
 
             if (TryValidateModel(existingUser))
             {
-                var result = _planRepository.AddUserToPlanPlanStep(existingUser.Id.Value, addExternalUserToStep.PlanId, addExternalUserToStep.Step);
+                var result = _planRepository.AddUserToPlanStep(existingUser.Id.Value, addExternalUserToStep.PlanId, addExternalUserToStep.Step);
 
                 if (result)
                 {
@@ -249,7 +249,7 @@ namespace Web.Controllers
                     return PartialView("~/Views/User/Partials/_AddNewUser.cshtml");
                 }
 
-                if (!_planRepository.AddUserToPlanPlanStep(user.Id, addExternalUserToStep.PlanId, addExternalUserToStep.Step))
+                if (!_planRepository.AddUserToPlanStep(user.Id, addExternalUserToStep.PlanId, addExternalUserToStep.Step))
                 {
                     ModelState.AddModelError(string.Empty, "User was not added to the planning team due ");
 

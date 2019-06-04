@@ -14,11 +14,11 @@ namespace Application.Interfaces.Repositories
 
         IEnumerable<string> GetStepList();
 
-        IEnumerable<PlanDTO> GetPlanList();
+        IEnumerable<PlanDTO> GetPlanList(int skipCount,int takeCount,out int totalCount);
 
         bool AddUserToPlan(int userId, int planId, int positionId);
 
-        bool AddUserToPlanPlanStep(int userId, int planId, string step);
+        bool AddUserToPlanStep(int userId, int planId, string step);
 
         bool RemoveUserFromPlan(int userId, int planId);
 
@@ -28,7 +28,7 @@ namespace Application.Interfaces.Repositories
 
         bool SaveStep(PlanStepDTO planStep, bool isDefinitive, bool isSubmitted, int userId);
 
-        IEnumerable<PlanDTO> GetPlanListForUser(int userId);
+        IEnumerable<PlanDTO> GetPlanListForUser(int userId, int skipCount, int takeCount, out int totalCount);
 
         IList<FileDTO> GetFileAnswers(int questionId, int planId, int userId, bool isDefinitive);
 
