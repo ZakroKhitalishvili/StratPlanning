@@ -32,7 +32,7 @@ function initializeInputs(selector) {
         tokenSeparators: [","]
     });
 
-    $(selector).find('.datepicker').datepicker({ format: 'dd-mm-yyyy' });
+    $(selector).find('.datepicker').datepicker({  format: 'dd-mm-yyyy' });
 
     $(selector).find('.select2-without-search').select2({
         minimumResultsForSearch: Infinity

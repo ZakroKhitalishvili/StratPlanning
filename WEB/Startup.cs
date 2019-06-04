@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Web.Helpers;
+using Web.Binders;
 
 namespace Web
 {
@@ -38,7 +39,11 @@ namespace Web
 
             services.ConfigureDatabase(Configuration);
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(options =>
+            {
+                options.ModelBinderProviders.Insert(0,new CustomBinderProvider());
+            })
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddLocalServices();
 
@@ -54,7 +59,7 @@ namespace Web
 
             MapperInitializer.Initialize();
 
-            // This code fixs a bug in providing current directory
+            // This code fixes a bug in providing current directory
             //https://stackoverflow.com/questions/54508735/directory-getcurrentdirectory-doesnt-return-the-correct-directory
             CurrentDirectoryHelper.SetCurrentDirectory();
 
@@ -76,6 +81,12 @@ namespace Web
             app.UseAuthentication();
 
             app.UseStaticFiles();
+
+            app.UseRequestLocalization(options =>
+            {
+                options.SetDefaultCulture("en-GB");
+            }
+            );
 
 
             app.UseMvc(routes =>
