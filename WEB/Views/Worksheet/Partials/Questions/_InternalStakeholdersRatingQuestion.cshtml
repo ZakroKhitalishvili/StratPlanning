@@ -87,7 +87,7 @@
                                         }
                                     </tr>
                                 }
-                                <tr>
+                                @*<tr>
                                     <th title="Grade">
                                         Grade
                                     </th>
@@ -108,7 +108,7 @@
                                             3.5
                                         </td>
                                     }
-                                </tr>
+                                </tr>*@
 
                             </tbody>
                         </table>
@@ -168,7 +168,7 @@
                     <td>@(string.Format("{0:0.00}", answerGroup.Answer?.StakeholderRatingAnswers.Where(x => x.StakeholderId == stakeholder.Id).FirstOrDefault()?.Grade))</td>
                     }
                 </tr>
-                <tr>
+                @*<tr>
                     <th>
                         Priority
                     </th>
@@ -179,7 +179,7 @@
                                    value="@((answerGroup.Answer?.StakeholderRatingAnswers?.Where(x => x.StakeholderId == stakeholders[j].Id).Select(x => x.Priority).FirstOrDefault()) ?? 0)">
                         </td>
                     }
-                </tr>
+                </tr>*@
 
             </tbody>
         </table>
