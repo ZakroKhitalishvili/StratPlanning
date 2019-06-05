@@ -31,6 +31,11 @@ namespace Web.Controllers
 
         public IActionResult GetStep(string stepIndex, int planId)
         {
+            if(string.IsNullOrEmpty(stepIndex) || planId<=0)
+            {
+                return BadRequest();
+            }
+
             var userId = HttpContext.GetUserId();
 
             var isDefinitive = User.IsInRole(Roles.Admin);
