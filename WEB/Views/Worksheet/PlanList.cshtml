@@ -1,4 +1,9 @@
-﻿@model IEnumerable<Application.DTOs.PlanDTO>
+﻿@model X.PagedList.IPagedList<Application.DTOs.PlanDTO>
+
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Mvc.Common;
+@using X.PagedList;
+
 @{
     ViewData["Title"] = "Plans";
 }
@@ -42,7 +47,7 @@
                                             <div id="collapse_@plan.Id" style="display:none">
                                                 <p>@(new String(plan.Description.Skip(100).ToArray()))</p>
                                             </div>
-                                            
+
                                             <a href="#collapse_@plan.Id" class="nav-toggle m--margin-left-10">Read More</a>
                                         }
                                         else
@@ -74,6 +79,13 @@
                         </small>
                     </div>
                 }
+            </div>
+            <div class="m--margin-top-20">
+                @Html.PagedListPager(Model, page => Url.Action("GetPlanList", new { page }), new PagedListRenderOptions
+               {
+                   LiElementClasses = new string[] { "page-item" },
+                   PageClasses = new string[] { "page-link" }
+               })
             </div>
         </div>
     </div>

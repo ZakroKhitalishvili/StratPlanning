@@ -10,6 +10,7 @@ using System.Linq;
 using Web.Extensions;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using X.PagedList;
 
 namespace Web.Controllers
 {
@@ -46,19 +47,27 @@ namespace Web.Controllers
             return RedirectToAction("GetPlanList");
         }
 
-        public IActionResult GetPlanList()
+        public IActionResult GetPlanList(int? page)
         {
+            var pageSize = 5;
+            var skipCount = ((page ?? 1 )- 1) * pageSize;
+            var takeCount = pageSize;
+
             if (User.IsInRole(Roles.Admin))
             {
-                var planList = _planRepository.GetPlanList();
+                var planList = _planRepository.GetPlanList(skipCount, takeCount, out int totalCount);
 
-                return View("PlanList", planList);
+                var pagedList = new StaticPagedList<PlanDTO>(planList, page ?? 1, pageSize, totalCount);
+
+                return View("PlanList", pagedList);
             }
             else
             {
-                var planList = _planRepository.GetPlanListForUser(HttpContext.GetUserId());
+                var planList = _planRepository.GetPlanListForUser(HttpContext.GetUserId(), skipCount, takeCount, out int totalCount);
 
-                return View("PlanList", planList);
+                var pagedList = new StaticPagedList<PlanDTO>(planList, page ?? 1, pageSize, totalCount);
+
+                return View("PlanList", pagedList);
             }
         }
 
