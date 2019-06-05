@@ -689,8 +689,8 @@ $(document).on('click', 'button#step_form_complete', function (e) {
     e.preventDefault();
 
     let formData = new FormData(document.querySelector('form#step_form'));
-    let planId = formData['PlanId'];
-    let stepIndex = formData['Step'];
+    let planId = formData.get('PlanId');
+    let stepIndex = formData.get('Step');
 
     submitConfirm("You won't be able to change it after").then(function (result) {
         if (result) {
@@ -706,7 +706,7 @@ $(document).on('click', 'button#step_form_complete', function (e) {
                     success: function (data, statusText, xhr) {
                         if (xhr.status == 200) {
                             notify("Successfully completed", "success", 5);
-                            completeCheckBox.prop('checked', true);
+                            refreshStepForm(false);
                         }
 
                         if (xhr.status == 202 || xhr.status == 400) {

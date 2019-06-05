@@ -41,5 +41,7 @@ namespace Application.Interfaces.Repositories
         IList<ResourceDTO> GetResources();
 
         IList<ResourceDTO> GetResourcesByPlan(int planId);
+
+        bool IsAvailableStep(int planId, string stepIndex);
     }
 }

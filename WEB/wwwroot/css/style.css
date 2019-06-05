@@ -793,3 +793,7 @@ table td .m-list-badge {
 .page-link , page-link:hover{
     color: #2b70ba;
 }
+
+.disabled *, .disabled :hover *, .disabled :focus *{
+    color: lightgrey !important;
+}
