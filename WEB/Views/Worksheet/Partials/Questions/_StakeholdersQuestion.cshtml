@@ -134,7 +134,7 @@
                                         }
                                         <input type="hidden" value="@internalGuid" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers.index" />
                                         <input type="hidden" value="@answer.Id" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers[@internalGuid].Id" />
-                                        <input type="hidden" value="@(answer.UserId.HasValue ? answer.UserId : 0)" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers[@internalGuid].UserId" />
+                                        <input type="hidden" value="@(answer.UserId.HasValue ? answer.UserId : 0)" class="i-stakeholder" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers[@internalGuid].UserId" />
                                     </a>
                                 }
                             }
