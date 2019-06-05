@@ -18,77 +18,48 @@
     var count = 0;
 }
 
-<div class="m-demo">
-    <div class="m-demo__preview">
-        <div class="m-scrollable " data-scrollable="true" data-axis="xy">
-            <table class="table m-table table-bordered m--margin-top-10 m--margin-bottom-20">
-                <thead>
-                    <tr>
-                        <th title="Issue">
-                            Issue
-                        </th>
-                        <th title="IssueValue1">
-                            Why is this an issue or why would you consider it to be
-                            problematic /challenging?
-                        </th>
-                        <th title="IssueValue2">
-                            What will be the consequences of not addressing this
-                            issue
-                            or in other words, how damaging it is for the party not
-                            to
-                            address the issue?
-                        </th>
-                        <th title="IssueValue3">
-                            What should the goals of the party be in addressing this
-                            issue?
-                        </th>
-                        <th title="IssueValue4">
-                            What are the ways and means of achieving the goals
-                            surrounding the strategic issue?
-                        </th>
-                        <th title="Ranking">
-                            Ranking
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (answerGroup.DefinitiveAnswer?.StrategicIssueAnswers != null)
-                    {
-                        <tr class="author">
-                            <td colspan="6">Definitive answer</td>
+@if (answerGroup.DefinitiveAnswer != null || (answerGroup.OtherAnswers != null && answerGroup.OtherAnswers.Count() > 0))
+{
+    <div class="m-demo">
+        <div class="m-demo__preview">
+            <div class="m-scrollable " data-scrollable="true" data-axis="xy">
+                <table class="table m-table table-bordered m--margin-top-10 m--margin-bottom-20">
+                    <thead>
+                        <tr>
+                            <th title="Issue">
+                                Issue
+                            </th>
+                            <th title="IssueValue1">
+                                Why is this an issue or why would you consider it to be
+                                problematic /challenging?
+                            </th>
+                            <th title="IssueValue2">
+                                What will be the consequences of not addressing this
+                                issue
+                                or in other words, how damaging it is for the party not
+                                to
+                                address the issue?
+                            </th>
+                            <th title="IssueValue3">
+                                What should the goals of the party be in addressing this
+                                issue?
+                            </th>
+                            <th title="IssueValue4">
+                                What are the ways and means of achieving the goals
+                                surrounding the strategic issue?
+                            </th>
+                            <th title="Ranking">
+                                Ranking
+                            </th>
                         </tr>
-                        foreach (var issueAnswer in answerGroup.DefinitiveAnswer.StrategicIssueAnswers)
-                        {
-                            <tr>
-                                <td>
-                                    @issueAnswer.Issue
-                                </td>
-                                <td>
-                                    @issueAnswer.Why
-                                </td>
-                                <td>
-                                    @issueAnswer.Result
-                                </td>
-                                <td>
-                                    @issueAnswer.Goal
-                                </td>
-                                <td>
-                                    @issueAnswer.Solution
-                                </td>
-                                <td>
-                                    @issueAnswer.Ranking
-                                </td>
-                            </tr>
-                        }
-                    }
-                    @if (answerGroup.OtherAnswers != null)
-                    {
-                        foreach (var otherAnswer in answerGroup.OtherAnswers)
+                    </thead>
+                    <tbody>
+                        @if (answerGroup.DefinitiveAnswer?.StrategicIssueAnswers != null)
                         {
                             <tr class="author">
-                                <td colspan="6">@otherAnswer.Author</td>
+                                <td colspan="6">Definitive answer</td>
                             </tr>
-                            foreach (var issueAnswer in otherAnswer.StrategicIssueAnswers)
+                            foreach (var issueAnswer in answerGroup.DefinitiveAnswer.StrategicIssueAnswers)
                             {
                                 <tr>
                                     <td>
@@ -112,12 +83,44 @@
                                 </tr>
                             }
                         }
-                    }
-                </tbody>
-            </table>
+                        @if (answerGroup.OtherAnswers != null)
+                        {
+                            foreach (var otherAnswer in answerGroup.OtherAnswers)
+                            {
+                                <tr class="author">
+                                    <td colspan="6">@otherAnswer.Author</td>
+                                </tr>
+                                foreach (var issueAnswer in otherAnswer.StrategicIssueAnswers)
+                                {
+                                    <tr>
+                                        <td>
+                                            @issueAnswer.Issue
+                                        </td>
+                                        <td>
+                                            @issueAnswer.Why
+                                        </td>
+                                        <td>
+                                            @issueAnswer.Result
+                                        </td>
+                                        <td>
+                                            @issueAnswer.Goal
+                                        </td>
+                                        <td>
+                                            @issueAnswer.Solution
+                                        </td>
+                                        <td>
+                                            @issueAnswer.Ranking
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
+}
 
 <div class="row">
     <div class="col-sm-12">

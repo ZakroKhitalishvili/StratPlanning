@@ -28,7 +28,8 @@
 
     if (answerGroup.DefinitiveAnswer != null)
     {
-        stakeholderAnswers.AddRange(answerGroup.DefinitiveAnswer.StakeholderAnswers.Select(x => new {
+        stakeholderAnswers.AddRange(answerGroup.DefinitiveAnswer.StakeholderAnswers.Select(x => new
+        {
             author = "Definitive Answer",
             stakeholderName = x.FirstName + ' ' + x.LastName,
             isDefinitive = true,
@@ -40,46 +41,49 @@
 
     stakeholderAnswers = stakeholderAnswers.OrderByDescending(x => x.isDefinitive).ToList();
 }
-<div class="m-demo">
-    <div class="m-demo__preview">
-        <div class="form-group m-form__group">
-            <label>
-                Combined result
-            </label>
-            <div>
-                <div class="row">
-                    <div class="col-xs-12 col-md-6">
-                        <div class="bg-color-gray p-3">
-                            <h5>Internal</h5>
-                        </div>
-                        <div class="bg-color-lightgray p-3">
-                            <div class="m-list-badge m-list-badge--light-bg">
-                                <div class="m-list-badge__items">
-                                    @foreach (var answer in stakeholderAnswers.Where(x => x.isInternal).GroupBy(x => x.stakeholderName))
-                                    {
-                                        <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
-                                            @(answer.Key)
-                                        </span>
-                                    }
+@if (answerGroup.DefinitiveAnswer != null || (answerGroup.OtherAnswers != null && answerGroup.OtherAnswers.Count() > 0))
+{
+    <div class="m-demo">
+        <div class="m-demo__preview">
+            <div class="form-group m-form__group">
+                <label>
+                    Combined result
+                </label>
+                <div>
+                    <div class="row">
+                        <div class="col-xs-12 col-md-6">
+                            <div class="bg-color-gray p-3">
+                                <h5>Internal</h5>
+                            </div>
+                            <div class="bg-color-lightgray p-3">
+                                <div class="m-list-badge m-list-badge--light-bg">
+                                    <div class="m-list-badge__items">
+                                        @foreach (var answer in stakeholderAnswers.Where(x => x.isInternal).GroupBy(x => x.stakeholderName))
+                                        {
+                                            <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
+                                                @(answer.Key)
+                                            </span>
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sx-12  col-md-6">
-                        <div class="bg-color-gray p-3">
-                            <h5>External</h5>
-                        </div>
-                        <div class="bg-color-lightgray p-3">
-                            <div class="m-list-badge m-list-badge--light-bg">
-                                <div class="m-list-badge__items">
-                                    @foreach (var answer in stakeholderAnswers.Where(x => !x.isInternal).GroupBy(x => new { name = x.stakeholderName, email = x.email, category = x.category }))
-                                    {
-                                        <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
-                                            <div>@(answer.Key.name)</div>
-                                            <div>@(answer.Key.email)</div>
-                                            <div>@(answer.Key.category)</div>
-                                        </span>
-                                    }
+                        <div class="col-sx-12  col-md-6">
+                            <div class="bg-color-gray p-3">
+                                <h5>External</h5>
+                            </div>
+                            <div class="bg-color-lightgray p-3">
+                                <div class="m-list-badge m-list-badge--light-bg">
+                                    <div class="m-list-badge__items">
+                                        @foreach (var answer in stakeholderAnswers.Where(x => !x.isInternal).GroupBy(x => new { name = x.stakeholderName, email = x.email, category = x.category }))
+                                        {
+                                            <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
+                                                <div>@(answer.Key.name)</div>
+                                                <div>@(answer.Key.email)</div>
+                                                <div>@(answer.Key.category)</div>
+                                            </span>
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -88,7 +92,7 @@
             </div>
         </div>
     </div>
-</div>
+}
 <div class="form-group m-form__group">
     <label>
         Your answer
@@ -115,13 +119,13 @@
                     <div class="m-list-badge m-list-badge--light-bg">
                         <div id="s_@(question.Id)_list" class="m-list-badge__items">
                             @if (answerGroup.Answer != null)
+                            {
+                                string internalGuid = "";
+                                foreach (var answer in answerGroup.Answer.StakeholderAnswers.Where(x => x.IsInternal))
+                                {
                                     {
-                                        string internalGuid = "";
-                                        foreach (var answer in answerGroup.Answer.StakeholderAnswers.Where(x => x.IsInternal))
-                                        {
-                                            {
-                                                internalGuid = Guid.NewGuid().ToString();
-                                            }
+                                        internalGuid = Guid.NewGuid().ToString();
+                                    }
                                     <a class="m-list-badge__item m-list-badge__item--default">
                                         @(answer.FirstName + " " + answer.LastName)
                                         @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)

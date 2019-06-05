@@ -15,66 +15,68 @@
     var valuesDictionary = Web.Helpers.StepHelper.GetValuesDictionary(Context);
 }
 
-<div class="m-demo">
-    <div class="m-demo__preview">
-        <div class="form-group m-form__group">
-            <div>
-                <div class="m-scrollable mCustomScrollbar _mCS_1 mCS-autoHide" data-scrollable="true" data-axis="xy" style="position: relative; overflow: visible;">
-                    <div id="mCSB_1" class="mCustomScrollBox mCS-minimal-dark mCSB_vertical_horizontal mCSB_outside" style="max-height: none;" tabindex="0">
-                        <div id="mCSB_1_container" class="mCSB_container mCS_y_hidden mCS_no_scrollbar_y" style="position: relative; top: 0px; left: 0px; width: 792px;" dir="ltr">
-                            <table class="table m-table  table-bordered m--margin-top-10" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            Value
-                                        </th>
-                                        <th>
-                                            Definition
-                                        </th>
-                                        <th>
-                                            How is this value expressed in our party life?
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (answerGroup.DefinitiveAnswer != null)
-                                    {
-                                        <tr class="author">
-                                            <td colspan="3">Definitive answer</td>
+@if (answerGroup.DefinitiveAnswer != null || (answerGroup.OtherAnswers != null && answerGroup.OtherAnswers.Count() > 0))
+{
+    <div class="m-demo">
+        <div class="m-demo__preview">
+            <div class="form-group m-form__group">
+                <div>
+                    <div class="m-scrollable mCustomScrollbar _mCS_1 mCS-autoHide" data-scrollable="true" data-axis="xy" style="position: relative; overflow: visible;">
+                        <div id="mCSB_1" class="mCustomScrollBox mCS-minimal-dark mCSB_vertical_horizontal mCSB_outside" style="max-height: none;" tabindex="0">
+                            <div id="mCSB_1_container" class="mCSB_container mCS_y_hidden mCS_no_scrollbar_y" style="position: relative; top: 0px; left: 0px; width: 792px;" dir="ltr">
+                                <table class="table m-table  table-bordered m--margin-top-10" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                Value
+                                            </th>
+                                            <th>
+                                                Definition
+                                            </th>
+                                            <th>
+                                                How is this value expressed in our party life?
+                                            </th>
                                         </tr>
-                                        @foreach (var valueAnswer in answerGroup.DefinitiveAnswer.ValueAnswer)
+                                    </thead>
+                                    <tbody>
+                                        @if (answerGroup.DefinitiveAnswer != null)
                                         {
-                                            <tr>
-                                                <td>@valueAnswer.Value</td>
-                                                <td>@valueAnswer.Definition</td>
-                                                <td>@valueAnswer.Description</td>
+                                            <tr class="author">
+                                                <td colspan="3">Definitive answer</td>
                                             </tr>
+                                            @foreach (var valueAnswer in answerGroup.DefinitiveAnswer.ValueAnswer)
+                                            {
+                                                <tr>
+                                                    <td>@valueAnswer.Value</td>
+                                                    <td>@valueAnswer.Definition</td>
+                                                    <td>@valueAnswer.Description</td>
+                                                </tr>
+                                            }
                                         }
-                                    }
-                                    @foreach (var otherAnswer in answerGroup.OtherAnswers)
-                                    {
-                                        <tr class="author">
-                                            <td colspan="3">@otherAnswer.Author</td>
-                                        </tr>
-                                        @foreach (var valueAnswer in otherAnswer.ValueAnswer)
+                                        @foreach (var otherAnswer in answerGroup.OtherAnswers)
                                         {
-                                            <tr>
-                                                <td>@valueAnswer.Value</td>
-                                                <td>@valueAnswer.Definition</td>
-                                                <td>@valueAnswer.Description</td>
+                                            <tr class="author">
+                                                <td colspan="3">@otherAnswer.Author</td>
                                             </tr>
+                                            @foreach (var valueAnswer in otherAnswer.ValueAnswer)
+                                            {
+                                                <tr>
+                                                    <td>@valueAnswer.Value</td>
+                                                    <td>@valueAnswer.Definition</td>
+                                                    <td>@valueAnswer.Description</td>
+                                                </tr>
+                                            }
                                         }
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div><div id="mCSB_1_scrollbar_vertical" class="mCSB_scrollTools mCSB_1_scrollbar mCS-minimal-dark mCSB_scrollTools_vertical" style="display: none;"><div class="mCSB_draggerContainer"><div id="mCSB_1_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 50px; height: 0px; top: 0px;"><div class="mCSB_dragger_bar" style="line-height: 50px;"></div></div><div class="mCSB_draggerRail"></div></div></div><div id="mCSB_1_scrollbar_horizontal" class="mCSB_scrollTools mCSB_1_scrollbar mCS-minimal-dark mCSB_scrollTools_horizontal" style="display: block;"><div class="mCSB_draggerContainer"><div id="mCSB_1_dragger_horizontal" class="mCSB_dragger" style="position: absolute; min-width: 50px; display: block; width: 792px; max-width: 781.8px; left: 0px;"><div class="mCSB_dragger_bar"></div></div><div class="mCSB_draggerRail"></div></div></div>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div><div id="mCSB_1_scrollbar_vertical" class="mCSB_scrollTools mCSB_1_scrollbar mCS-minimal-dark mCSB_scrollTools_vertical" style="display: none;"><div class="mCSB_draggerContainer"><div id="mCSB_1_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 50px; height: 0px; top: 0px;"><div class="mCSB_dragger_bar" style="line-height: 50px;"></div></div><div class="mCSB_draggerRail"></div></div></div><div id="mCSB_1_scrollbar_horizontal" class="mCSB_scrollTools mCSB_1_scrollbar mCS-minimal-dark mCSB_scrollTools_horizontal" style="display: block;"><div class="mCSB_draggerContainer"><div id="mCSB_1_dragger_horizontal" class="mCSB_dragger" style="position: absolute; min-width: 50px; display: block; width: 792px; max-width: 781.8px; left: 0px;"><div class="mCSB_dragger_bar"></div></div><div class="mCSB_draggerRail"></div></div></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
+}
 <div class="form-group m-form__group">
     <div class="row">
         <div class="col-sm-12">
@@ -194,7 +196,7 @@
                                     Definition
                                 </label>
                                 <div class="col-lg-9 col-md-9 col-sm-12">
-                                    @Html.TextAreaFor(x => valueAnswerDTO.Definition, new { @class = "form-control m-input", rows="3", data_name = "definition" })
+                                    @Html.TextAreaFor(x => valueAnswerDTO.Definition, new { @class = "form-control m-input", rows = "3", data_name = "definition" })
                                     @Html.ValidationMessageFor(x => valueAnswerDTO.Definition, "", new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -203,7 +205,7 @@
                                     How is this value expressed in our party life?
                                 </label>
                                 <div class="col-lg-9 col-md-9 col-sm-12">
-                                    @Html.TextAreaFor(x => valueAnswerDTO.Description, new { @class = "form-control m-input", rows="3", data_name="description" })
+                                    @Html.TextAreaFor(x => valueAnswerDTO.Description, new { @class = "form-control m-input", rows = "3", data_name = "description" })
                                     @Html.ValidationMessageFor(x => valueAnswerDTO.Description, "", new { @class = "text-danger" })
                                 </div>
                             </div>
