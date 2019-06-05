@@ -15,49 +15,34 @@
     var options = Web.Helpers.StepHelper.GetDefinitifeIssueOptions(Context, Model.PlanId).ToArray();
 }
 
+@if (answerGroup.DefinitiveAnswer != null || (answerGroup.OtherAnswers != null && answerGroup.OtherAnswers.Count() > 0))
+{
+    <div class="m-demo">
+        <div class="m-demo__preview">
 
-<div class="m-demo">
-    <div class="m-demo__preview">
+            <div class="m-scrollable " data-scrollable="true" data-axis="xy">
+                <table class="table m-table table-bordered m--margin-top-10 m--margin-bottom-20">
+                    <thead>
+                        <tr>
+                            <th>
+                                Issue
+                            </th>
 
-        <div class="m-scrollable " data-scrollable="true" data-axis="xy">
-            <table class="table m-table table-bordered m--margin-top-10 m--margin-bottom-20">
-                <thead>
-                    <tr>
-                        <th>
-                            Issue
-                        </th>
-
-                        <th>
-                            When will it be done
-                        </th>
-                        <th>
-                            How will it be done
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (filledAnswer.DefinitiveAnswer != null)
-                    {
-                        <tr class="author">
-                            <td colspan="3">Definitive Answer</td>
+                            <th>
+                                When will it be done
+                            </th>
+                            <th>
+                                How will it be done
+                            </th>
                         </tr>
-                        @foreach (var answer in filledAnswer.DefinitiveAnswer.IssuePreparingAnswers)
-                        {
-                            <tr>
-                                <td>@answer.IssueName</td>
-                                <td>@answer.Date?.ToString("dd-MM-yyyy")</td>
-                                <td>@answer.HowItWillBeDone</td>
-                            </tr>
-                        }
-                    }
-                    @if (filledAnswer.OtherAnswers != null)
-                    {
-                        @foreach (var answerAuthor in filledAnswer.OtherAnswers)
+                    </thead>
+                    <tbody>
+                        @if (filledAnswer.DefinitiveAnswer != null)
                         {
                             <tr class="author">
-                                <td colspan="3">@answerAuthor.Author</td>
+                                <td colspan="3">Definitive Answer</td>
                             </tr>
-                            @foreach (var answer in answerAuthor.IssuePreparingAnswers)
+                            @foreach (var answer in filledAnswer.DefinitiveAnswer.IssuePreparingAnswers)
                             {
                                 <tr>
                                     <td>@answer.IssueName</td>
@@ -66,12 +51,29 @@
                                 </tr>
                             }
                         }
-                    }
-                </tbody>
-            </table>
+                        @if (filledAnswer.OtherAnswers != null)
+                        {
+                            @foreach (var answerAuthor in filledAnswer.OtherAnswers)
+                            {
+                                <tr class="author">
+                                    <td colspan="3">@answerAuthor.Author</td>
+                                </tr>
+                                @foreach (var answer in answerAuthor.IssuePreparingAnswers)
+                                {
+                                    <tr>
+                                        <td>@answer.IssueName</td>
+                                        <td>@answer.Date?.ToString("dd-MM-yyyy")</td>
+                                        <td>@answer.HowItWillBeDone</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
+}
 
 <div>
     <label>
@@ -128,13 +130,13 @@
                                 </td>
                                 @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
                                 {
-                                <td>
-                                    <input type="text" class="datepicker form-control" value="@(answer != null ? answer.Date?.ToString("dd-MM-yyyy") : "")"
-                                           name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssuePreparingAnswers[@i].Date">
-                                    <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.IssuePreparingAnswers[i].Date"></span>
-                                    <input type="hidden" value="@options[i].Id"
-                                           name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssuePreparingAnswers[@i].IssueOptionAnswerId" />
-                                </td>
+                                    <td>
+                                        <input type="text" class="datepicker form-control" value="@(answer != null ? answer.Date?.ToString("dd-MM-yyyy") : "")"
+                                               name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssuePreparingAnswers[@i].Date">
+                                        <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.IssuePreparingAnswers[i].Date"></span>
+                                        <input type="hidden" value="@options[i].Id"
+                                               name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssuePreparingAnswers[@i].IssueOptionAnswerId" />
+                                    </td>
 
                                     <td>
                                         <textarea class="form-control m-input" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.IssuePreparingAnswers[@i].HowItWillBeDone">@(answer != null ? answer.HowItWillBeDone : "")</textarea>

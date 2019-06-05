@@ -81,116 +81,119 @@
         <div class="m-demo">
             <div class="m-demo__preview">
 
-                <div class="form-group m-form__group">
-                    <label>
-                        Combined result
-                    </label>
-                    <div class="swot col-sm-12 m--margin-bottom-20">
-                        <div class="row">
-                            <div class="d-none d-md-block col-md-2 swot-cell">
+                @if (answerGroup.DefinitiveAnswer != null || (answerGroup.OtherAnswers != null && answerGroup.OtherAnswers.Count() > 0))
+                {
+                    <div class="form-group m-form__group">
+                        <label>
+                            Combined result
+                        </label>
+                        <div class="swot col-sm-12 m--margin-bottom-20">
+                            <div class="row">
+                                <div class="d-none d-md-block col-md-2 swot-cell">
 
+                                </div>
+                                <div class="d-none d-md-block col-md-5  swot-cell bg-color-lightgreen">
+                                    <h5>Helpful</h5>
+                                    <span>to achieving the objective</span>
+                                </div>
+                                <div class="d-none d-md-block col-md-5 swot-cell bg-color-lightred">
+                                    <h5>Harmful</h5>
+                                    <span>to achieving the objective</span>
+                                </div>
                             </div>
-                            <div class="d-none d-md-block col-md-5  swot-cell bg-color-lightgreen">
-                                <h5>Helpful</h5>
-                                <span>to achieving the objective</span>
-                            </div>
-                            <div class="d-none d-md-block col-md-5 swot-cell bg-color-lightred">
-                                <h5>Harmful</h5>
-                                <span>to achieving the objective</span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="d-none d-md-block col-md-2 swot-cell bg-color-lightyellow">
-                                <h5>Internal origin</h5>
-                                <span>attributes of the system</span>
-                            </div>
-                            <div class="col-sm-12 col-md-5 swot-cell bg-color-greenyellow">
-                                <div class="row swot-add ">
-                                    <div class="col-12">
-                                        <h5 class="pull-left"> Strengths</h5>
+                            <div class="row">
+                                <div class="d-none d-md-block col-md-2 swot-cell bg-color-lightyellow">
+                                    <h5>Internal origin</h5>
+                                    <span>attributes of the system</span>
+                                </div>
+                                <div class="col-sm-12 col-md-5 swot-cell bg-color-greenyellow">
+                                    <div class="row swot-add ">
+                                        <div class="col-12">
+                                            <h5 class="pull-left"> Strengths</h5>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12 ">
+                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                <div class="m-list-badge__items">
+                                                    @foreach (var answer in swotAnswers.Where(x => x.type == "Strengths").GroupBy(x => x.value))
+                                                    {
+                                                        <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
+                                                            @(answer.Key)
+                                                        </span>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-sm-12 ">
-                                        <div class="m-list-badge m-list-badge--light-bg">
-                                            <div class="m-list-badge__items">
-                                                @foreach (var answer in swotAnswers.Where(x => x.type == "Strengths").GroupBy(x => x.value))
-                                                {
-                                                    <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
-                                                        @(answer.Key)
-                                                    </span>
-                                                }
+
+                                <div class="col-sm-12 col-md-5  swot-cell  bg-color-redyellow">
+                                    <div class="row swot-add">
+                                        <div class="col-12">
+                                            <h5 class="pull-left"> Weaknesses</h5>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12 ">
+                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                <div class="m-list-badge__items">
+                                                    @foreach (var answer in swotAnswers.Where(x => x.type == "Weaknesses").GroupBy(x => x.value))
+                                                    {
+                                                        <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
+                                                            @(answer.Key)
+                                                        </span>
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="col-sm-12 col-md-5  swot-cell  bg-color-redyellow">
-                                <div class="row swot-add">
-                                    <div class="col-12">
-                                        <h5 class="pull-left"> Weaknesses</h5>
-                                    </div>
+                            <div class="row">
+                                <div class="d-none d-md-block col-md-2 swot-cell  bg-color-lightblue">
+                                    <h5>External origin</h5>
+                                    <span>attributes of the environment</span>
                                 </div>
-                                <div class="row">
-                                    <div class="col-sm-12 ">
-                                        <div class="m-list-badge m-list-badge--light-bg">
-                                            <div class="m-list-badge__items">
-                                                @foreach (var answer in swotAnswers.Where(x => x.type == "Weaknesses").GroupBy(x => x.value))
-                                                {
-                                                    <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
-                                                        @(answer.Key)
-                                                    </span>
-                                                }
+                                <div class="col-sm-12 col-md-5  swot-cell  bg-color-greenblue">
+                                    <div class="row swot-add">
+                                        <div class="col-12">
+                                            <h5 class="pull-left"> Opportunities</h5>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+
+                                        <div class="col-sm-12 ">
+                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                <div class="m-list-badge__items">
+                                                    @foreach (var answer in swotAnswers.Where(x => x.type == "Opportunities").GroupBy(x => x.value))
+                                                    {
+                                                        <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
+                                                            @(answer.Key)
+                                                        </span>
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="d-none d-md-block col-md-2 swot-cell  bg-color-lightblue">
-                                <h5>External origin</h5>
-                                <span>attributes of the environment</span>
-                            </div>
-                            <div class="col-sm-12 col-md-5  swot-cell  bg-color-greenblue">
-                                <div class="row swot-add">
-                                    <div class="col-12">
-                                        <h5 class="pull-left"> Opportunities</h5>
-                                    </div>
-                                </div>
-                                <div class="row">
-
-                                    <div class="col-sm-12 ">
-                                        <div class="m-list-badge m-list-badge--light-bg">
-                                            <div class="m-list-badge__items">
-                                                @foreach (var answer in swotAnswers.Where(x => x.type == "Opportunities").GroupBy(x => x.value))
-                                                {
-                                                    <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
-                                                        @(answer.Key)
-                                                    </span>
-                                                }
-                                            </div>
+                                <div class="col-sm-12 col-md-5  swot-cell  bg-color-redblue">
+                                    <div class="row swot-add">
+                                        <div class="col-12">
+                                            <h5 class="pull-left"> Threats</h5>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-5  swot-cell  bg-color-redblue">
-                                <div class="row swot-add">
-                                    <div class="col-12">
-                                        <h5 class="pull-left"> Threats</h5>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-12 ">
-                                        <div class="m-list-badge m-list-badge--light-bg">
-                                            <div class="m-list-badge__items">
-                                                @foreach (var answer in swotAnswers.Where(x => x.type == "Threats").GroupBy(x => x.value))
-                                                {
-                                                    <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
-                                                        @(answer.Key)
-                                                    </span>
-                                                }
+                                    <div class="row">
+                                        <div class="col-sm-12 ">
+                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                <div class="m-list-badge__items">
+                                                    @foreach (var answer in swotAnswers.Where(x => x.type == "Threats").GroupBy(x => x.value))
+                                                    {
+                                                        <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
+                                                            @(answer.Key)
+                                                        </span>
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -198,7 +201,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                }
 
             </div>
         </div>

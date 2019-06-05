@@ -36,124 +36,127 @@
                  role="tabpanel" aria-labelledby="issue_accordion_@(i)_head"
                  data-parent="#issue_accordions" style="">
                 <div class="m-accordion__item-content">
-                    <div class="m-demo">
-                        <div class="m-demo__preview">
+                    @if (answerGroup.DefinitiveAnswer != null || (answerGroup.OtherAnswers != null && answerGroup.OtherAnswers.Count() > 0))
+                    {
+                        <div class="m-demo">
+                            <div class="m-demo__preview">
 
-                            <div class="m-scrollable " data-scrollable="true"
-                                 data-axis="xy">
-                                <table class="issue-actions-datatable table m-table  table-bordered m--margin-top-10 m--margin-bottom-20">
-                                    <thead>
-                                        <tr>
-                                            <th title="Option">
-                                                Option
-                                            </th>
-                                            <th title="ResponsiblePeople">
-                                                Actor responsible
-                                            </th>
-                                            <th title="IssueValue2">
-                                                Required resources
-                                            </th>
-                                            <th title="IssueValue3">
-                                                Best option
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (filledAnswer.DefinitiveAnswer != null)
-                                        {
-                                            var definitiveAnswers = filledAnswer.DefinitiveAnswer.IssueOptionAnswers.Where(x => x.IssueId == issues[i].Id).ToList();
-
-                                            <tr class="author">
-                                                <td colspan="4">Definitive answer</td>
+                                <div class="m-scrollable " data-scrollable="true"
+                                     data-axis="xy">
+                                    <table class="issue-actions-datatable table m-table  table-bordered m--margin-top-10 m--margin-bottom-20">
+                                        <thead>
+                                            <tr>
+                                                <th title="Option">
+                                                    Option
+                                                </th>
+                                                <th title="ResponsiblePeople">
+                                                    Actor responsible
+                                                </th>
+                                                <th title="IssueValue2">
+                                                    Required resources
+                                                </th>
+                                                <th title="IssueValue3">
+                                                    Best option
+                                                </th>
                                             </tr>
-
-                                            @foreach (var answer in definitiveAnswers.OrderByDescending(x => x.IsBestOption))
+                                        </thead>
+                                        <tbody>
+                                            @if (filledAnswer.DefinitiveAnswer != null)
                                             {
-                                                <tr>
-                                                    <td>
-                                                        @answer.Option
-                                                    </td>
-                                                    <td>
-                                                        <div class="m-list-badge m-list-badge--light-bg">
-                                                            <div class="m-list-badge__items">
-                                                                @answer.Actors
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="m-list-badge m-list-badge--light-bg">
-                                                            <div class="m-list-badge__items">
-                                                                @foreach (var res in answer.Resources.Split(','))
-                                                                {
-                                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                                        @res
-                                                                    </span>
-                                                                }
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        @if (answer.IsBestOption)
-                                                        {
-                                                            <i class="fa fa-check-square-o sp-font-md"></i>
-                                                        }
-                                                        else
-                                                        {
-                                                            <i class="fa fa-square-o sp-font-md"></i>
-                                                        }
-                                                    </td>
-                                                </tr>
-                                            }
-                                        }
-                                        @foreach (var authorAnswer in filledAnswer.OtherAnswers.SelectMany(x => x.IssueOptionAnswers.Select(y => new { author = x.Author, info = y })).Where(x => x.info.IssueId == issues[i].Id).GroupBy(x => x.author).ToList())
-                                        {
-                                            <tr class="author">
-                                                <td colspan="4">@authorAnswer.Key</td>
-                                            </tr>
+                                                var definitiveAnswers = filledAnswer.DefinitiveAnswer.IssueOptionAnswers.Where(x => x.IssueId == issues[i].Id).ToList();
 
-                                            @foreach (var answer in authorAnswer.OrderByDescending(x => x.info.IsBestOption))
-                                            {
-                                                <tr>
-                                                    <td>
-                                                        @answer.info.Option
-                                                    </td>
-                                                    <td>
-                                                        <div class="m-list-badge m-list-badge--light-bg">
-                                                            <div class="m-list-badge__items">
-                                                                @answer.info.Actors
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="m-list-badge m-list-badge--light-bg">
-                                                            <div class="m-list-badge__items">
-                                                                @foreach (var res in answer.info.Resources.Split(','))
-                                                                {
-                                                                    <span class="m-list-badge__item m-list-badge__item--default">
-                                                                        @res
-                                                                    </span>
-                                                                }
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        @if (answer.info.IsBestOption)
-                                                        {
-                                                            <i class="fa fa-check-square-o sp-font-md"></i>
-                                                        }
-                                                        else
-                                                        {
-                                                            <i class="fa fa-square-o sp-font-md"></i>
-                                                        }
-                                                    </td>
+                                                <tr class="author">
+                                                    <td colspan="4">Definitive answer</td>
                                                 </tr>
+
+                                                @foreach (var answer in definitiveAnswers.OrderByDescending(x => x.IsBestOption))
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @answer.Option
+                                                        </td>
+                                                        <td>
+                                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                                <div class="m-list-badge__items">
+                                                                    @answer.Actors
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                                <div class="m-list-badge__items">
+                                                                    @foreach (var res in answer.Resources.Split(','))
+                                                                    {
+                                                                        <span class="m-list-badge__item m-list-badge__item--default">
+                                                                            @res
+                                                                        </span>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            @if (answer.IsBestOption)
+                                                            {
+                                                                <i class="fa fa-check-square-o sp-font-md"></i>
+                                                            }
+                                                            else
+                                                            {
+                                                                <i class="fa fa-square-o sp-font-md"></i>
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
                                             }
-                                        }
-                                    </tbody>
-                                </table>
+                                            @foreach (var authorAnswer in filledAnswer.OtherAnswers.SelectMany(x => x.IssueOptionAnswers.Select(y => new { author = x.Author, info = y })).Where(x => x.info.IssueId == issues[i].Id).GroupBy(x => x.author).ToList())
+                                            {
+                                                <tr class="author">
+                                                    <td colspan="4">@authorAnswer.Key</td>
+                                                </tr>
+
+                                                @foreach (var answer in authorAnswer.OrderByDescending(x => x.info.IsBestOption))
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @answer.info.Option
+                                                        </td>
+                                                        <td>
+                                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                                <div class="m-list-badge__items">
+                                                                    @answer.info.Actors
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="m-list-badge m-list-badge--light-bg">
+                                                                <div class="m-list-badge__items">
+                                                                    @foreach (var res in answer.info.Resources.Split(','))
+                                                                    {
+                                                                        <span class="m-list-badge__item m-list-badge__item--default">
+                                                                            @res
+                                                                        </span>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            @if (answer.info.IsBestOption)
+                                                            {
+                                                                <i class="fa fa-check-square-o sp-font-md"></i>
+                                                            }
+                                                            else
+                                                            {
+                                                                <i class="fa fa-square-o sp-font-md"></i>
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
 
                     <div class="form-group m-form__group">
                         <label>

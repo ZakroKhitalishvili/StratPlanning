@@ -793,3 +793,15 @@ table td .m-list-badge {
 .page-link , page-link:hover{
     color: #2b70ba;
 }
+
+.stakeholders-rating-table > tbody th {
+    text-align: left;
+}
+
+.flex-grow-1 {
+    flex-grow: 1;
+}
+
+.stakeholders-rating-table .m-dropdown.m-dropdown--up .m-dropdown__wrapper {
+    right: 0;
+}
