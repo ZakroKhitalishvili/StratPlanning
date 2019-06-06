@@ -119,14 +119,14 @@
                                                     {
                                                         if (Model.IsAdmin && !Model.IsCompleted)
                                                         {
-                                                            <span title=""
+                                                            <button type="button" title=""
                                                                   data-toggle="tooltip"
                                                                   class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")"
                                                                   data-original-title="@String.Join(',', answer.Select(x => x.author))"
                                                                   data-val='@(Json.Serialize(new { swotName = answer.Key }))'
                                                                   onclick='selectAnswer(this, "#l_@(question.Id)_strengths")'>
                                                                 @(answer.Key)
-                                                            </span>
+                                                            </button>
                                                         }
                                                         else
                                                         {

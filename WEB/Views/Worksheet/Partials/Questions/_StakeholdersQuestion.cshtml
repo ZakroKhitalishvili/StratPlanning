@@ -70,17 +70,18 @@
                                         {
                                             if (Model.IsAdmin && !Model.IsCompleted)
                                             {
-                                                <span title=""
+                                                <button title=""
+                                                        type="button"
                                                       data-val='@Json.Serialize(new {
                                                            stakeholderId = answer.FirstOrDefault().userId,
                                                            stakeholderName = answer.FirstOrDefault().firstName + ' ' + answer.FirstOrDefault().lastName
-                                                  })'
+                                                        })'
                                                       data-toggle="tooltip"
                                                       onclick="selectAnswer(this, '#s_@(question.Id)_list');"
                                                       class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")"
                                                       data-original-title="@String.Join(',', answer.Select(x => x.author))">
                                                     @(answer.Key)
-                                                </span>
+                                                </button>
                                             }
                                             else
                                             {
@@ -107,7 +108,7 @@
                                         {
                                             if (Model.IsAdmin && !Model.IsCompleted)
                                             {
-                                                <span title=""
+                                                <button type="button" title=""
                                                       data-val='@Json.Serialize(new {
                                                            itemId = answer.FirstOrDefault().id,
                                                            firstName = answer.FirstOrDefault().firstName,
@@ -123,7 +124,7 @@
                                                     <div>@(answer.Key.name)</div>
                                                     <div>@(answer.Key.email)</div>
                                                     <div>@(answer.Key.category)</div>
-                                                </span>
+                                                </button>
                                             }
                                             else
                                             {

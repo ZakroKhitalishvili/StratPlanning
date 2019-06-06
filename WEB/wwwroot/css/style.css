@@ -809,3 +809,7 @@ table td .m-list-badge {
 .disabled *, .disabled :hover *, .disabled :focus *{
     color: lightgrey !important;
 }
+
+button.m-list-badge__item {
+    cursor: pointer;
+}
