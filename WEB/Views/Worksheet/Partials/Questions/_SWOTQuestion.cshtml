@@ -78,11 +78,10 @@
 
 <div class="row">
     <div class="col-12">
-        <div class="m-demo">
-            <div class="m-demo__preview">
-
-                @if (answerGroup.DefinitiveAnswer != null || (answerGroup.OtherAnswers != null && answerGroup.OtherAnswers.Count() > 0))
-                {
+        @if (answerGroup.DefinitiveAnswer != null || (answerGroup.OtherAnswers != null && answerGroup.OtherAnswers.Count() > 0))
+        {
+            <div class="m-demo">
+                <div class="m-demo__preview">
                     <div class="form-group m-form__group">
                         <label>
                             Combined result
@@ -118,9 +117,26 @@
                                                 <div class="m-list-badge__items">
                                                     @foreach (var answer in swotAnswers.Where(x => x.type == SWOTTypes.Strength).GroupBy(x => x.value))
                                                     {
-                                                        <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
-                                                            @(answer.Key)
-                                                        </span>
+                                                        if (Model.IsAdmin && !Model.IsCompleted)
+                                                        {
+                                                            <span title=""
+                                                                  data-toggle="tooltip"
+                                                                  class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")"
+                                                                  data-original-title="@String.Join(',', answer.Select(x => x.author))"
+                                                                  data-val='@(Json.Serialize(new { swotName = answer.Key }))'
+                                                                  onclick='selectAnswer(this, "#l_@(question.Id)_strengths")'>
+                                                                @(answer.Key)
+                                                            </span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span title=""
+                                                                  data-toggle="tooltip"
+                                                                  class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")"
+                                                                  data-original-title="@String.Join(',', answer.Select(x => x.author))">
+                                                                @(answer.Key)
+                                                            </span>
+                                                        }
                                                     }
                                                 </div>
                                             </div>
@@ -140,9 +156,26 @@
                                                 <div class="m-list-badge__items">
                                                     @foreach (var answer in swotAnswers.Where(x => x.type == SWOTTypes.Weakness).GroupBy(x => x.value))
                                                     {
-                                                        <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
-                                                            @(answer.Key)
-                                                        </span>
+                                                        if (Model.IsAdmin && !Model.IsCompleted)
+                                                        {
+                                                            <span title=""
+                                                                  data-toggle="tooltip"
+                                                                  class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")"
+                                                                  data-original-title="@String.Join(',', answer.Select(x => x.author))"
+                                                                  data-val='@(Json.Serialize(new { swotName = answer.Key }))'
+                                                                  onclick='selectAnswer(this, "#l_@(question.Id)_weaknesses")'>
+                                                                @(answer.Key)
+                                                            </span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span title=""
+                                                                  data-toggle="tooltip"
+                                                                  class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")"
+                                                                  data-original-title="@String.Join(',', answer.Select(x => x.author))">
+                                                                @(answer.Key)
+                                                            </span>
+                                                        }
                                                     }
                                                 </div>
                                             </div>
@@ -168,9 +201,26 @@
                                                 <div class="m-list-badge__items">
                                                     @foreach (var answer in swotAnswers.Where(x => x.type == SWOTTypes.Opportunity).GroupBy(x => x.value))
                                                     {
-                                                        <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
-                                                            @(answer.Key)
-                                                        </span>
+                                                        if (Model.IsAdmin && !Model.IsCompleted)
+                                                        {
+                                                            <span title=""
+                                                                  data-toggle="tooltip"
+                                                                  class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")"
+                                                                  data-original-title="@String.Join(',', answer.Select(x => x.author))"
+                                                                  data-val='@(Json.Serialize(new { swotName = answer.Key }))'
+                                                                  onclick='selectAnswer(this, "#l_@(question.Id)_opportunities")'>
+                                                                @(answer.Key)
+                                                            </span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span title=""
+                                                                  data-toggle="tooltip"
+                                                                  class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")"
+                                                                  data-original-title="@String.Join(',', answer.Select(x => x.author))">
+                                                                @(answer.Key)
+                                                            </span>
+                                                        }
                                                     }
                                                 </div>
                                             </div>
@@ -189,9 +239,26 @@
                                                 <div class="m-list-badge__items">
                                                     @foreach (var answer in swotAnswers.Where(x => x.type == SWOTTypes.Threat).GroupBy(x => x.value))
                                                     {
-                                                        <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
-                                                            @(answer.Key)
-                                                        </span>
+                                                        if (Model.IsAdmin && !Model.IsCompleted)
+                                                        {
+                                                            <span title=""
+                                                                  data-toggle="tooltip"
+                                                                  class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")"
+                                                                  data-original-title="@String.Join(',', answer.Select(x => x.author))"
+                                                                  data-val='@(Json.Serialize(new { swotName = answer.Key }))'
+                                                                  onclick='selectAnswer(this, "#l_@(question.Id)_threats")'>
+                                                                @(answer.Key)
+                                                            </span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span title=""
+                                                                  data-toggle="tooltip"
+                                                                  class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")"
+                                                                  data-original-title="@String.Join(',', answer.Select(x => x.author))">
+                                                                @(answer.Key)
+                                                            </span>
+                                                        }
                                                     }
                                                 </div>
                                             </div>
@@ -201,10 +268,10 @@
                             </div>
                         </div>
                     </div>
-                }
 
+                </div>
             </div>
-        </div>
+        }
 
         <div class="form-group m-form__group">
             <label>
@@ -256,7 +323,7 @@
                                 }
                                 <div class="col-sm-12 ">
                                     <div class="m-list-badge m-list-badge--light-bg">
-                                        <div class="m-list-badge__items list-items">
+                                        <div id="l_@(question.Id)_strengths" class="m-list-badge__items list-items">
                                             @if (answerGroup.Answer?.SwotAnswer.Strengths != null)
                                             {
                                                 foreach (var strength in answerGroup.Answer.SwotAnswer.Strengths)
@@ -299,7 +366,7 @@
                                 }
                                 <div class="col-sm-12 ">
                                     <div class="m-list-badge m-list-badge--light-bg">
-                                        <div class="m-list-badge__items list-items">
+                                        <div id="l_@(question.Id)_weaknesses" class="m-list-badge__items list-items">
                                             @if (answerGroup.Answer?.SwotAnswer.Weaknesses != null)
                                             {
                                                 foreach (var weakness in answerGroup.Answer.SwotAnswer.Weaknesses)
@@ -348,7 +415,7 @@
                                 }
                                 <div class="col-sm-12 ">
                                     <div class="m-list-badge m-list-badge--light-bg">
-                                        <div class="m-list-badge__items list-items">
+                                        <div id="l_@(question.Id)_opportunities" class="m-list-badge__items list-items">
                                             @if (answerGroup.Answer?.SwotAnswer.Opportunities != null)
                                             {
                                                 foreach (var opportunity in answerGroup.Answer.SwotAnswer.Opportunities)
@@ -392,7 +459,7 @@
                                 }
                                 <div class="col-sm-12 ">
                                     <div class="m-list-badge m-list-badge--light-bg">
-                                        <div class="m-list-badge__items list-items">
+                                        <div id="l_@(question.Id)_threats" class="m-list-badge__items list-items">
                                             @if (answerGroup.Answer?.SwotAnswer.Threats != null)
                                             {
                                                 foreach (var threat in answerGroup.Answer.SwotAnswer.Threats)
@@ -418,3 +485,68 @@
         </div>
     </div>
 </div>
+
+@if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
+{
+    <script>
+        if (typeof fieldOptions === 'undefined') {
+            var fieldOptions = {};
+        }
+
+        fieldOptions['#l_@(question.Id)_threats'] = {
+            template: function (data, index) {
+                if ($('#l_@(question.Id)_threats').find(`input[value="${data.swotName}"]`).length > 0) return null;
+
+                return `
+                    <a class="m-list-badge__item m-list-badge__item--default list-item">
+                        <input type="hidden" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.SwotAnswer.Threats" value="${data.swotName}"/>
+                        ${data.swotName}
+                        <span class="list-item-delete fa fa-close"></span>
+                    </a>
+                `;
+            }
+        };
+
+        fieldOptions['#l_@(question.Id)_opportunities'] = {
+            template: function (data, index) {
+                if ($('#l_@(question.Id)_opportunities').find(`input[value="${data.swotName}"]`).length > 0) return null;
+
+                return `
+                    <a class="m-list-badge__item m-list-badge__item--default list-item">
+                        <input type="hidden" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.SwotAnswer.Opportunities" value="${data.swotName}"/>
+                        ${data.swotName}
+                        <span class="list-item-delete fa fa-close"></span>
+                    </a>
+                `;
+            }
+        };
+
+        fieldOptions['#l_@(question.Id)_weaknesses'] = {
+            template: function (data, index) {
+                if ($('#l_@(question.Id)_weaknesses').find(`input[value="${data.swotName}"]`).length > 0) return null;
+
+                return `
+                    <a class="m-list-badge__item m-list-badge__item--default list-item">
+                        <input type="hidden" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.SwotAnswer.Weaknesses" value="${data.swotName}"/>
+                        ${data.swotName}
+                        <span class="list-item-delete fa fa-close"></span>
+                    </a>
+                `;
+            }
+        };
+
+        fieldOptions['#l_@(question.Id)_strengths'] = {
+            template: function (data, index) {
+                if ($('#l_@(question.Id)_strengths').find(`input[value="${data.swotName}"]`).length > 0) return null;
+
+                return `
+                    <a class="m-list-badge__item m-list-badge__item--default list-item">
+                        <input type="hidden" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.SwotAnswer.Strengths" value="${data.swotName}"/>
+                        ${data.swotName}
+                        <span class="list-item-delete fa fa-close"></span>
+                    </a>
+                `;
+            }
+        };
+    </script>
+}

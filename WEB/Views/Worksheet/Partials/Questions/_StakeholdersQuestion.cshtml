@@ -18,24 +18,32 @@
 
     var stakeholderAnswers = answerGroup.OtherAnswers.SelectMany(x => x.StakeholderAnswers.Select(y => new
     {
+        id = y.Id,
         author = x.Author,
-        stakeholderName = y.FirstName + ' ' + y.LastName,
+        firstName = y.FirstName,
+        lastName = y.LastName,
         isDefinitive = false,
         isInternal = y.IsInternal,
         category = y.Category,
-        email = y.Email
+        email = y.Email,
+        userId = y.UserId,
+        categoryId = y.CategoryId
     })).ToList();
 
     if (answerGroup.DefinitiveAnswer != null)
     {
         stakeholderAnswers.AddRange(answerGroup.DefinitiveAnswer.StakeholderAnswers.Select(x => new
         {
+            id = x.Id,
             author = "Definitive Answer",
-            stakeholderName = x.FirstName + ' ' + x.LastName,
+            firstName = x.FirstName,
+            lastName = x.LastName,
             isDefinitive = true,
             isInternal = x.IsInternal,
             category = x.Category,
-            email = x.Email
+            email = x.Email,
+            userId = x.UserId,
+            categoryId = x.CategoryId
         }));
     }
 
@@ -58,11 +66,31 @@
                             <div class="bg-color-lightgray p-3">
                                 <div class="m-list-badge m-list-badge--light-bg">
                                     <div class="m-list-badge__items">
-                                        @foreach (var answer in stakeholderAnswers.Where(x => x.isInternal).GroupBy(x => x.stakeholderName))
+                                        @foreach (var answer in stakeholderAnswers.Where(x => x.isInternal).GroupBy(x => x.firstName + ' ' + x.lastName))
                                         {
-                                            <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
-                                                @(answer.Key)
-                                            </span>
+                                            if (Model.IsAdmin && !Model.IsCompleted)
+                                            {
+                                                <span title=""
+                                                      data-val='@Json.Serialize(new {
+                                                           stakeholderId = answer.FirstOrDefault().userId,
+                                                           stakeholderName = answer.FirstOrDefault().firstName + ' ' + answer.FirstOrDefault().lastName
+                                                  })'
+                                                      data-toggle="tooltip"
+                                                      onclick="selectAnswer(this, '#s_@(question.Id)_list');"
+                                                      class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")"
+                                                      data-original-title="@String.Join(',', answer.Select(x => x.author))">
+                                                    @(answer.Key)
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span title=""
+                                                      data-toggle="tooltip"
+                                                      class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")"
+                                                      data-original-title="@String.Join(',', answer.Select(x => x.author))">
+                                                    @(answer.Key)
+                                                </span>
+                                            }
                                         }
                                     </div>
                                 </div>
@@ -75,13 +103,39 @@
                             <div class="bg-color-lightgray p-3">
                                 <div class="m-list-badge m-list-badge--light-bg">
                                     <div class="m-list-badge__items">
-                                        @foreach (var answer in stakeholderAnswers.Where(x => !x.isInternal).GroupBy(x => new { name = x.stakeholderName, email = x.email, category = x.category }))
+                                        @foreach (var answer in stakeholderAnswers.Where(x => !x.isInternal).GroupBy(x => new { name = x.firstName + ' ' + x.lastName, email = x.email, category = x.category }))
                                         {
-                                            <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
-                                                <div>@(answer.Key.name)</div>
-                                                <div>@(answer.Key.email)</div>
-                                                <div>@(answer.Key.category)</div>
-                                            </span>
+                                            if (Model.IsAdmin && !Model.IsCompleted)
+                                            {
+                                                <span title=""
+                                                      data-val='@Json.Serialize(new {
+                                                           itemId = answer.FirstOrDefault().id,
+                                                           firstName = answer.FirstOrDefault().firstName,
+                                                           lastName = answer.FirstOrDefault().lastName,
+                                                           email = answer.FirstOrDefault().email,
+                                                           category_label = answer.FirstOrDefault().category,
+                                                           category = answer.FirstOrDefault().categoryId
+                                                  })'
+                                                      onclick="selectAnswer(this, '#s_@(question.Id)_externals');"
+                                                      data-toggle="tooltip"
+                                                      class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")"
+                                                      data-original-title="@String.Join(',', answer.Select(x => x.author))">
+                                                    <div>@(answer.Key.name)</div>
+                                                    <div>@(answer.Key.email)</div>
+                                                    <div>@(answer.Key.category)</div>
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span title=""
+                                                      data-toggle="tooltip"
+                                                      class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")"
+                                                      data-original-title="@String.Join(',', answer.Select(x => x.author))">
+                                                    <div>@(answer.Key.name)</div>
+                                                    <div>@(answer.Key.email)</div>
+                                                    <div>@(answer.Key.category)</div>
+                                                </span>
+                                            }
                                         }
                                     </div>
                                 </div>
@@ -134,7 +188,7 @@
                                         }
                                         <input type="hidden" value="@internalGuid" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers.index" />
                                         <input type="hidden" value="@answer.Id" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers[@internalGuid].Id" />
-                                        <input type="hidden" value="@(answer.UserId.HasValue ? answer.UserId : 0)" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers[@internalGuid].UserId" />
+                                        <input type="hidden" value="@(answer.UserId.HasValue ? answer.UserId : 0)" class="i-stakeholder" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderAnswers[@internalGuid].UserId" />
                                     </a>
                                 }
                             }
@@ -166,7 +220,7 @@
                                     {
                                         externalGuid = Guid.NewGuid().ToString();
                                     }
-                                    <a class="m-list-badge__item m-list-badge__item--default">
+                                    <a class="m-list-badge__item m-list-badge__item--default external-stakeholder-@answer.Id">
                                         @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
                                         {
                                             <span class="fa fa-close pull-right" onclick="deleteRecord(this, 'a')"></span>
@@ -282,8 +336,11 @@
 
         fieldOptions['#s_@(question.Id)_externals'] = {
             template: function (data, index) {
+                if (data.itemId && $('#s_@(question.Id)_externals').find(`.external-stakeholder-${data.itemId}`).length > 0)
+                    return null;
+
                 return `
-                    <a class="m-list-badge__item m-list-badge__item--default">
+                    <a class="m-list-badge__item m-list-badge__item--default external-stakeholder-${data.itemId}">
                         <span class="fa fa-close pull-right" onclick="deleteRecord(this, 'a')"></span>
                         <div>${data.firstName} ${data.lastName}</div>
                         <div>${data.email}</div>
