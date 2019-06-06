@@ -11,8 +11,12 @@
             <br><br> <h2 class="text-success">@Model.Title</h2>
             <p>
                 @Model.Text
-            </p>
-        </div>
+            </p> 
+            <a asp-controller="Auth" asp-action="Login"
+                     class="btn m-btn m-btn--pill m-btn--custom m-login__btn btn-sp--secondary btn-large-sp">
+                Back to Login
+            </a>
+        </div> 
     </div>
 </div>
 

@@ -323,7 +323,7 @@ namespace Application.Repositories
                 SaveAnswers(planStep.AnswerGroups, finalDefinitiveStepResult);
 
                 //delete old stepResults that are neither submitted nor final
-                var otherDefinitiveResult = Context.UserStepResults.Where(x => x.PlanId == planStep.PlanId && x.IsFinal.HasValue && !x.IsFinal.Value && !x.IsSubmitted && x.IsDefinitive && x.Step == planStep.Step).SingleOrDefault();
+                var otherDefinitiveResult = Context.UserStepResults.Where(x => x.PlanId == planStep.PlanId && x.Step == planStep.Step && x.IsFinal.HasValue && !x.IsFinal.Value && !x.IsSubmitted && x.IsDefinitive ).SingleOrDefault();
 
                 if (otherDefinitiveResult != null)
                 {
