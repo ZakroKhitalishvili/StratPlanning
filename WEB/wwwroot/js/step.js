@@ -547,7 +547,7 @@ $(document).on('hidden.bs.modal', function (event) {
     modal.find('.field-validation-error').text("");
 });
 
-function editRecord(modalId, targetId, ) {
+function editRecord(modalId, targetId) {
     if (fieldOptions[targetId] === undefined) return;
 
     var options = fieldOptions[targetId];
@@ -589,6 +589,22 @@ function editRecord(modalId, targetId, ) {
     });
 
     modal.find('.m-index').val("");
+}
+
+function selectAnswer(element, targetId) {
+    if (fieldOptions[targetId] === undefined) return;
+
+    var options = fieldOptions[targetId];
+    var list = $(targetId);
+
+    var data = JSON.parse($(element).attr('data-val'));
+    var index = guid();
+
+    var temp = options.template(data, index);
+
+    if (temp) {
+        list.append(temp);
+    }
 }
 
 function showRecordDetail(source, modalId) {
