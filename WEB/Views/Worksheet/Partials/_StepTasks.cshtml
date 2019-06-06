@@ -62,12 +62,40 @@
                         @foreach (var stepTask in Model.StepTasks)
                         {
                             var stepTaskAnswers = Model.StepTaskAnswers?.Answer?.StepTaskAnswers.Where(x => x.Step == stepTask.Step) ?? Enumerable.Empty<StepTaskAnswerDTO>();
-
                             <tr>
                                 <td>
                                     @steps.ResourceManager.GetString(stepTask.Step)
                                 </td>
                                 <td>
+                                    <script>
+                                        if (typeof fieldOptions === 'undefined') {
+                                            var fieldOptions = {};
+                                        }
+
+                                        fieldOptions['#step_tasks_list_@(stepTask.Step)'] = {
+                                            template: function (data, index) {
+                                                if (data.itemId && $('#step_tasks_list_@(stepTask.Step)').find(`.responsible-${data.itemId}`).length > 0)
+                                                    return null;
+
+                                                let count = parseInt($('input#step_tasks_count').val());
+
+                                                $('input#step_tasks_count').val(count + 1);
+
+                                                return `
+                                                    <a class="m-list-badge__item m-list-badge__item--default list-item responsible-${data.itemId}">
+                                                        <input type="hidden" name="StepTaskAnswers.Answer.StepTaskAnswers[${count}].UserToPlanId" ${data.userToPlanId > 0 ? "value='" + data.userToPlanId + "'" : ''}/>
+                                                        <input type="hidden" name="StepTaskAnswers.Answer.StepTaskAnswers[${count}].Email" value="${data.email}" />
+                                                        <input type="hidden" name="StepTaskAnswers.Answer.StepTaskAnswers[${count}].FirstName" value="${data.firstName}" />
+                                                        <input type="hidden" name="StepTaskAnswers.Answer.StepTaskAnswers[${count}].LastName" value="${data.lastName}" />
+                                                        <input type="hidden" name="StepTaskAnswers.Answer.StepTaskAnswers[${count}].Step" value="${data.step}" />
+                                                        <input type="hidden" name="StepTaskAnswers.Answer.StepTaskAnswers.Index" value="${count}" />
+                                                        ${data.firstName} ${data.lastName} ${data.email ? '(' + data.email + ')' : ''}
+                                                        <span class="fa fa-close list-item-delete"></span>
+                                                    </a>
+                                                `;
+                                            }
+                                        };
+                                    </script>
                                     <div class="m-list-badge m-list-badge--light-bg">
                                         <div class="m-list-badge__items">
                                             @{
@@ -93,11 +121,30 @@
 
                                                     foreach (var stepTaskAnswer in otherStepTaskAnswers)
                                                     {
-                                                        <span title="@otherAnswer.Author"
-                                                              data-toggle="tooltip"
-                                                              class="m-list-badge__item m-list-badge__item--default sp-tooltip">
-                                                            @stepTaskAnswer.FirstName @stepTaskAnswer.LastName @(stepTaskAnswer.UserToPlanId == null ? $"({stepTaskAnswer.Email})" : "")
-                                                        </span>
+                                                        if (Model.IsAdmin && !Model.IsCompleted)
+                                                        {
+                                                            <button type="button"
+                                                                    class="m-list-badge__item m-list-badge__item--default sp-tooltip"
+                                                                    data-val='@Json.Serialize(new {
+                                                                           email = stepTaskAnswer.UserToPlanId == null ? stepTaskAnswer.Email : "",
+                                                                           firstName = stepTaskAnswer.FirstName,
+                                                                           lastName = stepTaskAnswer.LastName,
+                                                                           step = stepTaskAnswer.Step,
+                                                                           itemId = stepTaskAnswer.Id,
+                                                                           userToPlanId = stepTaskAnswer.UserToPlanId ?? 0
+                                                                        })'
+                                                                    onclick="selectAnswer(this, '#step_tasks_list_@(stepTask.Step)');">
+                                                                @stepTaskAnswer.FirstName @stepTaskAnswer.LastName @(stepTaskAnswer.UserToPlanId == null ? $"({stepTaskAnswer.Email})" : "")
+                                                            </button>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span title="@otherAnswer.Author"
+                                                                  data-toggle="tooltip"
+                                                                  class="m-list-badge__item m-list-badge__item--default sp-tooltip">
+                                                                @stepTaskAnswer.FirstName @stepTaskAnswer.LastName @(stepTaskAnswer.UserToPlanId == null ? $"({stepTaskAnswer.Email})" : "")
+                                                            </span>
+                                                        }
                                                     }
                                                 }
 
