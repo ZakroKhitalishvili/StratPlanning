@@ -501,6 +501,12 @@ namespace Application.Repositories
             return workingStep;
         }
 
+        public bool IsUserInPlanningTeam(int planId,int userId)
+        {
+            return Context.UsersToPlans.Any(x => x.PlanId == planId && x.UserId == userId);
+        }
+
+
         #region Private methods
 
         #region General methods
@@ -591,6 +597,10 @@ namespace Application.Repositories
             {
                 userStepResult.PlanId = null;
                 var userToPlan = Context.UsersToPlans.Where(x => x.UserId == userId && x.PlanId == planId).FirstOrDefault();
+                if(userToPlan==null)
+                {
+                    return null;
+                }
                 userStepResult.UserToPlan = userToPlan;
             }
 

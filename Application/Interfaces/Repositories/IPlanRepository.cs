@@ -49,5 +49,7 @@ namespace Application.Interfaces.Repositories
         bool IsAvailableStep(int planId, string stepIndex);
 
         string GetWorkingStep(int planId);
+
+        bool IsUserInPlanningTeam(int planId, int userId);
     }
 }

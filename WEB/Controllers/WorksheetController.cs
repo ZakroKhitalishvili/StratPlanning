@@ -36,14 +36,19 @@ namespace Web.Controllers
                 return BadRequest();
             }
 
+            var userId = HttpContext.GetUserId();
+
+            var isDefinitive = User.IsInRole(Roles.Admin);
+
+            if (!isDefinitive && !_planRepository.IsUserInPlanningTeam(planId, userId))
+            {
+                return new StatusCodeResult(StatusCodes.Status401Unauthorized);
+            }
+
             if (!_planRepository.IsAvailableStep(planId, stepIndex))
             {
                 return BadRequest();
             }
-
-            var userId = HttpContext.GetUserId();
-
-            var isDefinitive = User.IsInRole(Roles.Admin);
 
             var stepDTO = _planRepository.GetStep(stepIndex, planId, isDefinitive, userId);
 
