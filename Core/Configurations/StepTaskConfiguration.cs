@@ -30,6 +30,10 @@ namespace Core.Configurations
               .IsRequired()
               .HasDefaultValue(false);
 
+            builder.Property(x => x.IsActive)
+              .IsRequired()
+              .HasDefaultValue(true);
+
             builder.Property(x => x.CreatedAt)
                 .IsRequired();
 

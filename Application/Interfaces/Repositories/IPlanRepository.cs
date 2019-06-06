@@ -14,7 +14,11 @@ namespace Application.Interfaces.Repositories
 
         IEnumerable<string> GetStepList();
 
-        IEnumerable<PlanDTO> GetPlanList(int skipCount,int takeCount,out int totalCount);
+        IEnumerable<string> GetStepList(bool isActionPlan);
+
+        IEnumerable<string> GetActionPlanSteps();
+
+        IEnumerable<PlanDTO> GetPlanList(int skipCount, int takeCount, out int totalCount);
 
         bool AddUserToPlan(int userId, int planId, int positionId);
 
@@ -43,5 +47,9 @@ namespace Application.Interfaces.Repositories
         IList<ResourceDTO> GetResourcesByPlan(int planId);
 
         bool IsAvailableStep(int planId, string stepIndex);
+
+        string GetWorkingStep(int planId);
+
+        bool IsUserInPlanningTeam(int planId, int userId);
     }
 }

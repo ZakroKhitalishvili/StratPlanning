@@ -126,15 +126,21 @@ namespace Application.Repositories
 
         public bool CompleteStep(int planId, string stepIndex)
         {
-            if (IsAvailableStep(planId, stepIndex))
+            if (GetWorkingStep(planId) == stepIndex)
             {
+                if (!GetUserStepResultByCondition(x => x.IsDefinitive && x.PlanId == planId
+                && x.Step == stepIndex && x.IsSubmitted && x.IsFinal.HasValue && x.IsFinal.Value).Any())
+                {
+                    return false;
+                }
+
                 var stepTask = GetStepTask(planId, stepIndex);
 
                 if (!stepTask.IsCompleted)
                 {
                     stepTask.IsCompleted = true;
 
-                    if(stepIndex == Steps.Evalution)
+                    if (stepIndex == Steps.Evalution)
                     {
                         var plan = Get(planId);
 
@@ -142,7 +148,7 @@ namespace Application.Repositories
                         plan.EndDate = DateTime.Now;
                         plan.UpdatedAt = DateTime.Now;
                     }
-                    
+
                     Context.SaveChanges();
                     return true;
                 }
@@ -206,6 +212,21 @@ namespace Application.Repositories
             return members.Select(member => member.Name);
         }
 
+        public IEnumerable<string> GetStepList(bool isActionPlan)
+        {
+            if (isActionPlan)
+            {
+                return GetStepList();
+            }
+
+            return GetStepList().Except(GetActionPlanSteps());
+        }
+
+        public IEnumerable<string> GetActionPlanSteps()
+        {
+            return new string[] { Steps.ActionPlanKeyQuestions, Steps.ActionPlanDetailed, Steps.Review };
+        }
+
         public bool RemoveUserFromPlan(int userId, int planId)
         {
             var userToPlan = Context.UsersToPlans.Where(x => x.UserId == userId && x.PlanId == planId).FirstOrDefault();
@@ -231,7 +252,7 @@ namespace Application.Repositories
 
         public bool SaveStep(PlanStepDTO planStep, bool isDefinitive, bool isSubmitted, int userId)
         {
-            if (!IsAvailableStep(planStep.PlanId, planStep.Step))
+            if (GetWorkingStep(planStep.PlanId) != planStep.Step)
             {
                 return false;
             }
@@ -438,53 +459,63 @@ namespace Application.Repositories
 
         public bool IsAvailableStep(int planId, string stepIndex)
         {
-            var plan = Context.Plans.Where(x => x.Id == planId).Include(x => x.StepTasks).SingleOrDefault();
+            var plan = Context.Plans.Where(x => x.Id == planId).Include(x => x.StepTasks).Single();
 
-            if(plan==null)
-            {
-                return false;
-            }
-
-            if ((stepIndex == Steps.ActionPlanKeyQuestions || stepIndex == Steps.ActionPlanDetailed || stepIndex == Steps.Review)
-                && plan.IsWithActionPlan.HasValue && !plan.IsWithActionPlan.Value)
-            {
-                return true;
-            }
-
-            var stepTask = plan.StepTasks.Where(x=>x.Step==stepIndex).SingleOrDefault();
+            var stepTask = plan.StepTasks.Where(x => x.Step == stepIndex).Single();
 
             if (stepTask.IsCompleted)
             {
                 return true;
             }
 
-            var sortedStepArray = GetStepList().ToArray();
-
-            var index = Array.IndexOf(sortedStepArray, stepIndex);
-
-            if (index == 0)
+            if (!stepTask.IsActive)
             {
-                return true;
+                return false;
             }
 
-            var previousStep = sortedStepArray[index - 1];
-
-            var previousStepTask = plan.StepTasks.Where(x => x.Step == previousStep).SingleOrDefault();
-
-            return previousStepTask.IsCompleted;
+            return stepTask.Step == GetWorkingStep(planId);
         }
+
+        public string GetWorkingStep(int planId)
+        {
+            var plan = Context.Plans.Where(x => x.Id == planId).Include(x => x.StepTasks).Single();
+
+            var sortedStepArray = GetStepList(plan.IsWithActionPlan == null || (plan.IsWithActionPlan.HasValue && plan.IsWithActionPlan.Value)).ToArray();
+
+            var lastCompletedStepTask = plan.StepTasks.Where(x => x.IsActive).OrderBy(x => Array.IndexOf(sortedStepArray, x.Step)).LastOrDefault(x => x.IsCompleted);
+
+            if (lastCompletedStepTask == null)
+            {
+                return Steps.Predeparture;
+            }
+
+            if (lastCompletedStepTask.Step == Steps.Evalution)
+            {
+                return Steps.Evalution;
+            }
+
+            var index = Array.IndexOf(sortedStepArray, lastCompletedStepTask.Step);
+
+            var workingStep = sortedStepArray[index + 1];
+
+            return workingStep;
+        }
+
+        public bool IsUserInPlanningTeam(int planId,int userId)
+        {
+            return Context.UsersToPlans.Any(x => x.PlanId == planId && x.UserId == userId);
+        }
+
 
         #region Private methods
 
         #region General methods
 
-
-
         private IList<StepTaskDTO> GetStepTasks(int planId)
         {
             var orderedStepArray = GetStepList().ToArray();
 
-            return Context.StepTasks.Where(x => x.PlanId == planId).ToList().Select(x =>
+            return Context.StepTasks.Where(x => x.PlanId == planId && x.IsActive).ToList().Select(x =>
             {
                 StepTaskStatus status;
                 if (x.IsCompleted)
@@ -566,6 +597,10 @@ namespace Application.Repositories
             {
                 userStepResult.PlanId = null;
                 var userToPlan = Context.UsersToPlans.Where(x => x.UserId == userId && x.PlanId == planId).FirstOrDefault();
+                if(userToPlan==null)
+                {
+                    return null;
+                }
                 userStepResult.UserToPlan = userToPlan;
             }
 
@@ -794,7 +829,7 @@ namespace Application.Repositories
                         SaveTagMultiSelectAnswer(answerGroup, userStepResult); break;
 
                     case QuestionTypes.PlanTypeSelect:
-                        SaveBooleanAnswer(answerGroup, userStepResult); break;
+                        SavePlanTypeSelectAnswer(answerGroup, userStepResult); break;
 
                     case QuestionTypes.TextArea:
                         SaveTextAnswer(answerGroup, userStepResult); break;
@@ -929,6 +964,30 @@ namespace Application.Repositories
                 userStepResult.BooleanAnswers.Add(newAnswer);
             }
 
+        }
+
+        private void SavePlanTypeSelectAnswer(AnswerGroupDTO answerGroup, UserStepResult userStepResult)
+        {
+            SaveBooleanAnswer(answerGroup, userStepResult);
+            if (userStepResult.IsDefinitive && userStepResult.IsSubmitted)
+            {
+                var plan = Context.Plans.Where(x => x.Id == userStepResult.PlanId).Include(x => x.StepTasks).Single();
+
+                if (plan.IsWithActionPlan != answerGroup.Answer.BooleanAnswer)
+                {
+                    plan.IsWithActionPlan = answerGroup.Answer.BooleanAnswer;
+                    plan.UpdatedAt = DateTime.Now;
+
+                    var actionPlanSteps = GetActionPlanSteps();
+
+                    var actionPlanStepTasks = plan.StepTasks.Where(x => actionPlanSteps.Contains(x.Step));
+
+                    foreach (var actionPlanStepTask in actionPlanStepTasks)
+                    {
+                        actionPlanStepTask.IsActive = plan.IsWithActionPlan.Value;
+                    }
+                }
+            }
         }
 
         private void SaveSelectAnswer(AnswerGroupDTO answerGroup, UserStepResult userStepResult)

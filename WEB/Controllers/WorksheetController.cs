@@ -31,12 +31,7 @@ namespace Web.Controllers
 
         public IActionResult GetStep(string stepIndex, int planId)
         {
-            if(string.IsNullOrEmpty(stepIndex) || planId<=0)
-            {
-                return BadRequest();
-            }
-
-            if(!_planRepository.IsAvailableStep(planId,stepIndex))
+            if (string.IsNullOrEmpty(stepIndex) || planId <= 0)
             {
                 return BadRequest();
             }
@@ -45,9 +40,19 @@ namespace Web.Controllers
 
             var isDefinitive = User.IsInRole(Roles.Admin);
 
+            if (!isDefinitive && !_planRepository.IsUserInPlanningTeam(planId, userId))
+            {
+                return new StatusCodeResult(StatusCodes.Status401Unauthorized);
+            }
+
+            if (!_planRepository.IsAvailableStep(planId, stepIndex))
+            {
+                return BadRequest();
+            }
+
             var stepDTO = _planRepository.GetStep(stepIndex, planId, isDefinitive, userId);
 
-            if(stepDTO==null)
+            if (stepDTO == null)
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
@@ -63,7 +68,7 @@ namespace Web.Controllers
         public IActionResult GetPlanList(int? page)
         {
             var pageSize = 5;
-            var skipCount = ((page ?? 1 )- 1) * pageSize;
+            var skipCount = ((page ?? 1) - 1) * pageSize;
             var takeCount = pageSize;
 
             if (User.IsInRole(Roles.Admin))
@@ -86,7 +91,7 @@ namespace Web.Controllers
 
         public IActionResult GetPlan(int id)
         {
-            return RedirectToAction("GetStep", new { stepIndex = Steps.Predeparture, planId = id });
+            return RedirectToAction("GetStep", new { stepIndex = _planRepository.GetWorkingStep(id), planId = id });
         }
 
         [HttpPost]
@@ -110,16 +115,16 @@ namespace Web.Controllers
             HttpContext.Response.StatusCode = StatusCodes.Status202Accepted;
             var isDefinitive = User.IsInRole(Roles.Admin);
 
-
-            if (!_planRepository.IsAvailableStep(planStep.PlanId, planStep.Step))
-            {
-                return BadRequest();
-            }
-
             bool result = false;
 
             if (ModelState.IsValid)
             {
+
+                if (_planRepository.GetWorkingStep(planStep.PlanId) != planStep.Step)
+                {
+                    return BadRequest();
+                }
+
                 result = _planRepository.SaveStep(planStep, isDefinitive, planStep.IsSubmitted, userId: HttpContext.GetUserId());
 
                 if (result)
@@ -216,7 +221,6 @@ namespace Web.Controllers
                 return new StatusCodeResult(StatusCodes.Status202Accepted);
             }
 
-            return BadRequest();
         }
 
         [HttpPost]

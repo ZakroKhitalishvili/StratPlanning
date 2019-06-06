@@ -31,6 +31,8 @@ namespace Core.Entities
 
         public int? UpdatedBy { get; set; }
 
+        public bool IsActive { get; set; }
+
         public virtual Plan Plan { get; set; }
 
         public virtual ICollection<StepTaskAnswer> StepTaskAnswers { get; set; }
