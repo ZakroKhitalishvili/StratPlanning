@@ -17,28 +17,28 @@
         author = x.Author,
         value = y,
         isDefinitive = false,
-        type = "Strengths"
+        type = SWOTTypes.Strength
     }))
     .Concat(answerGroup.OtherAnswers.SelectMany(x => x.SwotAnswer.Weaknesses.Select(y => new
     {
         author = x.Author,
         value = y,
         isDefinitive = false,
-        type = "Weaknesses"
+        type = SWOTTypes.Weakness
     })))
     .Concat(answerGroup.OtherAnswers.SelectMany(x => x.SwotAnswer.Opportunities.Select(y => new
     {
         author = x.Author,
         value = y,
         isDefinitive = false,
-        type = "Opportunities"
+        type = SWOTTypes.Opportunity
     })))
     .Concat(answerGroup.OtherAnswers.SelectMany(x => x.SwotAnswer.Threats.Select(y => new
     {
         author = x.Author,
         value = y,
         isDefinitive = false,
-        type = "Threats"
+        type = SWOTTypes.Threat
     }))).ToList();
 
     if (answerGroup.DefinitiveAnswer != null)
@@ -48,28 +48,28 @@
             author = "Definitive Answer",
             value = x,
             isDefinitive = true,
-            type = "Strengths"
+            type = SWOTTypes.Strength
         })
         .Concat(answerGroup.DefinitiveAnswer.SwotAnswer.Weaknesses.Select(x => new
         {
             author = "Definitive Answer",
             value = x,
             isDefinitive = true,
-            type = "Weaknesses"
+            type = SWOTTypes.Weakness
         }))
         .Concat(answerGroup.DefinitiveAnswer.SwotAnswer.Opportunities.Select(x => new
         {
             author = "Definitive Answer",
             value = x,
             isDefinitive = true,
-            type = "Opportunities"
+            type = SWOTTypes.Opportunity
         }))
         .Concat(answerGroup.DefinitiveAnswer.SwotAnswer.Threats.Select(x => new
         {
             author = "Definitive Answer",
             value = x,
             isDefinitive = true,
-            type = "Threats"
+            type = SWOTTypes.Threat
         })));
     }
 
@@ -116,7 +116,7 @@
                                         <div class="col-sm-12 ">
                                             <div class="m-list-badge m-list-badge--light-bg">
                                                 <div class="m-list-badge__items">
-                                                    @foreach (var answer in swotAnswers.Where(x => x.type == "Strengths").GroupBy(x => x.value))
+                                                    @foreach (var answer in swotAnswers.Where(x => x.type == SWOTTypes.Strength).GroupBy(x => x.value))
                                                     {
                                                         <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
                                                             @(answer.Key)
@@ -138,7 +138,7 @@
                                         <div class="col-sm-12 ">
                                             <div class="m-list-badge m-list-badge--light-bg">
                                                 <div class="m-list-badge__items">
-                                                    @foreach (var answer in swotAnswers.Where(x => x.type == "Weaknesses").GroupBy(x => x.value))
+                                                    @foreach (var answer in swotAnswers.Where(x => x.type == SWOTTypes.Weakness).GroupBy(x => x.value))
                                                     {
                                                         <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
                                                             @(answer.Key)
@@ -166,7 +166,7 @@
                                         <div class="col-sm-12 ">
                                             <div class="m-list-badge m-list-badge--light-bg">
                                                 <div class="m-list-badge__items">
-                                                    @foreach (var answer in swotAnswers.Where(x => x.type == "Opportunities").GroupBy(x => x.value))
+                                                    @foreach (var answer in swotAnswers.Where(x => x.type == SWOTTypes.Opportunity).GroupBy(x => x.value))
                                                     {
                                                         <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
                                                             @(answer.Key)
@@ -187,7 +187,7 @@
                                         <div class="col-sm-12 ">
                                             <div class="m-list-badge m-list-badge--light-bg">
                                                 <div class="m-list-badge__items">
-                                                    @foreach (var answer in swotAnswers.Where(x => x.type == "Threats").GroupBy(x => x.value))
+                                                    @foreach (var answer in swotAnswers.Where(x => x.type == SWOTTypes.Threat).GroupBy(x => x.value))
                                                     {
                                                         <span title="" data-toggle="tooltip" class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" data-original-title="@String.Join(',', answer.Select(x => x.author))">
                                                             @(answer.Key)
@@ -239,17 +239,21 @@
                                 </div>
                             </div>
                             <div class="row list-items-add-group">
-                                <div class="col-sm-12 swot-inputs">
-                                    <div class="input-group m--margin-bottom-10">
-                                        <input type="text"
-                                               class="form-control m-input m-input--air form-control-danger list-add-input">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-sp m-btn m-btn--icon list-add-button" data-input-name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.SwotAnswer.Strengths">
-                                                add
-                                            </button>
+
+                                @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
+                                {
+                                    <div class="col-sm-12 swot-inputs">
+                                        <div class="input-group m--margin-bottom-10">
+                                            <input type="text"
+                                                   class="form-control m-input m-input--air form-control-danger list-add-input">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-sp m-btn m-btn--icon list-add-button" data-input-name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.SwotAnswer.Strengths">
+                                                    add
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                }
                                 <div class="col-sm-12 ">
                                     <div class="m-list-badge m-list-badge--light-bg">
                                         <div class="m-list-badge__items list-items">
@@ -260,7 +264,10 @@
                                                     <a class="m-list-badge__item m-list-badge__item--default list-item">
                                                         <input type="hidden" asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.SwotAnswer.Strengths" value="@strength" />
                                                         @strength
-                                                        <span class="list-item-delete fa fa-close"></span>
+                                                        @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
+                                                        {
+                                                            <span class="list-item-delete fa fa-close"></span>
+                                                        }
                                                     </a>
                                                 }
                                             }
@@ -276,17 +283,20 @@
                                 </div>
                             </div>
                             <div class="row list-items-add-group">
-                                <div class="col-sm-12 swot-inputs">
-                                    <div class="input-group m--margin-bottom-10">
-                                        <input type="text"
-                                               class="form-control m-input m-input--air form-control-danger list-add-input">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-sp m-btn m-btn--icon list-add-button" data-input-name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.SwotAnswer.Weaknesses">
-                                                add
-                                            </button>
+                                @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
+                                {
+                                    <div class="col-sm-12 swot-inputs">
+                                        <div class="input-group m--margin-bottom-10">
+                                            <input type="text"
+                                                   class="form-control m-input m-input--air form-control-danger list-add-input">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-sp m-btn m-btn--icon list-add-button" data-input-name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.SwotAnswer.Weaknesses">
+                                                    add
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                }
                                 <div class="col-sm-12 ">
                                     <div class="m-list-badge m-list-badge--light-bg">
                                         <div class="m-list-badge__items list-items">
@@ -297,7 +307,10 @@
                                                     <a class="m-list-badge__item m-list-badge__item--default list-item">
                                                         <input type="hidden" asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.SwotAnswer.Weaknesses" value="@weakness" />
                                                         @weakness
-                                                        <span class="list-item-delete fa fa-close"></span>
+                                                        @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
+                                                        {
+                                                            <span class="list-item-delete fa fa-close"></span>
+                                                        }
                                                     </a>
                                                 }
                                             }
@@ -319,17 +332,20 @@
                                 </div>
                             </div>
                             <div class="row list-items-add-group">
-                                <div class="col-sm-12 swot-inputs">
-                                    <div class="input-group m--margin-bottom-10">
-                                        <input type="text"
-                                               class="form-control m-input m-input--air form-control-danger list-add-input">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-sp m-btn m-btn--icon list-add-button" data-input-name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.SwotAnswer.Opportunities">
-                                                add
-                                            </button>
+                                @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
+                                {
+                                    <div class="col-sm-12 swot-inputs">
+                                        <div class="input-group m--margin-bottom-10">
+                                            <input type="text"
+                                                   class="form-control m-input m-input--air form-control-danger list-add-input">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-sp m-btn m-btn--icon list-add-button" data-input-name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.SwotAnswer.Opportunities">
+                                                    add
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                }
                                 <div class="col-sm-12 ">
                                     <div class="m-list-badge m-list-badge--light-bg">
                                         <div class="m-list-badge__items list-items">
@@ -340,7 +356,11 @@
                                                     <a class="m-list-badge__item m-list-badge__item--default list-item">
                                                         <input type="hidden" asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.SwotAnswer.Opportunities" value="@opportunity" />
                                                         @opportunity
-                                                        <span class="list-item-delete fa fa-close"></span>
+
+                                                        @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
+                                                        {
+                                                            <span class="list-item-delete fa fa-close"></span>
+                                                        }
                                                     </a>
                                                 }
                                             }
@@ -356,17 +376,20 @@
                                 </div>
                             </div>
                             <div class="row list-items-add-group">
-                                <div class="col-sm-12 swot-inputs">
-                                    <div class="input-group m--margin-bottom-10">
-                                        <input type="text"
-                                               class="form-control m-input m-input--air form-control-danger list-add-input">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-sp m-btn m-btn--icon list-add-button" data-input-name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.SwotAnswer.Threats">
-                                                add
-                                            </button>
+                                @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
+                                {
+                                    <div class="col-sm-12 swot-inputs">
+                                        <div class="input-group m--margin-bottom-10">
+                                            <input type="text"
+                                                   class="form-control m-input m-input--air form-control-danger list-add-input">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-sp m-btn m-btn--icon list-add-button" data-input-name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.SwotAnswer.Threats">
+                                                    add
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                }
                                 <div class="col-sm-12 ">
                                     <div class="m-list-badge m-list-badge--light-bg">
                                         <div class="m-list-badge__items list-items">
@@ -377,7 +400,10 @@
                                                     <a class="m-list-badge__item m-list-badge__item--default list-item">
                                                         <input type="hidden" asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.SwotAnswer.Threats" value="@threat" />
                                                         @threat
-                                                        <span class="list-item-delete fa fa-close"></span>
+                                                        @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
+                                                        {
+                                                            <span class="list-item-delete fa fa-close"></span>
+                                                        }
                                                     </a>
                                                 }
                                             }
