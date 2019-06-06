@@ -68,17 +68,29 @@
                                     <div class="m-list-badge__items">
                                         @foreach (var answer in stakeholderAnswers.Where(x => x.isInternal).GroupBy(x => x.firstName + ' ' + x.lastName))
                                         {
-                                            <span title="" 
-                                                  data-val='@Json.Serialize(new {
+                                            if (Model.IsAdmin && !Model.IsCompleted)
+                                            {
+                                                <span title=""
+                                                      data-val='@Json.Serialize(new {
                                                            stakeholderId = answer.FirstOrDefault().userId,
                                                            stakeholderName = answer.FirstOrDefault().firstName + ' ' + answer.FirstOrDefault().lastName
                                                   })'
-                                                  data-toggle="tooltip" 
-                                                  onclick="selectAnswer(this, '#s_@(question.Id)_list');" 
-                                                  class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" 
-                                                  data-original-title="@String.Join(',', answer.Select(x => x.author))">
-                                                @(answer.Key)
-                                            </span>
+                                                      data-toggle="tooltip"
+                                                      onclick="selectAnswer(this, '#s_@(question.Id)_list');"
+                                                      class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")"
+                                                      data-original-title="@String.Join(',', answer.Select(x => x.author))">
+                                                    @(answer.Key)
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span title=""
+                                                      data-toggle="tooltip"
+                                                      class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")"
+                                                      data-original-title="@String.Join(',', answer.Select(x => x.author))">
+                                                    @(answer.Key)
+                                                </span>
+                                            }
                                         }
                                     </div>
                                 </div>
@@ -93,8 +105,10 @@
                                     <div class="m-list-badge__items">
                                         @foreach (var answer in stakeholderAnswers.Where(x => !x.isInternal).GroupBy(x => new { name = x.firstName + ' ' + x.lastName, email = x.email, category = x.category }))
                                         {
-                                            <span title="" 
-                                                  data-val='@Json.Serialize(new {
+                                            if (Model.IsAdmin && !Model.IsCompleted)
+                                            {
+                                                <span title=""
+                                                      data-val='@Json.Serialize(new {
                                                            itemId = answer.FirstOrDefault().id,
                                                            firstName = answer.FirstOrDefault().firstName,
                                                            lastName = answer.FirstOrDefault().lastName,
@@ -102,14 +116,26 @@
                                                            category_label = answer.FirstOrDefault().category,
                                                            category = answer.FirstOrDefault().categoryId
                                                   })'
-                                                  onclick="selectAnswer(this, '#s_@(question.Id)_externals');"
-                                                  data-toggle="tooltip" 
-                                                  class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")" 
-                                                  data-original-title="@String.Join(',', answer.Select(x => x.author))">
-                                                <div>@(answer.Key.name)</div>
-                                                <div>@(answer.Key.email)</div>
-                                                <div>@(answer.Key.category)</div>
-                                            </span>
+                                                      onclick="selectAnswer(this, '#s_@(question.Id)_externals');"
+                                                      data-toggle="tooltip"
+                                                      class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")"
+                                                      data-original-title="@String.Join(',', answer.Select(x => x.author))">
+                                                    <div>@(answer.Key.name)</div>
+                                                    <div>@(answer.Key.email)</div>
+                                                    <div>@(answer.Key.category)</div>
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span title=""
+                                                      data-toggle="tooltip"
+                                                      class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")"
+                                                      data-original-title="@String.Join(',', answer.Select(x => x.author))">
+                                                    <div>@(answer.Key.name)</div>
+                                                    <div>@(answer.Key.email)</div>
+                                                    <div>@(answer.Key.category)</div>
+                                                </span>
+                                            }
                                         }
                                     </div>
                                 </div>
