@@ -805,3 +805,7 @@ table td .m-list-badge {
 .stakeholders-rating-table .m-dropdown.m-dropdown--up .m-dropdown__wrapper {
     right: 0;
 }
+
+.disabled *, .disabled :hover *, .disabled :focus *{
+    color: lightgrey !important;
+}

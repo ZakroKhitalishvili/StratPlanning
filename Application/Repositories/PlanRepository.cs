@@ -133,6 +133,16 @@ namespace Application.Repositories
                 if (!stepTask.IsCompleted)
                 {
                     stepTask.IsCompleted = true;
+
+                    if(stepIndex == Steps.Evalution)
+                    {
+                        var plan = Get(planId);
+
+                        plan.IsCompleted = true;
+                        plan.EndDate = DateTime.Now;
+                        plan.UpdatedAt = DateTime.Now;
+                    }
+                    
                     Context.SaveChanges();
                     return true;
                 }
@@ -141,7 +151,7 @@ namespace Application.Repositories
             return false;
         }
 
-        public IEnumerable<PlanDTO> GetPlanList(int skipCount, int takeCount,out int totalCount)
+        public IEnumerable<PlanDTO> GetPlanList(int skipCount, int takeCount, out int totalCount)
         {
             totalCount = Context.Plans.Count();
 
@@ -159,10 +169,10 @@ namespace Application.Repositories
 
         public PlanStepDTO GetStep(string stepIndex, int planId, bool isDefinitive, int userId)
         {
-            //if(!IsAvailableStep(planId,stepIndex))
-            //{
-            //    return null;
-            //}
+            if (!IsAvailableStep(planId, stepIndex))
+            {
+                return null;
+            }
 
             var planStep = GetPlanStep(planId, stepIndex, isDefinitive);
 
@@ -221,10 +231,10 @@ namespace Application.Repositories
 
         public bool SaveStep(PlanStepDTO planStep, bool isDefinitive, bool isSubmitted, int userId)
         {
-            //if (!IsAvailableStep(planStep.PlanId, planStep.Step))
-            //{
-            //    return false;
-            //}
+            if (!IsAvailableStep(planStep.PlanId, planStep.Step))
+            {
+                return false;
+            }
 
             if (!isDefinitive)
             {
@@ -426,13 +436,14 @@ namespace Application.Repositories
             }).ToList();
         }
 
-        #region Private methods
-
-        #region General methods
-
-        private bool IsAvailableStep(int planId, string stepIndex)
+        public bool IsAvailableStep(int planId, string stepIndex)
         {
-            var plan = Get(planId);
+            var plan = Context.Plans.Where(x => x.Id == planId).Include(x => x.StepTasks).SingleOrDefault();
+
+            if(plan==null)
+            {
+                return false;
+            }
 
             if ((stepIndex == Steps.ActionPlanKeyQuestions || stepIndex == Steps.ActionPlanDetailed || stepIndex == Steps.Review)
                 && plan.IsWithActionPlan.HasValue && !plan.IsWithActionPlan.Value)
@@ -440,7 +451,7 @@ namespace Application.Repositories
                 return true;
             }
 
-            var stepTask = GetStepTask(planId, stepIndex);
+            var stepTask = plan.StepTasks.Where(x=>x.Step==stepIndex).SingleOrDefault();
 
             if (stepTask.IsCompleted)
             {
@@ -458,45 +469,45 @@ namespace Application.Repositories
 
             var previousStep = sortedStepArray[index - 1];
 
-            var previousStepTask = GetStepTask(planId, stepIndex);
+            var previousStepTask = plan.StepTasks.Where(x => x.Step == previousStep).SingleOrDefault();
 
             return previousStepTask.IsCompleted;
         }
 
+        #region Private methods
+
+        #region General methods
+
+
+
         private IList<StepTaskDTO> GetStepTasks(int planId)
         {
+            var orderedStepArray = GetStepList().ToArray();
+
             return Context.StepTasks.Where(x => x.PlanId == planId).ToList().Select(x =>
             {
                 StepTaskStatus status;
-                if (x.Schedule != null)
+                if (x.IsCompleted)
                 {
-
-                    if (x.IsCompleted)
+                    if (x.Schedule == null || x.Schedule >= DateTime.Now)
                     {
-                        if (x.Schedule >= DateTime.Now)
-                        {
-                            status = StepTaskStatus.Complete;
-                        }
-                        else
-                        {
-                            status = StepTaskStatus.OverdueComplete;
-                        }
+                        status = StepTaskStatus.Complete;
                     }
                     else
                     {
-                        if (x.Schedule >= DateTime.Now)
-                        {
-                            status = StepTaskStatus.Incomplete;
-                        }
-                        else
-                        {
-                            status = StepTaskStatus.OverdueIncomplete;
-                        }
+                        status = StepTaskStatus.OverdueComplete;
                     }
                 }
                 else
                 {
-                    status = StepTaskStatus.Incomplete;
+                    if (x.Schedule == null || x.Schedule >= DateTime.Now)
+                    {
+                        status = StepTaskStatus.Incomplete;
+                    }
+                    else
+                    {
+                        status = StepTaskStatus.OverdueIncomplete;
+                    }
                 }
 
                 return new StepTaskDTO
@@ -507,9 +518,10 @@ namespace Application.Repositories
                     RemindIn = x.Remind,
                     Schedule = x.Schedule,
                     Step = x.Step,
-                    Status = status
+                    Status = status,
+                    IsAvailable = IsAvailableStep(x.PlanId, x.Step)
                 };
-            }).OrderBy(x => Array.IndexOf(GetStepList().ToArray(), x.Step)).ToList();
+            }).OrderBy(x => Array.IndexOf(orderedStepArray, x.Step)).ToList();
         }
 
         private UserStepResult GetOrCreateUserStepResult(int planId, string stepIndex, bool isDefinitive, int userId)
@@ -1659,11 +1671,16 @@ namespace Application.Repositories
 
                     foreach (var questionDbAnswer in questionDbAnswers)
                     {
-                        if (!issueDistinguishAnswer.SelectAnswers.Contains(questionDbAnswer.OptionId.Value))
+                        if (issueDistinguishAnswer.SelectAnswers == null || !issueDistinguishAnswer.SelectAnswers.Contains(questionDbAnswer.OptionId.Value))
                         {
                             Context.SelectAnswers.Remove(questionDbAnswer);
                             Context.SaveChanges();
                         }
+                    }
+
+                    if (issueDistinguishAnswer.SelectAnswers == null)
+                    {
+                        return;
                     }
 
                     foreach (var selectAnswer in issueDistinguishAnswer.SelectAnswers)

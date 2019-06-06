@@ -661,56 +661,43 @@ function guid() {
 }
 
 
-///////////////////////////
-//// steptask completion event
-////////
-//$(document).on('click', 'button#.step-complete-checkbox', function (e) {
-//    e.preventDefault();
+/////////////////////////
+// steptask completion event
+//////
+$(document).on('click', '.step-complete-checkbox', function (e) {
+    e.preventDefault();
+    let checkbox = e.target;
 
-//    let completeCheckBox = $(this);
-//    let stepTaskId = completeCheckBox.data('id');
+    if (!$(checkbox).prop("checked")) {
+        return;
+    }
 
-//    if ($(this).val()) {
-//        submitConfirm("You won't be able to change it after").then(function (result) {
-//            if (result) {
-//                $.ajax(
-//                    {
-//                        url: CompleteStepTaskURL,
-//                        method: "post",
-//                        data: {
-//                            stepTaskId
-//                        },
-//                        processData: true,
-//                        success: function (data, statusText, xhr) {
-//                            if (xhr.status == 200) {
-//                                notify("Successfully completed", "success", 5);
-//                                completeCheckBox.prop('checked', true);
-//                            }
+    let planId = $(checkbox).data('planid');
+    let stepIndex = $(checkbox).data('step');
 
-//                            if (xhr.status == 202 || xhr.status == 400) {
-//                                notify("Input data are not valid ", "danger", 5);
-//                            }
+    completeStep(planId, stepIndex, function () {
+        setTimeout(function () { location.reload(); }, 1000);
+    });
+});
 
-//                        },
-//                        error: function (xhr, statusText, error) {
-//                            notify("An Error occured on the request", "danger", 5);
-//                        }
-//                    });
-//            }
-//        });
-//    }
-//});
 
 $(document).on('click', 'button#step_form_complete', function (e) {
     e.preventDefault();
 
     let formData = new FormData(document.querySelector('form#step_form'));
-    let planId = formData['PlanId'];
-    let stepIndex = formData['Step'];
+    let planId = formData.get('PlanId');
+    let stepIndex = formData.get('Step');
+
+    completeStep(planId, stepIndex, function () {
+        setTimeout(function () { location.reload(); }, 1000);
+    })
+});
+
+function completeStep(planId, stepIndex, callback) {
 
     submitConfirm("You won't be able to change it after").then(function (result) {
         if (result) {
-            $.ajax(
+            return $.ajax(
                 {
                     url: CompleteStepTaskURL,
                     method: "post",
@@ -722,21 +709,23 @@ $(document).on('click', 'button#step_form_complete', function (e) {
                     success: function (data, statusText, xhr) {
                         if (xhr.status == 200) {
                             notify("Successfully completed", "success", 5);
-                            completeCheckBox.prop('checked', true);
+                            callback();
                         }
 
-                        if (xhr.status == 202 || xhr.status == 400) {
-                            notify("Input data are not valid ", "danger", 5);
+                        if (xhr.status == 202) {
+                            notify("The step can not be completed", "danger", 5);
                         }
-
                     },
                     error: function (xhr, statusText, error) {
+
                         notify("An Error occured on the request", "danger", 5);
                     }
                 });
         }
-    });
-});
+    })
+
+}
+
 ///////
 ////
 

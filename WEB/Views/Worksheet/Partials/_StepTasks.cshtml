@@ -79,9 +79,9 @@
 
                                                     foreach (var definitiveAnswer in definitiveAnswers)
                                                     {
-                                            <span class="m-list-badge__item m-list-badge__item--warning">
-                                                @definitiveAnswer.FirstName @definitiveAnswer.LastName  @(definitiveAnswer.UserToPlanId == null ? $"({definitiveAnswer.Email})" : "")
-                                            </span>
+                                                        <span class="m-list-badge__item m-list-badge__item--warning">
+                                                            @definitiveAnswer.FirstName @definitiveAnswer.LastName  @(definitiveAnswer.UserToPlanId == null ? $"({definitiveAnswer.Email})" : "")
+                                                        </span>
                                                     }
                                                 }
 
@@ -96,7 +96,7 @@
                                                         <span title="@otherAnswer.Author"
                                                               data-toggle="tooltip"
                                                               class="m-list-badge__item m-list-badge__item--default sp-tooltip">
-                                                            @stepTaskAnswer.FirstName @stepTaskAnswer.LastName @(stepTaskAnswer.UserToPlanId==null?$"({stepTaskAnswer.Email})":"")
+                                                            @stepTaskAnswer.FirstName @stepTaskAnswer.LastName @(stepTaskAnswer.UserToPlanId == null ? $"({stepTaskAnswer.Email})" : "")
                                                         </span>
                                                     }
                                                 }
@@ -158,7 +158,7 @@
                                     <td>
                                         <span class="m-switch m-switch--icon">
                                             <label>
-                                                <input asp-for="StepTasks[stepTaskCount].IsCompleted" disabled="@Model.StepTasks[stepTaskCount].IsCompleted" class="step-complete-checkbox"
+                                                <input asp-for="StepTasks[stepTaskCount].IsCompleted" class="step-complete-checkbox" data-step="@stepTask.Step" data-planid="@stepTask.PlanId"
                                                        type="checkbox" data-id="@Model.StepTasks[stepTaskCount].Id">
                                                 <span></span>
                                             </label>

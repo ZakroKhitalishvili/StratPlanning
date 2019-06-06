@@ -3,7 +3,7 @@
 @using Core.Constants;
 @using Web.Helpers;
 
-@{ 
+@{
     var sortedSteps = StepHelper.GetStepList(Context).ToArray();
 }
 <button class="m-aside-left-close m-aside-left-close--skin-light" id="m_aside_left_close_btn">
@@ -36,15 +36,18 @@
             {
                 var statusClass = "";
 
-                switch(stepTask.Status)
+                switch (stepTask.Status)
                 {
-                    case StepTaskStatus.Complete: statusClass = "fa-check m--font-success";break;
+                    case StepTaskStatus.Complete: statusClass = "fa-check m--font-success"; break;
                     case StepTaskStatus.Incomplete: statusClass = ""; break;
                     case StepTaskStatus.OverdueComplete: statusClass = "fa-warning m--font-warning"; break;
                     case StepTaskStatus.OverdueIncomplete: statusClass = "fa-remove m--font-danger"; break;
                 }
 
-                <li class="m-menu__item @(Model.Step == stepTask.Step ? "m-menu__item--active" : "")" aria-haspopup="true" data-redirect="true">
+            <li class="m-menu__item @(Model.Step == stepTask.Step ? "m-menu__item--active" : "")" aria-haspopup="true" data-redirect="true">
+                @if (stepTask.IsAvailable)
+                {
+
                     <a asp-controller="WorkSheet" asp-action="GetStep" asp-route-stepIndex="@stepTask.Step" asp-route-planId="@Model.PlanId" class="m-menu__link m--padding-left-5">
                         <i class="m-menu__link-bullet fa @statusClass">
                             <span></span>
@@ -53,132 +56,21 @@
                             @steps.ResourceManager.GetString(stepTask.Step)
                         </span>
                     </a>
-                </li>
+                }
+                else
+                {
+                    <span class="m-menu__link m--padding-left-5 disabled">
+                        <i class="m-menu__link-bullet fa @statusClass">
+                            <span></span>
+                        </i>
+                        <span class="m-menu__link-text m--padding-left-10">
+                            @steps.ResourceManager.GetString(stepTask.Step)
+                        </span>
+                    </span>
+                }
+            </li>
             }
 
-
-
-
-            @*<li class="m-menu__item " aria-haspopup="true" data-redirect="true">
-                <a asp-controller="WorkSheet" asp-action="GetStep" asp-route-stepIndex="@Steps.Mission" asp-route-planId="" class="m-menu__link m--padding-left-5">
-                    <i class="m-menu__link-bullet fa fa-check m--font-success">
-                        <span></span>
-                    </i>
-                    <span class="m-menu__link-text m--padding-left-10">
-                        Mission Statement
-                    </span>
-                </a>
-            </li>
-            <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
-                <a href="vision.html" class="m-menu__link m--padding-left-5">
-                    <i class="m-menu__link-bullet fa fa-remove m--font-danger">
-                        <span></span>
-                    </i>
-                    <span class="m-menu__link-text m--padding-left-10">
-                        Sketching a Vision
-                    </span>
-                </a>
-            </li>
-            <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
-                <a href="values.html" class="m-menu__link m--padding-left-5">
-                    <i class="m-menu__link-bullet fa fa-remove m--font-danger">
-                        <span></span>
-                    </i>
-                    <span class="m-menu__link-text m--padding-left-10">
-                        Values Statement
-                    </span>
-                </a>
-            </li>
-            <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
-                <a href="stakeholders.html" class="m-menu__link m--padding-left-5">
-                    <i class="m-menu__link-bullet fa fa-remove m--font-danger">
-                        <span></span>
-                    </i>
-                    <span class="m-menu__link-text m--padding-left-10">
-                        Identifying the Party's Stakeholders
-                    </span>
-                </a>
-            </li>
-            <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
-                <a href="swot.html" class="m-menu__link m--padding-left-5">
-                    <i class="m-menu__link-bullet fa fa-remove m--font-danger">
-                        <span></span>
-                    </i>
-                    <span class="m-menu__link-text m--padding-left-10">
-                        SWOT
-                    </span>
-                </a>
-            </li>
-            <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
-                <a href="stakeholders-analysis.html" class="m-menu__link m--padding-left-5">
-                    <i class="m-menu__link-bullet fa fa-remove m--font-danger">
-                        <span></span>
-                    </i>
-                    <span class="m-menu__link-text m--padding-left-10">
-                        Stakeholder Analysis
-                    </span>
-                </a>
-            </li>
-            <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
-                <a href="issues-master-list.html" class="m-menu__link m--padding-left-5">
-                    <i class="m-menu__link-bullet fa fa-remove m--font-danger">
-                        <span></span>
-                    </i>
-                    <span class="m-menu__link-text m--padding-left-10">
-                        Master List of key strategis issues
-                    </span>
-                </a>
-            </li>
-            <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
-                <a href="issues-division.html" class="m-menu__link m--padding-left-5">
-                    <i class="m-menu__link-bullet fa fa-remove m--font-danger">
-                        <span></span>
-                    </i>
-                    <span class="m-menu__link-text m--padding-left-10">
-                        Operational and strategic issues
-                    </span>
-                </a>
-            </li>
-            <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
-                <a href="action-plan-questions.html" class="m-menu__link m--padding-left-5">
-                    <i class="m-menu__link-bullet fa fa-remove m--font-danger">
-                        <span></span>
-                    </i>
-                    <span class="m-menu__link-text m--padding-left-10">
-                        Key questions for the action plan
-                    </span>
-                </a>
-            </li>
-            <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
-                <a href="detailed-action-plan.html" class="m-menu__link m--padding-left-5">
-                    <i class="m-menu__link-bullet fa fa-remove m--font-danger">
-                        <span></span>
-                    </i>
-                    <span class="m-menu__link-text m--padding-left-10">
-                        Making a detailed action plan
-                    </span>
-                </a>
-            </li>
-            <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
-                <a href="review-resources.html" class="m-menu__link m--padding-left-5">
-                    <i class="m-menu__link-bullet fa fa-remove m--font-danger">
-                        <span></span>
-                    </i>
-                    <span class="m-menu__link-text m--padding-left-10">
-                        Reviewing strategies & implementation plans
-                    </span>
-                </a>
-            </li>
-            <li class="m-menu__item " aria-haspopup="true" data-redirect="true">
-                <a href="evaluation.html" class="m-menu__link m--padding-left-5">
-                    <i class="m-menu__link-bullet fa fa-remove m--font-danger">
-                        <span></span>
-                    </i>
-                    <span class="m-menu__link-text m--padding-left-10">
-                        Evaluation
-                    </span>
-                </a>
-            </li>*@
         </ul>
     </div>
     <!-- END: Aside Menu -->

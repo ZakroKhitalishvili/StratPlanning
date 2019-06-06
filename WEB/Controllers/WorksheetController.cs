@@ -31,13 +31,26 @@ namespace Web.Controllers
 
         public IActionResult GetStep(string stepIndex, int planId)
         {
+            if(string.IsNullOrEmpty(stepIndex) || planId<=0)
+            {
+                return BadRequest();
+            }
+
+            if(!_planRepository.IsAvailableStep(planId,stepIndex))
+            {
+                return BadRequest();
+            }
+
             var userId = HttpContext.GetUserId();
 
             var isDefinitive = User.IsInRole(Roles.Admin);
 
             var stepDTO = _planRepository.GetStep(stepIndex, planId, isDefinitive, userId);
 
-            ViewBag.Steps = _planRepository.GetStepList();
+            if(stepDTO==null)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
 
             return View("Step", stepDTO);
         }
@@ -96,6 +109,12 @@ namespace Web.Controllers
         {
             HttpContext.Response.StatusCode = StatusCodes.Status202Accepted;
             var isDefinitive = User.IsInRole(Roles.Admin);
+
+
+            if (!_planRepository.IsAvailableStep(planStep.PlanId, planStep.Step))
+            {
+                return BadRequest();
+            }
 
             bool result = false;
 
@@ -191,6 +210,10 @@ namespace Web.Controllers
             if (result)
             {
                 return Ok();
+            }
+            else
+            {
+                return new StatusCodeResult(StatusCodes.Status202Accepted);
             }
 
             return BadRequest();
