@@ -1,5 +1,7 @@
 ﻿@model Application.DTOs.PlanStepDTO
 
+
+@inject Application.Interfaces.Repositories.IDictionaryRepository dictionaryRepository
 @{
     var blockIndex = (int)ViewData["BlockIndex"];
     var questionIndex = (int)ViewData["QuestionIndex"];
@@ -12,7 +14,7 @@
 
     var filledAnswer = Model.AnswerGroups[questionIndexOffset + questionIndex];
 
-    var valuesDictionary = Web.Helpers.StepHelper.GetValuesDictionary(Context);
+    var valuesDictionary =dictionaryRepository.GetValues();
 }
 
 @if (answerGroup.DefinitiveAnswer != null || (answerGroup.OtherAnswers != null && answerGroup.OtherAnswers.Count() > 0))

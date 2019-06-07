@@ -1,5 +1,6 @@
 ﻿@model Application.DTOs.PlanStepDTO
 
+@inject Application.Interfaces.Repositories.IPlanRepository planRepository
 @{
     var blockIndex = (int)ViewData["BlockIndex"];
     var questionIndex = (int)ViewData["QuestionIndex"];
@@ -12,7 +13,7 @@
 
     var filledAnswer = Model.AnswerGroups[questionIndexOffset + questionIndex];
 
-    var options = Web.Helpers.StepHelper.GetDefinitifeIssueOptions(Context, Model.PlanId).ToArray();
+    var options = planRepository.GetDefinitiveIssueOptions(Model.PlanId).ToArray();
 }
 
 @if (answerGroup.DefinitiveAnswer != null || (answerGroup.OtherAnswers != null && answerGroup.OtherAnswers.Count() > 0))

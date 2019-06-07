@@ -1,4 +1,6 @@
 ﻿@model Application.DTOs.PlanStepDTO
+@inject Application.Interfaces.Repositories.IPlanRepository planRepository
+@inject Application.Interfaces.Repositories.IDictionaryRepository dictionaryRepository
 
 @{
     var blockIndex = (int)ViewData["BlockIndex"];
@@ -12,9 +14,9 @@
 
     var filledAnswer = Model.AnswerGroups[questionIndexOffset + questionIndex];
 
-    var stakeholders = Web.Helpers.StepHelper.GetDefinitifeStakeholders(Context, Model.PlanId, false).OrderBy(x => x.Id).ToArray();
+    var stakeholders = planRepository.GetDefinitiveStakehloders(Model.PlanId, false).OrderBy(x => x.Id).ToArray();
 
-    var criterions = Web.Helpers.StepHelper.GetCriterionsDictionary(Context).OrderBy(x => x.Id).ToArray();
+    var criterions = dictionaryRepository.GetCriterions().OrderBy(x => x.Id).ToArray();
 }
 
 @if (stakeholders.Count() > 0)

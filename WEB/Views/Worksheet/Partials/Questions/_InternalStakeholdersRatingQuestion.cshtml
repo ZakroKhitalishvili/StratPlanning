@@ -1,5 +1,9 @@
 ﻿@model Application.DTOs.PlanStepDTO
 
+@inject Application.Interfaces.Repositories.IPlanRepository planRepository
+@inject Application.Interfaces.Repositories.IDictionaryRepository dictionaryRepository
+
+
 @{
     var blockIndex = (int)ViewData["BlockIndex"];
     var questionIndex = (int)ViewData["QuestionIndex"];
@@ -12,9 +16,9 @@
 
     var filledAnswer = Model.AnswerGroups[questionIndexOffset + questionIndex];
 
-    var stakeholders = Web.Helpers.StepHelper.GetDefinitifeStakeholders(Context, Model.PlanId, true).OrderBy(x => x.Id).ToArray();
+    var stakeholders = planRepository.GetDefinitiveStakehloders(Model.PlanId, true).OrderBy(x => x.Id).ToArray();
 
-    var criterions = Web.Helpers.StepHelper.GetCriterionsDictionary(Context).OrderBy(x => x.Id).ToArray();
+    var criterions = dictionaryRepository.GetCriterions().OrderBy(x => x.Id).ToArray();
 }
 
 @if (stakeholders.Count() > 0)
@@ -116,21 +120,21 @@
                     </th>
                     @foreach (var stakeholder in stakeholders)
                     {
-                    <td>@(string.Format("{0:0.00}", answerGroup.Answer?.StakeholderRatingAnswers.Where(x => x.StakeholderId == stakeholder.Id).FirstOrDefault()?.Grade))</td>
+                        <td>@(string.Format("{0:0.00}", answerGroup.Answer?.StakeholderRatingAnswers.Where(x => x.StakeholderId == stakeholder.Id).FirstOrDefault()?.Grade))</td>
                     }
                 </tr>
                 @*<tr>
-                    <th>
-                        Priority
-                    </th>
-                    @for (var j = 0; j < stakeholders.Count(); j++)
-                    {
-                        <td>
-                            <input type="number" class="form-control" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderRatingAnswers[@j].Priority"
-                                   value="@((answerGroup.Answer?.StakeholderRatingAnswers?.Where(x => x.StakeholderId == stakeholders[j].Id).Select(x => x.Priority).FirstOrDefault()) ?? 0)">
-                        </td>
-                    }
-                </tr>*@
+                        <th>
+                            Priority
+                        </th>
+                        @for (var j = 0; j < stakeholders.Count(); j++)
+                        {
+                            <td>
+                                <input type="number" class="form-control" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderRatingAnswers[@j].Priority"
+                                       value="@((answerGroup.Answer?.StakeholderRatingAnswers?.Where(x => x.StakeholderId == stakeholders[j].Id).Select(x => x.Priority).FirstOrDefault()) ?? 0)">
+                            </td>
+                        }
+                    </tr>*@
 
             </tbody>
         </table>

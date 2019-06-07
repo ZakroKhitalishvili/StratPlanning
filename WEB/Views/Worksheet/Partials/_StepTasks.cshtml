@@ -1,10 +1,12 @@
 ﻿@model Application.DTOs.PlanStepDTO
+
+@inject Application.Interfaces.Repositories.IPlanRepository planRepository
 @using Resources
 
 @using Web.Helpers
 
 @{
-    var stepList = StepHelper.GetStepList(Context);
+    var stepList = planRepository.GetStepList();
 
     var count = 0;
     var stepTaskCount = 0;

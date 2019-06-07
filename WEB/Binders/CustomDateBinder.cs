@@ -20,6 +20,7 @@ namespace Web.Binders
 
             var result = DateTime.TryParseExact(value, "dd-MM-yyyy", CultureInfo.InvariantCulture,DateTimeStyles.None, out DateTime resultingDate);
             bindingContext.Result = ModelBindingResult.Success(resultingDate);
+
             return Task.CompletedTask;
         }
     }

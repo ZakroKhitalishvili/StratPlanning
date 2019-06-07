@@ -1,6 +1,7 @@
 ﻿@model Application.DTOs.PlanStepDTO
 @using Web.Helpers
 
+@inject Application.Interfaces.Repositories.IPlanRepository planRepository
 @{
     var blockIndex = (int)ViewData["BlockIndex"];
     var questionIndex = (int)ViewData["QuestionIndex"];
@@ -13,7 +14,7 @@
 
     var filledAnswer = Model.AnswerGroups[questionIndexOffset + questionIndex];
 
-    var issues = StepHelper.GetIssues(Context, Model.PlanId);
+    var issues = planRepository.GetIssues( Model.PlanId);
 
     var count = 0;
 }

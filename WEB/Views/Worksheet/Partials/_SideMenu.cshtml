@@ -1,10 +1,10 @@
 ﻿@model Application.DTOs.PlanStepDTO
-
+@inject Application.Interfaces.Repositories.IPlanRepository planRepository
 @using Core.Constants;
 @using Web.Helpers;
 
 @{
-    var sortedSteps = StepHelper.GetStepList(Context).ToArray();
+    var sortedSteps = planRepository.GetStepList().ToArray();
 }
 <button class="m-aside-left-close m-aside-left-close--skin-light" id="m_aside_left_close_btn">
     <i class="la la-close"></i>
@@ -44,31 +44,31 @@
                     case StepTaskStatus.OverdueIncomplete: statusClass = "fa-remove m--font-danger"; break;
                 }
 
-            <li class="m-menu__item @(Model.Step == stepTask.Step ? "m-menu__item--active" : "")" aria-haspopup="true" data-redirect="true">
-                @if (stepTask.IsAvailable)
-                {
+                <li class="m-menu__item @(Model.Step == stepTask.Step ? "m-menu__item--active" : "")" aria-haspopup="true" data-redirect="true">
+                    @if (stepTask.IsAvailable)
+                    {
 
-                    <a asp-controller="WorkSheet" asp-action="GetStep" asp-route-stepIndex="@stepTask.Step" asp-route-planId="@Model.PlanId" class="m-menu__link m--padding-left-5">
-                        <i class="m-menu__link-bullet fa @statusClass">
-                            <span></span>
-                        </i>
-                        <span class="m-menu__link-text m--padding-left-10">
-                            @steps.ResourceManager.GetString(stepTask.Step)
+                        <a asp-controller="WorkSheet" asp-action="GetStep" asp-route-stepIndex="@stepTask.Step" asp-route-planId="@Model.PlanId" class="m-menu__link m--padding-left-5">
+                            <i class="m-menu__link-bullet fa @statusClass">
+                                <span></span>
+                            </i>
+                            <span class="m-menu__link-text m--padding-left-10">
+                                @steps.ResourceManager.GetString(stepTask.Step)
+                            </span>
+                        </a>
+                    }
+                    else
+                    {
+                        <span class="m-menu__link m--padding-left-5 disabled">
+                            <i class="m-menu__link-bullet fa @statusClass">
+                                <span></span>
+                            </i>
+                            <span class="m-menu__link-text m--padding-left-10">
+                                @steps.ResourceManager.GetString(stepTask.Step)
+                            </span>
                         </span>
-                    </a>
-                }
-                else
-                {
-                    <span class="m-menu__link m--padding-left-5 disabled">
-                        <i class="m-menu__link-bullet fa @statusClass">
-                            <span></span>
-                        </i>
-                        <span class="m-menu__link-text m--padding-left-10">
-                            @steps.ResourceManager.GetString(stepTask.Step)
-                        </span>
-                    </span>
-                }
-            </li>
+                    }
+                </li>
             }
 
         </ul>
