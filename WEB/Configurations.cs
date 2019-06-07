@@ -45,6 +45,7 @@ namespace Web
                        options.ReturnUrlParameter = "returnUrl";
                        options.AccessDeniedPath = "/Auth/AccessDenied";
                        options.Cookie.IsEssential = true;
+                       options.Cookie.HttpOnly = true;
                    });
 
             return services;
