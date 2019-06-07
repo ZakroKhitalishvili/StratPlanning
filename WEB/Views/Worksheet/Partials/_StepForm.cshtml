@@ -32,6 +32,10 @@
             </button>
             <button type="button" id="step_form_submit_button" class="btn m-btn--pill btn-sp">
                 Submit
+                @if(!Model.IsSubmitted)
+                {
+                    <i class="fa fa-exclamation-triangle"></i>
+                }
             </button>
             @if (Model.IsAdmin)
             {

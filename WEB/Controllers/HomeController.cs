@@ -12,19 +12,15 @@ namespace Web.Controllers
 
         public IActionResult Index()
         {
-            _loggerManager.Info("Home.Index was invoked");
+            _loggerManager.Info("Home.Index was requested");
 
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
             return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
+            _loggerManager.Info("Error was returned");
             return View();
         }
     }

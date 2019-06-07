@@ -34,12 +34,17 @@ namespace Web.Controllers
         [AllowAnonymous]
         public IActionResult Login(string returnUrl)
         {
+            _loggerManager.Info("GET Login is requested");
+
             if (User.Identity.IsAuthenticated)
             {
+                _loggerManager.Warn("User is already authenticated and redirected to home");
                 return RedirectToAction("Index", "Home", null);
             }
 
             var login = new UserLoginDTO { ReturnUrl = returnUrl };
+
+            _loggerManager.Info("Login() returned a result");
 
             return View(login);
         }
@@ -48,6 +53,8 @@ namespace Web.Controllers
         [AllowAnonymous]
         public IActionResult Login(UserLoginDTO login)
         {
+            _loggerManager.Info("POST Login is requested");
+
             if (ModelState.IsValid)
             {
                 if (_userRepository.TryAuthentication(login.Email.Trim(), login.Password, out UserDTO user))
@@ -66,12 +73,12 @@ namespace Web.Controllers
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Email or password is wrong");
-                    _loggerManager.Info("Authentication attempt failed");
+                    _loggerManager.Warn("Authentication attempt failed");
                 }
             }
             else
             {
-                _loggerManager.Info("Authentication values are invalid");
+                _loggerManager.Warn("Authentication values are invalid");
             }
 
             return View();
@@ -90,6 +97,7 @@ namespace Web.Controllers
         [AllowAnonymous]
         public IActionResult ForgotPassword()
         {
+            _loggerManager.Info("GET ForgotPassword is requested");
             return View();
         }
 
@@ -97,11 +105,15 @@ namespace Web.Controllers
         [AllowAnonymous]
         public IActionResult ForgotPassword(ForgotPasswordDTO forgotPassword)
         {
+            _loggerManager.Info("POST ForgotPassword is requested");
+
             if (ModelState.IsValid)
             {
                 var user = _userRepository.GetUserByEmail(forgotPassword.Email);
                 if (user == null)
                 {
+                    _loggerManager.Warn("ForgotPassword - an user does not exist");
+
                     ModelState.AddModelError(string.Empty, "An user with the email does not exist");
 
                     return View();
@@ -112,6 +124,8 @@ namespace Web.Controllers
 
                 if (!_emailService.SendPasswordRecoveryInfo(url, user))
                 {
+                    _loggerManager.Warn("ForgotPassword - It was unable to send a recovery email to the address");
+
                     ModelState.AddModelError(nameof(forgotPassword.Email), "It was unable to send a recovery email to the address");
 
                     return View();
@@ -122,6 +136,8 @@ namespace Web.Controllers
                     Title = "Successfully sent",
                     Text = $"Recovery link was sent to {forgotPassword.Email}. It will be valid within next 24 hours"
                 };
+
+                _loggerManager.Info("ForgotPassword - successfully sent password recovery info");
 
                 return View("Success", result);
 
@@ -134,10 +150,16 @@ namespace Web.Controllers
         [AllowAnonymous]
         public IActionResult RecoverPassword(string token)
         {
+            _loggerManager.Info("GET RecoverPassword is requested");
+
             if (!_userRepository.ValidateToken(token))
             {
+                _loggerManager.Warn("Token is not valid");
+
                 return new StatusCodeResult(StatusCodes.Status400BadRequest);
             }
+
+            _loggerManager.Info("Successfully returned password recovery page");
 
             return View();
         }
@@ -146,9 +168,10 @@ namespace Web.Controllers
         [AllowAnonymous]
         public IActionResult RecoverPassword(RecoverPasswordDTO recoverPassword)
         {
+            _loggerManager.Info("POST RecoverPassword is requested");
+
             if (ModelState.IsValid)
             {
-
                 if (_userRepository.RecoverPassword(recoverPassword))
                 {
                     var result = new ResultVM
@@ -157,12 +180,20 @@ namespace Web.Controllers
                         Text = "New password was set. You can log in now."
                     };
 
+                    _loggerManager.Info("Password recovered successfully");
+
                     return View("Success", result);
                 }
                 else
                 {
+                    _loggerManager.Error("Password recovery failed");
+
                     ModelState.AddModelError(string.Empty, "An error occured during updating password");
                 }
+            }
+            else
+            {
+                _loggerManager.Warn("Password recovery values are invalid");
             }
 
             return View(); ;
@@ -171,6 +202,8 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult AccessDenied()
         {
+            _loggerManager.Info("AccessDenied page returned");
+
             return View();
         }
 
