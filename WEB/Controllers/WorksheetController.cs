@@ -31,8 +31,11 @@ namespace Web.Controllers
 
         public IActionResult GetStep(string stepIndex, int planId)
         {
+            _loggerManager.Info($"GetStep({stepIndex},{planId}) is requested");
+
             if (string.IsNullOrEmpty(stepIndex) || planId <= 0)
             {
+                _loggerManager.Warn($"GetStep({stepIndex},{planId}): Step Inde");
                 return BadRequest();
             }
 
@@ -42,11 +45,13 @@ namespace Web.Controllers
 
             if (!isDefinitive && !_planRepository.IsUserInPlanningTeam(planId, userId))
             {
+                _loggerManager.Warn($"GetStep({stepIndex},{planId}): an users is not authorized to access");
                 return new StatusCodeResult(StatusCodes.Status401Unauthorized);
             }
 
             if (!_planRepository.IsAvailableStep(planId, stepIndex))
             {
+                _loggerManager.Warn($"GetStep({stepIndex},{planId}): The step is not avalaible");
                 return BadRequest();
             }
 
@@ -54,19 +59,23 @@ namespace Web.Controllers
 
             if (stepDTO == null)
             {
+                _loggerManager.Error($"GetStep({stepIndex},{planId}): Internal error ");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
 
+            _loggerManager.Info($"GetStep({stepIndex},{planId}): Successfully returned step");
             return View("Step", stepDTO);
         }
 
         public IActionResult Index()
         {
+            _loggerManager.Info($"Worksheet.Index() Redirected to GetPlanList()");
             return RedirectToAction("GetPlanList");
         }
 
         public IActionResult GetPlanList(int? page)
         {
+            _loggerManager.Info($"GetPlanList({page}) was requested");
             var pageSize = 5;
             var skipCount = ((page ?? 1) - 1) * pageSize;
             var takeCount = pageSize;
@@ -77,6 +86,8 @@ namespace Web.Controllers
 
                 var pagedList = new StaticPagedList<PlanDTO>(planList, page ?? 1, pageSize, totalCount);
 
+                _loggerManager.Info($"GetPlanList({page}) returned a list for admin view");
+
                 return View("PlanList", pagedList);
             }
             else
@@ -85,26 +96,34 @@ namespace Web.Controllers
 
                 var pagedList = new StaticPagedList<PlanDTO>(planList, page ?? 1, pageSize, totalCount);
 
+                _loggerManager.Info($"GetPlanList({page}) returned a list for employee view");
+
                 return View("PlanList", pagedList);
             }
         }
 
         public IActionResult GetPlan(int id)
         {
+            _loggerManager.Info($"GetPlan({id}) was requested and redirected to GetStep() for a working step");
             return RedirectToAction("GetStep", new { stepIndex = _planRepository.GetWorkingStep(id), planId = id });
         }
 
         [HttpPost]
         public IActionResult GetPlanningTeam(int planId)
         {
+            _loggerManager.Info($"GetPlanningTeam({planId}) was requested");
             if (planId <= 0)
             {
                 Response.StatusCode = StatusCodes.Status400BadRequest;
+
+                _loggerManager.Warn($"GetPlanningTeam({planId}) was bad request");
 
                 return PartialView("~/Views/Worksheet/Partials/_PlanningTeam.cshtml", Enumerable.Empty<UserPlanningMemberDTO>());
             }
 
             var planningTeam = _planRepository.GetPlanningTeam(planId);
+
+            _loggerManager.Info($"GetPlanningTeam({planId}) successfully returned a result");
 
             return PartialView("~/Views/Worksheet/Partials/_PlanningTeam.cshtml", planningTeam);
         }
@@ -112,6 +131,8 @@ namespace Web.Controllers
         [HttpPost]
         public IActionResult SaveStep(PlanStepDTO planStep)
         {
+            _loggerManager.Info($"SaveStep() was requested for a step ({planStep.Step}) of a plan({planStep.PlanId})");
+
             HttpContext.Response.StatusCode = StatusCodes.Status202Accepted;
             var isDefinitive = User.IsInRole(Roles.Admin);
 
@@ -122,6 +143,7 @@ namespace Web.Controllers
 
                 if (_planRepository.GetWorkingStep(planStep.PlanId) != planStep.Step)
                 {
+                    _loggerManager.Warn($"SaveStep's request appeared bad for step ({planStep.Step}) of a plan({planStep.PlanId})");
                     return BadRequest();
                 }
 
@@ -130,6 +152,8 @@ namespace Web.Controllers
                 if (result)
                 {
                     ModelState.Clear();
+
+                    _loggerManager.Info($"Step({planStep.Step}) was successfully saved of a plan({planStep.PlanId})");
                     HttpContext.Response.StatusCode = StatusCodes.Status200OK;
                 }
             }
@@ -138,6 +162,7 @@ namespace Web.Controllers
 
             if (!result)
             {
+                _loggerManager.Warn($"SaveStep() request was invalid for a step ({planStep.Step}) of a plan({planStep.PlanId})");
                 newPlanStep.FilledAnswers = planStep.AnswerGroups;
             }
 
@@ -147,11 +172,15 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult GetAnswerFiles(int questionId, int planId)
         {
+            _loggerManager.Info($"GetAnswerFiles({questionId},{planId}) was requested");
+
             var isDefinitive = User.IsInRole(Roles.Admin);
 
             var userId = HttpContext.GetUserId();
 
             var files = _planRepository.GetFileAnswers(questionId, planId, userId, isDefinitive);
+
+            _loggerManager.Info($"GetAnswerFiles({questionId},{planId}) successfully returned  a result");
 
             return Ok(files.Select(x => new
             {
@@ -164,10 +193,13 @@ namespace Web.Controllers
         [HttpPost]
         public IActionResult UploadFile()
         {
+            _loggerManager.Info($"UploadFile() was requested");
+
             var files = HttpContext.Request.Form.Files;
 
             if (files == null || files.Count == 0)
             {
+                _loggerManager.Warn($"UploadFile() request is a bad request");
                 return BadRequest();
             }
 
@@ -194,6 +226,8 @@ namespace Web.Controllers
 
             }
 
+            _loggerManager.Info($"UploadFile() successfuly uploaded file(s) and returned a result");
+
             return Ok(result.Select(x => new
             {
                 id = x.Id,
@@ -205,8 +239,11 @@ namespace Web.Controllers
         [HttpPost]
         public IActionResult CompleteStepTask(int planId, string stepIndex)
         {
+            _loggerManager.Info($"CompleteStepTask({planId},{stepIndex}) is requested");
+
             if (planId <= 0 || string.IsNullOrEmpty(stepIndex))
             {
+                _loggerManager.Warn($"CompleteStepTask({planId},{stepIndex}) is bad request");
                 return BadRequest();
             }
 
@@ -214,10 +251,14 @@ namespace Web.Controllers
 
             if (result)
             {
+                _loggerManager.Info($"CompleteStepTask({planId},{stepIndex}) successfully completed task");
+
                 return Ok();
             }
             else
             {
+                _loggerManager.Warn($"CompleteStepTask({planId},{stepIndex}) was unable to complete task");
+
                 return new StatusCodeResult(StatusCodes.Status202Accepted);
             }
 
@@ -226,6 +267,8 @@ namespace Web.Controllers
         [HttpPost]
         public IActionResult RefreshStepForm(PlanStepDTO planStep, bool? keepFilled)
         {
+            _loggerManager.Info($"RefreshStepForm wa requsted for a step({planStep.Step}) of a plan({planStep.PlanId}) with option: keepFilled = {keepFilled ?? false}");
+
             var isDefinitive = User.IsInRole(Roles.Admin);
 
             var newPlanStep = _planRepository.GetStep(planStep.Step, planStep.PlanId, isDefinitive, HttpContext.GetUserId());
@@ -240,8 +283,9 @@ namespace Web.Controllers
                         newPlanStep.StepTaskAnswers.Answer.StepTaskAnswers?.Add(stepTaskAnswer);
                     }
                 }
-
             }
+
+            _loggerManager.Info($"RefreshStepForm successfully returned form for a step({planStep.Step}) of a plan({planStep.PlanId})");
 
             return PartialView("~/Views/Worksheet/Partials/_StepForm.cshtml", newPlanStep);
         }
@@ -250,6 +294,8 @@ namespace Web.Controllers
         [Authorize(Roles = Roles.Admin)]
         public IActionResult CreatePlan(PlanDTO plan)
         {
+            _loggerManager.Info($"CreatePlan is requested");
+
             Response.StatusCode = StatusCodes.Status202Accepted;
 
             if (ModelState.IsValid)
@@ -258,12 +304,18 @@ namespace Web.Controllers
 
                 if (result)
                 {
+                    _loggerManager.Info($"CreatePlan successfully created a plan");
                     Response.StatusCode = StatusCodes.Status201Created;
                 }
                 else
                 {
+                    _loggerManager.Warn($"CreatePlan was unable to create a plan");
                     ModelState.AddModelError(string.Empty, "Something went wrong during creating plan");
                 }
+            }
+            else
+            {
+                _loggerManager.Info($"CreatePlan request is invalid");
             }
 
             return PartialView("~/Views/Worksheet/Partials/_NewPlan.cshtml");
@@ -273,14 +325,26 @@ namespace Web.Controllers
         [Authorize(Roles = Roles.Admin)]
         public IActionResult DeletePlan(int planId)
         {
+            _loggerManager.Info($"DeletePlan({planId}) is requested");
+
             Response.StatusCode = StatusCodes.Status202Accepted;
 
             if (planId <= 0)
             {
+                _loggerManager.Info($"DeletePlan({planId}) is a bad request");
                 return BadRequest();
             }
 
             var result = _planRepository.DeletePlan(planId);
+
+            if (result)
+            {
+                _loggerManager.Info($"DeletePlan({planId}) successfully deleted a plan");
+            }
+            else
+            {
+                _loggerManager.Info($"DeletePlan({planId}) is unable to delete a plan");
+            }
 
             return new JsonResult(new { result });
 
