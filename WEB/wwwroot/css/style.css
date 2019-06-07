@@ -813,3 +813,7 @@ table td .m-list-badge {
 button.m-list-badge__item {
     cursor: pointer;
 }
+
+.m-dropzone-readonly {
+    cursor: default;
+}

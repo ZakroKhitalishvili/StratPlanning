@@ -89,18 +89,46 @@
         <div class="col-10 col-md-11">
             <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].QuestionId" value="@question.Id" />
             <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer" />
-            <div class="m-dropzone dropzone-sp m-dropzone--default m--margin-top-20"
-                 data-initurl="@Url.Action("GetAnswerFiles", "Worksheet", new { questionId = question.Id, planId = Model.PlanId })"
-                 data-inputname="@Html.NameFor(x => x.AnswerGroups[questionIndexOffset + questionIndex].Answer.InputFileAnswer)">
-                <div class="m-dropzone__msg dz-message needsclick">
-                    <h3 class="m-dropzone__msg-title">
-                        Drop files here or click to upload.
-                    </h3>
-                    <span class="m-dropzone__msg-desc">
-                        Only image, pdf and psd files are allowed for upload
-                    </span>
+            @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
+            {
+                <div class="m-dropzone dropzone-sp m-dropzone--default m--margin-top-20"
+                     data-initurl="@Url.Action("GetAnswerFiles", "Worksheet", new { questionId = question.Id, planId = Model.PlanId })"
+                     data-inputname="@Html.NameFor(x => x.AnswerGroups[questionIndexOffset + questionIndex].Answer.InputFileAnswer)">
+                    <div class="m-dropzone__msg dz-message needsclick">
+                        <h3 class="m-dropzone__msg-title">
+                            Drop files here or click to upload.
+                        </h3>
+                        <span class="m-dropzone__msg-desc">
+                            Only image, pdf and psd files are allowed for upload
+                        </span>
+                    </div>
                 </div>
-            </div>
+            }
+            else
+            {
+                <div class="m-dropzone dropzone m-dropzone-readonly m-dropzone--default m--margin-top-20">
+                    @if (filledAnswer.Answer != null)
+                    {
+                        foreach (var fileAnswer in filledAnswer.Answer.FileAnswer)
+                        {
+                            <div class="dz-preview dz-file-preview dz-processing dz-error dz-complete">
+                                <div class="dz-image"></div>
+                                <div class="dz-details">
+                                    <div class="dz-filename">
+                                        <a class="sp-file-link" href="@fileAnswer.Path" target="_Blank"><span data-dz-name="">@(fileAnswer.Name + fileAnswer.Ext)</span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <h3 class="m-dropzone__msg-title">
+                            No attached files.
+                        </h3>
+                    }
+                </div>
+            }
         </div>
     </div>
 
