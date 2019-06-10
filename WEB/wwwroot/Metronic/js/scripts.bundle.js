@@ -8513,24 +8513,24 @@ var mLayout = function() {
     var initQuicksearch = function() {
         var qs = $('#m_quicksearch');
 
-        qs.mQuicksearch({
-            type: qs.data('search-type'), // quick search type
-            source: 'https://keenthemes.com/metronic/preview/inc/api/quick_search.php',
-            spinner: 'm-loader m-loader--skin-light m-loader--right',
+        //qs.mQuicksearch({
+        //    type: qs.data('search-type'), // quick search type
+        //    source: 'https://keenthemes.com/metronic/preview/inc/api/quick_search.php',
+        //    spinner: 'm-loader m-loader--skin-light m-loader--right',
 
-            input: '#m_quicksearch_input',
-            iconClose: '#m_quicksearch_close',
-            iconCancel: '#m_quicksearch_cancel',
-            iconSearch: '#m_quicksearch_search',
+        //    input: '#m_quicksearch_input',
+        //    iconClose: '#m_quicksearch_close',
+        //    iconCancel: '#m_quicksearch_cancel',
+        //    iconSearch: '#m_quicksearch_search',
 
-            hasResultClass: 'm-list-search--has-result',
-            minLength: 1,
-            templates: {
-                error: function(qs) {
-                    return '<div class="m-search-results m-search-results--skin-light"><span class="m-search-result__message">Something went wrong</div></div>';
-                }
-            }
-        });
+        //    hasResultClass: 'm-list-search--has-result',
+        //    minLength: 1,
+        //    templates: {
+        //        error: function(qs) {
+        //            return '<div class="m-search-results m-search-results--skin-light"><span class="m-search-result__message">Something went wrong</div></div>';
+        //        }
+        //    }
+        //});
     };
 
     var initScrollTop = function() {

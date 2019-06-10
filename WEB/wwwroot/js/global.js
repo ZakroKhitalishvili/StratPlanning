@@ -104,6 +104,7 @@ function initializeInputs(selector) {
     $(selector).find('.m-scrollable').each(function (ind, el) {
         mApp.initScroller($(el), {});
     });
+
     //$(selector).find('[maxlength],[data-val-maxlength-max]').maxlength(
     //    {
     //        alwaysShow: true,
@@ -144,6 +145,27 @@ $(document).ready(function () {
     //});
     initializeInputs(document);
 
+    var quickSearch = $('#m_quicksearch');
+
+    //quickSearch.mQuicksearch({
+    //    type: quickSearch.data('search-type'), // quick search type
+    //    source: '',
+    //    spinner: 'm-loader m-loader--skin-light m-loader--right',
+
+    //    input: '#m_quicksearch_input',
+    //    iconClose: '#m_quicksearch_close',
+    //    iconCancel: '#m_quicksearch_cancel',
+    //    iconSearch: '#m_quicksearch_search',
+
+    //    hasResultClass: 'm-list-search--has-result',
+    //    minLength: 1,
+    //    templates: {
+    //        error: function (qs) {
+    //            return '<div class="m-search-results m-search-results--skin-light"><span class="m-search-result__message">Something went wrong</div></div>';
+    //        }
+    //    }
+    //});
+
     $.fn.dataTable.ext.order['dom-select'] = function (settings, col) {
         return this.api().column(col, { order: 'index' }).nodes().map(function (td, i) {
             return $('select', td).val();
@@ -172,7 +194,6 @@ $(document).ready(function () {
 
     /////
     ///
-
 });
 
 

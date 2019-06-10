@@ -303,21 +303,21 @@
                                     <input type="hidden" class="m-index" />
                                     <input type="hidden" class="m-input" data-name="id" />
                                     <input type="hidden" class="m-input" data-name="isBestOption" />
-                                    <div class="form-group m-form__group m--margin-top-20">
+                                    <div class="form-group m-form__group">
                                         <label for="issueOptionAnswerDTOs[@i].Option">
                                             Option
                                         </label>
                                         @Html.TextBoxFor(x => issueOptionAnswerDTOs[i].Option, new { @class = "form-control m-input", data_name = "option" })
                                         @Html.ValidationMessageFor(x => issueOptionAnswerDTOs[i].Option, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="form-group m-form__group m--margin-top-20">
+                                    <div class="form-group m-form__group">
                                         <label for="issueOptionAnswerDTOs[@i].Actors">
                                             Actor Responsible
                                         </label>
                                         @Html.TextAreaFor(x => issueOptionAnswerDTOs[i].Actors, new { @class = "form-control m-input", rows = "3", data_name = "actors" })
                                         @Html.ValidationMessageFor(x => issueOptionAnswerDTOs[i].Actors, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="form-group m-form__group m--margin-top-20">
+                                    <div class="form-group m-form__group">
                                         <label for="issueOptionAnswerDTOs[@i].Resources">
                                             Required resources
                                         </label>

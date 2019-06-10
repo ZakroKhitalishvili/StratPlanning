@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Constants;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -10,9 +11,11 @@ namespace Application.DTOs
         public int Id { get; set; }
 
         [Required]
+        [StringLength(EntityConfigs.TextMaxLength)]
         public string Name { get; set; }
 
         [Required]
+        [StringLength(EntityConfigs.TextAreaMaxLength)]
         public string Description { get; set; }
 
         public DateTime StartDate { get; set; }
