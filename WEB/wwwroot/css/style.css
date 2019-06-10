@@ -511,6 +511,15 @@ input.datepicker {
     .m-accordion .m-accordion__item .m-accordion__item-body .m-accordion__item-content {
         padding: 0.7rem 1rem;
     }
+
+    .m-page .m-page__container {
+        padding: 0px 0px;
+    } 
+    
+    .m-header--fixed-mobile .m-body
+    {
+        padding-top:70px;
+    }
 }
 
 /*  End: small and medium screen */

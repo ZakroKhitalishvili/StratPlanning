@@ -21,106 +21,109 @@
 
 @if (stakeholders.Count() > 0)
 {
-    <table id="external-stakeholders-rating-table"
-           class="stakeholders-rating-table table  m-table  table-bordered m--margin-top-10 m--margin-bottom-20">
-        <tbody>
-            <tr>
-                <th title="Name">
-                    Stakeholder name
-                </th>
-                @for (var i = 0; i < stakeholders.Count(); i++)
-                {
-                    <td>
-                        <input type="hidden" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderRatingAnswers[@i].StakeholderId" value="@stakeholders[i].Id" />
-                        @stakeholders[i].Name
-                    </td>
-                }
-            </tr>
-            @for (var i = 0; i < criterions.Count(); i++)
-            {
+    <div class="m-scrollable " data-scrollable="true"
+         data-axis="xy">
+        <table id="external-stakeholders-rating-table"
+               class="stakeholders-rating-table table  m-table  table-bordered m--margin-top-10 m--margin-bottom-20">
+            <tbody>
                 <tr>
-                    <th>
-                        @criterions[i].Title
+                    <th title="Name">
+                        Stakeholder name
                     </th>
-                    @for (var j = 0; j < stakeholders.Count(); j++)
+                    @for (var i = 0; i < stakeholders.Count(); i++)
                     {
-                        var currentRate = answerGroup.Answer?.StakeholderRatingAnswers?.Where(x => x.StakeholderId == stakeholders[j].Id).SelectMany(x => x.CriterionsRates).Where(x => x.CriterionId == criterions[i].Id).Select(x => x.Rate).FirstOrDefault();
                         <td>
-                            <div class="d-flex justify-content-between">
-                                <div class="flex-grow-1 text-center">
-                                    <input type="hidden" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderRatingAnswers[@j].CriterionsRates[@i].CriterionId" value="@criterions[i].Id" />
-                                    <select class="form-control m-select2" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderRatingAnswers[@j].CriterionsRates[@i].Rate">
-                                        <!option value="1" @(currentRate == 1 ? "selected" : "")>1</!option>
-                                        <!option value="2" @(currentRate == 2 ? "selected" : "")>2</!option>
-                                        <!option value="3" @(currentRate == 3 ? "selected" : "")>3</!option>
-                                        <!option value="4" @(currentRate == 4 ? "selected" : "")>4</!option>
-                                        <!option value="5" @(currentRate == 5 ? "selected='true'" : "")>5</!option>
-                                    </select>
-                                </div>
-                                <div class="m-dropdown m-dropdown--up m-dropdown--inline m-dropdown--huge" data-dropdown-toggle="click" data-dropdown-persistent="true">
-                                    <a href="#" class=" m-dropdown__toggle  combined_result margin-top-0 dropdown-toggle">
-                                        <i class="fa fa-info"></i>
-                                    </a>
-                                    <div class="m-dropdown__wrapper">
-                                        <div class="m-dropdown__inner">
-                                            <div class="m-dropdown__body">
-                                                <div class="m-dropdown__content">
-                                                    <div class="m-scrollable mCustomScrollbar _mCS_2 mCS-autoHide mCS_no_scrollbar" data-scrollable="true" data-max-height="200" style="max-height: 200px; height: 200px; position: relative; overflow: visible;">
-                                                        <div id="mCSB_2" class="mCustomScrollBox mCS-minimal-dark mCSB_vertical mCSB_outside" style="max-height: 200px;" tabindex="0">
-                                                            <div id="mCSB_2_container" class="mCSB_container mCS_y_hidden mCS_no_scrollbar_y" style="position:relative; top:0; left:0;" dir="ltr">
-                                                                <div class="m-list-timeline">
-                                                                    <div class="m-list-timeline__items">
-                                                                        @if (answerGroup.DefinitiveAnswer != null)
-                                                                        {
-                                                                            <div class="m-list-timeline__item">
-                                                                                <span class="m-list-timeline__badge"></span>
-                                                                                <span class="m-list-timeline__text">
-                                                                                    <b>Definitive answer</b>
-                                                                                </span>
-                                                                                <span class="m-list-timeline__text">
-                                                                                    @answerGroup.DefinitiveAnswer.StakeholderRatingAnswers.FirstOrDefault().CriterionsRates.FirstOrDefault(x => x.CriterionId == criterions[i].Id).Rate
-                                                                                </span>
-                                                                            </div>
-                                                                        }
-                                                                        @foreach (var otherAnswer in answerGroup.OtherAnswers.Where(x => x.StakeholderRatingAnswers.Any(y => y.StakeholderId == stakeholders[j].Id)))
-                                                                        {
-                                                                            <div class="m-list-timeline__item">
-                                                                                <span class="m-list-timeline__badge"></span>
-                                                                                <span class="m-list-timeline__text">
-                                                                                    @otherAnswer.Author
-                                                                                </span>
-                                                                                <span class="m-list-timeline__text">
-                                                                                    @otherAnswer.StakeholderRatingAnswers.FirstOrDefault().CriterionsRates.FirstOrDefault(x => x.CriterionId == criterions[i].Id).Rate
-                                                                                </span>
-                                                                            </div>
-                                                                        }
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div><div id="mCSB_2_scrollbar_vertical" class="mCSB_scrollTools mCSB_2_scrollbar mCS-minimal-dark mCSB_scrollTools_vertical" style="display: none;"><div class="mCSB_draggerContainer"><div id="mCSB_2_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 50px; top: 0px;"><div class="mCSB_dragger_bar" style="line-height: 50px;"></div></div><div class="mCSB_draggerRail"></div></div></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <span class="m-dropdown__arrow m-dropdown__arrow--left"></span>
-                                    </div>
-                                </div>
-                            </div>
+                            <input type="hidden" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderRatingAnswers[@i].StakeholderId" value="@stakeholders[i].Id" />
+                            @stakeholders[i].Name
                         </td>
                     }
                 </tr>
-            }
-            @*<tr>
-                    <th title="Grade">
-                        Grade
-                    </th>
-                    @foreach (var stakeholder in stakeholders)
-                    {
-                        <td>@(string.Format("{0:0.00}", answerGroup.Answer?.StakeholderRatingAnswers.Where(x => x.StakeholderId == stakeholder.Id).FirstOrDefault()?.Grade))</td>
-                    }
-                </tr>*@
+                @for (var i = 0; i < criterions.Count(); i++)
+                {
+                    <tr>
+                        <th>
+                            @criterions[i].Title
+                        </th>
+                        @for (var j = 0; j < stakeholders.Count(); j++)
+                        {
+                            var currentRate = answerGroup.Answer?.StakeholderRatingAnswers?.Where(x => x.StakeholderId == stakeholders[j].Id).SelectMany(x => x.CriterionsRates).Where(x => x.CriterionId == criterions[i].Id).Select(x => x.Rate).FirstOrDefault();
+                            <td>
+                                <div class="d-flex justify-content-between">
+                                    <div class="flex-grow-1 text-center">
+                                        <input type="hidden" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderRatingAnswers[@j].CriterionsRates[@i].CriterionId" value="@criterions[i].Id" />
+                                        <select class="form-control m-select2" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderRatingAnswers[@j].CriterionsRates[@i].Rate">
+                                            <!option value="1" @(currentRate == 1 ? "selected" : "")>1</!option>
+                                            <!option value="2" @(currentRate == 2 ? "selected" : "")>2</!option>
+                                            <!option value="3" @(currentRate == 3 ? "selected" : "")>3</!option>
+                                            <!option value="4" @(currentRate == 4 ? "selected" : "")>4</!option>
+                                            <!option value="5" @(currentRate == 5 ? "selected='true'" : "")>5</!option>
+                                        </select>
+                                    </div>
+                                    <div class="m-dropdown m-dropdown--up m-dropdown--inline m-dropdown--huge" data-dropdown-toggle="click" data-dropdown-persistent="true">
+                                        <a href="#" class=" m-dropdown__toggle  combined_result margin-top-0 dropdown-toggle">
+                                            <i class="fa fa-info"></i>
+                                        </a>
+                                        <div class="m-dropdown__wrapper">
+                                            <div class="m-dropdown__inner">
+                                                <div class="m-dropdown__body">
+                                                    <div class="m-dropdown__content">
+                                                        <div class="m-scrollable mCustomScrollbar _mCS_2 mCS-autoHide mCS_no_scrollbar" data-scrollable="true" data-max-height="200" style="max-height: 200px; height: 200px; position: relative; overflow: visible;">
+                                                            <div id="mCSB_2" class="mCustomScrollBox mCS-minimal-dark mCSB_vertical mCSB_outside" style="max-height: 200px;" tabindex="0">
+                                                                <div id="mCSB_2_container" class="mCSB_container mCS_y_hidden mCS_no_scrollbar_y" style="position:relative; top:0; left:0;" dir="ltr">
+                                                                    <div class="m-list-timeline">
+                                                                        <div class="m-list-timeline__items">
+                                                                            @if (answerGroup.DefinitiveAnswer != null)
+                                                                            {
+                                                                                <div class="m-list-timeline__item">
+                                                                                    <span class="m-list-timeline__badge"></span>
+                                                                                    <span class="m-list-timeline__text">
+                                                                                        <b>Definitive answer</b>
+                                                                                    </span>
+                                                                                    <span class="m-list-timeline__text">
+                                                                                        @answerGroup.DefinitiveAnswer.StakeholderRatingAnswers.FirstOrDefault().CriterionsRates.FirstOrDefault(x => x.CriterionId == criterions[i].Id).Rate
+                                                                                    </span>
+                                                                                </div>
+                                                                            }
+                                                                            @foreach (var otherAnswer in answerGroup.OtherAnswers.Where(x => x.StakeholderRatingAnswers.Any(y => y.StakeholderId == stakeholders[j].Id)))
+                                                                            {
+                                                                                <div class="m-list-timeline__item">
+                                                                                    <span class="m-list-timeline__badge"></span>
+                                                                                    <span class="m-list-timeline__text">
+                                                                                        @otherAnswer.Author
+                                                                                    </span>
+                                                                                    <span class="m-list-timeline__text">
+                                                                                        @otherAnswer.StakeholderRatingAnswers.FirstOrDefault().CriterionsRates.FirstOrDefault(x => x.CriterionId == criterions[i].Id).Rate
+                                                                                    </span>
+                                                                                </div>
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div><div id="mCSB_2_scrollbar_vertical" class="mCSB_scrollTools mCSB_2_scrollbar mCS-minimal-dark mCSB_scrollTools_vertical" style="display: none;"><div class="mCSB_draggerContainer"><div id="mCSB_2_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 50px; top: 0px;"><div class="mCSB_dragger_bar" style="line-height: 50px;"></div></div><div class="mCSB_draggerRail"></div></div></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <span class="m-dropdown__arrow m-dropdown__arrow--left"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        }
+                    </tr>
+                }
+                @*<tr>
+                        <th title="Grade">
+                            Grade
+                        </th>
+                        @foreach (var stakeholder in stakeholders)
+                        {
+                            <td>@(string.Format("{0:0.00}", answerGroup.Answer?.StakeholderRatingAnswers.Where(x => x.StakeholderId == stakeholder.Id).FirstOrDefault()?.Grade))</td>
+                        }
+                    </tr>*@
 
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
     <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].QuestionId" value="@question.Id" />
 }

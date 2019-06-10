@@ -14,7 +14,7 @@
 
     var filledAnswer = Model.AnswerGroups[questionIndexOffset + questionIndex];
 
-    var issues = planRepository.GetIssues( Model.PlanId).ToArray();
+    var issues = planRepository.GetIssues(Model.PlanId).ToArray();
 
     var resources = planRepository.GetResources();
 
@@ -176,7 +176,7 @@
                                         }
                                     </div>
                                 </div>
-                                <div class="m-scrollable " data-scrollable="true"
+                                <div class="m-scrollable" data-scrollable="true"
                                      data-axis="xy">
                                     <table class="issue-actions-datatable table m-table  table-bordered m--margin-top-10 m--margin-bottom-20">
                                         <thead>
@@ -284,7 +284,7 @@
         </div>
         @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
         {
-            
+
 
             <div class="dynamic-modal" data-id="m_@(question.Id)_@(issues[i].Id)_issueOptionModal">
                 <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
@@ -303,32 +303,27 @@
                                     <input type="hidden" class="m-index" />
                                     <input type="hidden" class="m-input" data-name="id" />
                                     <input type="hidden" class="m-input" data-name="isBestOption" />
-                                    <div class="form-group m-form__group row m--margin-top-20">
-                                        <label class="col-form-label col-lg-3 col-sm-12">
+                                    <div class="form-group m-form__group m--margin-top-20">
+                                        <label for="issueOptionAnswerDTOs[@i].Option">
                                             Option
                                         </label>
-                                        <div class="col-lg-9 col-md-9 col-sm-12">
-                                            @Html.TextBoxFor(x => issueOptionAnswerDTOs[i].Option, new { @class = "form-control m-input", data_name = "option" })
-                                            @Html.ValidationMessageFor(x => issueOptionAnswerDTOs[i].Option, "", new { @class = "text-danger" })
-                                        </div>
+                                        @Html.TextBoxFor(x => issueOptionAnswerDTOs[i].Option, new { @class = "form-control m-input", data_name = "option" })
+                                        @Html.ValidationMessageFor(x => issueOptionAnswerDTOs[i].Option, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="form-group m-form__group row m--margin-top-20">
-                                        <label class="col-form-label col-lg-3 col-sm-12">
+                                    <div class="form-group m-form__group m--margin-top-20">
+                                        <label for="issueOptionAnswerDTOs[@i].Actors">
                                             Actor Responsible
                                         </label>
-                                        <div class="col-lg-9 col-md-9 col-sm-12">
-                                            @Html.TextAreaFor(x => issueOptionAnswerDTOs[i].Actors, new { @class = "form-control m-input", rows = "3", data_name = "actors" })
-                                            @Html.ValidationMessageFor(x => issueOptionAnswerDTOs[i].Actors, "", new { @class = "text-danger" })
-                                        </div>
+                                        @Html.TextAreaFor(x => issueOptionAnswerDTOs[i].Actors, new { @class = "form-control m-input", rows = "3", data_name = "actors" })
+                                        @Html.ValidationMessageFor(x => issueOptionAnswerDTOs[i].Actors, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="form-group m-form__group row m--margin-top-20">
-                                        <label class="col-form-label col-lg-3 col-sm-12">
+                                    <div class="form-group m-form__group m--margin-top-20">
+                                        <label for="issueOptionAnswerDTOs[@i].Resources">
                                             Required resources
                                         </label>
-                                        <div class="col-lg-9 col-md-9 col-sm-12">
-                                            @Html.DropDownListFor(x => issueOptionAnswerDTOs[i].Resources, new SelectList(resources, "Title", "Title"), null, new { @class = "form-control m-select2 tag-select m-input", style = "width:100%", data_name = "resources", multiple = true })
-                                            @Html.ValidationMessageFor(x => issueOptionAnswerDTOs[i].Resources, "", new { @class = "text-danger" })
-                                        </div>
+
+                                        @Html.DropDownListFor(x => issueOptionAnswerDTOs[i].Resources, new SelectList(resources, "Title", "Title"), null, new { @class = "form-control m-select2 tag-select m-input", style = "width:100%", data_name = "resources", multiple = true })
+                                        @Html.ValidationMessageFor(x => issueOptionAnswerDTOs[i].Resources, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="modal-footer">

@@ -89,13 +89,21 @@ function initializeInputs(selector) {
             }
         }).on('click', function () {
             $(this).autocomplete("search", $(this).val());
-        });
+            })
+            .on('keyup keydown', function (e) {
+                if (e.which == 13) {
+                    e.preventDefault();
+                }
+            });
     }
 
     $.validator.unobtrusive.parse(selector);
 
     $(selector).find('.sp-tooltip').tooltip();
 
+    $(selector).find('.m-scrollable').each(function (ind, el) {
+        mApp.initScroller($(el), {});
+    });
     //$(selector).find('[maxlength],[data-val-maxlength-max]').maxlength(
     //    {
     //        alwaysShow: true,

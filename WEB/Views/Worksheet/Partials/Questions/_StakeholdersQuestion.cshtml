@@ -72,14 +72,14 @@
                                             {
                                                 <button title=""
                                                         type="button"
-                                                      data-val='@Json.Serialize(new {
+                                                        data-val='@Json.Serialize(new {
                                                            stakeholderId = answer.FirstOrDefault().userId,
                                                            stakeholderName = answer.FirstOrDefault().firstName + ' ' + answer.FirstOrDefault().lastName
                                                         })'
-                                                      data-toggle="tooltip"
-                                                      onclick="selectAnswer(this, '#s_@(question.Id)_list');"
-                                                      class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")"
-                                                      data-original-title="@String.Join(',', answer.Select(x => x.author))">
+                                                        data-toggle="tooltip"
+                                                        onclick="selectAnswer(this, '#s_@(question.Id)_list');"
+                                                        class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")"
+                                                        data-original-title="@String.Join(',', answer.Select(x => x.author))">
                                                     @(answer.Key)
                                                 </button>
                                             }
@@ -109,7 +109,7 @@
                                             if (Model.IsAdmin && !Model.IsCompleted)
                                             {
                                                 <button type="button" title=""
-                                                      data-val='@Json.Serialize(new {
+                                                        data-val='@Json.Serialize(new {
                                                            itemId = answer.FirstOrDefault().id,
                                                            firstName = answer.FirstOrDefault().firstName,
                                                            lastName = answer.FirstOrDefault().lastName,
@@ -117,10 +117,10 @@
                                                            category_label = answer.FirstOrDefault().category,
                                                            category = answer.FirstOrDefault().categoryId
                                                   })'
-                                                      onclick="selectAnswer(this, '#s_@(question.Id)_externals');"
-                                                      data-toggle="tooltip"
-                                                      class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")"
-                                                      data-original-title="@String.Join(',', answer.Select(x => x.author))">
+                                                        onclick="selectAnswer(this, '#s_@(question.Id)_externals');"
+                                                        data-toggle="tooltip"
+                                                        class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")"
+                                                        data-original-title="@String.Join(',', answer.Select(x => x.author))">
                                                     <div>@(answer.Key.name)</div>
                                                     <div>@(answer.Key.email)</div>
                                                     <div>@(answer.Key.category)</div>
@@ -260,41 +260,33 @@
                     </div>
                     <div class="m-form m-form--fit m-form--label-align-right">
                         <div class="modal-body">
-                            <div class="form-group m-form__group row m--margin-top-20">
-                                <label class="col-form-label col-lg-3 col-sm-12">
+                            <div class="form-group m-form__group m--margin-top-20">
+                                <label for="stakeholderAnswerDTO.FirstName">
                                     First name
                                 </label>
-                                <div class="col-lg-9 col-md-9 col-sm-12">
-                                    @Html.TextBoxFor(x => stakeholderAnswerDTO.FirstName, new { @class = "form-control m-input", data_name = "firstName" })
-                                    @Html.ValidationMessageFor(x => stakeholderAnswerDTO.FirstName, "", new { @class = "text-danger" })
-                                </div>
+                                @Html.TextBoxFor(x => stakeholderAnswerDTO.FirstName, new { @class = "form-control m-input", data_name = "firstName" })
+                                @Html.ValidationMessageFor(x => stakeholderAnswerDTO.FirstName, "", new { @class = "text-danger" })
                             </div>
-                            <div class="form-group m-form__group row m--margin-top-20">
-                                <label class="col-form-label col-lg-3 col-sm-12">
+                            <div class="form-group m-form__group m--margin-top-20">
+                                <label for="stakeholderAnswerDTO.LastName">
                                     Last name
                                 </label>
-                                <div class="col-lg-9 col-md-9 col-sm-12">
-                                    @Html.TextBoxFor(x => stakeholderAnswerDTO.LastName, new { @class = "form-control m-input", data_name = "lastName" })
-                                    @Html.ValidationMessageFor(x => stakeholderAnswerDTO.LastName, "", new { @class = "text-danger" })
-                                </div>
+                                @Html.TextBoxFor(x => stakeholderAnswerDTO.LastName, new { @class = "form-control m-input", data_name = "lastName" })
+                                @Html.ValidationMessageFor(x => stakeholderAnswerDTO.LastName, "", new { @class = "text-danger" })
                             </div>
-                            <div class="form-group m-form__group row m--margin-top-20">
-                                <label class="col-form-label col-lg-3 col-sm-12">
+                            <div class="form-group m-form__group m--margin-top-20">
+                                <label for="stakeholderAnswerDTO.Email">
                                     Email
                                 </label>
-                                <div class="col-lg-9 col-md-9 col-sm-12">
-                                    @Html.TextBoxFor(x => stakeholderAnswerDTO.Email, new { @class = "form-control m-input", data_name = "email" })
-                                    @Html.ValidationMessageFor(x => stakeholderAnswerDTO.Email, "", new { @class = "text-danger" })
-                                </div>
+                                @Html.TextBoxFor(x => stakeholderAnswerDTO.Email, new { @class = "form-control m-input", data_name = "email" })
+                                @Html.ValidationMessageFor(x => stakeholderAnswerDTO.Email, "", new { @class = "text-danger" })
                             </div>
-                            <div class="form-group m-form__group row m--margin-top-20">
-                                <label class="col-form-label col-lg-3 col-sm-12">
+                            <div class="form-group m-form__group m--margin-top-20">
+                                <label for="stakeholderAnswerDTO.CategoryId">
                                     Category
                                 </label>
-                                <div class="col-lg-9 col-md-9 col-sm-12">
-                                    @Html.DropDownListFor(x => stakeholderAnswerDTO.CategoryId, new SelectList(categories, "Value", "Text"), null, new { @class = "form-control m-select2 m-input", style = "width:100%", data_name = "category" })
-                                    @Html.ValidationMessageFor(x => stakeholderAnswerDTO.CategoryId, "", new { @class = "text-danger" })
-                                </div>
+                                @Html.DropDownListFor(x => stakeholderAnswerDTO.CategoryId, new SelectList(categories, "Value", "Text"), null, new { @class = "form-control m-select2 m-input", style = "width:100%", data_name = "category" })
+                                @Html.ValidationMessageFor(x => stakeholderAnswerDTO.CategoryId, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="modal-footer">

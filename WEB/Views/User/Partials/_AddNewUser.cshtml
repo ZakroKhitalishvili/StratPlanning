@@ -9,47 +9,35 @@
         <div class="form-group m-form__group">
             <div class="text-danger" asp-validation-summary="ModelOnly"></div>
         </div>
-        <div class="form-group m-form__group row">
-            <label for="example-text-input" class="col-2 col-form-label">
+        <div class="form-group m-form__group">
+            <label asp-for="NewUser.FirstName">
                 Firstname
             </label>
-            <div class="col-10">
-                <input asp-for="NewUser.FirstName" class="form-control m-input" />
-                <span class="text-danger" asp-validation-for="NewUser.FirstName"></span>
-            </div>
-
+            <input asp-for="NewUser.FirstName" class="form-control m-input" />
+            <span class="text-danger" asp-validation-for="NewUser.FirstName"></span>
         </div>
-        <div class="form-group m-form__group row">
-            <label for="example-text-input" class="col-2 col-form-label">
+        <div class="form-group m-form__group">
+            <label asp-for="NewUser.LastName">
                 Lastname
             </label>
-            <div class="col-10">
-                <input asp-for="NewUser.LastName" class="form-control m-input" />
-                <span class="text-danger" asp-validation-for="NewUser.LastName"></span>
-            </div>
-
+            <input asp-for="NewUser.LastName" class="form-control m-input" />
+            <span class="text-danger" asp-validation-for="NewUser.LastName"></span>
         </div>
-        <div class="form-group m-form__group row">
-            <label asp-for="NewUser.Email" class="col-2 col-form-label">
+        <div class="form-group m-form__group ">
+            <label asp-for="NewUser.Email">
                 Email
             </label>
-            <div class="col-10">
-                <input asp-for="NewUser.Email" class="form-control m-input" />
-                <span class="text-danger" asp-validation-for="NewUser.Email"></span>
-            </div>
-
+            <input asp-for="NewUser.Email" class="form-control m-input" />
+            <span class="text-danger" asp-validation-for="NewUser.Email"></span>
         </div>
-        <div class="form-group m-form__group row">
-            <label asp-for="NewUser.PositionId" class="col-2 col-form-label">
+        <div class="form-group m-form__group">
+            <label asp-for="NewUser.PositionId">
                 Position
             </label>
-            <div class="col-10">
-                <select asp-items="UserHelper.GetPositionsSelectList(Context)" asp-for="NewUser.PositionId" class="form-control m-select2" style="width:100%">
-                    <option value="">-- Specify --</option>
-                </select>
-                <span class="text-danger" asp-validation-for="NewUser.PositionId"></span>
-            </div>
-
+            <select asp-items="UserHelper.GetPositionsSelectList(Context)" asp-for="NewUser.PositionId" class="form-control m-select2" style="width:100%">
+                <option value="">-- Specify --</option>
+            </select>
+            <span class="text-danger" asp-validation-for="NewUser.PositionId"></span>
         </div>
     </div>
     <div class="m-portlet__foot m-portlet__foot--fit">

@@ -14,7 +14,7 @@
 
     var filledAnswer = Model.AnswerGroups[questionIndexOffset + questionIndex];
 
-    var valuesDictionary =dictionaryRepository.GetValues();
+    var valuesDictionary = dictionaryRepository.GetValues();
 }
 
 @if (answerGroup.DefinitiveAnswer != null || (answerGroup.OtherAnswers != null && answerGroup.OtherAnswers.Count() > 0))
@@ -93,9 +93,7 @@
             }
         </div>
     </div>
-    <div class="m-scrollable mCustomScrollbar _mCS_2 mCS-autoHide" data-scrollable="true" data-axis="xy" style="position: relative; overflow: visible;">
-        <div id="mCSB_2" class="mCustomScrollBox mCS-minimal-dark mCSB_vertical_horizontal mCSB_outside" style="max-height: none;" tabindex="0">
-            <div id="mCSB_2_container" class="mCSB_container mCS_y_hidden mCS_no_scrollbar_y" style="position: relative; top: 0px; left: 0px; width: 860px;" dir="ltr">
+    <div class="m-scrollable" data-scrollable="true" data-axis="xy">
                 <table class="table m-table  table-bordered m--margin-top-10" width="100%">
                     <thead>
                         <tr>
@@ -156,9 +154,7 @@
                         }
                     </tbody>
                 </table>
-            </div>
-        </div><div id="mCSB_2_scrollbar_vertical" class="mCSB_scrollTools mCSB_2_scrollbar mCS-minimal-dark mCSB_scrollTools_vertical" style="display: none;"><div class="mCSB_draggerContainer"><div id="mCSB_2_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 50px; height: 0px; top: 0px;"><div class="mCSB_dragger_bar" style="line-height: 50px;"></div></div><div class="mCSB_draggerRail"></div></div></div><div id="mCSB_2_scrollbar_horizontal" class="mCSB_scrollTools mCSB_2_scrollbar mCS-minimal-dark mCSB_scrollTools_horizontal" style="display: block;"><div class="mCSB_draggerContainer"><div id="mCSB_2_dragger_horizontal" class="mCSB_dragger" style="position: absolute; min-width: 50px; display: block; width: 860px; max-width: 849.8px; left: 0px;"><div class="mCSB_dragger_bar"></div></div><div class="mCSB_draggerRail"></div></div></div>
-    </div>
+     </div>
     <span class="m-form__help">
         @question.Description
     </span>
@@ -184,32 +180,26 @@
                         <div class="modal-body">
                             <input type="hidden" class="m-index" />
                             <input type="hidden" class="m-input" data-name="id" />
-                            <div class="form-group m-form__group row m--margin-top-20">
-                                <label class="col-form-label col-lg-3 col-sm-12">
+                            <div class="form-group m-form__group">
+                                <label for="valueAnswerDTO.Value">
                                     Value
                                 </label>
-                                <div class="col-lg-9 col-md-9 col-sm-12">
-                                    @Html.TextBoxFor(x => valueAnswerDTO.Value, new { @class = "form-control m-input m-values-autocomplete", data_name = "value" })
-                                    @Html.ValidationMessageFor(x => valueAnswerDTO.Value, "", new { @class = "text-danger" })
-                                </div>
+                                @Html.TextBoxFor(x => valueAnswerDTO.Value, new { @class = "form-control m-input m-values-autocomplete", data_name = "value" })
+                                @Html.ValidationMessageFor(x => valueAnswerDTO.Value, "", new { @class = "text-danger" })
                             </div>
-                            <div class="form-group m-form__group row m--margin-top-20">
-                                <label class="col-form-label col-lg-3 col-sm-12">
+                            <div class="form-group m-form__group">
+                                <label for="valueAnswerDTO.Definition">
                                     Definition
                                 </label>
-                                <div class="col-lg-9 col-md-9 col-sm-12">
-                                    @Html.TextAreaFor(x => valueAnswerDTO.Definition, new { @class = "form-control m-input", rows = "3", data_name = "definition" })
-                                    @Html.ValidationMessageFor(x => valueAnswerDTO.Definition, "", new { @class = "text-danger" })
-                                </div>
+                                @Html.TextAreaFor(x => valueAnswerDTO.Definition, new { @class = "form-control m-input", rows = "3", data_name = "definition" })
+                                @Html.ValidationMessageFor(x => valueAnswerDTO.Definition, "", new { @class = "text-danger" })
                             </div>
-                            <div class="form-group m-form__group row m--margin-top-20">
-                                <label class="col-form-label col-lg-3 col-sm-12">
+                            <div class="form-group m-form__group">
+                                <label for="valueAnswerDTO.Description">
                                     How is this value expressed in our party life?
                                 </label>
-                                <div class="col-lg-9 col-md-9 col-sm-12">
-                                    @Html.TextAreaFor(x => valueAnswerDTO.Description, new { @class = "form-control m-input", rows = "3", data_name = "description" })
-                                    @Html.ValidationMessageFor(x => valueAnswerDTO.Description, "", new { @class = "text-danger" })
-                                </div>
+                                @Html.TextAreaFor(x => valueAnswerDTO.Description, new { @class = "form-control m-input", rows = "3", data_name = "description" })
+                                @Html.ValidationMessageFor(x => valueAnswerDTO.Description, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="modal-footer">

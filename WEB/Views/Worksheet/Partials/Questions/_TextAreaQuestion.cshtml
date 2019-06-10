@@ -23,11 +23,14 @@
             <div class="m-list-badge__items">
                 @foreach (var f in question.Files)
                 {
-                    <span class="m-list-badge__item m-list-badge__item--default ">
-                        <a download="" href="/image.png" target="_blank">
+                    <a download="" href="/image.png" target="_blank">
+                        <span class="m-list-badge__item m-list-badge__item--default ">
+                            <i class="fa fa-file-o"></i>
+
                             @(f.Name + f.Ext)
-                        </a>
-                    </span>
+
+                        </span>
+                    </a>
                 }
             </div>
         </div>
