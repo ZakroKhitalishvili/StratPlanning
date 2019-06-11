@@ -1,6 +1,6 @@
 [
   {
-    "outputFileName": "wwwroot/js/scripts.min.js",
+    "outputFileName": "wwwroot/js/global.min.js",
     "inputFiles": [
       "wwwroot/js/global.js"
       //"wwwroot/js/session-timeout.js"
