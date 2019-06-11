@@ -366,12 +366,22 @@ namespace Application.Repositories
 
         public IList<FileDTO> GetFileAnswers(int questionId, int planId, int userId, bool isDefinitive)
         {
-            return Context.UserStepResults
-                .Include(x => x.UserToPlan)
-                .Include(x => x.FileAnswers)
-                .Where(x => (isDefinitive && x.PlanId == planId && x.IsDefinitive) || (x.UserToPlan.UserId == userId && x.UserToPlan.PlanId == planId))
-                .SelectMany(x => x.FileAnswers)
-                .Where(x => x.QuestionId == questionId)
+            var question = Context.Questions.Where(x => x.Id == questionId).Include(x => x.StepBlock).FirstOrDefault();
+
+            if (question == null) return new List<FileDTO>();
+
+            UserStepResult userStepResult;
+
+            if (isDefinitive)
+            {
+                userStepResult = GetFinalDefinitiveStepResult(planId, question.StepBlock.Step);
+            }
+            else
+            {
+                userStepResult = GetUserStepResult(planId, question.StepBlock.Step, userId);
+            }
+
+            return userStepResult.FileAnswers.Where(x => x.QuestionId == questionId)
                 .Select(x => Mapper.Map<FileDTO>(x.File)).ToList();
         }
 
@@ -685,6 +695,7 @@ namespace Application.Repositories
                 Context.StakeholderRatingAnswers.RemoveRange(userStepResult.StakeholderRatingAnswers);
                 Context.StakeholderAnswers.RemoveRange(userStepResult.StakeholderAnswers);
                 Context.StepTaskAnswers.RemoveRange(userStepResult.StepTaskAnswers);
+                Context.TextAnswers.RemoveRange(userStepResult.TextAnswers);
                 Context.UserStepResults.Remove(userStepResult);
 
                 Context.SaveChanges();
