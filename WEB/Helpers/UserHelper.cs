@@ -51,7 +51,7 @@ namespace Web.Helpers
         {
             var dictionaryRepository = context.RequestServices.GetService<IDictionaryRepository>();
 
-            var selectList = dictionaryRepository.GetCategories().Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Title });
+            var selectList = dictionaryRepository.GetStakeholderCategories().Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Title });
 
             return selectList;
         }

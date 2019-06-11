@@ -11,8 +11,14 @@ namespace Application.Interfaces.Repositories
 
         IEnumerable<string> GetValues();
 
-        IEnumerable<CategoryDTO> GetCategories();
+        IEnumerable<CategoryDTO> GetStakeholderCategories();
 
         IEnumerable<CriterionDTO> GetCriterions();
+
+        bool UpdateDictionary(int id, string newTitle, int userId);
+
+        bool Create(DictionaryDTO newDictionary, int userId);
+
+        bool Delete(int id);
     }
 }

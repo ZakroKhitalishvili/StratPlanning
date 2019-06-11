@@ -21,7 +21,7 @@
     <link href="~/Metronic/css/vendors.bundle.css" rel="stylesheet" />
     <link href="~/Metronic/css/styles.bundle.css" rel="stylesheet" />
     <link href="~/css/styles.bundle.css" rel="stylesheet" />
-    <link href="~/css/style.css" rel="stylesheet" asp-append-version="true"/>
+    <link href="~/css/style.css" rel="stylesheet" asp-append-version="true" />
 </head>
 <!-- end::Head -->
 <!-- begin::Body -->
@@ -184,6 +184,80 @@
                                             </span>
                                         </a>
                                     </li>
+                                    @if (User.IsInRole(Roles.Admin))
+                                    {
+                                        <li id="menu_manage" class="m-menu__item m-menu__item--submenu m-menu__item--rel m-menu__item--open-dropdown m-menu__item--open" data-menu-submenu-toggle="click" data-redirect="true" aria-haspopup="true">
+                                            <a class="m-menu__link m-menu__toggle">
+                                                <span class="m-menu__link-text">
+                                                    Manage
+                                                </span>
+                                                <i class="m-menu__hor-arrow la la-angle-down"></i>
+                                                <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                            </a>
+                                            <div class="m-menu__submenu  m-menu__submenu--fixed m-menu__submenu--left" style="width:500px">
+                                                <span class="m-menu__arrow m-menu__arrow--adjust"></span>
+                                                <div class="m-menu__subnav">
+                                                    <ul class="m-menu__content">
+                                                        <li class="m-menu__item">
+                                                            <h3 class="m-menu__heading m-menu__toggle">
+                                                                <span class="m-menu__link-text">
+                                                                    Directory
+                                                                </span>
+                                                                <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                                            </h3>
+                                                            <ul class="m-menu__inner">
+                                                                <li class="m-menu__item " data-redirect="true" aria-haspopup="true">
+                                                                    <a asp-controller="Manage" asp-action="GetPositionList" class="m-menu__link ">
+                                                                        <span class="m-menu__link-text">
+                                                                            Positions
+                                                                        </span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="m-menu__item " data-redirect="true" aria-haspopup="true">
+                                                                    <a href="header/actions.html" class="m-menu__link ">
+                                                                        <span class="m-menu__link-text">
+                                                                            Values
+                                                                        </span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="m-menu__item " data-redirect="true" aria-haspopup="true">
+                                                                    <a href="header/actions.html" class="m-menu__link ">
+                                                                        <span class="m-menu__link-text">
+                                                                            Stakeholder categories
+                                                                        </span>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                        <li class="m-menu__item">
+                                                            <h3 class="m-menu__heading m-menu__toggle">
+                                                                <span class="m-menu__link-text">
+                                                                    Steps
+                                                                </span>
+                                                                <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                                            </h3>
+                                                            <ul class="m-menu__inner">
+                                                                <li class="m-menu__item" data-redirect="true" aria-haspopup="true">
+                                                                    <a href="header/actions.html" class="m-menu__link ">
+                                                                        <span class="m-menu__link-text">
+                                                                            Introductions
+                                                                        </span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="m-menu__item " data-redirect="true" aria-haspopup="true">
+                                                                    <a href="header/actions.html" class="m-menu__link ">
+                                                                        <span class="m-menu__link-text">
+                                                                            Blocks
+                                                                        </span>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    }
                                 </ul>
                             </div>
                         </div>
@@ -293,7 +367,7 @@
 
     <environment names="Development">
         <script src="~/js/global.js" type="text/javascript" asp-append-version="true"></script>
-       @* <script src="~/js/session-timeout.js" type="text/javascript"></script>*@
+        @* <script src="~/js/session-timeout.js" type="text/javascript"></script>*@
     </environment>
 
     <environment names="Production">

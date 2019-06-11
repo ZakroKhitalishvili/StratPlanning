@@ -327,7 +327,7 @@ $(document).on('submit', 'form#add_plan_form', function (e) {
                     notify("Successfully created", "success", 5);
                     setTimeout(function () {
                         document.location.reload(false)
-                    }, 3000);
+                    }, 2000);
                 }
                 if (xhr.status == 202 || xhr.status == 400) {
                     notify("Input data are not valid ", "danger", 5);
@@ -374,11 +374,105 @@ $(document).on('click', '.delete-plan', function (e) {
                             notify("Successfully deleted", "success", 5);
                             setTimeout(function () {
                                 document.location.reload(false)
-                            }, 3000);
+                            }, 2000);
 
                         }
                         else {
                             notify("Deleting the plan is not possible due to existing answers", "danger", 5);
+                        }
+
+                    },
+                    error: function (xhr, statusText, error) {
+                        notify("An Error occured during sending a request", "danger", 5);
+                    }
+                })
+        }
+    })
+
+});
+
+//////
+///
+
+
+////////////
+//// Dictionary create ajax
+///
+
+
+$(document).on('submit', 'form#add_dictionary_form', function (e) {
+    e.preventDefault();
+
+    if (!$('#add_dictionary_form').valid()) {
+        return;
+    }
+
+    let formData = new FormData(document.querySelector('form#add_dictionary_form'));
+
+    $.ajax(
+        {
+            url: CreateDictionaryURL,
+            method: "post",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data, statusText, xhr) {
+                if (xhr.status == 201) {
+                    notify("Successfully created", "success", 5);
+                    setTimeout(function () {
+                        document.location.reload(false)
+                    }, 2000);
+                }
+                if (xhr.status == 202 || xhr.status == 400) {
+                    notify("Input data are not valid ", "danger", 5);
+                }
+
+                $('#add_dictionary_form').html(data);
+                initializeInputs('#add_dictionary_form');
+            },
+            error: function (xhr, statusText, error) {
+                notify("An Error occured on the request", "danger", 5);
+            }
+        });
+});
+
+////
+///
+
+
+///////
+/// plan delete ajax
+///
+
+$(document).on('click', '.delete-dictionary', function (e) {
+    e.preventDefault();
+
+    let id = $(this).data('id');
+
+    deleteConfirm().then(result => {
+        if (result) {
+            $.ajax(
+                {
+                    url: DeleteDictionaryURL,
+                    method: "post",
+                    data: {
+                        id
+                    },
+                    success: function (data, statusText, xhr) {
+                        if (xhr.status == 400) {
+                            notify("An Error occured during sending a request", "danger", 5);
+
+                        }
+
+                        if (data.result) {
+                            notify("Successfully deleted", "success", 5);
+                            setTimeout(function () {
+                                document.location.reload(false)
+                            }, 2000);
+
+                        }
+                        else {
+                            notify("Deleting the record is not possible due", "danger", 5);
                         }
 
                     },

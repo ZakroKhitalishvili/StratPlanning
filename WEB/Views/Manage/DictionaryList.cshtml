@@ -1,0 +1,90 @@
+﻿@model IEnumerable<Application.DTOs.DictionaryDTO>
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-portlet m-portlet--full-height m-portlet--tabs">
+        <div class="m-portlet__head">
+            <div class="m-subheader">
+                <div class="d-flex align-items-center">
+                    <div class="mr-auto">
+                        <h2>@ViewData["Title"]</h2>
+                    </div>
+
+                    <a href="" class="btn btn-sp m-btn m-btn--pill m--pull-right m--margin-bottom-10"
+                       data-toggle="modal" data-target="#add_dictionary_modal">
+                        Add new
+                    </a>
+
+                </div>
+            </div>
+        </div>
+        <div class="m-portlet__body">
+            <div class="m-scrollable " data-scrollable="true" data-axis="xy">
+                <table class="table m-table  table-bordered m--margin-top-10" width="100%">
+                    <thead>
+                        <tr>
+                            <th>
+                                Title
+                            </th>
+                            <th>
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var dictionary in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @dictionary.Title
+                                </td>
+                                <td>
+                                    <a href="" class="delete-dictionary m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
+                                       title="Delete"
+                                       data-toggle="tooltip" data-id="@dictionary.Id">
+                                        <i class="la la-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="add_dictionary_modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="">
+                    Add new
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="la la-remove"></span>
+                </button>
+            </div>
+            @{
+                var newDictionary = new DictionaryDTO
+                {
+                    HasCriterion = (bool?)ViewData["HasCriterion"] ?? false,
+                    HasPosition = (bool?)ViewData["HasPosition"] ?? false,
+                    HasStakeholderCategory = (bool?)ViewData["HasStakeholderCategory"] ?? false,
+                    HasStakeholderCriteria = (bool?)ViewData["HasStakeholderCriteria"] ?? false,
+                    HasValue = (bool?)ViewData["HasValue"] ?? false,
+                };
+
+            }
+            <partial name="~/Views/Manage/Partials/_NewDictionary.cshtml" view-data="ViewData" model="newDictionary" />
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        $('#menu_manage').addClass('m-menu__item--active');
+        var CreateDictionaryURL = '@Url.Action("CreateDictionary","Manage")';
+        var DeleteDictionaryURL = '@Url.Action("DeleteDictionary", "Manage")';
+    </script>
+}

@@ -1,0 +1,28 @@
+﻿@model Application.DTOs.DictionaryDTO
+
+<form class="m-form m-form--fit m-form--label-align-right" id="add_dictionary_form">
+    <div class="m-portlet__body">
+        <input type="hidden" asp-for="HasCriterion" />
+        <input type="hidden" asp-for="HasPosition" />
+        <input type="hidden" asp-for="HasStakeholderCategory" />
+        <input type="hidden" asp-for="HasStakeholderCriteria" />
+        <input type="hidden" asp-for="HasValue" />
+        <div class="form-group m-form__group">
+            <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+        </div>
+        <div class="form-group m-form__group">
+            <label asp-for="Title">
+                Title
+            </label>
+            <input type="text" asp-for="Title" class="form-control m-input" />
+            <span class="text-danger" asp-validation-for="Title"></span>
+        </div>
+    </div>
+    <div class="m-portlet__foot m-portlet__foot--fit">
+        <div class="m-form__actions pull-right">
+            <button type="submit" class="btn btn-sp m-btn m-btn--icon">
+                Add
+            </button>
+        </div>
+    </div>
+</form>

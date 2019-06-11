@@ -327,8 +327,6 @@ namespace Web.Controllers
         {
             _loggerManager.Info($"DeletePlan({planId}) is requested");
 
-            Response.StatusCode = StatusCodes.Status202Accepted;
-
             if (planId <= 0)
             {
                 _loggerManager.Info($"DeletePlan({planId}) is a bad request");

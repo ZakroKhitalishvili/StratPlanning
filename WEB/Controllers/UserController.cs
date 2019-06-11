@@ -45,6 +45,11 @@ namespace Web.Controllers
                 return BadRequest();
             }
 
+            if (userId != HttpContext.GetUserId())
+            {
+                return new StatusCodeResult(StatusCodes.Status401Unauthorized);
+            }
+
             var user = _userRepository.GetUserById(userId.Value);
 
             _loggerManager.Info($"GetProfile({userId}) successfully returned a result");

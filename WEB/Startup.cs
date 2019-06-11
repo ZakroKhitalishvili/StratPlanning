@@ -82,13 +82,6 @@ namespace Web
 
             app.UseStaticFiles();
 
-            app.UseRequestLocalization(options =>
-            {
-                options.SetDefaultCulture("en-GB");
-            }
-            );
-
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
