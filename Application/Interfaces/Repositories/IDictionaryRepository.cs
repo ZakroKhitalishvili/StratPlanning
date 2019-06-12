@@ -7,18 +7,22 @@ namespace Application.Interfaces.Repositories
 {
     public interface IDictionaryRepository
     {
-        IEnumerable<PositionDTO> GetPositions();
+        IEnumerable<DictionaryDTO> GetPositions(bool includeDeleted = true);
 
-        IEnumerable<string> GetValues();
+        IEnumerable<DictionaryDTO> GetValues(bool includeDeleted = true);
 
-        IEnumerable<CategoryDTO> GetStakeholderCategories();
+        IEnumerable<DictionaryDTO> GetStakeholderCategories(bool includeDeleted = true);
 
-        IEnumerable<CriterionDTO> GetCriterions();
+        IEnumerable<DictionaryDTO> GetStakeholderCriteria(bool includeDeleted = true);
 
         bool UpdateDictionary(int id, string newTitle, int userId);
 
         bool Create(DictionaryDTO newDictionary, int userId);
 
-        bool Delete(int id);
+        bool Delete(int id, int userId);
+
+        bool Activate(int id, int userId);
+
+        bool Disactivate(int id, int userId);
     }
 }

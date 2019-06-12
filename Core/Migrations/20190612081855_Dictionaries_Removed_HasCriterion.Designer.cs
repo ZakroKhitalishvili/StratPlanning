@@ -4,14 +4,16 @@ using Core.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Core.Migrations
 {
     [DbContext(typeof(PlanningDbContext))]
-    partial class PlanningDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190612081855_Dictionaries_Removed_HasCriterion")]
+    partial class Dictionaries_Removed_HasCriterion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,14 +77,6 @@ namespace Core.Migrations
                         .HasDefaultValue(false);
 
                     b.Property<bool>("HasValue")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(false);
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(true);
-
-                    b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(false);
 
@@ -167,7 +161,15 @@ namespace Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1000);
+
                     b.Property<string>("Step")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100);
 
@@ -1197,7 +1199,7 @@ namespace Core.Migrations
                     b.HasOne("Core.Entities.Dictionary", "Criterion")
                         .WithMany("StakeholderRatingAnswersToDictionaries")
                         .HasForeignKey("CriterionId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Core.Entities.StakeholderRatingAnswer", "StakeholderRatingAnswer")
                         .WithMany("Criteria")

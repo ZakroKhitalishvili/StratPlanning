@@ -21,8 +21,6 @@ namespace Core.Entities
 
         public bool HasPosition { get; set; }
 
-        public bool HasCriterion { get; set; }
-
         public bool HasValue { get; set; }
 
         public bool HasStakeholderCategory { get; set; }
@@ -36,6 +34,10 @@ namespace Core.Entities
         public int? CreatedBy { get; set; }
 
         public int? UpdatedBy { get; set; }
+
+        public bool IsDeleted { get; set; }
+
+        public bool IsActive { get; set; }
 
         public virtual ICollection<StakeholderAnswer> CategoryStakeholders { get; set; }
 

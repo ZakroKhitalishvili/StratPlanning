@@ -71,6 +71,9 @@ namespace Application.Mappers
                         opt => opt.Ignore())
                .ForMember(
                      dest => dest.UpdatedBy,
+                        opt => opt.Ignore())
+               .ForMember(
+                     dest => dest.IsDeleted,
                         opt => opt.Ignore());
 
             });

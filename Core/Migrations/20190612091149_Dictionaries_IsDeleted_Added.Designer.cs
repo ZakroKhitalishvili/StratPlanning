@@ -4,14 +4,16 @@ using Core.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Core.Migrations
 {
     [DbContext(typeof(PlanningDbContext))]
-    partial class PlanningDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190612091149_Dictionaries_IsDeleted_Added")]
+    partial class Dictionaries_IsDeleted_Added
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,10 +79,6 @@ namespace Core.Migrations
                     b.Property<bool>("HasValue")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(false);
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(true);
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -167,7 +165,15 @@ namespace Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1000);
+
                     b.Property<string>("Step")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100);
 

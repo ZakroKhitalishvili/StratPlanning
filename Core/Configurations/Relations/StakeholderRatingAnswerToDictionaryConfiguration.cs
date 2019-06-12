@@ -22,7 +22,7 @@ namespace Core.Configurations
                 .WithMany(s => s.StakeholderRatingAnswersToDictionaries)
                 .HasForeignKey(x => x.CriterionId)
                 .IsRequired(true)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
         }
     }

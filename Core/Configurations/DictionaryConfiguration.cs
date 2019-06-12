@@ -20,9 +20,6 @@ namespace Core.Configurations
             builder.Property(x => x.HasPosition)
                 .HasDefaultValue(false);
 
-            builder.Property(x => x.HasCriterion)
-                .HasDefaultValue(false);
-
             builder.Property(x => x.HasValue)
                 .HasDefaultValue(false);
 
@@ -43,6 +40,12 @@ namespace Core.Configurations
 
             builder.Property(x => x.UpdatedBy)
                 .IsRequired(false);
+
+            builder.Property(x => x.IsDeleted)
+               .HasDefaultValue(false);
+
+            builder.Property(x => x.IsActive)
+               .HasDefaultValue(true);
 
         }
     }

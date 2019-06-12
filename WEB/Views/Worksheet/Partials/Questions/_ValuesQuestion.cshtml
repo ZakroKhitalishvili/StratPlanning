@@ -14,7 +14,7 @@
 
     var filledAnswer = Model.AnswerGroups[questionIndexOffset + questionIndex];
 
-    var valuesDictionary = dictionaryRepository.GetValues();
+    var valuesDictionary = dictionaryRepository.GetValues(false).Where(x=>x.IsActive);
 }
 
 @if (answerGroup.DefinitiveAnswer != null || (answerGroup.OtherAnswers != null && answerGroup.OtherAnswers.Count() > 0))
@@ -221,7 +221,7 @@
         }
 
         if (fieldOptions['valuesDictionary'] == undefined) {
-            fieldOptions['valuesDictionary'] = @Json.Serialize(valuesDictionary);
+            fieldOptions['valuesDictionary'] = @Json.Serialize(valuesDictionary.Select(x=>x.Title));
         }
 
         fieldOptions['#v_@(question.Id)_list'] = {

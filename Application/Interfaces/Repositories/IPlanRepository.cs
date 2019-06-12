@@ -51,5 +51,11 @@ namespace Application.Interfaces.Repositories
         string GetWorkingStep(int planId);
 
         bool IsUserInPlanningTeam(int planId, int userId);
+
+        IntroductionDTO GetIntroduction(string stepIndex);
+
+        IEnumerable<IntroductionDTO> GetIntroductions();
+
+        bool UpdateIntroduction(string stepIndex, int VideoId, int userId);
     }
 }

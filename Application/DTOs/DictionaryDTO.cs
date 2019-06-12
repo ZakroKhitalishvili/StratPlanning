@@ -16,12 +16,12 @@ namespace Application.DTOs
 
         public bool HasPosition { get; set; }
 
-        public bool HasCriterion { get; set; }
-
         public bool HasValue { get; set; }
 
         public bool HasStakeholderCategory { get; set; }
 
         public bool HasStakeholderCriteria { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }

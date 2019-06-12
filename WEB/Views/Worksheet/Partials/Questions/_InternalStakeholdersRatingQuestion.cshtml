@@ -18,7 +18,7 @@
 
     var stakeholders = planRepository.GetDefinitiveStakehloders(Model.PlanId, true).OrderBy(x => x.Id).ToArray();
 
-    var criterions = dictionaryRepository.GetCriterions().OrderBy(x => x.Id).ToArray();
+    var criteria = dictionaryRepository.GetStakeholderCriteria().OrderBy(x => x.Id).ToArray();
 }
 
 @if (stakeholders.Count() > 0)
@@ -41,19 +41,23 @@
                             </td>
                         }
                     </tr>
-                    @for (var i = 0; i < criterions.Count(); i++)
+                    @for (var i = 0; i < criteria.Count(); i++)
                     {
+                        if (!criteria[i].IsActive && !(answerGroup.Answer?.StakeholderRatingAnswers.Any(x => x.CriterionsRates.Any(s => s.CriterionId == criteria[i].Id)) ?? false))
+                        {
+                            continue;
+                        }
                         <tr>
                             <th>
-                                @criterions[i].Title
+                                @criteria[i].Title
                             </th>
                             @for (var j = 0; j < stakeholders.Count(); j++)
                             {
-                                var currentRate = answerGroup.Answer?.StakeholderRatingAnswers?.Where(x => x.StakeholderId == stakeholders[j].Id).SelectMany(x => x.CriterionsRates).Where(x => x.CriterionId == criterions[i].Id).Select(x => x.Rate).FirstOrDefault();
+                                var currentRate = answerGroup.Answer?.StakeholderRatingAnswers?.Where(x => x.StakeholderId == stakeholders[j].Id).SelectMany(x => x.CriterionsRates).Where(x => x.CriterionId == criteria[i].Id).Select(x => x.Rate).FirstOrDefault();
                                 <td>
                                     <div class="d-flex justify-content-between">
                                         <div class="flex-grow-1 text-center">
-                                            <input type="hidden" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderRatingAnswers[@j].CriterionsRates[@i].CriterionId" value="@criterions[i].Id" />
+                                            <input type="hidden" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderRatingAnswers[@j].CriterionsRates[@i].CriterionId" value="@criteria[i].Id" />
                                             <select class="form-control m-select2" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.StakeholderRatingAnswers[@j].CriterionsRates[@i].Rate">
                                                 <!option value="1" @(currentRate == 1 ? "selected" : "")>1</!option>
                                                 <!option value="2" @(currentRate == 2 ? "selected" : "")>2</!option>
@@ -83,7 +87,7 @@
                                                                                             <b>Definitive answer</b>
                                                                                         </span>
                                                                                         <span class="m-list-timeline__text">
-                                                                                            @answerGroup.DefinitiveAnswer.StakeholderRatingAnswers.FirstOrDefault().CriterionsRates.FirstOrDefault(x => x.CriterionId == criterions[i].Id).Rate
+                                                                                            @answerGroup.DefinitiveAnswer.StakeholderRatingAnswers.FirstOrDefault().CriterionsRates.FirstOrDefault(x => x.CriterionId == criteria[i].Id).Rate
                                                                                         </span>
                                                                                     </div>
                                                                                 }
@@ -95,7 +99,7 @@
                                                                                             @otherAnswer.Author
                                                                                         </span>
                                                                                         <span class="m-list-timeline__text">
-                                                                                            @otherAnswer.StakeholderRatingAnswers.FirstOrDefault().CriterionsRates.FirstOrDefault(x => x.CriterionId == criterions[i].Id).Rate
+                                                                                            @otherAnswer.StakeholderRatingAnswers.FirstOrDefault().CriterionsRates.FirstOrDefault(x => x.CriterionId == criteria[i].Id).Rate
                                                                                         </span>
                                                                                     </div>
                                                                                 }

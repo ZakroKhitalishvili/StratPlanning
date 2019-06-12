@@ -6,7 +6,6 @@ using Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Application.Repositories
 {
@@ -17,24 +16,24 @@ namespace Application.Repositories
 
         }
 
-        public IEnumerable<PositionDTO> GetPositions()
+        public IEnumerable<DictionaryDTO> GetPositions(bool includeDeleted = true)
         {
-            return FindByCondition(x => x.HasPosition).AsEnumerable().Select(p => Mapper.Map<PositionDTO>(p)).ToList();
+            return FindByCondition(x => x.HasPosition && (x.IsDeleted == includeDeleted || !x.IsDeleted)).AsEnumerable().Select(p => Mapper.Map<DictionaryDTO>(p)).ToList();
         }
 
-        public IEnumerable<string> GetValues()
+        public IEnumerable<DictionaryDTO> GetValues(bool includeDeleted = true)
         {
-            return FindByCondition(x => x.HasValue).AsEnumerable().Select(x => x.Title);
+            return FindByCondition(x => x.HasValue && (x.IsDeleted == includeDeleted || !x.IsDeleted)).AsEnumerable().Select(x => Mapper.Map<DictionaryDTO>(x));
         }
 
-        public IEnumerable<CriterionDTO> GetCriterions()
+        public IEnumerable<DictionaryDTO> GetStakeholderCriteria(bool includeDeleted = true)
         {
-            return FindByCondition(x => x.HasStakeholderCriteria).AsEnumerable().Select(p => Mapper.Map<CriterionDTO>(p)).ToList();
+            return FindByCondition(x => x.HasStakeholderCriteria && ( x.IsDeleted == includeDeleted || !x.IsDeleted)).AsEnumerable().Select(p => Mapper.Map<DictionaryDTO>(p)).ToList();
         }
 
-        public IEnumerable<CategoryDTO> GetStakeholderCategories()
+        public IEnumerable<DictionaryDTO> GetStakeholderCategories(bool includeDeleted = true)
         {
-            return FindByCondition(x => x.HasStakeholderCategory).AsEnumerable().Select(p => Mapper.Map<CategoryDTO>(p)).ToList();
+            return FindByCondition(x => x.HasStakeholderCategory && (x.IsDeleted == includeDeleted || !x.IsDeleted)).AsEnumerable().Select(p => Mapper.Map<DictionaryDTO>(p)).ToList();
         }
 
         public bool UpdateDictionary(int id, string newTitle, int userId)
@@ -83,7 +82,7 @@ namespace Application.Repositories
             return true;
         }
 
-        public bool Delete(int id)
+        public bool Delete(int id, int userId)
         {
             var dictionary = Get(id);
 
@@ -91,7 +90,52 @@ namespace Application.Repositories
             {
                 try
                 {
-                    Delete(dictionary);
+                    dictionary.IsActive = false;
+                    dictionary.IsDeleted = true;
+                    Context.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public bool Activate(int id,int userId)
+        {
+            var dictionary = Get(id);
+
+            if (dictionary != null)
+            {
+                try
+                {
+                    dictionary.IsActive = true;
+                    dictionary.UpdatedAt = DateTime.Now;
+                    dictionary.UpdatedBy = userId;
+                    Context.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public bool Disactivate(int id, int userId)
+        {
+            var dictionary = Get(id);
+
+            if (dictionary != null)
+            {
+                try
+                {
+                    dictionary.IsActive = false;
+                    dictionary.UpdatedAt = DateTime.Now;
+                    dictionary.UpdatedBy = userId;
                     Context.SaveChanges();
                 }
                 catch (Exception)

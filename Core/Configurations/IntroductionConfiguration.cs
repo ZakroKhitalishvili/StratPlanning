@@ -12,25 +12,15 @@ namespace Core.Configurations
     {
         public void Configure(EntityTypeBuilder<Introduction> builder)
         {
-
-            builder.Property(x => x.Title)
-                .IsRequired()
-                .HasMaxLength(EntityConfigs.TextMaxLength);
-
             builder.Property(x => x.Step)
               .IsRequired()
               .HasMaxLength(EntityConfigs.TextMaxLength);
-
-            builder.Property(x => x.Description)
-              .IsRequired()
-              .HasMaxLength(EntityConfigs.TextAreaMaxLength);
 
             builder.Property(x => x.UpdatedAt)
                 .IsRequired();
 
             builder.Property(x => x.UpdatedBy)
                 .IsRequired(false);
-
 
             builder.HasOne(x => x.Video)
                 .WithOne(s => s.Introduction)

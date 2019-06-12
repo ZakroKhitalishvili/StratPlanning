@@ -32,7 +32,7 @@ function initializeInputs(selector) {
         tokenSeparators: [","]
     });
 
-    $(selector).find('.datepicker').datepicker({  format: 'dd-mm-yyyy' });
+    $(selector).find('.datepicker').datepicker({ format: 'dd-mm-yyyy' });
 
     $(selector).find('.select2-without-search').select2({
         minimumResultsForSearch: Infinity
@@ -89,7 +89,7 @@ function initializeInputs(selector) {
             }
         }).on('click', function () {
             $(this).autocomplete("search", $(this).val());
-            })
+        })
             .on('keyup keydown', function (e) {
                 if (e.which == 13) {
                     e.preventDefault();
@@ -133,19 +133,10 @@ $(document).ready(function () {
 
 $(document).ready(function () {
 
-    ///////
-    //shared
-    //
-    //$('form').on('keyup keypress', function (e) {
-    //    var keyCode = e.keyCode || e.which;
-    //    if (keyCode === 13) {
-    //        e.preventDefault();
-    //        return false;
-    //    }
-    //});
+
     initializeInputs(document);
 
-    var quickSearch = $('#m_quicksearch');
+    //var quickSearch = $('#m_quicksearch');
 
     //quickSearch.mQuicksearch({
     //    type: quickSearch.data('search-type'), // quick search type
@@ -441,7 +432,7 @@ $(document).on('submit', 'form#add_dictionary_form', function (e) {
 
 
 ///////
-/// plan delete ajax
+/// dictionary deleted ajax
 ///
 
 $(document).on('click', '.delete-dictionary', function (e) {
@@ -472,7 +463,104 @@ $(document).on('click', '.delete-dictionary', function (e) {
 
                         }
                         else {
-                            notify("Deleting the record is not possible due", "danger", 5);
+                            notify("Deleting the record is not possible ", "danger", 5);
+                        }
+
+                    },
+                    error: function (xhr, statusText, error) {
+                        notify("An Error occured during sending a request", "danger", 5);
+                    }
+                })
+        }
+    })
+
+});
+
+//////
+///
+
+///////
+/// dictionary activation ajax
+///
+
+$(document).on('click', '.activate-dictionary', function (e) {
+    e.preventDefault();
+
+    let id = $(this).data('id');
+
+    deleteConfirm().then(result => {
+        if (result) {
+            $.ajax(
+                {
+                    url: ActivateDictionaryURL,
+                    method: "post",
+                    data: {
+                        id
+                    },
+                    success: function (data, statusText, xhr) {
+                        if (xhr.status == 400) {
+                            notify("An Error occured during sending a request", "danger", 5);
+
+                        }
+
+                        if (data.result) {
+                            notify("Successfully activated", "success", 5);
+                            setTimeout(function () {
+                                document.location.reload(false)
+                            }, 2000);
+
+                        }
+                        else {
+                            notify("Activating the record is not possible ", "danger", 5);
+                        }
+
+                    },
+                    error: function (xhr, statusText, error) {
+                        notify("An Error occured during sending a request", "danger", 5);
+                    }
+                })
+        }
+    })
+
+});
+
+//////
+///
+
+
+///////
+/// dictionary disactivation ajax
+///
+
+$(document).on('click', '.disactivate-dictionary', function (e) {
+    e.preventDefault();
+
+    let id = $(this).data('id');
+
+    deleteConfirm().then(result => {
+        if (result) {
+            $.ajax(
+                {
+                    url: DisactivateDictionaryURL,
+                    method: "post",
+                    data: {
+                        id
+                    },
+                    success: function (data, statusText, xhr) {
+                        if (xhr.status == 400) {
+                            notify("An Error occured during sending a request", "danger", 5);
+
+                        }
+
+                        if (data.result) {
+                            notify("Successfully Diactivated", "success", 5);
+                            setTimeout(function () {
+                                document.location.reload(false)
+                            }, 2000);
+
+                        }
+                        else {
+                            notify("Disactivating the record is not possible ", "danger", 5);
                         }
 
                     },

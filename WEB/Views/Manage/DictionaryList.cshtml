@@ -38,6 +38,22 @@
                                     @dictionary.Title
                                 </td>
                                 <td>
+                                    @if (dictionary.IsActive)
+                                    {
+                                        <a href="" class="disactivate-dictionary m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
+                                           title="Disactivate"
+                                           data-toggle="tooltip" data-id="@dictionary.Id">
+                                            <i class="fa fa-lock"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="" class="activate-dictionary m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
+                                           title="Activate"
+                                           data-toggle="tooltip" data-id="@dictionary.Id">
+                                            <i class="fa fa-unlock"></i>
+                                        </a>
+                                    }
                                     <a href="" class="delete-dictionary m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
                                        title="Delete"
                                        data-toggle="tooltip" data-id="@dictionary.Id">
@@ -67,7 +83,6 @@
             @{
                 var newDictionary = new DictionaryDTO
                 {
-                    HasCriterion = (bool?)ViewData["HasCriterion"] ?? false,
                     HasPosition = (bool?)ViewData["HasPosition"] ?? false,
                     HasStakeholderCategory = (bool?)ViewData["HasStakeholderCategory"] ?? false,
                     HasStakeholderCriteria = (bool?)ViewData["HasStakeholderCriteria"] ?? false,
@@ -86,5 +101,7 @@
         $('#menu_manage').addClass('m-menu__item--active');
         var CreateDictionaryURL = '@Url.Action("CreateDictionary","Manage")';
         var DeleteDictionaryURL = '@Url.Action("DeleteDictionary", "Manage")';
+        var ActivateDictionaryURL = '@Url.Action("ActivateDictionary", "Manage")';
+        var DisactivateDictionaryURL = '@Url.Action("DisactivateDictionary", "Manage")';
     </script>
 }

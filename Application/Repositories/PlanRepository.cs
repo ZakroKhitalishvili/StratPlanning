@@ -323,7 +323,7 @@ namespace Application.Repositories
                 SaveAnswers(planStep.AnswerGroups, finalDefinitiveStepResult);
 
                 //delete old stepResults that are neither submitted nor final
-                var otherDefinitiveResult = Context.UserStepResults.Where(x => x.PlanId == planStep.PlanId && x.Step == planStep.Step && x.IsFinal.HasValue && !x.IsFinal.Value && !x.IsSubmitted && x.IsDefinitive ).SingleOrDefault();
+                var otherDefinitiveResult = Context.UserStepResults.Where(x => x.PlanId == planStep.PlanId && x.Step == planStep.Step && x.IsFinal.HasValue && !x.IsFinal.Value && !x.IsSubmitted && x.IsDefinitive).SingleOrDefault();
 
                 if (otherDefinitiveResult != null)
                 {
@@ -511,11 +511,54 @@ namespace Application.Repositories
             return workingStep;
         }
 
-        public bool IsUserInPlanningTeam(int planId,int userId)
+        public bool IsUserInPlanningTeam(int planId, int userId)
         {
             return Context.UsersToPlans.Any(x => x.PlanId == planId && x.UserId == userId);
         }
 
+        public IntroductionDTO GetIntroduction(string stepIndex)
+        {
+            return Context.Introductions.Where(x => x.Step == stepIndex).Include(x => x.Video).AsEnumerable().Select(x => new IntroductionDTO { Step = x.Step, Video = Mapper.Map<FileDTO>(x.Video) }).SingleOrDefault();
+        }
+
+        public IEnumerable<IntroductionDTO> GetIntroductions()
+        {
+            return Context.Introductions.Include(x => x.Video).AsEnumerable().Select(x => new IntroductionDTO { Step = x.Step, Video = Mapper.Map<FileDTO>(x.Video) });
+        }
+
+        public bool UpdateIntroduction(string stepIndex, int VideoFileId, int userId)
+        {
+            var introduction = Context.Introductions.Where(x => x.Step == stepIndex).SingleOrDefault();
+            if (introduction == null)
+            {
+                introduction = new Introduction
+                {
+                    VideoId = VideoFileId,
+                    Step = stepIndex,
+                    UpdatedAt = DateTime.Now,
+                    UpdatedBy = userId
+                };
+
+                Context.Introductions.Add(introduction);
+            }
+            else
+            {
+                introduction.VideoId = VideoFileId;
+                introduction.UpdatedAt = DateTime.Now;
+                introduction.UpdatedBy = userId;
+            }
+
+            try
+            {
+                Context.SaveChanges();
+            }
+            catch(Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
 
         #region Private methods
 
@@ -607,7 +650,7 @@ namespace Application.Repositories
             {
                 userStepResult.PlanId = null;
                 var userToPlan = Context.UsersToPlans.Where(x => x.UserId == userId && x.PlanId == planId).FirstOrDefault();
-                if(userToPlan==null)
+                if (userToPlan == null)
                 {
                     return null;
                 }

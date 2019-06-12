@@ -18,9 +18,13 @@ namespace Web.Controllers
     {
         private readonly IDictionaryRepository _dictionaryRepository;
 
-        public ManageController(ILoggerManager loggerManager, IDictionaryRepository dictionaryRepository) : base(loggerManager)
+        private readonly IPlanRepository _planRepository;
+
+        public ManageController(ILoggerManager loggerManager, IDictionaryRepository dictionaryRepository, IPlanRepository planRepository) : base(loggerManager)
         {
             _dictionaryRepository = dictionaryRepository;
+
+            _planRepository = planRepository;
         }
         // GET: /<controller>/
         public IActionResult Index()
@@ -31,12 +35,45 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult GetPositionList()
         {
-            var positions = _dictionaryRepository.GetPositions().Select(x => new DictionaryDTO { Id = x.Id, Title = x.Title, HasPosition = true });
+            var positions = _dictionaryRepository.GetPositions(false);
 
             ViewData["Title"] = "Positions";
             ViewData["HasPosition"] = true;
 
             return View("DictionaryList", positions);
+        }
+
+        [HttpGet]
+        public IActionResult GetValueList()
+        {
+            var values = _dictionaryRepository.GetValues(false);
+
+            ViewData["Title"] = "Values";
+            ViewData["HasValue"] = true;
+
+            return View("DictionaryList", values);
+        }
+
+        [HttpGet]
+        public IActionResult GetStakeholderCategoryList()
+        {
+            var stakeholderCategories = _dictionaryRepository.GetStakeholderCategories(false);
+
+            ViewData["Title"] = "Stakeholder Categories";
+            ViewData["HasStakeholderCategory"] = true;
+
+            return View("DictionaryList", stakeholderCategories);
+        }
+
+        [HttpGet]
+        public IActionResult GetStakeholderCriterionList()
+        {
+            var stakeholderCriteria = _dictionaryRepository.GetStakeholderCriteria(false);
+
+            ViewData["Title"] = "Stakeholder Criteria";
+            ViewData["HasStakeholderCriteria"] = true;
+
+            return View("DictionaryList", stakeholderCriteria);
         }
 
         [HttpPost]
@@ -64,10 +101,42 @@ namespace Web.Controllers
 
             if (ModelState.IsValid)
             {
-                result = _dictionaryRepository.Delete(id);
+                result = _dictionaryRepository.Delete(id, HttpContext.GetUserId());
             }
 
             return new JsonResult(new { result });
+        }
+
+        [HttpPost]
+        public IActionResult ActivateDictionary(int id)
+        {
+            var result = false;
+
+            if (ModelState.IsValid)
+            {
+                result = _dictionaryRepository.Activate(id, HttpContext.GetUserId());
+            }
+
+            return new JsonResult(new { result });
+        }
+
+        [HttpPost]
+        public IActionResult DisactivateDictionary(int id)
+        {
+            var result = false;
+
+            if (ModelState.IsValid)
+            {
+                result = _dictionaryRepository.Disactivate(id, HttpContext.GetUserId());
+            }
+
+            return new JsonResult(new { result });
+        }
+
+        [HttpGet]
+        public IActionResult GetIntroductionList()
+        {
+            return View("IntroductionList",_planRepository.GetIntroductions());
         }
     }
 }

@@ -188,6 +188,7 @@
                                     {
                                         <li id="menu_manage" class="m-menu__item m-menu__item--submenu m-menu__item--rel m-menu__item--open-dropdown m-menu__item--open" data-menu-submenu-toggle="click" data-redirect="true" aria-haspopup="true">
                                             <a class="m-menu__link m-menu__toggle">
+                                                <span class="m-menu__item-here"></span>
                                                 <span class="m-menu__link-text">
                                                     Manage
                                                 </span>
@@ -214,16 +215,23 @@
                                                                     </a>
                                                                 </li>
                                                                 <li class="m-menu__item " data-redirect="true" aria-haspopup="true">
-                                                                    <a href="header/actions.html" class="m-menu__link ">
+                                                                    <a asp-controller="Manage" asp-action="GetValueList" class="m-menu__link ">
                                                                         <span class="m-menu__link-text">
                                                                             Values
                                                                         </span>
                                                                     </a>
                                                                 </li>
                                                                 <li class="m-menu__item " data-redirect="true" aria-haspopup="true">
-                                                                    <a href="header/actions.html" class="m-menu__link ">
+                                                                    <a asp-controller="Manage" asp-action="GetStakeholderCategoryList" class="m-menu__link ">
                                                                         <span class="m-menu__link-text">
-                                                                            Stakeholder categories
+                                                                            Stakeholder Categories
+                                                                        </span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="m-menu__item " data-redirect="true" aria-haspopup="true">
+                                                                    <a asp-controller="Manage" asp-action="GetStakeholderCriterionList" class="m-menu__link ">
+                                                                        <span class="m-menu__link-text">
+                                                                            Stakeholder Criteria
                                                                         </span>
                                                                     </a>
                                                                 </li>
@@ -238,7 +246,7 @@
                                                             </h3>
                                                             <ul class="m-menu__inner">
                                                                 <li class="m-menu__item" data-redirect="true" aria-haspopup="true">
-                                                                    <a href="header/actions.html" class="m-menu__link ">
+                                                                    <a asp-controller="Manage" asp-action="GetIntroductionList" class="m-menu__link ">
                                                                         <span class="m-menu__link-text">
                                                                             Introductions
                                                                         </span>
