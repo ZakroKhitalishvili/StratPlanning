@@ -142,9 +142,30 @@ function initializeStep() {
             addRemoveLinks: true,
             removedfile: function (file) {
                 let currentPreviewElement = $(file.previewElement);
+                let id = $(currentPreviewElement).find(".sp-file-input").val();
 
-                removeFilePreview(currentPreviewElement);
+                removeFilePreview(currentPreviewElement).then(function (result) {
+                    console.log(result);
+                    if (result) {
+                        $.ajax(
+                            {
+                                url: '/Worksheet/DeleteFile',
+                                method: "post",
+                                data: { id  },
+                                success: function (data, statusText, xhr) {
+                                    if (xhr.status == 201) {
 
+                                    }
+                                    if (xhr.status == 202 || xhr.status == 400) {
+                                        notify("Input data are not valid ", "danger", 5);
+                                    }
+                                },
+                                error: function (xhr, statusText, error) {
+                                    notify("An Error occured on the request", "danger", 5);
+                                }
+                            });
+                    }
+                });
             },
             url: "/Worksheet/UploadFile",
             uploadMultiple: true,
@@ -180,36 +201,62 @@ function initializeStep() {
                     <a class="dz-remove" href="javascript:undefined;" data-dz-remove="">Remove file</a>
                 </div>`
         })
-            .droppable({
-                accept: '.draggable-file',
+            //.droppable({
+            //    accept: '.draggable-file',
 
-                drop: function (e, ui) {
-                    console.log('drop');
+            //    drop: function (e, ui) {
+            //        console.log('drop');
 
-                    e.preventDefault();
+            //        e.preventDefault();
 
-                    let name = $(ui.draggable).html();
+            //        let name = $(ui.draggable).html();
 
-                    $(this).find('.dz-message').hide();
+            //        $(this).find('.dz-message').hide();
 
-                    $(this).append(`
-                <div class="dz-preview dz-file-preview dz-processing dz-error dz-complete">
-                    <input class="sp-file-input" type="hidden" name="${inputname}"/>
-                    <div class="dz-image"></div>
-                    <div class="dz-details">      
-                        <div class="dz-filename">
-                            <span data-dz-name="">${name}</span>
-                        </div>  
-                        <div class="dz-progress">
-                            <span class="dz-upload" data-dz-uploadprogress=""></span>
-                        </div>   
-                    </div>
-                    <a class="dz-remove" href="javascript:undefined;" onclick="filePreviewRemoveHandler(event)" data-dz-remove="">Remove file</a>
-                </div>`);
-                }
-            })
+            //        $(this).append(`
+            //    <div class="dz-preview dz-file-preview dz-processing dz-error dz-complete">
+            //        <input class="sp-file-input" type="hidden" name="${inputname}"/>
+            //        <div class="dz-image"></div>
+            //        <div class="dz-details">      
+            //            <div class="dz-filename">
+            //                <span data-dz-name="">${name}</span>
+            //            </div>  
+            //            <div class="dz-progress">
+            //                <span class="dz-upload" data-dz-uploadprogress=""></span>
+            //            </div>   
+            //        </div>
+            //        <a class="dz-remove" href="javascript:undefined;" onclick="filePreviewRemoveHandler(event)" data-dz-remove="">Remove file</a>
+            //    </div>`);
+            //    }
+            //})
             .addClass('dropzone');
     });
+
+    //////////
+    /// dropzone file previews remove relating functions
+    //
+    function filePreviewRemoveHandler(e) {
+        removeFilePreview($(e.target).parent());
+    }
+
+    function removeFilePreview(filePreview) {
+        let parentDropzone = $(filePreview).parent();
+        parentDropzone.find('.dz-message').hide();
+        return deleteConfirm().then(function (isConfirm) {
+
+            if (isConfirm) {
+                filePreview.remove();
+
+            }
+
+            if (parentDropzone.find('.dz-preview').length == 0) {
+                parentDropzone.find('.dz-message').show();
+            }
+
+            return isConfirm;
+
+        });
+    }
 
     //////
     /// list-items events

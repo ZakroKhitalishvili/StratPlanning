@@ -1,0 +1,76 @@
+﻿@model Application.DTOs.IntroductionDTO
+
+@inject Application.Interfaces.Repositories.IPlanRepository planRepository
+
+@{
+    ViewData["Title"] = "Introductions";
+    var stepList = planRepository.GetStepList();
+}
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-portlet m-portlet--full-height m-portlet--tabs">
+        <div class="m-portlet__head">
+            <div class="m-subheader">
+                <div class="d-flex align-items-center">
+                    <div class="mr-auto">
+                        <h2>@ViewData["Title"]</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="m-portlet__body">
+            <div class="row col-12">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Choose a step
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        @foreach (var step in stepList)
+                        {
+                            <a class="dropdown-item" asp-action="GetIntroduction" asp-route-stepIndex="@step">
+                                @steps.ResourceManager.GetString(step)
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="row col-12 m--margin-top-20">
+                <h4>@steps.ResourceManager.GetString(Model.Step)</h4>
+            </div>
+            <div class="row">
+                <div class="col-12">
+
+                    <div class="row">
+                        <div class="col-12">
+                            <form class="m-form m-form--fit m-form--label-align-right" method="post" enctype="multipart/form-data" asp-controller="Manage" asp-action="UploadIntroduction">
+                                <input type="hidden" asp-for="Step" />
+                                <input type="hidden" asp-for="Video.Path"/>
+                                @if (Model.Video != null)
+                                {
+
+                                    <div class="form-group m-form__group">
+                                        <video style="max-width:100%; max-height:400px" controls>
+                                            <source src="@Model.Video.Path" />
+                                        </video>
+                                    </div>
+
+                                }
+                                <div class="form-group m-form__group">
+                                    <input type="file" class="form-control" name="introductionVideo" accept="video/*">
+                                </div>
+                                <div class="form-group m-form__group">
+                                    <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                                </div>
+                                <div class="form-group m-form__group">
+                                    <button type="submit" class="btn btn-sp m-btn m-btn--icon">
+                                        Upload
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

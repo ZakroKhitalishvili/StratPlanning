@@ -803,7 +803,8 @@ namespace Application.Repositories
                 PlanningTeam = GetPlanningTeam(planId),
                 IsAdmin = isDefinitive,
                 IsCompleted = steptask?.IsCompleted ?? false,
-                StepTasks = GetStepTasks(planId)
+                StepTasks = GetStepTasks(planId),
+                IntroductionVideo = GetIntroduction(stepIndex)?.Video
             };
 
             if (stepIndex == Steps.IssuesDistinguish)

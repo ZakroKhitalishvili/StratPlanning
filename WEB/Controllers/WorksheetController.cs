@@ -11,6 +11,7 @@ using Web.Extensions;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using X.PagedList;
+using Web.Helpers;
 
 namespace Web.Controllers
 {
@@ -209,18 +210,9 @@ namespace Web.Controllers
 
             foreach (var file in files)
             {
-                //var path = Path.Combine(_hostingEnvironment.WebRootPath, "Uploads",
-                //                       file.FileName);
+                var uploadRelPath = UploadHelper.Upload(files[0]);
 
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Uploads",
-                                       file.FileName);
-
-                using (var stream = new FileStream(path, FileMode.Create))
-                {
-                    file.CopyTo(stream);
-                }
-
-                var fileDto = _fileRepository.CreateNewFile(Path.GetFileNameWithoutExtension(path), Path.GetExtension(path), $"/Uploads/{file.FileName}", userId);
+                var fileDto = _fileRepository.CreateNewFile(Path.GetFileNameWithoutExtension(file.FileName), Path.GetExtension(file.FileName), uploadRelPath, userId);
 
                 if (fileDto != null) result.Add(fileDto);
 
@@ -234,6 +226,37 @@ namespace Web.Controllers
                 name = x.Name + x.Ext,
                 url = x.Path
             }).ToArray());
+        }
+
+        public IActionResult DeleteFile(int id)
+        {
+            _loggerManager.Info($"DeleteFile({id}) was requested");
+
+            var file = _fileRepository.GetFile(id);
+
+            if (file == null)
+            {
+                _loggerManager.Warn($"DeleteFile({id}) request is a bad request");
+                return BadRequest();
+            }
+
+            var result = _fileRepository.Delete(id);
+
+            if (result)
+            {
+                _loggerManager.Info($"DeleteFile({id}) deleted a file info from database");
+
+                if(UploadHelper.Delete(file.Path))
+                {
+                    _loggerManager.Info($"DeleteFile({id}) deleted a file from a directory");
+                }
+                else
+                {
+                    _loggerManager.Info($"DeleteFile({id}) was unable to delete a file from a directory");
+                }
+            }
+
+            return Ok(new { result });
         }
 
         [HttpPost]

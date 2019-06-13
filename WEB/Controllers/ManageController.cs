@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.DTOs;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Web.Extensions;
+using Web.Helpers;
 
 namespace Web.Controllers
 {
@@ -20,11 +22,15 @@ namespace Web.Controllers
 
         private readonly IPlanRepository _planRepository;
 
-        public ManageController(ILoggerManager loggerManager, IDictionaryRepository dictionaryRepository, IPlanRepository planRepository) : base(loggerManager)
+        private readonly IFileRepository _fileRepository;
+
+        public ManageController(ILoggerManager loggerManager, IDictionaryRepository dictionaryRepository, IPlanRepository planRepository, IFileRepository fileRepository) : base(loggerManager)
         {
             _dictionaryRepository = dictionaryRepository;
 
             _planRepository = planRepository;
+
+            _fileRepository = fileRepository;
         }
         // GET: /<controller>/
         public IActionResult Index()
@@ -136,7 +142,72 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult GetIntroductionList()
         {
-            return View("IntroductionList",_planRepository.GetIntroductions());
+            return RedirectToAction("GetIntroduction", new { stepIndex = Steps.Predeparture });
         }
+
+        [HttpGet]
+        public IActionResult GetIntroduction(string stepIndex)
+        {
+
+            if (!_planRepository.GetStepList().Contains(stepIndex))
+            {
+                return BadRequest();
+            }
+
+            var introduction = _planRepository.GetIntroduction(stepIndex);
+
+            if (introduction == null)
+            {
+                introduction = new IntroductionDTO { Step = stepIndex };
+            }
+
+            return View("Introduction", introduction);
+        }
+
+        [HttpPost]
+        [RequestSizeLimit(100_000_000)]
+        public IActionResult UploadIntroduction(IntroductionDTO introduction)
+        {
+            var files = HttpContext.Request.Form.Files;
+
+            if (files == null || files.Count != 1 )
+            {
+                ModelState.AddModelError(string.Empty, "A file is not chosen");
+                
+                return View("Introduction", introduction);
+            }
+
+            if (!_planRepository.GetStepList().Contains(introduction.Step))
+            {
+                return BadRequest();
+            }
+
+            var userId = HttpContext.GetUserId();
+
+            var uploadRelPath = UploadHelper.Upload(files[0]);
+
+            var fileDto = _fileRepository.CreateNewFile(Path.GetFileNameWithoutExtension(files[0].FileName), Path.GetExtension(files[0].FileName), uploadRelPath, userId);
+
+            var result = false;
+
+            if (fileDto != null)
+            {
+                var oldVideo = _planRepository.GetIntroduction(introduction.Step)?.Video;
+                result = _planRepository.UpdateIntroduction(introduction.Step, fileDto.Id, userId);
+                if (result && oldVideo != null)
+                {
+                    UploadHelper.Delete(oldVideo.Path);
+                    _fileRepository.Delete(oldVideo.Id);
+                }
+            }
+
+            if (!result)
+            {
+                ModelState.AddModelError(string.Empty, "Something went wrong due to a server");
+            }
+
+            return RedirectToAction("GetIntroduction", new { stepIndex = introduction.Step });
+        }
+
     }
 }

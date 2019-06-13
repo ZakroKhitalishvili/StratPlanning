@@ -9,5 +9,9 @@ namespace Application.Interfaces.Repositories
     public interface IFileRepository : IRepositoryBase<File>
     {
         FileDTO CreateNewFile(string name, string ext, string path, int userId);
+
+        bool Delete(int id);
+
+        FileDTO GetFile(int id);
     }
 }

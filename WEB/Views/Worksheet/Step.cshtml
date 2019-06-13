@@ -54,7 +54,15 @@
                      style="">
                     <div class="m-accordion__item-content">
                         <video width="100%" controls>
-                            Your browser does not support the video tag.
+                            @if (Model.IntroductionVideo != null)
+                            {
+                                <source src="@Model.IntroductionVideo?.Path" />
+                                <span>Your browser does not support the video tag.</span>
+                            }
+                            else
+                            {
+                                <span>No video</span>
+                            }
                         </video>
                     </div>
                 </div>
@@ -73,7 +81,7 @@
         {
             <partial name="~/Views/Worksheet/Partials/_InfoAboutUsersStatus.cshtml" model="Model" />
         }
-        
+
 
         <div id="step_form_container">
             <partial name="~/Views/Worksheet/Partials/_StepForm.cshtml" model="Model" />

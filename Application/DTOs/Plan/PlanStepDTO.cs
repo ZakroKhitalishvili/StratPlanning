@@ -13,6 +13,8 @@ namespace Application.DTOs
         [Required]
         public string Step { get; set; }
 
+        public FileDTO IntroductionVideo { get; set; }
+
         public IList<StepBlockDTO> StepBlocks { get; set; }
 
         public IList<QuestionDTO> AdditionalQuestions { get; set; }

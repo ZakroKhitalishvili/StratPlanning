@@ -247,28 +247,6 @@ function submitConfirm(text) {
     );
 }
 
-//////////
-/// dropzone file previews remove relating functions
-//
-
-function filePreviewRemoveHandler(e) {
-    removeFilePreview($(e.target).parent());
-}
-
-function removeFilePreview(filePreview) {
-    let parentDropzone = $(filePreview).parent();
-    parentDropzone.find('.dz-message').hide();
-    deleteConfirm().then(function (isConfirm) {
-
-        if (isConfirm) {
-            filePreview.remove();
-        }
-
-        if (parentDropzone.find('.dz-preview').length == 0) {
-            parentDropzone.find('.dz-message').show();
-        }
-    });
-}
 
 function notify(text, type, seconds = 5) {
     $.notify({
