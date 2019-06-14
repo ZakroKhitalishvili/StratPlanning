@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Application.Interfaces;
-
+using System;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace Web.Controllers
 {
     public class HomeController : AbstractController
     {
-        public HomeController(ILoggerManager loggerManager):base(loggerManager)
+        public HomeController(ILoggerManager loggerManager) : base(loggerManager)
         {
         }
 
@@ -20,7 +21,13 @@ namespace Web.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            _loggerManager.Info("Error was returned");
+            var feature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+
+            if (feature != null)
+            {
+                _loggerManager.Error("Uncaught exception was thrown.", feature.Error);
+            }
+
             return View();
         }
     }

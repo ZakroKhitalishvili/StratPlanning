@@ -42,7 +42,8 @@
       "wwwroot/lib/DataTables/datatables.min.js",
       "wwwroot/lib/noUiSlider/nouislider.min.js",
       "wwwroot/lib/wnumb/wNumb.js",
-      "wwwroot/lib/blockui/jquery.blockUI.js"
+      "wwwroot/lib/blockui/jquery.blockUI.js",
+      "wwwroot/lib/summernote/dist/summernote.min.js"
     ],
     "minify": {
       "enabled": true,

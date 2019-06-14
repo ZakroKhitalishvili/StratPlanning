@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Web.Helpers;
 using Web.Binders;
+using Microsoft.AspNetCore.Diagnostics;
+using Application.Interfaces;
 
 namespace Web
 {
@@ -41,7 +43,7 @@ namespace Web
 
             services.AddMvc(options =>
             {
-                options.ModelBinderProviders.Insert(0,new CustomBinderProvider());
+                options.ModelBinderProviders.Insert(0, new CustomBinderProvider());
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 

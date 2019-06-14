@@ -44,7 +44,7 @@
                         <div class="col-12">
                             <form class="m-form m-form--fit m-form--label-align-right" method="post" enctype="multipart/form-data" asp-controller="Manage" asp-action="UploadIntroduction">
                                 <input type="hidden" asp-for="Step" />
-                                <input type="hidden" asp-for="Video.Path"/>
+                                <input type="hidden" asp-for="Video.Path" />
                                 @if (Model.Video != null)
                                 {
 
@@ -56,6 +56,7 @@
 
                                 }
                                 <div class="form-group m-form__group">
+                                    <label for="introductionVideo">Video upload</label>
                                     <input type="file" class="form-control" name="introductionVideo" accept="video/*">
                                 </div>
                                 <div class="form-group m-form__group">
@@ -74,3 +75,9 @@
         </div>
     </div>
 </div>
+
+@section scripts{
+    <script>
+        $('#menu_manage').addClass('m-menu__item--active');
+    </script>
+}
