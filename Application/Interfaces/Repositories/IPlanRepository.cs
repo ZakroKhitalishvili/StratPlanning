@@ -57,5 +57,11 @@ namespace Application.Interfaces.Repositories
         IEnumerable<IntroductionDTO> GetIntroductions();
 
         bool UpdateIntroduction(string stepIndex, int VideoId, int userId);
+
+        IEnumerable<BlockDTO> GetBlocks(string stepindex);
+
+        BlockDTO GetBlock(int id);
+
+        bool UpdateBlock(BlockEditDTO block,int userId);
     }
 }

@@ -29,7 +29,7 @@
                     <div class="alert m-alert m-alert--default" role="alert">
                         <div class="m-scrollable" data-scrollable="true" data-max-height="200"
                              data-mobile-max-height="200">
-                            @Model.StepBlocks[blockIndex].Description
+                            @Html.Raw(Model.StepBlocks[blockIndex].Description)
                         </div>
                     </div>
                 </div>
@@ -187,7 +187,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                @Model.StepBlocks[blockIndex].Instruction
+                @Html.Raw(Model.StepBlocks[blockIndex].Instruction)
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">

@@ -110,6 +110,8 @@ function initializeInputs(selector) {
     //        alwaysShow: true,
     //        warningClass: "alert alert-primary"
     //    });
+
+    $(selector).find('.text-editor').summernote();
 }
 //////
 /// read more/less for large texts

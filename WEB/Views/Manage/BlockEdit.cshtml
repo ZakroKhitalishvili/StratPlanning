@@ -1,0 +1,113 @@
+﻿@model Application.DTOs.BlockEditDTO
+
+
+@inject Application.Interfaces.Repositories.IPlanRepository planRepository
+
+@{
+    ViewData["Title"] = "Blocks";
+
+    var stepList = planRepository.GetStepList();
+
+    var blockList = Enumerable.Empty<BlockDTO>();
+
+    if (ViewData["Step"] != null)
+    {
+        blockList = planRepository.GetBlocks((string)ViewData["Step"]);
+    }
+
+    
+}
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-portlet m-portlet--full-height m-portlet--tabs">
+        <div class="m-portlet__head">
+            <div class="m-subheader">
+                <div class="d-flex align-items-center">
+                    <div class="mr-auto">
+                        <h2>@ViewData["Title"]</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="m-portlet__body">
+            <div class="row col-12">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="stepDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        @(ViewData["Step"] != null ? steps.ResourceManager.GetString((string)ViewData["Step"]).ToString() : "Choose a step")
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="stepDropdownMenuButton">
+                        @foreach (var step in stepList)
+                        {
+                            <a class="dropdown-item" asp-action="GetBlockList" asp-route-stepIndex="@step">
+                                @steps.ResourceManager.GetString(step)
+                            </a>
+                        }
+                    </div>
+                </div>
+                <div class="dropdown m--margin-left-10">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="blockDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        @(Model?.Title ?? "Choose a block")
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="blockDropdownMenuButton">
+                        @foreach (var block in blockList)
+                        {
+                            <a class="dropdown-item" asp-action="BlockEdit" asp-route-id="@block.Id">
+                                @block.Title
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+            @if (Model != null)
+            {
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-12">
+                                <form class="m-form m-form--fit m-form--label-align-right" method="post" asp-controller="Manage" asp-action="BlockEdit">
+                                    <input type="hidden" asp-for="Id" />
+                                    <input type="hidden" asp-for="Step"/>
+                                    <div class="form-group m-form__group">
+                                        <label asp-for="Title">Title</label>
+                                        <input type="text" class="form-control" asp-for="Title" />
+                                        <span class="text-danger" asp-validation-for="Title"></span>
+                                    </div>
+                                    <div class="form-group m-form__group">
+                                        <label asp-for="Description">Description</label>
+                                        <textarea type="text" class="form-control text-editor" asp-for="Description"></textarea>
+                                        <span class="text-danger" asp-validation-for="Description"></span>
+                                    </div>
+                                    <div class="form-group m-form__group">
+                                        <label asp-for="Instruction">Instruction</label>
+                                        <textarea type="text" class="form-control text-editor" asp-for="Instruction"></textarea>
+                                        <span class="text-danger" asp-validation-for="Instruction"></span>
+                                    </div>
+                                    <div class="form-group m-form__group">
+                                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                                    </div>
+                                    @if (ViewData["SuccessMessage"] != null)
+                                    {
+                                        <div class="form-group m-form__group">
+                                            <div class="text-success">@ViewData["SuccessMessage"] </div>
+                                        </div>
+                                    }
+                                    <div class="form-group m-form__group">
+                                        <button type="submit" class="btn btn-sp m-btn m-btn--icon">
+                                            Save
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $('#menu_manage').addClass('m-menu__item--active');
+    </script>
+}

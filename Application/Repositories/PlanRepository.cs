@@ -526,14 +526,14 @@ namespace Application.Repositories
             return Context.Introductions.Include(x => x.Video).AsEnumerable().Select(x => new IntroductionDTO { Step = x.Step, Video = Mapper.Map<FileDTO>(x.Video) });
         }
 
-        public bool UpdateIntroduction(string stepIndex, int VideoFileId, int userId)
+        public bool UpdateIntroduction(string stepIndex, int videoFileId, int userId)
         {
             var introduction = Context.Introductions.Where(x => x.Step == stepIndex).SingleOrDefault();
             if (introduction == null)
             {
                 introduction = new Introduction
                 {
-                    VideoId = VideoFileId,
+                    VideoId = videoFileId,
                     Step = stepIndex,
                     UpdatedAt = DateTime.Now,
                     UpdatedBy = userId
@@ -543,7 +543,7 @@ namespace Application.Repositories
             }
             else
             {
-                introduction.VideoId = VideoFileId;
+                introduction.VideoId = videoFileId;
                 introduction.UpdatedAt = DateTime.Now;
                 introduction.UpdatedBy = userId;
             }
@@ -552,12 +552,50 @@ namespace Application.Repositories
             {
                 Context.SaveChanges();
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return false;
             }
 
             return true;
+        }
+
+        public IEnumerable<BlockDTO> GetBlocks(string stepIndex)
+        {
+            return Context.StepBlocks.Where(x => x.Step == stepIndex).AsEnumerable().Select(x => Mapper.Map<BlockDTO>(x));
+        }
+
+        public BlockDTO GetBlock(int id)
+        {
+            return Context.StepBlocks.Where(x => x.Id == id).AsEnumerable().Select(x => Mapper.Map<BlockDTO>(x)).SingleOrDefault();
+        }
+
+        public bool UpdateBlock(BlockEditDTO blockEdit, int userId)
+        {
+            var block = Context.StepBlocks.Where(x => x.Id == blockEdit.Id).SingleOrDefault();
+
+            if (block == null)
+            {
+                return false;
+            }
+
+            block.Title = blockEdit.Title.Trim();
+            block.Instruction = blockEdit.Instruction?.Trim();
+            block.Description = blockEdit.Description?.Trim();
+            block.UpdatedAt = DateTime.Now;
+            block.UpdatedBy = userId;
+
+            try
+            {
+                Context.SaveChanges();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+
         }
 
         #region Private methods

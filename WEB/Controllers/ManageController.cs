@@ -170,10 +170,10 @@ namespace Web.Controllers
         {
             var files = HttpContext.Request.Form.Files;
 
-            if (files == null || files.Count != 1 )
+            if (files == null || files.Count != 1)
             {
                 ModelState.AddModelError(string.Empty, "A file is not chosen");
-                
+
                 return View("Introduction", introduction);
             }
 
@@ -203,10 +203,72 @@ namespace Web.Controllers
 
             if (!result)
             {
-                ModelState.AddModelError(string.Empty, "Something went wrong due to a server");
+                ModelState.AddModelError(string.Empty, "Something went wrong due to a server issue");
+
+                return View("Introduction", introduction);
             }
 
             return RedirectToAction("GetIntroduction", new { stepIndex = introduction.Step });
+        }
+
+        [HttpGet]
+        public IActionResult GetBlockList(string stepIndex)
+        {
+            if (string.IsNullOrWhiteSpace(stepIndex) || !_planRepository.GetStepList().Contains(stepIndex))
+            {
+                ViewData["Step"] = Steps.Predeparture;
+            }
+            else
+            {
+                ViewData["Step"] = stepIndex;
+            }
+
+            return View("BlockEdit");
+        }
+
+        [HttpGet]
+        public IActionResult BlockEdit(int id)
+        {
+            var block = _planRepository.GetBlock(id);
+
+            if (block == null)
+            {
+                return BadRequest();
+            }
+
+            ViewData["Step"] = block.Step;
+
+            var blockEdit = new BlockEditDTO
+            {
+                Description = block.Description,
+                Id = block.Id,
+                Instruction = block.Instruction,
+                Title = block.Title,
+                Step = block.Step
+            };
+
+            return View("BlockEdit", blockEdit);
+        }
+
+        [HttpPost]
+        public IActionResult BlockEdit(BlockEditDTO blockEdit)
+        {
+            ViewData["Step"] = blockEdit.Step;
+            if (ModelState.IsValid)
+            {
+                var result = _planRepository.UpdateBlock(blockEdit, HttpContext.GetUserId());
+
+                if (!result)
+                {
+                    ModelState.AddModelError(string.Empty, "Something went wrong due to a server issue");
+                }
+                else
+                {
+                    ViewData["SuccessMessage"] = "Block successfully updated";
+                }
+            }
+
+            return View("BlockEdit", blockEdit);
         }
 
     }

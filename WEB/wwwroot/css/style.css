@@ -872,3 +872,7 @@ button.m-list-badge__item {
 .m-dropzone-readonly {
     cursor: default;
 }
+
+.note-toolbar {
+    z-index: 100;
+}
