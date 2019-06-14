@@ -33,9 +33,8 @@ namespace Core.Context
 
             if (!Context.Plans.Any())
             {
-                SeedPlans();
+                //SeedPlans();
             }
-
 
             if (!Context.Dictionaries.Any(x => x.HasPosition))
             {

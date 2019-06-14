@@ -24,11 +24,11 @@ namespace Web
             {
                 try
                 {
-                    using (var context = scope.ServiceProvider.GetService<PlanningDbContext>())
-                    {
-                        context.Database.Migrate();
-                        DatabaseInitializer.Initialize(context);
-                    }
+                    //using (var context = scope.ServiceProvider.GetService<PlanningDbContext>())
+                    //{
+                    //    context.Database.Migrate();
+                    //    DatabaseInitializer.Initialize(context);
+                    //}
                 }
                 catch (Exception ex)
                 {
