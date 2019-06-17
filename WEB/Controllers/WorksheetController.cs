@@ -34,9 +34,15 @@ namespace Web.Controllers
         {
             _loggerManager.Info($"GetStep({stepIndex},{planId}) is requested");
 
-            if (string.IsNullOrEmpty(stepIndex) || planId <= 0)
+            if (string.IsNullOrEmpty(stepIndex) || !_planRepository.GetStepList().Contains(stepIndex))
             {
-                _loggerManager.Warn($"GetStep({stepIndex},{planId}): Step Inde");
+                _loggerManager.Warn($"GetStep({stepIndex},{planId}): Step Index is invalid");
+                return BadRequest();
+            }
+
+            if(!_planRepository.FindByCondition(x=>x.Id==planId).Any())
+            {
+                _loggerManager.Warn($"GetStep({stepIndex},{planId}): A plan with a such Id does not exist");
                 return BadRequest();
             }
 

@@ -32,11 +32,6 @@ namespace Web.Controllers
 
             _fileRepository = fileRepository;
         }
-        // GET: /<controller>/
-        public IActionResult Index()
-        {
-            return View();
-        }
 
         [HttpGet]
         public IActionResult GetPositionList()
@@ -165,7 +160,6 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        [RequestSizeLimit(100_000_000)]
         public IActionResult UploadIntroduction(IntroductionDTO introduction)
         {
             var files = HttpContext.Request.Form.Files;
