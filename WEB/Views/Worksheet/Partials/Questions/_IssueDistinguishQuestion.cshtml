@@ -42,7 +42,7 @@
                  data-parent="#issue_accordions" style="">
                 <div class="m-accordion__item-content">
 
-                    @foreach (var issueQuestion in Model.AdditionalQuestions)
+                    @foreach (var issueQuestion in Model.AdditionalQuestions.OrderBy(x=>x.Order))
                     {
                         if (answerCount > Model.AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers.Count - 1)
                         {
