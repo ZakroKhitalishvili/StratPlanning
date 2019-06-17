@@ -13,11 +13,9 @@ namespace Application.DTOs
         [Required]
         [MaxLength(EntityConfigs.TextMaxLength)]
         public string Title { get; set; }
-
-        [MaxLength(EntityConfigs.TextAreaMaxLength)]
+        
         public string Description { get; set; }
-
-        [MaxLength(EntityConfigs.TextAreaMaxLength)]
+        
         public string Instruction { get; set; }
 
         public string Step { get; set; }
