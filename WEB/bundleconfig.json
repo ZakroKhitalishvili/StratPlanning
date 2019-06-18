@@ -12,7 +12,7 @@
     "sourceMap": false
   },
   {
-    "outputFileName": "wwwroot/css/styles.bundle.css",
+    "outputFileName": "wwwroot/lib/lib.bundle.css",
     "inputFiles": [
       "wwwroot/lib/noUiSlider/nouislider.min.css"
     ],
@@ -23,7 +23,7 @@
     "sourceMap": false
   },
   {
-    "outputFileName": "wwwroot/lib/lib.bundle.min.js",
+    "outputFileName": "wwwroot/lib/lib.bundle.js",
     "inputFiles": [
       "wwwroot/lib/jquery/jquery-3.3.1.min.js",
       "wwwroot/lib/jquery-ui/jquery-ui.min.js",

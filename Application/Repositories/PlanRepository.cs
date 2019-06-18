@@ -257,93 +257,18 @@ namespace Application.Repositories
                 return false;
             }
 
+            bool result = false;
+
             if (!isDefinitive)
             {
-                var userStepResult = GetOrCreateUserStepResult(planStep.PlanId, planStep.Step, false, userId);
-
-                if (userStepResult.IsSubmitted)
-                {
-                    return false;
-                }
-                if (isSubmitted)
-                {
-                    userStepResult.IsSubmitted = true;
-                }
-
-                SaveAnswers(planStep.AnswerGroups, userStepResult);
-
-                if (planStep.Step == Steps.Predeparture)
-                {
-                    SaveStepTaskAnswers(planStep.StepTaskAnswers, userStepResult);
-                }
+                result = SaveOrdinaryAnswers(planStep, isSubmitted, userId);
             }
             else
             {
-                // definitive answer
-                // this code determines which stepResult should be handled (submitted one or final - only admin viewed one)
-                var finalDefinitiveStepResult = GetFinalDefinitiveStepResult(planStep.PlanId, planStep.Step);
-                if (finalDefinitiveStepResult == null)
-                {
-                    finalDefinitiveStepResult = CreateUserStepResult(planStep.PlanId, planStep.Step, isDefinitive, userId);
-                    if (isSubmitted)
-                    {
-                        finalDefinitiveStepResult.IsSubmitted = true;
-                    }
-                }
-                else
-                {
-                    var submittedDefinitiveResult = GetSubmittedDefinitiveStepResult(planStep.PlanId, planStep.Step);
-
-                    if (isSubmitted)
-                    {
-                        if (!finalDefinitiveStepResult.IsSubmitted)
-                        {
-                            finalDefinitiveStepResult.IsSubmitted = true;
-
-                            if (submittedDefinitiveResult != null)
-                            {
-                                submittedDefinitiveResult.IsSubmitted = false;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (submittedDefinitiveResult != null)
-                        {
-                            if (submittedDefinitiveResult.Id == finalDefinitiveStepResult.Id)
-                            {
-                                var newFinalDefinitiveStepResult = CreateUserStepResult(planStep.PlanId, planStep.Step, isDefinitive, userId);
-                                submittedDefinitiveResult.IsFinal = false;
-                                finalDefinitiveStepResult = newFinalDefinitiveStepResult;
-                            }
-                        }
-                    }
-                }
-
-                SaveAnswers(planStep.AnswerGroups, finalDefinitiveStepResult);
-
-                //delete old stepResults that are neither submitted nor final
-                var otherDefinitiveResult = Context.UserStepResults.Where(x => x.PlanId == planStep.PlanId && x.Step == planStep.Step && x.IsFinal.HasValue && !x.IsFinal.Value && !x.IsSubmitted && x.IsDefinitive).SingleOrDefault();
-
-                if (otherDefinitiveResult != null)
-                {
-                    DeleteUserStepResult(otherDefinitiveResult.Id);
-                }
-
-                if (planStep.Step == Steps.Predeparture)
-                {
-                    SaveStepTaskAnswers(planStep.StepTaskAnswers, finalDefinitiveStepResult);
-                }
-
+                result = SaveDefinitiveAnswers(planStep, isSubmitted, userId);
             }
 
-            if (planStep.Step == Steps.Predeparture)
-            {
-                SaveStepTasks(planStep.StepTasks, userId);
-            }
-
-            Context.SaveChanges();
-            return true;
+            return result;
         }
 
         public IEnumerable<PlanDTO> GetPlanListForUser(int userId, int skipCount, int takeCount, out int totalCount)
@@ -882,6 +807,115 @@ namespace Application.Repositories
         #endregion
 
         #region Saving methods
+
+        private bool SaveOrdinaryAnswers(PlanStepDTO plan, bool isSubmitted, int userId)
+        {
+            var userStepResult = GetOrCreateUserStepResult(planStep.PlanId, planStep.Step, false, userId);
+
+            if (userStepResult.IsSubmitted)
+            {
+                return false;
+            }
+            if (isSubmitted)
+            {
+                userStepResult.IsSubmitted = true;
+            }
+
+            SaveAnswers(planStep.AnswerGroups, userStepResult);
+
+            if (planStep.Step == Steps.Predeparture)
+            {
+                SaveStepTaskAnswers(planStep.StepTaskAnswers, userStepResult);
+            }
+
+            if (planStep.Step == Steps.Predeparture)
+            {
+                SaveStepTasks(planStep.StepTasks, userId);
+            }
+
+            try
+            {
+
+                Context.SaveChanges();
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool SaveDefinitiveAnswers(PlanStepDTO planStep, bool isSubmitted, int userId)
+        {
+            // definitive answer
+            // this code determines which stepResult should be handled (submitted one or final - only admin viewed one)
+            var finalDefinitiveStepResult = GetFinalDefinitiveStepResult(planStep.PlanId, planStep.Step);
+            if (finalDefinitiveStepResult == null)
+            {
+                finalDefinitiveStepResult = CreateUserStepResult(planStep.PlanId, planStep.Step, true, userId);
+                if (isSubmitted)
+                {
+                    finalDefinitiveStepResult.IsSubmitted = true;
+                }
+            }
+            else
+            {
+                var submittedDefinitiveResult = GetSubmittedDefinitiveStepResult(planStep.PlanId, planStep.Step);
+
+                if (isSubmitted)
+                {
+                    if (!finalDefinitiveStepResult.IsSubmitted)
+                    {
+                        finalDefinitiveStepResult.IsSubmitted = true;
+
+                        if (submittedDefinitiveResult != null)
+                        {
+                            submittedDefinitiveResult.IsSubmitted = false;
+                        }
+                    }
+                }
+                else
+                {
+                    if (submittedDefinitiveResult != null)
+                    {
+                        if (submittedDefinitiveResult.Id == finalDefinitiveStepResult.Id)
+                        {
+                            var newFinalDefinitiveStepResult = CreateUserStepResult(planStep.PlanId, planStep.Step, true, userId);
+                            submittedDefinitiveResult.IsFinal = false;
+                            finalDefinitiveStepResult = newFinalDefinitiveStepResult;
+                        }
+                    }
+                }
+            }
+
+            SaveAnswers(planStep.AnswerGroups, finalDefinitiveStepResult);
+
+            //delete old stepResults that are neither submitted nor final
+            var otherDefinitiveResult = Context.UserStepResults.Where(x => x.PlanId == planStep.PlanId && x.Step == planStep.Step && x.IsFinal.HasValue && !x.IsFinal.Value && !x.IsSubmitted && x.IsDefinitive).SingleOrDefault();
+
+            if (otherDefinitiveResult != null)
+            {
+                DeleteUserStepResult(otherDefinitiveResult.Id);
+            }
+
+            if (planStep.Step == Steps.Predeparture)
+            {
+                SaveStepTaskAnswers(planStep.StepTaskAnswers, finalDefinitiveStepResult);
+                SaveStepTasks(planStep.StepTasks, userId);
+            }
+
+            try
+            {
+                Context.SaveChanges();
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
 
         private void SaveStepTasks(IList<StepTaskDTO> stepTasks, int userId)
         {
