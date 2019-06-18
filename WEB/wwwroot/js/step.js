@@ -63,37 +63,6 @@ function initializeStep() {
         });
     });
 
-    /////////////
-    ///////
-
-    ////////
-    ///// evalution sliders
-    /////
-
-    //$(".evalution-slider").each(function (ind, slider) {
-    //    noUiSlider.create(slider, {
-    //        start: [5],
-    //        step: 1,
-    //        range: {
-    //            min: [1],
-    //            max: [10]
-    //        },
-    //        tooltips: true,
-    //        format: wNumb({
-    //            decimals: 0
-    //        }),
-    //        connect: [true, false]
-    //    });
-
-    //    slider.noUiSlider.on('change.one', function (value) {
-
-    //        $(this.target).parent().find('input').val(value);
-    //    });
-    //});
-    ///////////
-    //// selects speficy-other event
-    //////////////
-
     $('select.select-specify').on('change', function (e) {
         let value = $(this).val();
         let specifyInput = $(this).parent().find('input.select-specify-input');
@@ -105,6 +74,10 @@ function initializeStep() {
             specifyInput.hide();
         }
     }).trigger('change');
+
+    //////////////////////
+    ///  Dropzone
+    ///
 
     $('.dropzone-sp').each(function () {
         var element = $(this);
@@ -151,7 +124,7 @@ function initializeStep() {
                             {
                                 url: '/Worksheet/DeleteFile',
                                 method: "post",
-                                data: { id  },
+                                data: { id },
                                 success: function (data, statusText, xhr) {
                                     if (xhr.status == 201) {
 
@@ -200,37 +173,9 @@ function initializeStep() {
                     </div>
                     <a class="dz-remove" href="javascript:undefined;" data-dz-remove="">Remove file</a>
                 </div>`
-        })
-            //.droppable({
-            //    accept: '.draggable-file',
-
-            //    drop: function (e, ui) {
-            //        console.log('drop');
-
-            //        e.preventDefault();
-
-            //        let name = $(ui.draggable).html();
-
-            //        $(this).find('.dz-message').hide();
-
-            //        $(this).append(`
-            //    <div class="dz-preview dz-file-preview dz-processing dz-error dz-complete">
-            //        <input class="sp-file-input" type="hidden" name="${inputname}"/>
-            //        <div class="dz-image"></div>
-            //        <div class="dz-details">      
-            //            <div class="dz-filename">
-            //                <span data-dz-name="">${name}</span>
-            //            </div>  
-            //            <div class="dz-progress">
-            //                <span class="dz-upload" data-dz-uploadprogress=""></span>
-            //            </div>   
-            //        </div>
-            //        <a class="dz-remove" href="javascript:undefined;" onclick="filePreviewRemoveHandler(event)" data-dz-remove="">Remove file</a>
-            //    </div>`);
-            //    }
-            //})
-            .addClass('dropzone');
+        }).addClass('dropzone');
     });
+
 
     //////////
     /// dropzone file previews remove relating functions
@@ -772,7 +717,6 @@ function completeStep(planId, stepIndex, callback) {
     })
 
 }
-
 ///////
 ////
 
