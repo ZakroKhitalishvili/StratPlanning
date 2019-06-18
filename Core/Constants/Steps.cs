@@ -5,7 +5,7 @@ using System.Text;
 namespace Core.Constants
 {
     /*
-     * The order of these properties determines an order of respecting step tasks
+     * The order of these constants determines an order of respecting step tasks
      * 
      */
     public class Steps
