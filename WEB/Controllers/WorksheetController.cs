@@ -40,7 +40,7 @@ namespace Web.Controllers
                 return BadRequest();
             }
 
-            if(!_planRepository.FindByCondition(x=>x.Id==planId).Any())
+            if (!_planRepository.FindByCondition(x => x.Id == planId).Any())
             {
                 _loggerManager.Warn($"GetStep({stepIndex},{planId}): A plan with a such Id does not exist");
                 return BadRequest();
@@ -252,7 +252,7 @@ namespace Web.Controllers
             {
                 _loggerManager.Info($"DeleteFile({id}) deleted a file info from database");
 
-                if(UploadHelper.Delete(file.Path))
+                if (UploadHelper.Delete(file.Path))
                 {
                     _loggerManager.Info($"DeleteFile({id}) deleted a file from a directory");
                 }

@@ -33,7 +33,7 @@ namespace Web
                 catch (Exception ex)
                 {
                     var logger = scope.ServiceProvider.GetRequiredService<ILoggerManager>();
-                    logger.Error( "An error occurred while migrating or initializing the database.", ex);
+                    logger.Error("An error occurred while migrating or initializing the database.", ex);
                 }
             }
 
