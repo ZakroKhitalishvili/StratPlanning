@@ -1,0 +1,82 @@
+﻿@model IEnumerable<SettingDTO>
+
+@using Resources
+@{
+    ViewData["Title"] = "Settings";
+}
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-portlet m-portlet--full-height m-portlet--tabs">
+        <div class="m-portlet__head">
+            <div class="m-subheader">
+                <div class="d-flex align-items-center">
+                    <div class="mr-auto">
+                        <h2>@ViewData["Title"]</h2>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="m-portlet__body">
+            <div class="m-scrollable " data-scrollable="true" data-axis="xy">
+                <table class="table m-table  table-bordered m--margin-top-10" width="100%">
+                    <thead>
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Value
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var setting in Model.OrderBy(x=>x.Index))
+                        {
+                            <tr>
+                                <td>
+                                    @settings.ResourceManager.GetString(setting.Index)
+                                </td>
+                                <td>
+                                    @setting.Value
+                                </td>
+                                <td>
+                                    <a href="" class="edit-setting m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
+                                       title="Edit"
+                                       data-toggle="tooltip" data-index="@setting.Index">
+                                        <i class="la la-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="edit_setting_modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="">
+                    Edit a setting
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="la la-remove"></span>
+                </button>
+            </div>
+            <partial name="~/Views/Manage/Partials/_EditSetting.cshtml" view-data="ViewData" model="new SettingDTO()"/>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        $('#menu_manage').addClass('m-menu__item--active');
+        var UpdateSettingURL = '@Url.Action("EditSetting", "Manage")';
+    </script>
+}

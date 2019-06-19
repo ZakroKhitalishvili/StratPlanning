@@ -808,7 +808,7 @@ namespace Application.Repositories
 
         #region Saving methods
 
-        private bool SaveOrdinaryAnswers(PlanStepDTO plan, bool isSubmitted, int userId)
+        private bool SaveOrdinaryAnswers(PlanStepDTO planStep, bool isSubmitted, int userId)
         {
             var userStepResult = GetOrCreateUserStepResult(planStep.PlanId, planStep.Step, false, userId);
 

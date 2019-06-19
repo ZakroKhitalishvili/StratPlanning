@@ -24,13 +24,21 @@ namespace Web.Controllers
 
         private readonly IFileRepository _fileRepository;
 
-        public ManageController(ILoggerManager loggerManager, IDictionaryRepository dictionaryRepository, IPlanRepository planRepository, IFileRepository fileRepository) : base(loggerManager)
+        private readonly ISettingRepository _settingRepository;
+
+        public ManageController(ILoggerManager loggerManager,
+                                IDictionaryRepository dictionaryRepository,
+                                IPlanRepository planRepository,
+                                IFileRepository fileRepository,
+                                ISettingRepository settingRepository) : base(loggerManager)
         {
             _dictionaryRepository = dictionaryRepository;
 
             _planRepository = planRepository;
 
             _fileRepository = fileRepository;
+
+            _settingRepository = settingRepository;
         }
 
         [HttpGet]
@@ -372,6 +380,57 @@ namespace Web.Controllers
             }
 
             return View("BlockEdit", blockEdit);
+        }
+
+        [HttpGet]
+        public IActionResult GetSettingList()
+        {
+            _loggerManager.Info($"GetSettingList() was requested");
+
+            return View("SettingList", _settingRepository.GetSettingList());
+        }
+
+        [HttpGet]
+        public IActionResult EditSetting(string index)
+        {
+            _loggerManager.Info($"EditSetting({index}) GET was requested");
+
+            var value = _settingRepository.Get(index);
+
+            var settingDTO = new SettingDTO
+            {
+                Index = index,
+                Value = value
+            };
+
+            return PartialView("~/Views/Manage/Partials/_EditSetting.cshtml", settingDTO);
+        }
+
+        [HttpPost]
+        public IActionResult EditSetting(SettingDTO setting)
+        {
+            _loggerManager.Info($"EditSetting() POST was requested");
+
+            var result = false;
+            if (ModelState.IsValid)
+            {
+                result = _settingRepository.Set(setting.Index, setting.Value, HttpContext.GetUserId());
+
+                if(result)
+                {
+                    _loggerManager.Info($"EditSetting() POST successfully updated");
+                }
+                else
+                {
+                    _loggerManager.Warn($"EditSetting() POST was unable to update");
+                }
+            }
+            else
+            {
+                _loggerManager.Warn($"EditSetting() POST was invalid");
+            }
+
+            return PartialView("~/Views/Manage/Partials/_EditSetting.cshtml", setting);
         }
 
     }

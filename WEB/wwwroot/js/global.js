@@ -555,3 +555,75 @@ $(document).on('click', '.disactivate-dictionary', function (e) {
 
 //////
 ///
+
+/////////////
+///  Get a setting
+//
+$(document).on('click', '.edit-setting', function (e) {
+    e.preventDefault();
+
+    let index = $(this).data('index');
+
+    $.ajax(
+        {
+            url: UpdateSettingURL,
+            method: "get",
+            data: {
+                index
+            },
+            success: function (data, statusText, xhr) {
+                if (xhr.status == 200) {
+                    $('#edit_setting_form').html(data);
+                    initializeInputs('#edit_setting_form');
+                    $('#edit_setting_modal').modal('show')
+                }
+
+            },
+            error: function (xhr, statusText, error) {
+                notify("An Error occured during sending a request", "danger", 5);
+            }
+        })
+});
+
+/////
+///
+
+
+/////////////
+///  Edit a setting
+//
+$(document).on('submit', 'form#edit_setting_form', function (e) {
+    e.preventDefault();
+
+    let formData = new FormData(document.querySelector('form#edit_setting_form'));
+
+    $.ajax(
+        {
+            url: UpdateSettingURL,
+            method: "post",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data, statusText, xhr) {
+                if (xhr.status == 200) {
+                    notify("Successfully updated", "success", 5);
+
+                    setTimeout(function () {
+                        document.location.reload(false)
+                    }, 2000);
+                }
+
+                $('form#edit_setting_form').html(data);
+
+                initializeInputs('form#edit_setting_form');
+
+            },
+            error: function (xhr, statusText, error) {
+                notify("An Error occured during sending a request", "danger", 5);
+            }
+        })
+
+});
+
+/////
+///

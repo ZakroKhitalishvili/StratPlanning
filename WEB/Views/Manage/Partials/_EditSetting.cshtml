@@ -1,0 +1,24 @@
+﻿@model SettingDTO
+
+<form class="m-form m-form--fit m-form--label-align-right" id="edit_setting_form">
+    <div class="m-portlet__body">
+        <input type="hidden" asp-for="Index" />
+        <div class="form-group m-form__group">
+            <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+        </div>
+        <div class="form-group m-form__group">
+            <label asp-for="Value">
+                Value
+            </label>
+            <input type="text" asp-for="Value" class="form-control m-input" />
+            <span class="text-danger" asp-validation-for="Value"></span>
+        </div>
+    </div>
+    <div class="m-portlet__foot m-portlet__foot--fit">
+        <div class="m-form__actions pull-right">
+            <button type="submit" class="btn btn-sp m-btn m-btn--icon">
+                Save
+            </button>
+        </div>
+    </div>
+</form>

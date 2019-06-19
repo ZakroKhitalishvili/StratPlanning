@@ -28,6 +28,7 @@ namespace Web
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IFileRepository, FileRepository>();
             services.AddScoped<IDictionaryRepository, DictionaryRepository>();
+            services.AddScoped<ISettingRepository, SettingRepository>();
             services.AddScoped<IHashService, SHA256Service>();
             services.AddScoped<IEmailService, EmailService>();
 

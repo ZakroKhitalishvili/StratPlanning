@@ -31,10 +31,10 @@ namespace Core.Context
                 SeedUsers();
             }
 
-            if (!Context.Plans.Any())
-            {
-                SeedPlans();
-            }
+            //if (!Context.Plans.Any())
+            //{
+            //    SeedPlans();
+            //}
 
             if (!Context.Dictionaries.Any(x => x.HasPosition))
             {
@@ -115,7 +115,7 @@ namespace Core.Context
             {
                 SeedActionPlanDetailedStep();
             }
-            
+
             if (!Context.StepBlocks.Where(x => x.Step == Steps.Review).Any())
             {
                 SeedReviewStep();
@@ -126,9 +126,12 @@ namespace Core.Context
                 SeedEvalutionStep();
             }
 
+            if(!Context.Settings.Any())
+            {
+                SeedSettings();
+            }
 
             Context.SaveChanges();
-
         }
 
         private void SeedPositions()
@@ -895,6 +898,72 @@ namespace Core.Context
             };
 
             Context.StepBlocks.AddRange(Blocks);
+        }
+
+        private void SeedSettings()
+        {
+            var settings = new Setting[]
+            {
+                new Setting
+                {
+                    Index=Settings.FileExtensionsForStep,
+                    Value=".pdf,.docx,.doc,.jpg,.png",
+                    UpdatedBy=null,
+                    UpdatedAt=null
+                },
+                 new Setting
+                {
+                    Index=Settings.FileUploadLimit,
+                    Value="50",
+                    UpdatedBy=null,
+                    UpdatedAt=null
+                },
+                  new Setting
+                {
+                    Index=Settings.PageSize,
+                    Value="5",
+                    UpdatedBy=null,
+                    UpdatedAt=null
+                },
+                new Setting
+                {
+                    Index=Settings.SmtpFrom,
+                    Value="systemtestersender@gmail.com",
+                    UpdatedBy=null,
+                    UpdatedAt=null
+                },
+                 new Setting
+                {
+                    Index=Settings.SmtpPassword,
+                    Value="7d61d0aecc2292edc8a9e364a22446ae",
+                    UpdatedBy=null,
+                    UpdatedAt=null
+                },
+                new Setting
+                {
+                    Index=Settings.SmtpPort,
+                    Value="587",
+                    UpdatedBy=null,
+                    UpdatedAt=null
+                },
+                new Setting
+                {
+                    Index=Settings.SmtpServer,
+                    Value="in-v3.mailjet.com",
+                    UpdatedBy=null,
+                    UpdatedAt=null
+                },
+
+                 new Setting
+                {
+                    Index=Settings.SmtpUsername,
+                    Value="7c48d30fab75f474c110f4b946638267",
+                    UpdatedBy=null,
+                    UpdatedAt=null
+                }
+            };
+
+            Context.Settings.AddRange(settings);
         }
     }
 }

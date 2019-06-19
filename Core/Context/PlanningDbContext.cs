@@ -80,6 +80,12 @@ namespace Core.Context
 
         public DbSet<UserToIssueOptionAnswer> UsersToIssueOptionAnswers { get; set; }
 
+        /// <summary>
+        /// Settings
+        /// </summary>
+
+        public DbSet<Setting> Settings { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(PlanningDbContext).Assembly);

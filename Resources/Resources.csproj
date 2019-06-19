@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Update="settings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>settings.resx</DependentUpon>
+    </Compile>
     <Compile Update="steps.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -13,6 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="settings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>settings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="steps.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>steps.Designer.cs</LastGenOutput>
