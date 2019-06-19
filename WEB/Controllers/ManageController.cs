@@ -36,6 +36,8 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult GetPositionList()
         {
+            _loggerManager.Info($"GetPositionList is requested");
+
             var positions = _dictionaryRepository.GetPositions(false);
 
             ViewData["Title"] = "Positions";
@@ -47,6 +49,8 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult GetValueList()
         {
+            _loggerManager.Info($"GetValueList is requested");
+
             var values = _dictionaryRepository.GetValues(false);
 
             ViewData["Title"] = "Values";
@@ -58,6 +62,8 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult GetStakeholderCategoryList()
         {
+            _loggerManager.Info($"GetStakeholderCategoryList is requested");
+
             var stakeholderCategories = _dictionaryRepository.GetStakeholderCategories(false);
 
             ViewData["Title"] = "Stakeholder Categories";
@@ -69,6 +75,8 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult GetStakeholderCriterionList()
         {
+            _loggerManager.Info($"GetStakeholderCriterionList is requested");
+
             var stakeholderCriteria = _dictionaryRepository.GetStakeholderCriteria(false);
 
             ViewData["Title"] = "Stakeholder Criteria";
@@ -80,6 +88,8 @@ namespace Web.Controllers
         [HttpPost]
         public IActionResult CreateDictionary(DictionaryDTO dictionary)
         {
+            _loggerManager.Info($"CreateDictionary for {dictionary.Title} is requested");
+
             Response.StatusCode = StatusCodes.Status202Accepted;
 
             if (ModelState.IsValid)
@@ -89,7 +99,16 @@ namespace Web.Controllers
                 if (result)
                 {
                     Response.StatusCode = StatusCodes.Status201Created;
+                    _loggerManager.Info($"CreateDictionary for {dictionary.Title} successfully created a dictionary");
                 }
+                else
+                {
+                    _loggerManager.Warn($"CreateDictionary for {dictionary.Title} was unable to create a dictionary");
+                }
+            }
+            else
+            {
+                _loggerManager.Warn($"CreateDictionary for {dictionary.Title} was invalid");
             }
 
             return PartialView("~/Views/Manage/Partials/_NewDictionary.cshtml");
@@ -98,11 +117,26 @@ namespace Web.Controllers
         [HttpPost]
         public IActionResult DeleteDictionary(int id)
         {
+            _loggerManager.Info($"DeleteDictionary({id}) was requested");
+
             var result = false;
 
             if (ModelState.IsValid)
             {
                 result = _dictionaryRepository.Delete(id, HttpContext.GetUserId());
+
+                if (result)
+                {
+                    _loggerManager.Info($"DeleteDictionary({id}) successfully deleted");
+                }
+                else
+                {
+                    _loggerManager.Warn($"DeleteDictionary({id}) was unable to delete");
+                }
+            }
+            else
+            {
+                _loggerManager.Warn($"DeleteDictionary({id}) was invalid");
             }
 
             return new JsonResult(new { result });
@@ -111,11 +145,26 @@ namespace Web.Controllers
         [HttpPost]
         public IActionResult ActivateDictionary(int id)
         {
+            _loggerManager.Info($"ActivateDictionary({id}) was requested");
+
             var result = false;
 
             if (ModelState.IsValid)
             {
                 result = _dictionaryRepository.Activate(id, HttpContext.GetUserId());
+
+                if (result)
+                {
+                    _loggerManager.Info($"ActivateDictionary({id}) successfully activaed");
+                }
+                else
+                {
+                    _loggerManager.Warn($"ActivateDictionary({id}) was unable to activate");
+                }
+            }
+            else
+            {
+                _loggerManager.Warn($"ActivateDictionary({id}) was invalid");
             }
 
             return new JsonResult(new { result });
@@ -124,11 +173,26 @@ namespace Web.Controllers
         [HttpPost]
         public IActionResult DisactivateDictionary(int id)
         {
+            _loggerManager.Info($"DisactivateDictionary({id}) was requested");
+
             var result = false;
 
             if (ModelState.IsValid)
             {
                 result = _dictionaryRepository.Disactivate(id, HttpContext.GetUserId());
+
+                if (result)
+                {
+                    _loggerManager.Info($"DisactivateDictionary({id}) successfully disactivated");
+                }
+                else
+                {
+                    _loggerManager.Warn($"DisactivateDictionary({id}) was unable to disactivate");
+                }
+            }
+            else
+            {
+                _loggerManager.Warn($"DisactivateDictionary({id}) was invalid");
             }
 
             return new JsonResult(new { result });
@@ -137,15 +201,19 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult GetIntroductionList()
         {
+            _loggerManager.Info($"GetIntroductionList was requested");
+
             return RedirectToAction("GetIntroduction", new { stepIndex = Steps.Predeparture });
         }
 
         [HttpGet]
         public IActionResult GetIntroduction(string stepIndex)
         {
+            _loggerManager.Info($"GetIntroduction({stepIndex}) was requested");
 
             if (!_planRepository.GetStepList().Contains(stepIndex))
             {
+                _loggerManager.Warn($"GetIntroduction({stepIndex}) : Step index is wrong");
                 return BadRequest();
             }
 
@@ -162,17 +230,22 @@ namespace Web.Controllers
         [HttpPost]
         public IActionResult UploadIntroduction(IntroductionDTO introduction)
         {
+            _loggerManager.Info($"UploadIntroduction was requested");
+
             var files = HttpContext.Request.Form.Files;
 
             if (files == null || files.Count != 1)
             {
-                ModelState.AddModelError(string.Empty, "A file is not chosen");
+                ModelState.AddModelError(string.Empty, "A file is invalid");
+
+                _loggerManager.Warn($"UploadIntroduction : A file is invalid");
 
                 return View("Introduction", introduction);
             }
 
             if (!_planRepository.GetStepList().Contains(introduction.Step))
             {
+                _loggerManager.Warn($"UploadIntroduction : Step index is wrong");
                 return BadRequest();
             }
 
@@ -186,20 +259,38 @@ namespace Web.Controllers
 
             if (fileDto != null)
             {
+                _loggerManager.Info($"UploadIntroduction : A file was created");
+
                 var oldVideo = _planRepository.GetIntroduction(introduction.Step)?.Video;
                 result = _planRepository.UpdateIntroduction(introduction.Step, fileDto.Id, userId);
+
                 if (result && oldVideo != null)
                 {
-                    UploadHelper.Delete(oldVideo.Path);
-                    _fileRepository.Delete(oldVideo.Id);
+                    bool oldFileDelete = false;
+                    oldFileDelete = UploadHelper.Delete(oldVideo.Path);
+                    oldFileDelete = _fileRepository.Delete(oldVideo.Id) && oldFileDelete;
+
+                    if (oldFileDelete)
+                    {
+                        _loggerManager.Warn($"UploadIntroduction : An old file was deleted");
+                    }
+                    else
+                    {
+                        _loggerManager.Warn($"UploadIntroduction : An old file was not deleted");
+                    }
                 }
             }
 
             if (!result)
             {
                 ModelState.AddModelError(string.Empty, "Something went wrong due to a server issue");
+                _loggerManager.Warn($"UploadIntroduction was unable to update");
 
                 return View("Introduction", introduction);
+            }
+            else
+            {
+                _loggerManager.Info($"UploadIntroduction successfully updated");
             }
 
             return RedirectToAction("GetIntroduction", new { stepIndex = introduction.Step });
@@ -208,6 +299,8 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult GetBlockList(string stepIndex)
         {
+            _loggerManager.Info($"GetBlockList({stepIndex}) was requested");
+
             if (string.IsNullOrWhiteSpace(stepIndex) || !_planRepository.GetStepList().Contains(stepIndex))
             {
                 ViewData["Step"] = Steps.Predeparture;
@@ -223,10 +316,13 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult BlockEdit(int id)
         {
+            _loggerManager.Info($"BlockEdit({id}) was requested");
+
             var block = _planRepository.GetBlock(id);
 
             if (block == null)
             {
+                _loggerManager.Warn($"BlockEdit({id}): A block was not found");
                 return BadRequest();
             }
 
@@ -241,13 +337,18 @@ namespace Web.Controllers
                 Step = block.Step
             };
 
+            _loggerManager.Info($"BlockEdit({id}): A block was successfully found");
+
             return View("BlockEdit", blockEdit);
         }
 
         [HttpPost]
         public IActionResult BlockEdit(BlockEditDTO blockEdit)
         {
+            _loggerManager.Info($"BlockEdit() was requested");
+
             ViewData["Step"] = blockEdit.Step;
+
             if (ModelState.IsValid)
             {
                 var result = _planRepository.UpdateBlock(blockEdit, HttpContext.GetUserId());
@@ -255,11 +356,19 @@ namespace Web.Controllers
                 if (!result)
                 {
                     ModelState.AddModelError(string.Empty, "Something went wrong due to a server issue");
+
+                    _loggerManager.Warn($"BlockEdit() was unable to update a block");
                 }
                 else
                 {
                     ViewData["SuccessMessage"] = "Block successfully updated";
+
+                    _loggerManager.Warn($"BlockEdit() successfully updated");
                 }
+            }
+            else
+            {
+                _loggerManager.Warn($"BlockEdit() was invalid");
             }
 
             return View("BlockEdit", blockEdit);
