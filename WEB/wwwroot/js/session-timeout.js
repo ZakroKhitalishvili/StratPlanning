@@ -31,11 +31,8 @@ $.sessionTimeout({
     redirUrl: '/Auth/Login',
     countdownBar: true,
     onStart: function (options) {
-        console.log('onStart');
-
         if (canPing()) {
 
-            console.log("pinged");
             $.ajax(
                 {
                     url: '/Auth/Ping',
@@ -52,14 +49,13 @@ $.sessionTimeout({
                             }
 
                         }
-                        console.log(options);
                     },
                     error: function (xhr, statustext, error) {
                         if (xhr.status == 401) {
-                            notify("Authorization failed", "danger", 5);
+                            notify("Pinging failed", "danger", 5);
                         }
                         else {
-                            notify("An error occured during ping", "danger", 5);
+                            notify("An error occured during pinging", "danger", 5);
                         }
                     }
                 });

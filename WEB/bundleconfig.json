@@ -1,9 +1,10 @@
 [
   {
-    "outputFileName": "wwwroot/js/global.min.js",
+    "outputFileName": "wwwroot/js/scripts.bundle.min.js",
     "inputFiles": [
-      "wwwroot/js/global.js"
-      //"wwwroot/js/session-timeout.js"
+      "wwwroot/js/global.js",
+      "wwwroot/js/session-timeout.js",
+      "wwwroot/js/step.js"
     ],
     "minify": {
       "enabled": true,
@@ -30,7 +31,7 @@
       "wwwroot/lib/bootstrap/dist/js/bootstrap.bundle.min.js",
       "wwwroot/lib/bootstrap-notify/bootstrap-notify.min.js",
       "wwwroot/lib/bootstrap-maxlength/src/bootstrap-maxlength.js",
-      //"wwwroot/lib/bootstrap-session-timeout/dist/bootstrap-session-timeout.min.js",
+      "wwwroot/lib/bootstrap-session-timeout/dist/bootstrap-session-timeout.min.js",
       "wwwroot/lib/sweetalert/sweetalert.min.js",
       "wwwroot/lib/jquery-validation/dist/jquery.validate.min.js",
       "wwwroot/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js",
