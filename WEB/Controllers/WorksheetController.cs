@@ -23,11 +23,18 @@ namespace Web.Controllers
 
         public readonly IHostingEnvironment _hostingEnvironment;
 
-        public WorksheetController(IPlanRepository planRepository, ILoggerManager loggerManager, IFileRepository fileRepository, IHostingEnvironment hostingEnvironment) : base(loggerManager)
+        public readonly ISettingRepository _settingRepository;
+
+        public WorksheetController(IPlanRepository planRepository,
+            ILoggerManager loggerManager,
+            IFileRepository fileRepository,
+            IHostingEnvironment hostingEnvironment,
+            ISettingRepository settingRepository) : base(loggerManager)
         {
             _planRepository = planRepository;
             _fileRepository = fileRepository;
             _hostingEnvironment = hostingEnvironment;
+            _settingRepository = settingRepository;
         }
 
         public IActionResult GetStep(string stepIndex, int planId)
@@ -83,7 +90,14 @@ namespace Web.Controllers
         public IActionResult GetPlanList(int? page)
         {
             _loggerManager.Info($"GetPlanList({page}) was requested");
-            var pageSize = 5;
+
+            var parseResult = int.TryParse(_settingRepository.Get(Settings.PageSize), out int pageSize);
+
+            if (!parseResult || pageSize <= 0)
+            {
+                pageSize = 5;
+            }
+
             var skipCount = ((page ?? 1) - 1) * pageSize;
             var takeCount = pageSize;
 
@@ -214,14 +228,28 @@ namespace Web.Controllers
 
             var userId = HttpContext.GetUserId();
 
+            var validExtensions = _settingRepository.Get(Settings.FileExtensionsForStep)?.Split(',');
+
+            var uploadlimit = int.Parse(_settingRepository.Get(Settings.FileUploadLimit));
+
             foreach (var file in files)
             {
-                var uploadRelPath = UploadHelper.Upload(files[0]);
+                if (ValidationHelper.ValidateFileExtension(file, validExtensions) && ValidationHelper.ValidateFileSize(file, uploadlimit))
+                {
+                    var uploadRelPath = UploadHelper.Upload(files[0]);
 
-                var fileDto = _fileRepository.CreateNewFile(Path.GetFileNameWithoutExtension(file.FileName), Path.GetExtension(file.FileName), uploadRelPath, userId);
+                    var fileDto = _fileRepository.CreateNewFile(Path.GetFileNameWithoutExtension(file.FileName), Path.GetExtension(file.FileName), uploadRelPath, userId);
 
-                if (fileDto != null) result.Add(fileDto);
+                    if (fileDto != null) result.Add(fileDto);
+                }
+                else
+                {
+                    _loggerManager.Warn($"UploadFile() : {file.FileName} is not valid due to wrong extension or size");
 
+                    Response.StatusCode = StatusCodes.Status400BadRequest;
+
+                    return new JsonResult(new { message = $"{file.FileName} is not valid due to wrong extension or size" });
+                }
             }
 
             _loggerManager.Info($"UploadFile() successfuly uploaded file(s) and returned a result");

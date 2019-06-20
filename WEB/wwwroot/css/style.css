@@ -876,3 +876,10 @@ button.m-list-badge__item {
 .note-toolbar {
     z-index: 100;
 }
+
+.error-file {
+    color: #7f2a38;
+    background: #fddce2 !important;
+    border-color: #fcced6;
+    box-shadow: 0 0 2px 1px #7f2a38 !important;
+}

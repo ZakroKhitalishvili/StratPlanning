@@ -126,7 +126,7 @@ namespace Core.Context
                 SeedEvalutionStep();
             }
 
-            if(!Context.Settings.Any())
+            if (!Context.Settings.Any())
             {
                 SeedSettings();
             }
@@ -260,15 +260,6 @@ namespace Core.Context
                     }
                  }
             };
-
-            foreach (var plan in Plans)
-            {
-                if (Users != null)
-                {
-                    foreach (var user in Users)
-                        plan.UsersToPlans.Add(new UserToPlan { User = user });
-                }
-            }
 
             Context.Plans.AddRange(Plans);
 

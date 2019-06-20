@@ -7,7 +7,9 @@ namespace Application.Interfaces.Services
 {
     public interface IEmailService
     {
-        bool SendPasswordToUser(string password,UserDTO user);
+        bool Send(string recipient, string subject, string body);
+
+        bool SendPasswordToUser(string password, UserDTO user);
 
         bool SendPasswordRecoveryInfo(string url, UserDTO user);
     }

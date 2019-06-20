@@ -1,5 +1,7 @@
 ﻿using Application.DTOs;
+using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
+using Core.Constants;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -16,20 +18,27 @@ namespace Application.Services
 
         private readonly string _smtpServer;
 
-        private readonly bool _useTLS;
-
         private readonly int _port;
 
-        public EmailService()
+        private readonly string _from;
+
+        public EmailService(ISettingRepository settingRepository)
         {
-            _userName = "7c48d30fab75f474c110f4b946638267";
-            _password = "7d61d0aecc2292edc8a9e364a22446ae";
-            _smtpServer = "in-v3.mailjet.com";
-            _useTLS = true;
-            _port = 587;
+            //_userName = "7c48d30fab75f474c110f4b946638267";
+            //_password = "7d61d0aecc2292edc8a9e364a22446ae";
+            //_smtpServer = "in-v3.mailjet.com";
+            //_useTLS = true;
+            //_port = 587;
+            //_from="systemtestersender@gmail.com";
+
+            _userName = settingRepository.Get(Settings.SmtpUsername);
+            _password = settingRepository.Get(Settings.SmtpPassword);
+            _smtpServer = settingRepository.Get(Settings.SmtpServer);
+            _port = int.Parse(settingRepository.Get(Settings.SmtpPort));
+            _from = settingRepository.Get(Settings.SmtpFrom);
         }
 
-        private bool Send(string recipient, string subject, string body)
+        public bool Send(string recipient, string subject, string body)
         {
             SmtpClient client = new SmtpClient();
 
@@ -38,7 +47,7 @@ namespace Application.Services
             client.Credentials = new NetworkCredential(_userName, _password);
 
             MailMessage message = new MailMessage();
-            message.From = new MailAddress("systemtestersender@gmail.com");
+            message.From = new MailAddress(_from);
             message.To.Add(new MailAddress(recipient));
             message.Subject = subject;
             message.Body = body;

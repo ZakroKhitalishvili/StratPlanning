@@ -118,7 +118,6 @@ function initializeStep() {
                 let id = $(currentPreviewElement).find(".sp-file-input").val();
 
                 removeFilePreview(currentPreviewElement).then(function (result) {
-                    console.log(result);
                     if (result) {
                         $.ajax(
                             {
@@ -143,20 +142,29 @@ function initializeStep() {
             url: "/Worksheet/UploadFile",
             uploadMultiple: true,
             paramName: 'file',
-            success: function (file, res) {
+            success: function (file, response) {
                 var index = 0;
-                var fileResponse = res.filter(function (data, i) {
+                var fileResponse = response.filter(function (data, i) {
                     if (data.name === file.name) {
                         index = i;
                         return true;
                     }
-
                     return false;
                 })[0];
 
-
                 $(file.previewElement).find(".sp-file-input").val(fileResponse.id);
                 $(file.previewElement).find(".sp-file-link").attr('href', fileResponse.url);
+            },
+            error: function (file, response) {
+                $(file.previewElement).find(".dz-image").addClass('error-file');
+                $(file.previewElement).find(".dz-error-message").show();
+                if (typeof (response.message) !== 'undefined') {
+                    $(file.previewElement).find(".dz-error-message > span").html(response.message);
+                }
+                else {
+                    $(file.previewElement).find(".dz-error-message > span").html('An error occured on a server');
+                }
+                $(file.previewElement).find(".sp-file-input").remove();
             },
             previewTemplate: `
                 <div class="dz-preview dz-file-preview dz-processing dz-error dz-complete">
@@ -169,7 +177,10 @@ function initializeStep() {
                     </div>  
                     <div class="dz-progress">
                         <span class="dz-upload" data-dz-uploadprogress=""></span>
-                    </div>   
+                    </div>
+                    <div class="dz-error-message" style="display:none">
+                        <span class="dz-upload" data-dz-errormessage=""></span>
+                    </div>
                     </div>
                     <a class="dz-remove" href="javascript:undefined;" data-dz-remove="">Remove file</a>
                 </div>`

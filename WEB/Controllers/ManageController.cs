@@ -257,6 +257,17 @@ namespace Web.Controllers
                 return BadRequest();
             }
 
+            var uploadlimit = int.Parse(_settingRepository.Get(Settings.FileUploadLimit));
+
+            if (!ValidationHelper.ValidateFileSize(files[0], uploadlimit))
+            {
+                ModelState.AddModelError(string.Empty, "A file exceed a limit");
+
+                _loggerManager.Warn($"UploadIntroduction : A file exceed a limit");
+
+                return View("Introduction", introduction);
+            }
+
             var userId = HttpContext.GetUserId();
 
             var uploadRelPath = UploadHelper.Upload(files[0]);
@@ -416,7 +427,7 @@ namespace Web.Controllers
             {
                 result = _settingRepository.Set(setting.Index, setting.Value, HttpContext.GetUserId());
 
-                if(result)
+                if (result)
                 {
                     _loggerManager.Info($"EditSetting() POST successfully updated");
                 }
