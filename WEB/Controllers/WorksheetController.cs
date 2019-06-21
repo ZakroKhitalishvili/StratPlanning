@@ -87,7 +87,7 @@ namespace Web.Controllers
             return RedirectToAction("GetPlanList");
         }
 
-        public IActionResult GetPlanList(int? page)
+        public IActionResult GetPlanList(int? page, string searchText)
         {
             _loggerManager.Info($"GetPlanList({page}) was requested");
 
@@ -103,7 +103,7 @@ namespace Web.Controllers
 
             if (User.IsInRole(Roles.Admin))
             {
-                var planList = _planRepository.GetPlanList(skipCount, takeCount, out int totalCount);
+                var planList = _planRepository.GetPlanList(searchText, skipCount, takeCount, out int totalCount);
 
                 var pagedList = new StaticPagedList<PlanDTO>(planList, page ?? 1, pageSize, totalCount);
 
@@ -113,7 +113,7 @@ namespace Web.Controllers
             }
             else
             {
-                var planList = _planRepository.GetPlanListForUser(HttpContext.GetUserId(), skipCount, takeCount, out int totalCount);
+                var planList = _planRepository.GetPlanListForUser(HttpContext.GetUserId(), searchText, skipCount, takeCount, out int totalCount);
 
                 var pagedList = new StaticPagedList<PlanDTO>(planList, page ?? 1, pageSize, totalCount);
 

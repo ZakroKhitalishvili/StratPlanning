@@ -135,14 +135,13 @@ $(document).ready(function () {
 
 $(document).ready(function () {
 
-
     initializeInputs(document);
 
     //var quickSearch = $('#m_quicksearch');
 
     //quickSearch.mQuicksearch({
     //    type: quickSearch.data('search-type'), // quick search type
-    //    source: '',
+    //    source: 'search_url',
     //    spinner: 'm-loader m-loader--skin-light m-loader--right',
 
     //    input: '#m_quicksearch_input',

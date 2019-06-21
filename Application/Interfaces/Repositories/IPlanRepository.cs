@@ -18,7 +18,7 @@ namespace Application.Interfaces.Repositories
 
         IEnumerable<string> GetActionPlanSteps();
 
-        IEnumerable<PlanDTO> GetPlanList(int skipCount, int takeCount, out int totalCount);
+        IEnumerable<PlanDTO> GetPlanList(string searchText, int skipCount, int takeCount, out int totalCount);
 
         bool AddUserToPlan(int userId, int planId, int positionId);
 
@@ -32,7 +32,7 @@ namespace Application.Interfaces.Repositories
 
         bool SaveStep(PlanStepDTO planStep, bool isDefinitive, bool isSubmitted, int userId);
 
-        IEnumerable<PlanDTO> GetPlanListForUser(int userId, int skipCount, int takeCount, out int totalCount);
+        IEnumerable<PlanDTO> GetPlanListForUser(int userId, string searchText, int skipCount, int takeCount, out int totalCount);
 
         IList<FileDTO> GetFileAnswers(int questionId, int planId, int userId, bool isDefinitive);
 
@@ -62,6 +62,6 @@ namespace Application.Interfaces.Repositories
 
         BlockDTO GetBlock(int id);
 
-        bool UpdateBlock(BlockEditDTO block,int userId);
+        bool UpdateBlock(BlockEditDTO block, int userId);
     }
 }

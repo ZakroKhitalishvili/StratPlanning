@@ -157,11 +157,11 @@ namespace Application.Repositories
             return false;
         }
 
-        public IEnumerable<PlanDTO> GetPlanList(int skipCount, int takeCount, out int totalCount)
+        public IEnumerable<PlanDTO> GetPlanList(string searchText, int skipCount, int takeCount, out int totalCount)
         {
             totalCount = Context.Plans.Count();
 
-            return Context.Plans.OrderByDescending(x => x.CreatedAt).Skip(skipCount).Take(takeCount).Select(p => Mapper.Map<PlanDTO>(p));
+            return Context.Plans.AsEnumerable().Where(x => string.IsNullOrEmpty(searchText) || x.Name.Contains(searchText) || x.Description.Contains(searchText)).OrderByDescending(x => x.CreatedAt).Skip(skipCount).Take(takeCount).Select(p => Mapper.Map<PlanDTO>(p));
         }
 
         public IEnumerable<UserPlanningMemberDTO> GetPlanningTeam(int planId)
@@ -271,14 +271,16 @@ namespace Application.Repositories
             return result;
         }
 
-        public IEnumerable<PlanDTO> GetPlanListForUser(int userId, int skipCount, int takeCount, out int totalCount)
+        public IEnumerable<PlanDTO> GetPlanListForUser(int userId, string searchText, int skipCount, int takeCount, out int totalCount)
         {
             totalCount = Context.UsersToPlans
                 .Where(x => x.UserId == userId).Count();
 
             return Context.UsersToPlans
                 .Where(x => x.UserId == userId)
-                .Include(x => x.Plan).Include(x => x.UserStepResults).AsEnumerable()
+                .Include(x => x.Plan).Include(x => x.UserStepResults)
+                .AsEnumerable()
+                .Where(x => string.IsNullOrEmpty(searchText) || x.Plan.Name.Contains(searchText) || x.Plan.Description.Contains(searchText))
                 .OrderByDescending(x =>
                 {
                     if (x.UserStepResults.Any()) return x.UserStepResults.Max(y => y.UpdatedAt);

@@ -2,13 +2,17 @@
 using Application.Interfaces;
 using System;
 using Microsoft.AspNetCore.Diagnostics;
+using Application.Interfaces.Repositories;
 
 namespace Web.Controllers
 {
     public class HomeController : AbstractController
     {
-        public HomeController(ILoggerManager loggerManager) : base(loggerManager)
+        public readonly IPlanRepository _planRepository;
+
+        public HomeController(ILoggerManager loggerManager, IPlanRepository planRepository) : base(loggerManager)
         {
+            _planRepository = planRepository;
         }
 
         public IActionResult Index()
@@ -30,5 +34,6 @@ namespace Web.Controllers
 
             return View();
         }
+
     }
 }

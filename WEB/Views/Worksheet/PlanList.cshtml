@@ -27,7 +27,19 @@
             </div>
         </div>
         <div class="m-portlet__body">
+            <div class="row col-12">
+                <form>
+                    <div class="form-group m-form__group">
+                        <input name="searchText" type="text" class="form-control" placeholder="Search..." value="@Context.Request.Query["searchText"]"/>
+                    </div>
+                </form>
+            </div>
             <div class="list-group">
+
+                @if (Model.Count() == 0)
+                {
+                    <span class="m-align--center">No plans</span>
+                }
                 @foreach (var plan in Model)
                 {
                     <div class="list-group-item flex-column align-items-start">
