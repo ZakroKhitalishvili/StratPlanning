@@ -20,12 +20,14 @@ namespace Application.Repositories
             _hashService = hashService;
         }
 
-        public UserDTO AddNew(NewUserDTO newUser)
+        public UserDTO AddNew(NewUserDTO newUser, int userId)
         {
             var user = Mapper.Map<User>(newUser);
 
             user.CreatedAt = DateTime.Now;
             user.UpdatedAt = DateTime.Now;
+            user.CreatedBy = userId;
+            user.UpdatedBy = userId;
 
             user.Password = _hashService.Hash(user.Password);
 
@@ -48,7 +50,7 @@ namespace Application.Repositories
 
         }
 
-        public bool ChangePassword(ChangePasswordDTO changePassword)
+        public bool ChangePassword(ChangePasswordDTO changePassword, int userId)
         {
             if (changePassword.NewPassword != changePassword.ConfirmNewPassword)
             {
@@ -67,6 +69,8 @@ namespace Application.Repositories
 
             user.Password = hashedNewPassword;
             user.UpdatedAt = DateTime.Now;
+            user.UpdatedBy = userId;
+            user.CreatedBy = userId;
 
             try
             {
@@ -146,7 +150,7 @@ namespace Application.Repositories
             return (user != null) ? Mapper.Map<UserDTO>(user) : null;
         }
 
-        public bool RecoverPassword(RecoverPasswordDTO recoverPassword)
+        public bool RecoverPassword(RecoverPasswordDTO recoverPassword, int userId)
         {
             if (!(recoverPassword.NewPassword == recoverPassword.ConfirmNewPassword))
             {
@@ -161,12 +165,10 @@ namespace Application.Repositories
             var user = FindByCondition(x => x.Token == recoverPassword.Token).First();
 
             user.Password = _hashService.Hash(recoverPassword.NewPassword);
-
             user.Token = null;
-
             user.TokenExpiration = null;
-
             user.UpdatedAt = DateTime.Now;
+            user.UpdatedBy = userId;
 
             try
             {
@@ -191,7 +193,7 @@ namespace Application.Repositories
             return user != null;
         }
 
-        public bool UpdateProfile(UserProfileDTO userProfile)
+        public bool UpdateProfile(UserProfileDTO userProfile, int userId)
         {
             if (FindByCondition(u => u.Email == userProfile.Email && u.Id != userProfile.Id).Any())
             {
@@ -204,6 +206,7 @@ namespace Application.Repositories
             user.LastName = userProfile.LastName;
             user.Email = userProfile.Email;
             user.UpdatedAt = DateTime.Now;
+            user.UpdatedBy = userId;
 
             try
             {

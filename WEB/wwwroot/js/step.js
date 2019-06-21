@@ -119,25 +119,28 @@ function initializeStep() {
 
                 removeFilePreview(currentPreviewElement).then(function (result) {
                     if (result) {
-                        $.ajax(
-                            {
-                                url: '/Worksheet/DeleteFile',
-                                method: "post",
-                                data: { id },
-                                success: function (data, statusText, xhr) {
-                                    if (xhr.status == 201) {
+                        if (!!id) {
+                            $.ajax(
+                                {
+                                    url: '/Worksheet/DeleteFile',
+                                    method: "post",
+                                    data: { id },
+                                    success: function (data, statusText, xhr) {
+                                        if (xhr.status == 201) {
 
+                                        }
+                                        if (xhr.status == 202 || xhr.status == 400) {
+                                            notify("Input data are not valid ", "danger", 5);
+                                        }
+                                    },
+                                    error: function (xhr, statusText, error) {
+                                        notify("An Error occured on the request", "danger", 5);
                                     }
-                                    if (xhr.status == 202 || xhr.status == 400) {
-                                        notify("Input data are not valid ", "danger", 5);
-                                    }
-                                },
-                                error: function (xhr, statusText, error) {
-                                    notify("An Error occured on the request", "danger", 5);
-                                }
-                            });
+                                });
+                        }
                     }
                 });
+
             },
             url: "/Worksheet/UploadFile",
             uploadMultiple: true,
@@ -716,7 +719,7 @@ function completeStep(planId, stepIndex, callback) {
                         }
 
                         if (xhr.status == 202) {
-                            notify("The step can not be completed", "danger", 5);
+                            notify("The step can not be completed", "warning", 5);
                         }
                     },
                     error: function (xhr, statusText, error) {

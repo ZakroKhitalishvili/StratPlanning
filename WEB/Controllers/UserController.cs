@@ -168,7 +168,7 @@ namespace Web.Controllers
 
                 newUser.Password = _userRepository.GeneratePassword();
                 newUser.Role = Roles.Employee;
-                var user = _userRepository.AddNew(newUser);
+                var user = _userRepository.AddNew(newUser, HttpContext.GetUserId());
 
                 if (user == null)
                 {
@@ -276,7 +276,7 @@ namespace Web.Controllers
 
                 newUser.Password = _userRepository.GeneratePassword();
                 newUser.Role = Roles.External;
-                var user = _userRepository.AddNew(newUser);
+                var user = _userRepository.AddNew(newUser, HttpContext.GetUserId());
 
                 if (user == null)
                 {
@@ -352,7 +352,7 @@ namespace Web.Controllers
                     return PartialView("~/Views/User/Partials/_UserProfileDetails.cshtml");
                 }
 
-                if (!_userRepository.UpdateProfile(userProfile))
+                if (!_userRepository.UpdateProfile(userProfile, HttpContext.GetUserId()))
                 {
                     _loggerManager.Error($"UpdateProfile() - Profile is not updated");
 
@@ -401,7 +401,7 @@ namespace Web.Controllers
 
                 changePassword.Id = id;
 
-                if (!_userRepository.ChangePassword(changePassword))
+                if (!_userRepository.ChangePassword(changePassword, HttpContext.GetUserId()))
                 {
                     _loggerManager.Error($"ChangePassword() - Password was not updated");
 

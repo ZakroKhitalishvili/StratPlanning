@@ -8,9 +8,9 @@ namespace Application.Interfaces.Repositories
 {
     public interface IUserRepository : IRepositoryBase<User>
     {
-        bool TryAuthentication(string email, string password,out UserDTO user);
+        bool TryAuthentication(string email, string password, out UserDTO user);
 
-        UserDTO AddNew(NewUserDTO user);
+        UserDTO AddNew(NewUserDTO user, int userId);
 
         string GeneratePassword();
 
@@ -18,15 +18,15 @@ namespace Application.Interfaces.Repositories
 
         bool ValidateToken(string token);
 
-        bool RecoverPassword(RecoverPasswordDTO recoverPassword);
+        bool RecoverPassword(RecoverPasswordDTO recoverPassword, int userId);
 
         UserDTO GetUserById(int id);
 
         UserDTO GetUserByEmail(string email);
 
-        bool UpdateProfile(UserProfileDTO user);
+        bool UpdateProfile(UserProfileDTO user, int userId);
 
-        bool ChangePassword(ChangePasswordDTO changePassword);
+        bool ChangePassword(ChangePasswordDTO changePassword, int userId);
 
     }
 }
