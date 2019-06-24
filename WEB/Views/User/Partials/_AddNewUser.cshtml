@@ -1,6 +1,6 @@
 ﻿@model Application.DTOs.AddUserToPlanDTO
 @using Web.Helpers
-
+@inject Web.Helpers.HtmlHelper htmlHelper
 @{
     Layout = null;
 }
@@ -34,7 +34,7 @@
             <label asp-for="NewUser.PositionId">
                 Position
             </label>
-            <select asp-items="UserHelper.GetPositionsSelectList(Context)" asp-for="NewUser.PositionId" class="form-control m-select2" style="width:100%">
+            <select asp-items="htmlHelper.GetPositionsSelectList()" asp-for="NewUser.PositionId" class="form-control m-select2" style="width:100%">
                 <option value="">-- Specify --</option>
             </select>
             <span class="text-danger" asp-validation-for="NewUser.PositionId"></span>

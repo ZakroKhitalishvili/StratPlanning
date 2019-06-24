@@ -1,5 +1,6 @@
 ﻿@model Application.DTOs.PlanStepDTO
 
+@inject  Web.Helpers.HtmlHelper htmlHelper
 @{
     var blockIndex = (int)ViewData["BlockIndex"];
     var questionIndex = (int)ViewData["QuestionIndex"];
@@ -12,9 +13,9 @@
 
     var filledAnswer = Model.AnswerGroups[questionIndexOffset + questionIndex];
 
-    var stakeholderUsers = Web.Helpers.UserHelper.GetUsersSelectList(Context);
+    var stakeholderUsers = htmlHelper.GetUsersSelectList();
 
-    var categories = Web.Helpers.UserHelper.GetCategoriesSelectList(Context);
+    var categories = htmlHelper.GetCategoriesSelectList();
 
     var stakeholderAnswers = answerGroup.OtherAnswers.SelectMany(x => x.StakeholderAnswers.Select(y => new
     {

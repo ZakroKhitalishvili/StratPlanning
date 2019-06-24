@@ -1,6 +1,7 @@
 ﻿@model Application.DTOs.PlanStepDTO
 
 @inject Application.Interfaces.Repositories.IPlanRepository planRepository
+@inject Web.Helpers.HtmlHelper htmlHelper
 @using Resources
 
 @using Web.Helpers
@@ -161,7 +162,7 @@
                                     <div class="m-list-badge m-list-badge--light-bg">
                                         <div class="m-list-badge__items list-items" id="step_tasks_list_@stepTask.Step">
                                             @{
-                                                var userToPlans = UserHelper.GetUsersSelectListByPlan(Context, Model.PlanId);
+                                                var userToPlans = htmlHelper.GetUsersSelectListByPlan(Model.PlanId);
                                             }
                                             @foreach (var stepTaskAnswer in stepTaskAnswers)
                                             {

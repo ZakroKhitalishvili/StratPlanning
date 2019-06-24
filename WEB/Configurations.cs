@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using Web.Helpers;
 
 namespace Web
 {
@@ -23,6 +24,7 @@ namespace Web
 
         public static IServiceCollection AddLocalServices(this IServiceCollection services)
         {
+            // Application services
             services.AddScoped<ILoggerManager, LoggerManager>();
             services.AddScoped<IPlanRepository, PlanRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
@@ -31,6 +33,9 @@ namespace Web
             services.AddScoped<ISettingRepository, SettingRepository>();
             services.AddScoped<IHashService, SHA256Service>();
             services.AddScoped<IEmailService, EmailService>();
+
+            //Web services
+            services.AddTransient<HtmlHelper>();
 
             return services;
         }

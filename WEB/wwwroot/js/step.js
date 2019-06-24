@@ -44,7 +44,9 @@ function initializeStep() {
             columnDefs:
                 [{ visible: false, targets: [0] },
                 { orderable: false, targets: [1, 2, 3, 4, 5] },
-                { orderDataType: 'dom-input', targets: [6] }],
+                { orderDataType: 'dom-input-number', targets: [6] },
+                { type: 'numeric', targets: [6] }
+                ],
         }
     );
 
@@ -637,13 +639,19 @@ function showRecordDetail(source, modalId) {
 }
 
 function deleteRecord(source, targetSelector = false) {
-    var record = source;
 
-    if (targetSelector !== false) {
-        record = source.closest(targetSelector);
-    }
+    deleteConfirm().then(function (result) {
+        if (result) {
+            var record = source;
 
-    $(record).remove();
+            if (targetSelector !== false) {
+                record = source.closest(targetSelector);
+            }
+            $(record).remove();
+        }
+    })
+
+
 }
 
 function checkLikeRadio(el) {

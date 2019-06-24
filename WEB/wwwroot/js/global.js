@@ -158,6 +158,10 @@ $(document).ready(function () {
     //    }
     //});
 
+    /////
+    /// Datatable ordering functions
+    //
+
     $.fn.dataTable.ext.order['dom-select'] = function (settings, col) {
         return this.api().column(col, { order: 'index' }).nodes().map(function (td, i) {
             return $('select', td).val();
@@ -170,6 +174,15 @@ $(document).ready(function () {
         });
     };
 
+    $.fn.dataTable.ext.order['dom-input-number'] = function (settings, col) {
+        return this.api().column(col, { order: 'index' }).nodes().map(function (td, i) {
+            return parseFloat($('input', td).val());
+        });
+    };
+    ////
+    //
+    //
+
     $('.user-submit-btn').click(submitConfirm);
 
     $('.draggable-file').draggable({
@@ -179,10 +192,10 @@ $(document).ready(function () {
         cursor: "move"
     });
 
-    $('.table-row-delete').click(function (e) {
-        e.preventDefault();
-        deleteConfirm();
-    });
+    //$('.table-row-delete').click(function (e) {
+    //    e.preventDefault();
+    //    deleteConfirm();
+    //});
 
     /////
     ///

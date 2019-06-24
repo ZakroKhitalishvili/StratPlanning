@@ -2,6 +2,8 @@
 @using Web.Helpers
 @using Core.Constants
 
+@inject Web.Helpers.HtmlHelper htmlHelper
+
 @{
     Layout = null;
 }
@@ -17,7 +19,7 @@
             <label asp-for="ExistingResponsibleUser.Id">
                 User
             </label>
-            <select asp-items="UserHelper.GetUsersSelectListByPlan(Context,Model.PlanId)" asp-for="ExistingResponsibleUser.Id" class="form-control m-select2" style="width:100%">
+            <select asp-items="htmlHelper.GetUsersSelectListByPlan(Model.PlanId)" asp-for="ExistingResponsibleUser.Id" class="form-control m-select2" style="width:100%">
                 <option value="">-- Specify --</option>
             </select>
             <span class="text-danger" asp-validation-for="ExistingResponsibleUser.Id"></span>
