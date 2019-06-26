@@ -8,7 +8,10 @@
         </div>
         <div class="form-group m-form__group">
             <label asp-for="Value">
-                Value
+                @if (Model.Index != null)
+                {
+                    @settings.ResourceManager.GetString(Model.Index)
+                }
             </label>
             <input type="text" asp-for="Value" class="form-control m-input" />
             <span class="text-danger" asp-validation-for="Value"></span>
