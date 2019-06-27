@@ -1,0 +1,158 @@
+﻿@model IPagedList<UserDTO>
+
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Mvc.Common;
+@using X.PagedList;
+
+
+@using Resources
+@{
+    ViewData["Title"] = "Users";
+}
+
+<div class="m-grid__item m-grid__item--fluid m-wrapper">
+    <div class="m-portlet m-portlet--full-height m-portlet--tabs">
+        <div class="m-portlet__head">
+            <div class="m-subheader">
+                <div class="d-flex align-items-center">
+                    <div class="mr-auto">
+                        <h2>@ViewData["Title"]</h2>
+                    </div>
+
+                    <a href="" class="btn btn-sp m-btn m-btn--pill m--pull-right m--margin-bottom-10"
+                       data-toggle="modal" data-target="#add_user_modal">
+                        Add new
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="m-portlet__body">
+            <div class="m-scrollable " data-scrollable="true" data-axis="xy">
+                <table class="table m-table  table-bordered m--margin-top-10" width="100%">
+                    <thead>
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Email
+                            </th>
+                            <th>
+                                Role
+                            </th>
+                            <th>
+                                Position
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @user.FirstName @user.LastName
+                                </td>
+                                <td>
+                                    @user.Email
+                                </td>
+                                <td>
+                                    @roles.ResourceManager.GetString(user.Role)
+                                </td>
+                                <td>
+                                    @user.Position?.Title
+                                </td>
+                                <td>
+                                    @if (user.IsActive)
+                                    {
+                                        <a href="" class="disactivate-user m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
+                                           title="Disactivate"
+                                           data-toggle="tooltip" data-id="@user.Id">
+                                            <i class="fa fa-lock"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="" class="activate-user m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
+                                           title="Activate"
+                                           data-toggle="tooltip" data-id="@user.Id">
+                                            <i class="fa fa-unlock"></i>
+                                        </a>
+                                    }
+
+                                    <a href="" class="edit-user sp-tooltip m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
+                                       title="Edit"
+                                       data-toggle="tooltip" data-id="@user.Id">
+                                        <i class="la la-edit"></i>
+                                    </a>
+                                    <a href="" class="generate-user-password sp-tooltip m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
+                                       title="Generate password"
+                                       data-toggle="tooltip" data-id="@user.Id">
+                                        <i class="la la-key"></i>
+
+                                    </a>
+                                    <a href="" class="delete-user m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
+                                       title="Delete"
+                                       data-toggle="tooltip" data-id="@user.Id">
+                                        <i class="la la-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="m--margin-top-20">
+                @Html.PagedListPager(Model, page => Url.Action("GetUserList", new { page }), new PagedListRenderOptions
+               {
+                   LiElementClasses = new string[] { "page-item" },
+                   PageClasses = new string[] { "page-link" }
+               })
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="add_user_modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="">
+                    Add an user
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="la la-remove"></span>
+                </button>
+            </div>
+            <partial name="~/Views/Manage/Partials/_AddNewUser.cshtml" view-data="ViewData" model="new NewUserDTO()" />
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="edit_user_modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="">
+                    Edit an user
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="la la-remove"></span>
+                </button>
+            </div>
+            <partial name="~/Views/Manage/Partials/_UserEdit.cshtml" view-data="ViewData" model="new UserEditDTO()" />
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $('#menu_manage').addClass('m-menu__item--active');
+        var AddNewUserURL = '@Url.Action("AddNewUser", "Manage")';
+        var UserEditUrl = '@Url.Action("UserEdit", "Manage")';
+        var GeneratePasswordURL = '@Url.Action("GeneratePassword", "Manage")';
+         var DeleteUserURL = '@Url.Action("DeleteUser", "Manage")';
+        var ActivateUserURL = '@Url.Action("ActivateUser", "Manage")';
+        var DisactivateUserURL = '@Url.Action("DisactivateUser", "Manage")';
+    </script>
+}

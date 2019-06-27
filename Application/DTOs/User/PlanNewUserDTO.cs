@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Application.DTOs
 {
-    public class NewUserDTO
+    public class PlanNewUserDTO
     {
         [Required]
         [EmailAddress]
@@ -21,11 +21,7 @@ namespace Application.DTOs
         [MaxLength(EntityConfigs.TextMaxLength)]
         public string LastName { get; set; }
 
-        public string Password { get; set; }
-
         [Required]
-        public string Role { get; set; }
-
         public int? PositionId { get; set; }
     }
 }

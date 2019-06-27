@@ -1,0 +1,74 @@
+﻿@model Application.DTOs.UserEditDTO
+@using Web.Helpers
+@inject Web.Helpers.HtmlHelper htmlHelper
+@{
+    Layout = null;
+}
+<form class="m-form m-form--fit m-form--label-align-right" id="edit_user_form">
+    <div class="m-portlet__body">
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group m-form__group">
+            <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+        </div>
+        <div class="form-group m-form__group">
+            <label asp-for="FirstName">
+                Firstname
+            </label>
+            <input asp-for="FirstName" class="form-control m-input" />
+            <span class="text-danger" asp-validation-for="FirstName"></span>
+        </div>
+        <div class="form-group m-form__group">
+            <label asp-for="LastName">
+                Lastname
+            </label>
+            <input asp-for="LastName" class="form-control m-input" />
+            <span class="text-danger" asp-validation-for="LastName"></span>
+        </div>
+        <div class="form-group m-form__group ">
+            <label asp-for="Email">
+                Email
+            </label>
+            <input asp-for="Email" class="form-control m-input" />
+            <span class="text-danger" asp-validation-for="Email"></span>
+        </div>
+        <div class="form-group m-form__group">
+            <label asp-for="Role">
+                Role
+            </label>
+            <div class="m-radio-inline">
+                <label class="m-radio">
+                    <input type="radio" asp-for="Role" value="@Roles.Admin">
+                    @roles.ResourceManager.GetString(Roles.Admin)
+                    <span></span>
+                </label>
+                <label class="m-radio">
+                    <input type="radio" asp-for="Role" value="@Roles.Employee">
+                    @roles.ResourceManager.GetString(Roles.Employee)
+                    <span></span>
+                </label>
+                <label class="m-radio">
+                    <input type="radio" asp-for="Role" value="@Roles.External">
+                    @roles.ResourceManager.GetString(Roles.External)
+                    <span></span>
+                </label>
+            </div>
+            <span class="text-danger" asp-validation-for="Role"></span>
+        </div>
+        <div class="form-group m-form__group">
+            <label asp-for="PositionId">
+                Position
+            </label>
+            <select asp-items="htmlHelper.GetPositionsSelectList()" asp-for="PositionId" class="form-control m-select2" style="width:100%">
+                <option value="">-- Specify --</option>
+            </select>
+            <span class="text-danger" asp-validation-for="PositionId"></span>
+        </div>
+    </div>
+    <div class="m-portlet__foot m-portlet__foot--fit">
+        <div class="m-form__actions pull-right">
+            <button type="submit" class="btn btn-sp m-btn m-btn--icon">
+                Update
+            </button>
+        </div>
+    </div>
+</form>

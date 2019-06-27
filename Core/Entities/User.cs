@@ -31,6 +31,12 @@ namespace Core.Entities
 
         public string Token { get; set; }
 
+        public bool IsActive { get; set; }
+        
+        public bool IsDeleted { get; set; }
+
+        public string EmailBackUp { get; set; }
+
         public DateTime? TokenExpiration { get; set; }
 
         public DateTime CreatedAt { get; set; }

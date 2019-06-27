@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 using Application.DTOs;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
+using Application.Interfaces.Services;
 using Core.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Web.Extensions;
 using Web.Helpers;
+using X.PagedList;
+using AutoMapper;
 
 namespace Web.Controllers
 {
@@ -26,11 +29,17 @@ namespace Web.Controllers
 
         private readonly ISettingRepository _settingRepository;
 
+        private readonly IUserRepository _userRepository;
+
+        private readonly IEmailService _emailService;
+
         public ManageController(ILoggerManager loggerManager,
                                 IDictionaryRepository dictionaryRepository,
                                 IPlanRepository planRepository,
                                 IFileRepository fileRepository,
-                                ISettingRepository settingRepository) : base(loggerManager)
+                                ISettingRepository settingRepository,
+                                IUserRepository userRepository,
+                                IEmailService emailService) : base(loggerManager)
         {
             _dictionaryRepository = dictionaryRepository;
 
@@ -39,7 +48,13 @@ namespace Web.Controllers
             _fileRepository = fileRepository;
 
             _settingRepository = settingRepository;
+
+            _userRepository = userRepository;
+
+            _emailService = emailService;
         }
+
+        #region Dictionary
 
         [HttpGet]
         public IActionResult GetPositionList()
@@ -129,22 +144,15 @@ namespace Web.Controllers
 
             var result = false;
 
-            if (ModelState.IsValid)
-            {
-                result = _dictionaryRepository.Delete(id, HttpContext.GetUserId());
+            result = _dictionaryRepository.Delete(id, HttpContext.GetUserId());
 
-                if (result)
-                {
-                    _loggerManager.Info($"DeleteDictionary({id}) successfully deleted");
-                }
-                else
-                {
-                    _loggerManager.Warn($"DeleteDictionary({id}) was unable to delete");
-                }
+            if (result)
+            {
+                _loggerManager.Info($"DeleteDictionary({id}) successfully deleted");
             }
             else
             {
-                _loggerManager.Warn($"DeleteDictionary({id}) was invalid");
+                _loggerManager.Warn($"DeleteDictionary({id}) was unable to delete");
             }
 
             return new JsonResult(new { result });
@@ -157,22 +165,15 @@ namespace Web.Controllers
 
             var result = false;
 
-            if (ModelState.IsValid)
-            {
-                result = _dictionaryRepository.Activate(id, HttpContext.GetUserId());
+            result = _dictionaryRepository.Activate(id, HttpContext.GetUserId());
 
-                if (result)
-                {
-                    _loggerManager.Info($"ActivateDictionary({id}) successfully activaed");
-                }
-                else
-                {
-                    _loggerManager.Warn($"ActivateDictionary({id}) was unable to activate");
-                }
+            if (result)
+            {
+                _loggerManager.Info($"ActivateDictionary({id}) successfully activaed");
             }
             else
             {
-                _loggerManager.Warn($"ActivateDictionary({id}) was invalid");
+                _loggerManager.Warn($"ActivateDictionary({id}) was unable to activate");
             }
 
             return new JsonResult(new { result });
@@ -185,26 +186,23 @@ namespace Web.Controllers
 
             var result = false;
 
-            if (ModelState.IsValid)
-            {
-                result = _dictionaryRepository.Disactivate(id, HttpContext.GetUserId());
+            result = _dictionaryRepository.Disactivate(id, HttpContext.GetUserId());
 
-                if (result)
-                {
-                    _loggerManager.Info($"DisactivateDictionary({id}) successfully disactivated");
-                }
-                else
-                {
-                    _loggerManager.Warn($"DisactivateDictionary({id}) was unable to disactivate");
-                }
+            if (result)
+            {
+                _loggerManager.Info($"DisactivateDictionary({id}) successfully disactivated");
             }
             else
             {
-                _loggerManager.Warn($"DisactivateDictionary({id}) was invalid");
+                _loggerManager.Warn($"DisactivateDictionary({id}) was unable to disactivate");
             }
 
             return new JsonResult(new { result });
         }
+
+        #endregion
+
+        #region Steps
 
         [HttpGet]
         public IActionResult GetIntroductionList()
@@ -393,6 +391,10 @@ namespace Web.Controllers
             return View("BlockEdit", blockEdit);
         }
 
+        #endregion
+
+        #region Settings
+
         [HttpGet]
         public IActionResult GetSettingList()
         {
@@ -443,6 +445,272 @@ namespace Web.Controllers
 
             return PartialView("~/Views/Manage/Partials/_EditSetting.cshtml", setting);
         }
+
+        #endregion
+
+        #region User
+
+        [HttpGet]
+        public IActionResult GetUserList(int? page)
+        {
+            _loggerManager.Info($"GetUserList({page}) was requested");
+
+            var parseResult = int.TryParse(_settingRepository.Get(Settings.PageSize), out int pageSize);
+
+            if (!parseResult || pageSize <= 0)
+            {
+                pageSize = 5;
+            }
+
+            var skipCount = ((page ?? 1) - 1) * pageSize;
+            var takeCount = pageSize;
+
+            var planList = _userRepository.GetUserList(skipCount, takeCount, out int totalCount);
+
+            var pagedList = new StaticPagedList<UserDTO>(planList, page ?? 1, pageSize, totalCount);
+
+            _loggerManager.Info($"GetUserList({page}) returned a list");
+
+            return View("UserList", pagedList);
+
+        }
+
+        [HttpPost]
+        public IActionResult AddNewUser(NewUserDTO newUser)
+        {
+            if (ModelState.IsValid)
+            {
+                if (_userRepository.FindByCondition(u => u.Email == newUser.Email).Any())
+                {
+                    _loggerManager.Warn($"AddNewUser - an user with the email exists");
+
+                    ModelState.AddModelError("Email", "An user with the email exists");
+
+                    return PartialView("~/Views/Manage/Partials/_AddNewUser.cshtml");
+                }
+
+                newUser.Password = _userRepository.GeneratePassword();
+
+                var user = _userRepository.AddNew(newUser, HttpContext.GetUserId());
+
+                if (user == null)
+                {
+                    _loggerManager.Warn($"AddNewUser - Adding a new user failed");
+
+                    ModelState.AddModelError(string.Empty, "Adding a new user failed");
+
+                    return PartialView("~/Views/Manage/Partials/_AddNewUser.cshtml");
+                }
+
+                if (!_emailService.SendPasswordToUser(newUser.Password, user))
+                {
+                    _loggerManager.Error($"AddNewUser - Email was not sent to the user");
+
+                    ModelState.AddModelError(string.Empty, "Email was not sent to the user");
+
+                    return PartialView("~/Views/Manage/Partials/_AddNewUser.cshtml");
+                }
+
+                _loggerManager.Info($"AddNewUser succeesfully added a user");
+
+                Response.StatusCode = StatusCodes.Status201Created;
+
+            }
+            else
+            {
+                _loggerManager.Warn($"AddNewUser request is invalid");
+            }
+
+            return PartialView("~/Views/Manage/Partials/_AddNewUser.cshtml");
+        }
+
+        [HttpGet]
+        public IActionResult UserEdit(int id)
+        {
+
+            _loggerManager.Info($"UserEdit:Get was requested");
+
+            if (id <= 0)
+            {
+                _loggerManager.Warn($"UserEdit:Get was bad request");
+
+                return BadRequest();
+            }
+
+            var user = _userRepository.GetUserById(id);
+
+            var userEdit = new UserEditDTO
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Id = user.Id,
+                PositionId = user.Position?.Id,
+                Role = user.Role
+            };
+
+            return PartialView("~/Views/Manage/Partials/_UserEdit.cshtml", userEdit);
+        }
+
+        [HttpPost]
+        public IActionResult UserEdit(UserEditDTO userEdit)
+        {
+            _loggerManager.Info($"UserEdit:Post was requested");
+
+            Response.StatusCode = StatusCodes.Status202Accepted;
+
+            if (ModelState.IsValid)
+            {
+                if (_userRepository.FindByCondition(u => u.Email == userEdit.Email && u.Id != userEdit.Id).Any())
+                {
+                    _loggerManager.Warn($"UserEdit - an user with the email exists");
+
+                    ModelState.AddModelError("Email", "An user with the email exists");
+
+                    return PartialView("~/Views/Manage/Partials/_UserEdit.cshtml");
+                }
+
+                var result = _userRepository.Update(userEdit, HttpContext.GetUserId());
+
+                if (!result)
+                {
+                    _loggerManager.Warn($"UserEdit - updating an user failed");
+
+                    ModelState.AddModelError(string.Empty, "Updating an user failed");
+
+                    return PartialView("~/Views/Manage/Partials/_UserEdit.cshtml");
+                }
+
+                _loggerManager.Info($"UserEdit succeesfully updated a user");
+
+                Response.StatusCode = StatusCodes.Status200OK;
+
+            }
+            else
+            {
+                _loggerManager.Warn($"UserEdit request is invalid");
+            }
+
+            return PartialView("~/Views/Manage/Partials/_UserEdit.cshtml");
+        }
+
+        [HttpPost]
+        public IActionResult GeneratePassword(int id)
+        {
+            _loggerManager.Info($"GeneratePassword({id}) was requested");
+
+            if (id <= 0)
+            {
+                _loggerManager.Warn($"GeneratePassword({id}) was bad request");
+
+                return BadRequest();
+            }
+
+            var result = false;
+
+            var user = _userRepository.GetUserById(id);
+
+            if (user != null)
+            {
+
+                var password = _userRepository.GeneratePassword();
+
+                result = _userRepository.ChangePassword(id, password, HttpContext.GetUserId());
+
+                if (result)
+                {
+                    _loggerManager.Info($"GeneratePassword({id}) successfully updated password");
+                }
+                else
+                {
+                    _loggerManager.Warn($"GeneratePassword({id}) successfully updated password");
+                }
+
+                var emailResult = _emailService.SendPasswordToUser(password, user);
+
+                if (emailResult)
+                {
+                    _loggerManager.Info($"GeneratePassword({id}) an email successfully sent");
+                }
+                else
+                {
+                    _loggerManager.Warn($"GeneratePassword({id}) an email was not sent");
+                }
+
+            }
+            else
+            {
+                _loggerManager.Warn($"GeneratePassword({id}) no such user found");
+            }
+
+            return Json(new { result });
+        }
+
+        [HttpPost]
+        public IActionResult DeleteUser(int id)
+        {
+            _loggerManager.Info($"DeleteUser({id}) was requested");
+
+            var result = false;
+
+
+            result = _userRepository.Delete(id, HttpContext.GetUserId());
+
+            if (result)
+            {
+                _loggerManager.Info($"DeleteUser({id}) successfully deleted");
+            }
+            else
+            {
+                _loggerManager.Warn($"DeleteUser({id}) was unable to delete");
+            }
+
+            return new JsonResult(new { result });
+        }
+
+        [HttpPost]
+        public IActionResult ActivateUser(int id)
+        {
+            _loggerManager.Info($"ActivateUser({id}) was requested");
+
+            var result = false;
+
+            result = _userRepository.Activate(id, HttpContext.GetUserId());
+
+            if (result)
+            {
+                _loggerManager.Info($"ActivateUser({id}) successfully activaed");
+            }
+            else
+            {
+                _loggerManager.Warn($"ActivateUser({id}) was unable to activate");
+            }
+
+            return new JsonResult(new { result });
+        }
+
+        [HttpPost]
+        public IActionResult DisactivateUser(int id)
+        {
+            _loggerManager.Info($"DisactivateUser({id}) was requested");
+
+            var result = false;
+
+            result = _userRepository.Disactivate(id, HttpContext.GetUserId());
+
+            if (result)
+            {
+                _loggerManager.Info($"DisactivateUser({id}) successfully disactivated");
+            }
+            else
+            {
+                _loggerManager.Warn($"DisactivateUser({id}) was unable to disactivate");
+            }
+
+            return new JsonResult(new { result });
+        }
+
+        #endregion
 
     }
 }

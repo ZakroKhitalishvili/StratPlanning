@@ -152,12 +152,12 @@ namespace Web.Controllers
                 return PartialView("~/Views/User/Partials/_AddNewUser.cshtml");
             }
 
-            var newUser = addUserToPlan.NewUser;
+            var planNewUser = addUserToPlan.NewUser;
 
-            if (TryValidateModel(newUser))
+            if (TryValidateModel(planNewUser))
             {
 
-                if (_userRepository.FindByCondition(u => u.Email == newUser.Email).Any())
+                if (_userRepository.FindByCondition(u => u.Email == planNewUser.Email).Any())
                 {
                     _loggerManager.Warn($"AddNewUserToPlan - an user with the email exists");
 
@@ -165,6 +165,14 @@ namespace Web.Controllers
 
                     return PartialView("~/Views/User/Partials/_AddNewUser.cshtml");
                 }
+
+                var newUser = new NewUserDTO
+                {
+                    FirstName = planNewUser.FirstName,
+                    LastName = planNewUser.LastName,
+                    Email = planNewUser.Email,
+                    PositionId = planNewUser.PositionId
+                };
 
                 newUser.Password = _userRepository.GeneratePassword();
                 newUser.Role = Roles.Employee;

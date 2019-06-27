@@ -195,7 +195,7 @@
                                                 <i class="m-menu__hor-arrow la la-angle-down"></i>
                                                 <i class="m-menu__ver-arrow la la-angle-right"></i>
                                             </a>
-                                            <div class="m-menu__submenu  m-menu__submenu--fixed m-menu__submenu--left" style="width:500px">
+                                            <div class="m-menu__submenu  m-menu__submenu--fixed m-menu__submenu--left" style="width:600px">
                                                 <span class="m-menu__arrow m-menu__arrow--adjust"></span>
                                                 <div class="m-menu__subnav">
                                                     <ul class="m-menu__content">
@@ -273,6 +273,23 @@
                                                                     <a asp-controller="Manage" asp-action="GetSettingList" class="m-menu__link ">
                                                                         <span class="m-menu__link-text">
                                                                             All settings
+                                                                        </span>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                        <li class="m-menu__item">
+                                                            <h3 class="m-menu__heading m-menu__toggle">
+                                                                <span class="m-menu__link-text">
+                                                                    Users
+                                                                </span>
+                                                                <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                                            </h3>
+                                                            <ul class="m-menu__inner">
+                                                                <li class="m-menu__item" data-redirect="true" aria-haspopup="true">
+                                                                    <a asp-controller="Manage" asp-action="GetUserList" class="m-menu__link ">
+                                                                        <span class="m-menu__link-text">
+                                                                            All Users
                                                                         </span>
                                                                     </a>
                                                                 </li>

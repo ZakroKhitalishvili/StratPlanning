@@ -8,6 +8,6 @@ namespace Application.DTOs
     {
         public ExistingUserAddDTO ExistingUser { get; set; }
 
-        public NewUserDTO NewUser { get; set; }
+        public PlanNewUserDTO NewUser { get; set; }
     }
 }

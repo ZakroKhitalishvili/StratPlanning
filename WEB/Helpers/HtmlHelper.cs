@@ -17,7 +17,7 @@ namespace Web.Helpers
 
         private readonly IDictionaryRepository _dictionaryRepository;
 
-        public HtmlHelper(IUserRepository userRepository,IPlanRepository planRepository, IDictionaryRepository dictionaryRepository)
+        public HtmlHelper(IUserRepository userRepository, IPlanRepository planRepository, IDictionaryRepository dictionaryRepository)
         {
             _userRepository = userRepository;
             _planRepository = planRepository;
@@ -26,19 +26,19 @@ namespace Web.Helpers
 
         public IEnumerable<SelectListItem> GetUsersSelectList()
         {
-            var selectList = _userRepository.FindAll().Select(u => new SelectListItem { Value = u.Id.ToString(), Text = $"{u.FirstName} {u.LastName}" });
+            var selectList = _userRepository.FindByCondition(x => x.IsActive).Select(u => new SelectListItem { Value = u.Id.ToString(), Text = $"{u.FirstName} {u.LastName}" });
 
             return selectList;
         }
 
         public IEnumerable<SelectListItem> GetUsersSelectListByRole(string role)
         {
-            var selectList = _userRepository.FindByCondition(x => x.Role == role).Select(u => new SelectListItem { Value = u.Id.ToString(), Text = $"{u.FirstName} {u.LastName}" });
+            var selectList = _userRepository.FindByCondition(x => x.Role == role && x.IsActive).Select(u => new SelectListItem { Value = u.Id.ToString(), Text = $"{u.FirstName} {u.LastName}" });
 
             return selectList;
         }
 
-        public IEnumerable<SelectListItem> GetUsersSelectListByPlan( int planId)
+        public IEnumerable<SelectListItem> GetUsersSelectListByPlan(int planId)
         {
             var selectList = _planRepository.GetPlanningTeam(planId).Select(u => new SelectListItem { Value = u.UserToPlanId.ToString(), Text = u.FullName });
 

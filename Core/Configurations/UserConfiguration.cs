@@ -25,6 +25,16 @@ namespace Core.Configurations
                .IsRequired()
                .HasMaxLength(EntityConfigs.TextMaxLength);
 
+            builder.Property(x => x.IsActive)
+               .HasDefaultValue(true);
+
+            builder.Property(x => x.IsDeleted)
+              .HasDefaultValue(false);
+
+            builder.Property(x => x.EmailBackUp)
+               .IsRequired(false)
+               .HasMaxLength(EntityConfigs.TextMaxLength);
+
             builder.Property(x => x.Token)
                .IsRequired(false)
                .HasMaxLength(EntityConfigs.HashMaxLength);

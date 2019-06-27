@@ -39,6 +39,12 @@ namespace Application.Mappers
                          opt => opt.MapFrom(src =>
                              src.Position));
 
+                cfg.CreateMap<UserDTO, UserEditDTO>()
+                 .ForMember(
+                      dest => dest.PositionId,
+                         opt => opt.MapFrom<int?>(src => src.Position != null ? (int?)src.Position.Id : null
+                        ));
+
                 cfg.CreateMap<NewUserDTO, User>()
                 .ForMember(
                      dest => dest.Id,

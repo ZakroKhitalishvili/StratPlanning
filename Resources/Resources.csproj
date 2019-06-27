@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Update="roles.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>roles.resx</DependentUpon>
+    </Compile>
     <Compile Update="settings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -18,6 +23,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="roles.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>roles.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="settings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>settings.Designer.cs</LastGenOutput>

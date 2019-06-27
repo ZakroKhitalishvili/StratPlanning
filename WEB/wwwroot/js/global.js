@@ -639,3 +639,307 @@ $(document).on('submit', 'form#edit_setting_form', function (e) {
 
 /////
 ///
+
+///////
+/// Manage -add a new user
+//
+$('#add_user_modal').on('shown.bs.modal', function () {
+    initializeInputs($(this));
+})
+
+$(document).on('submit', 'form#add_user_form', function (e) {
+    e.preventDefault();
+
+    if (!$('#add_user_form').valid()) {
+        return;
+    }
+
+    let formData = new FormData(document.querySelector('form#add_user_form'));
+
+    $.ajax(
+        {
+            url: AddNewUserURL,
+            method: "post",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data, statusText, xhr) {
+                if (xhr.status == 201) {
+                    notify("Successfully created", "success", 5);
+                    setTimeout(function () {
+                        document.location.reload(false)
+                    }, 2000);
+                }
+                if (xhr.status == 202 || xhr.status == 400) {
+                    notify("Input data are not valid ", "danger", 5);
+                }
+
+                $('#add_user_form').html(data);
+                initializeInputs('#add_user_form');
+            },
+            error: function (xhr, statusText, error) {
+                notify("An Error occured on the request", "danger", 5);
+            }
+        });
+});
+
+///
+//
+
+
+/////////////
+///  Get an user
+//
+$(document).on('click', '.edit-user', function (e) {
+    e.preventDefault();
+
+    let id = $(this).data('id');
+
+    $.ajax(
+        {
+            url: UserEditUrl,
+            method: "get",
+            data: {
+                id
+            },
+            success: function (data, statusText, xhr) {
+                if (xhr.status == 200) {
+                    $('#edit_user_form').html(data);
+                    initializeInputs('#edit_user_form');
+                    $('#edit_user_modal').modal('show')
+                }
+
+            },
+            error: function (xhr, statusText, error) {
+                notify("An Error occured during sending a request", "danger", 5);
+            }
+        })
+});
+
+/////
+///
+
+
+/////////////
+///  Edit an user
+//
+$(document).on('submit', 'form#edit_user_form', function (e) {
+    e.preventDefault();
+
+    let formData = new FormData(document.querySelector('form#edit_user_form'));
+
+    $.ajax(
+        {
+            url: UserEditUrl,
+            method: "post",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data, statusText, xhr) {
+                if (xhr.status == 200) {
+                    notify("Successfully updated", "success", 5);
+
+                    setTimeout(function () {
+                        document.location.reload(false)
+                    }, 2000);
+                }
+
+                $('form#edit_user_form').html(data);
+
+                initializeInputs('form#edit_user_form');
+
+            },
+            error: function (xhr, statusText, error) {
+                notify("An Error occured during sending a request", "danger", 5);
+            }
+        })
+
+});
+
+/////
+///
+
+//////
+/// Manage -  generate an user password
+//
+$(document).on('click', '.generate-user-password', function (e) {
+    e.preventDefault();
+
+    let id = $(this).data('id');
+
+    submitConfirm("This will generate a new password for the user").then(function (result) {
+        if (result) {
+            $.ajax(
+                {
+                    url: GeneratePasswordURL,
+                    method: "post",
+                    data: {
+                        id
+                    },
+                    success: function (data, statusText, xhr) {
+                        if (data.result) {
+                            notify("Successfully generated new password", "success", 5);
+                        }
+                        else {
+                            notify("Password was not generated", "danger", 5);
+                        }
+
+                    },
+                    error: function (xhr, statusText, error) {
+                        notify("An Error occured during sending a request", "danger", 5);
+                    }
+                });
+        }
+    });
+
+});
+
+////
+//
+
+
+
+///////
+/// user delete ajax
+///
+
+$(document).on('click', '.delete-user', function (e) {
+    e.preventDefault();
+
+    let id = $(this).data('id');
+
+    deleteConfirm().then(result => {
+        if (result) {
+            $.ajax(
+                {
+                    url: DeleteUserURL,
+                    method: "post",
+                    data: {
+                        id
+                    },
+                    success: function (data, statusText, xhr) {
+                        if (xhr.status == 400) {
+                            notify("An Error occured during sending a request", "danger", 5);
+
+                        }
+
+                        if (data.result) {
+                            notify("Successfully deleted", "success", 5);
+                            setTimeout(function () {
+                                document.location.reload(false)
+                            }, 2000);
+
+                        }
+                        else {
+                            notify("Deleting the user is not possible ", "danger", 5);
+                        }
+
+                    },
+                    error: function (xhr, statusText, error) {
+                        notify("An Error occured during sending a request", "danger", 5);
+                    }
+                })
+        }
+    })
+
+});
+
+//////
+///
+
+///////
+/// dictionary activation ajax
+///
+
+$(document).on('click', '.activate-user', function (e) {
+    e.preventDefault();
+
+    let id = $(this).data('id');
+
+    deleteConfirm().then(result => {
+        if (result) {
+            $.ajax(
+                {
+                    url: ActivateUserURL,
+                    method: "post",
+                    data: {
+                        id
+                    },
+                    success: function (data, statusText, xhr) {
+                        if (xhr.status == 400) {
+                            notify("An Error occured during sending a request", "danger", 5);
+
+                        }
+
+                        if (data.result) {
+                            notify("Successfully activated", "success", 5);
+                            setTimeout(function () {
+                                document.location.reload(false)
+                            }, 2000);
+
+                        }
+                        else {
+                            notify("Activating the user is not possible ", "danger", 5);
+                        }
+
+                    },
+                    error: function (xhr, statusText, error) {
+                        notify("An Error occured during sending a request", "danger", 5);
+                    }
+                })
+        }
+    })
+
+});
+
+//////
+///
+
+
+///////
+/// dictionary disactivation ajax
+///
+
+$(document).on('click', '.disactivate-user', function (e) {
+    e.preventDefault();
+
+    let id = $(this).data('id');
+
+    deleteConfirm().then(result => {
+        if (result) {
+            $.ajax(
+                {
+                    url: DisactivateUserURL,
+                    method: "post",
+                    data: {
+                        id
+                    },
+                    success: function (data, statusText, xhr) {
+                        if (xhr.status == 400) {
+                            notify("An Error occured during sending a request", "danger", 5);
+
+                        }
+
+                        if (data.result) {
+                            notify("Successfully Diactivated", "success", 5);
+                            setTimeout(function () {
+                                document.location.reload(false)
+                            }, 2000);
+
+                        }
+                        else {
+                            notify("Disactivating the user is not possible ", "danger", 5);
+                        }
+
+                    },
+                    error: function (xhr, statusText, error) {
+                        notify("An Error occured during sending a request", "danger", 5);
+                    }
+                })
+        }
+    })
+
+});
+
+//////
+///

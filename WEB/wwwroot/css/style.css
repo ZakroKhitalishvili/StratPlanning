@@ -883,3 +883,7 @@ button.m-list-badge__item {
     border-color: #fcced6;
     box-shadow: 0 0 2px 1px #7f2a38 !important;
 }
+
+.has-danger .form-control:focus {
+    border-color: #2b70b8;
+}

@@ -6,8 +6,11 @@ using System.Text;
 
 namespace Application.DTOs
 {
-    public class NewUserDTO
+    public class UserEditDTO
     {
+        [Required]
+        public int Id { get; set; }
+
         [Required]
         [EmailAddress]
         [MaxLength(EntityConfigs.TextMaxLength)]
@@ -20,8 +23,6 @@ namespace Application.DTOs
         [Required]
         [MaxLength(EntityConfigs.TextMaxLength)]
         public string LastName { get; set; }
-
-        public string Password { get; set; }
 
         [Required]
         public string Role { get; set; }

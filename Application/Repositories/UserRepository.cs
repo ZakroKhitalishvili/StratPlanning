@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Repositories
 {
@@ -50,6 +51,43 @@ namespace Application.Repositories
 
         }
 
+        public bool Update(UserEditDTO userEdit, int userId)
+        {
+            var user = Get(userEdit.Id);
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            user.Email = userEdit.Email;
+            user.FirstName = userEdit.FirstName;
+            user.LastName = userEdit.LastName;
+            user.PositionId = userEdit.PositionId;
+            user.Role = userEdit.Role;
+            user.UpdatedBy = userId;
+            user.UpdatedAt = DateTime.Now;
+
+            try
+            {
+                Context.SaveChanges();
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+
+        public IEnumerable<UserDTO> GetUserList(int skipCount, int takeCount, out int totalCount)
+        {
+            totalCount = Context.Users.Where(x => !x.IsDeleted).Count();
+
+            return Context.Users.Where(x => !x.IsDeleted).Include(x => x.Position).OrderByDescending(x => x.CreatedAt).Skip(skipCount).Take(takeCount).Select(p => Mapper.Map<UserDTO>(p));
+        }
+
         public bool ChangePassword(ChangePasswordDTO changePassword, int userId)
         {
             if (changePassword.NewPassword != changePassword.ConfirmNewPassword)
@@ -70,7 +108,33 @@ namespace Application.Repositories
             user.Password = hashedNewPassword;
             user.UpdatedAt = DateTime.Now;
             user.UpdatedBy = userId;
-            user.CreatedBy = userId;
+
+            try
+            {
+                Save();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool ChangePassword(int userEditId, string newPassword, int userId)
+        {
+            var user = FindByCondition(u => u.Id == userEditId).FirstOrDefault();
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            var hashedNewPassword = _hashService.Hash(newPassword);
+
+            user.Password = hashedNewPassword;
+            user.UpdatedAt = DateTime.Now;
+            user.UpdatedBy = userId;
 
             try
             {
@@ -138,14 +202,14 @@ namespace Application.Repositories
 
         public UserDTO GetUserByEmail(string email)
         {
-            var user = FindByCondition(x => x.Email == email).FirstOrDefault();
+            var user = Context.Users.Where(x => x.Email == email).Include(x => x.Position).SingleOrDefault();
 
             return (user != null) ? Mapper.Map<UserDTO>(user) : null;
         }
 
         public UserDTO GetUserById(int id)
         {
-            var user = Get(id);
+            var user = Context.Users.Where(x => x.Id == id).Include(x => x.Position).SingleOrDefault();
 
             return (user != null) ? Mapper.Map<UserDTO>(user) : null;
         }
@@ -186,7 +250,7 @@ namespace Application.Repositories
         {
             var hashedPassword = _hashService.Hash(password);
 
-            var user = FindByCondition(x => x.Email == email && x.Password == hashedPassword).FirstOrDefault();
+            var user = FindByCondition(x => x.Email == email && x.Password == hashedPassword && x.IsActive).FirstOrDefault();
 
             userDTO = Mapper.Map<UserDTO>(user);
 
@@ -232,6 +296,73 @@ namespace Application.Repositories
                 return true;
             }
 
+            return false;
+        }
+
+        public bool Delete(int id, int userId)
+        {
+            var user = Get(id);
+
+            if (user != null)
+            {
+                try
+                {
+                    user.IsActive = false;
+                    user.IsDeleted = true;
+                    user.EmailBackUp = user.Email;
+                    user.Email = string.Empty;
+                    Context.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public bool Activate(int id, int userId)
+        {
+            var user = Get(id);
+
+            if (user != null)
+            {
+                try
+                {
+                    user.IsActive = true;
+                    user.UpdatedAt = DateTime.Now;
+                    user.UpdatedBy = userId;
+                    Context.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public bool Disactivate(int id, int userId)
+        {
+            var user = Get(id);
+
+            if (user != null)
+            {
+                try
+                {
+                    user.IsActive = false;
+                    user.UpdatedAt = DateTime.Now;
+                    user.UpdatedBy = userId;
+                    Context.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+                return true;
+            }
             return false;
         }
     }
