@@ -172,7 +172,7 @@ namespace Web.Controllers
 
             if (ModelState.IsValid)
             {
-                if (_userRepository.RecoverPassword(recoverPassword,HttpContext.GetUserId()))
+                if (_userRepository.RecoverPassword(recoverPassword))
                 {
                     var result = new ResultVM
                     {

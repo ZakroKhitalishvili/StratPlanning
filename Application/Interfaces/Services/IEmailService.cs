@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Application.Interfaces.Services
 {
+    /// <summary>
+    /// Email service interface for sending specific emails to an user
+    /// </summary>
     public interface IEmailService
     {
         bool Send(string recipient, string subject, string body);

@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Core.Constants
 {
-    /*
-     * The order of these constants determines an order of respecting step tasks
-     * 
-     */
+     /// <summary>
+     /// Constants for steps.
+     /// The order of these constants determines an order of respecting step tasks.
+     /// </summary>
     public class Steps
     {
         public const string Predeparture = "Predeparture";

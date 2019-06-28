@@ -224,7 +224,7 @@ namespace Application.Repositories
             return (user != null) ? Mapper.Map<UserDTO>(user) : null;
         }
 
-        public bool RecoverPassword(RecoverPasswordDTO recoverPassword, int userId)
+        public bool RecoverPassword(RecoverPasswordDTO recoverPassword)
         {
             if (!(recoverPassword.NewPassword == recoverPassword.ConfirmNewPassword))
             {
@@ -242,7 +242,6 @@ namespace Application.Repositories
             user.Token = null;
             user.TokenExpiration = null;
             user.UpdatedAt = DateTime.Now;
-            user.UpdatedBy = userId;
 
             try
             {

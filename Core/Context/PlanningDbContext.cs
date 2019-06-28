@@ -88,11 +88,13 @@ namespace Core.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Applies configurations from Configurations folder in Core Assembly
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(PlanningDbContext).Assembly);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder contextOptionsBuilder)
         {
+            // this is not required, this just logs sensitive data during migrations and database update
             contextOptionsBuilder.EnableSensitiveDataLogging(true);
         }
 

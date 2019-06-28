@@ -7,6 +7,10 @@ using Core.Context;
 
 namespace Application.Repositories
 {
+    /// <summary>
+    /// Abstract class that implements basic interface for IRepository&lt;T&gt;
+    /// </summary>
+    /// <typeparam name="T">Repository Entity type</typeparam>
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T: class
     {
         protected PlanningDbContext Context { get; set; }

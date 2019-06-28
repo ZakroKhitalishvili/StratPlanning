@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Application.Interfaces
 {
+    /// <summary>
+    /// Interface for logging of different type info
+    /// </summary>
     public interface ILoggerManager
     {
         void Error(string message);

@@ -11,8 +11,17 @@ using System.Threading.Tasks;
 
 namespace Web.Extensions
 {
+    /// <summary>
+    /// This class contains extension methods for <c>HttpContext</c> class.
+    /// </summary>
     public static class HttpContextExtensions
     {
+        /// <summary>
+        /// Signs an user in a website and saves claims (Role, Email, Name, Position, Id).
+        /// </summary>
+        /// <param name="context">This object</param>
+        /// <param name="user">User info</param>
+        /// <param name="rememberMe">determiens whether to remember user on website</param>
         public async static void LogIn(this HttpContext context, UserDTO user, bool rememberMe)
         {
             var claims = new List<Claim>
@@ -31,7 +40,7 @@ namespace Web.Extensions
             bool isPersistent = false;
             if (rememberMe)
             {
-                expiresUtc = DateTimeOffset.UtcNow.AddDays(7);
+                expiresUtc = DateTimeOffset.UtcNow.AddDays(7); // on remembemrMe, an user is stayed logged in for 7 days
                 isPersistent = true;
             }
 
@@ -65,22 +74,41 @@ namespace Web.Extensions
                 authProperties);
         }
 
+        /// <summary>
+        /// Logs user out
+        /// </summary>
+        /// <param name="context">This object</param>
         public async static void LogOut(this HttpContext context)
         {
             await context.SignOutAsync(
                         CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
+        /// <summary>
+        ///   Gets current logged user's id
+        /// </summary>
+        /// <param name="context">this object</param>
+        /// <returns>Current user Id</returns>
         public static int GetUserId(this HttpContext context)
         {
             return int.Parse(context.User.FindFirst(CustomClaimTypes.Id).Value);
         }
 
+        /// <summary>
+        ///  Gets current logged user's email
+        /// </summary>
+        /// <param name="context">This object</param>
+        /// <returns>Current user email</returns>
         public static string GetUserEmail(this HttpContext context)
         {
             return context.User.FindFirst(ClaimTypes.Email).Value;
         }
 
+        /// <summary>
+        /// Resets logged user info - claims
+        /// </summary>
+        /// <param name="context">this object</param>
+        /// <param name="user">Current user updated info</param>
         public async static void UpdateUser(this HttpContext context, UserDTO user)
         {
             var claimsIdentity = context.User.Identity as ClaimsIdentity;
@@ -113,7 +141,11 @@ namespace Web.Extensions
                    authProperties);
         }
 
-
+        /// <summary>
+        /// Gets date when current logged user session expires
+        /// </summary>
+        /// <param name="context">this object</param>
+        /// <returns>Expiring date</returns>
         public async static Task<DateTime?> GetExpiration(this HttpContext context)
         {
             var result = await context.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);

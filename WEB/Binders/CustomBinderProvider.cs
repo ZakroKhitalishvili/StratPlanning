@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Web.Binders
 {
-    public class CustomBinderProvider :IModelBinderProvider
+    /// <summary>
+    /// Custom binder provider for custom  <c>DateTime</c> binding
+    /// </summary>
+    public class CustomBinderProvider : IModelBinderProvider
     {
         public IModelBinder GetBinder(ModelBinderProviderContext context)
         {
@@ -15,6 +18,7 @@ namespace Web.Binders
                 throw new ArgumentNullException(nameof(context));
             }
 
+            //check if a property type is DateTime or DateTime? and return custom date binder
             if (context.Metadata.ModelType == typeof(DateTime?) || context.Metadata.ModelType == typeof(DateTime))
             {
                 return new CustomDateBinder();
@@ -23,5 +27,4 @@ namespace Web.Binders
             return null;
         }
     }
-
 }

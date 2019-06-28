@@ -14,14 +14,28 @@ using Web.Helpers;
 
 namespace Web
 {
+    /// <summary>
+    /// Contains Configuring extension methods for IServiceCollection
+    /// </summary>
     public static class Configurations
     {
+        /// <summary>
+        /// Configures database according to connection string from appsettings.json
+        /// </summary>
+        /// <param name="services">this object</param>
+        /// <param name="configuration">Configuration, that should contain information about connection string</param>
+        /// <returns></returns>
         public static IServiceCollection ConfigureDatabase(this IServiceCollection services, IConfiguration configuration)
         {
             return services.AddDbContext<PlanningDbContext>(options =>
                options.UseSqlServer(configuration.GetConnectionString("PlanningDatabase")));
         }
 
+        /// <summary>
+        /// Add local services from Application and Web layers
+        /// </summary>
+        /// <param name="services">This object</param>
+        /// <returns></returns>
         public static IServiceCollection AddLocalServices(this IServiceCollection services)
         {
             // Application services
@@ -40,6 +54,11 @@ namespace Web
             return services;
         }
 
+        /// <summary>
+        /// Configures authentication scheme
+        /// </summary>
+        /// <param name="services">This object</param>
+        /// <returns></returns>
         public static IServiceCollection ConfigureAuthentication(this IServiceCollection services)
         {
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

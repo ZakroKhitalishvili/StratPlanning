@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Core.Constants
 {
+    /// <summary>
+    /// Constants for SWOT 
+    /// </summary>
     public class SWOTTypes
     {
         public const string Strength = "Strength";

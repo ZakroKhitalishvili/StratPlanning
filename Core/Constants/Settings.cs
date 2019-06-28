@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Core.Constants
 {
+    /// <summary>
+    /// Constants for setting keys
+    /// </summary>
     public class Settings
     {
         public const string SmtpServer = "SmtpServer";

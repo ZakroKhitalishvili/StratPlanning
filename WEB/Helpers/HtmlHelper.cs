@@ -9,6 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Web.Helpers
 {
+    /// <summary>
+    /// Helper class for getting Razor Html tags friendly objects
+    /// </summary>
     public class HtmlHelper
     {
         private readonly IUserRepository _userRepository;

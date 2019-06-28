@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Web.Binders
 {
+    /// <summary>
+    /// Custom date binder that converts dd-MM-yyyy formatted dates to DateTime
+    /// </summary>
     public class CustomDateBinder : IModelBinder
     {
         public Task BindModelAsync(ModelBindingContext bindingContext)

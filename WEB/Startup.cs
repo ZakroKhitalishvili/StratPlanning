@@ -51,14 +51,6 @@ namespace Web
 
             services.ConfigureAuthentication();
 
-            //services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-            //services.AddScoped<IUrlHelper>(x =>
-            //{
-            //    var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
-            //    var factory = x.GetRequiredService<IUrlHelperFactory>();
-            //    return factory.GetUrlHelper(actionContext);
-            //});
-
             MapperInitializer.Initialize();
 
             // This code fixes a bug in providing current directory

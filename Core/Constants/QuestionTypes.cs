@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Core.Constants
 {
+    /// <summary>
+    /// Constants for question types
+    /// </summary>
     public class QuestionTypes
     {
         public const string Boolean = "Boolean";

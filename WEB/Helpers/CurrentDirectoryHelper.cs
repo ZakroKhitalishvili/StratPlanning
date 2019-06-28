@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace Web.Helpers
 {
+    /// <summary>
+    /// This helper fixes <c>Environment.CurrentDirectory</c> bug that appears when accessing it and a site running in IIS InProcess
+    /// </summary>
     public class CurrentDirectoryHelper
     {
         internal const string AspNetCoreModuleDll = "aspnetcorev2_inprocess.dll";

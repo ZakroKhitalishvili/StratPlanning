@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Web.Helpers
 {
+    /// <summary>
+    /// Helper class for handling uploding and deleting files from a folder
+    /// </summary>
     public class UploadHelper
     {
 

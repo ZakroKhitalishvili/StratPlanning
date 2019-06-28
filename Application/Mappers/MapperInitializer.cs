@@ -5,11 +5,14 @@ using System.Linq;
 
 namespace Application.Mappers
 {
+
+    /// <summary>
+    /// Initializes mappings for AutoMapper
+    /// </summary>
     public class MapperInitializer
     {
         public static void Initialize()
         {
-
             Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<StepBlock, StepBlockDTO>()

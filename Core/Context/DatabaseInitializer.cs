@@ -8,6 +8,9 @@ using System.Text;
 
 namespace Core.Context
 {
+    /// <summary>
+    /// Database seeder
+    /// </summary>
     public class DatabaseInitializer
     {
         private User[] Users { get; set; }
@@ -17,6 +20,10 @@ namespace Core.Context
         private Resource[] Resources { get; set; }
         private PlanningDbContext Context { get; set; }
 
+        /// <summary>
+        ///Initializes a seeder and strats seeding
+        /// </summary>
+        /// <param name="context">Database context, that needs to be seeded</param>
         public static void Initialize(PlanningDbContext context)
         {
             var initializer = new DatabaseInitializer();

@@ -24,13 +24,6 @@ namespace Application.Services
 
         public EmailService(ISettingRepository settingRepository)
         {
-            //_userName = "7c48d30fab75f474c110f4b946638267";
-            //_password = "7d61d0aecc2292edc8a9e364a22446ae";
-            //_smtpServer = "in-v3.mailjet.com";
-            //_useTLS = true;
-            //_port = 587;
-            //_from="systemtestersender@gmail.com";
-
             _userName = settingRepository.Get(Settings.SmtpUsername);
             _password = settingRepository.Get(Settings.SmtpPassword);
             _smtpServer = settingRepository.Get(Settings.SmtpServer);
