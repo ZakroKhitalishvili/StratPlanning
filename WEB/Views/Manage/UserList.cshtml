@@ -63,21 +63,24 @@
                                     @user.Position?.Title
                                 </td>
                                 <td>
-                                    @if (user.IsActive)
+                                    @if (user.Role != Roles.Admin)
                                     {
-                                        <a href="" class="disactivate-user m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
-                                           title="Disactivate"
-                                           data-toggle="tooltip" data-id="@user.Id">
-                                            <i class="fa fa-lock"></i>
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        <a href="" class="activate-user m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
-                                           title="Activate"
-                                           data-toggle="tooltip" data-id="@user.Id">
-                                            <i class="fa fa-unlock"></i>
-                                        </a>
+                                        @if (user.IsActive)
+                                        {
+                                            <a href="" class="disactivate-user m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
+                                               title="Deactivate"
+                                               data-toggle="tooltip" data-id="@user.Id">
+                                                <i class="fa fa-lock"></i>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a href="" class="activate-user m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
+                                               title="Activate"
+                                               data-toggle="tooltip" data-id="@user.Id">
+                                                <i class="fa fa-unlock"></i>
+                                            </a>
+                                        }
                                     }
 
                                     <a href="" class="edit-user sp-tooltip m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
@@ -91,11 +94,15 @@
                                         <i class="la la-key"></i>
 
                                     </a>
-                                    <a href="" class="delete-user m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
-                                       title="Delete"
-                                       data-toggle="tooltip" data-id="@user.Id">
-                                        <i class="la la-trash"></i>
-                                    </a>
+
+                                    @if (user.Role != Roles.Admin)
+                                    {
+                                        <a href="" class="delete-user m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
+                                           title="Delete"
+                                           data-toggle="tooltip" data-id="@user.Id">
+                                            <i class="la la-trash"></i>
+                                        </a>
+                                    }
                                 </td>
                             </tr>
                         }

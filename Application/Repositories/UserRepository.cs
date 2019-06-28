@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Core.Constants;
 
 namespace Application.Repositories
 {
@@ -58,6 +59,15 @@ namespace Application.Repositories
             if (user == null)
             {
                 return false;
+            }
+
+            if (user.Role == Roles.Admin && userEdit.Role != Roles.Admin)
+            {
+                if (!Context.Users.Where(x => x.IsActive && x.Role == Roles.Admin && x.Id!=userEdit.Id).Any())
+                {
+                    return false;
+                }
+
             }
 
             user.Email = userEdit.Email;
@@ -305,6 +315,11 @@ namespace Application.Repositories
 
             if (user != null)
             {
+                if (user.Role == Roles.Admin)
+                {
+                    return false;
+                }
+
                 try
                 {
                     user.IsActive = false;
@@ -328,6 +343,11 @@ namespace Application.Repositories
 
             if (user != null)
             {
+                if (user.Role == Roles.Admin)
+                {
+                    return false;
+                }
+
                 try
                 {
                     user.IsActive = true;
@@ -350,6 +370,12 @@ namespace Application.Repositories
 
             if (user != null)
             {
+
+                if (user.Role == Roles.Admin)
+                {
+                    return false;
+                }
+
                 try
                 {
                     user.IsActive = false;
