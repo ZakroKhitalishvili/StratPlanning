@@ -1,24 +1,35 @@
-﻿
+﻿/**
+ * checks whether it's possible to ping to a server 
+ * This helps to avoid sending exceeding amount of requests
+ * Implemented by a closure
+ */
 var canPing = (function () {
 
-    let lastPing = null;
+    let lastPing = null; // initilizes a variable for latest pinging date
 
     return function () {
 
-        if (lastPing == null) {
+        if (lastPing == null) // check if it is a first time call
+        {
             lastPing = new Date();
             return true;
         }
 
         let currentDate = new Date();
-        let duration = (currentDate.getTime() - lastPing.getTime()); //milliseconds
-        if (duration >= 1 * 60 * 1000) {
+        let duration = (currentDate.getTime() - lastPing.getTime()); // milliseconds
+        if (duration >= 1 * 60 * 1000) // check if a duration is longer than a minute ( default ping timespan)
+        {
             lastPing = currentDate;
             return true;
         }
         return false;
     }
 })();
+
+/**
+ * initilizes a session timeout controller
+ * source: https://github.com/orangehill/bootstrap-session-timeout
+ */
 
 $.sessionTimeout({
     message: 'Your session will be expired in a minute.',
@@ -32,7 +43,8 @@ $.sessionTimeout({
     countdownBar: true,
     onStart: function (options) {
         if (canPing()) {
-
+            // Once A ping was permitted, An ajax call is processed in order to renew session on a server
+            // A call returns expirationSeconds for remaining seconds of a session
             $.ajax(
                 {
                     url: '/Auth/Ping',
@@ -41,6 +53,7 @@ $.sessionTimeout({
                         if (xhr.status == 200) {
                             options.redirAfter = data.expirationSeconds * 1000;
 
+                            // after a successfull call session timeout controller configs are updated
                             if (data.expirationSeconds > 60) {
                                 options.warnAfter = (data.expirationSeconds - 60) * 1000;
                             }

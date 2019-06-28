@@ -1,3 +1,8 @@
+/**
+ * @description Initializes inputs (selects, datespickers and so on)
+ * @param {any} selector - root element or initializing element dom tree
+ */
+
 function initializeInputs(selector) {
 
     $(selector).find('.dynamic-modal').each(function () {
@@ -105,17 +110,15 @@ function initializeInputs(selector) {
         mApp.initScroller($(el), {});
     });
 
-    //$(selector).find('[maxlength],[data-val-maxlength-max]').maxlength(
-    //    {
-    //        alwaysShow: true,
-    //        warningClass: "alert alert-primary"
-    //    });
-
     $(selector).find('.text-editor').summernote();
 }
-//////
-/// read more/less for large texts
-//
+
+
+/*
+ * read more/less for large texts
+ * 
+ */
+
 $(document).ready(function () {
     $('.nav-toggle').click(function () {
         var collapse_content_selector = $(this).attr('href');
@@ -130,13 +133,16 @@ $(document).ready(function () {
     });
 
 });
-////
-//
+
 
 $(document).ready(function () {
 
-    initializeInputs(document);
+    initializeInputs(document); 
 
+    /**
+     * quickcSearch API from metronic
+     * 
+     */
     //var quickSearch = $('#m_quicksearch');
 
     //quickSearch.mQuicksearch({
@@ -158,9 +164,10 @@ $(document).ready(function () {
     //    }
     //});
 
-    /////
-    /// Datatable ordering functions
-    //
+    /**
+     * Datatable ordering functions
+     * 
+     */
 
     $.fn.dataTable.ext.order['dom-select'] = function (settings, col) {
         return this.api().column(col, { order: 'index' }).nodes().map(function (td, i) {
@@ -179,32 +186,13 @@ $(document).ready(function () {
             return parseFloat($('input', td).val());
         });
     };
-    ////
-    //
-    //
 
-    $('.user-submit-btn').click(submitConfirm);
-
-    $('.draggable-file').draggable({
-        revert: "invalid", // when not dropped, the item will revert back to its initial position
-        containment: "document",
-        helper: "clone",
-        cursor: "move"
-    });
-
-    //$('.table-row-delete').click(function (e) {
-    //    e.preventDefault();
-    //    deleteConfirm();
-    //});
-
-    /////
-    ///
 });
 
-
-///////
-// delete confirm alert
-//
+/**
+ * 
+ *  delete confirm alert
+ */
 
 function deleteConfirm() {
     return swal({
@@ -232,6 +220,11 @@ function deleteConfirm() {
     }
     );
 }
+
+/**
+ * 
+ *  submit confirm alert
+ */
 
 function submitConfirm(text) {
     return swal({
@@ -261,6 +254,13 @@ function submitConfirm(text) {
     );
 }
 
+/**
+ * @description shows a notification.
+ * 
+ * @param {string} text -  displaying text on notification
+ * @param {string} type - derermines color : "success", "danger", "warning" 
+ * @param {number} seconds - duration
+ */
 
 function notify(text, type, seconds = 5) {
     $.notify({
@@ -284,18 +284,19 @@ function notify(text, type, seconds = 5) {
         });
 }
 
-////////////
-//// plan create ajax
-///
-
+/**
+ * submit event based plan creation ajax
+ */
 
 $(document).on('submit', 'form#add_plan_form', function (e) {
     e.preventDefault();
 
+    // validates a form
     if (!$('#add_plan_form').valid()) {
         return;
     }
 
+    // takes valued from a form
     let formData = new FormData(document.querySelector('form#add_plan_form'));
 
     $.ajax(
@@ -325,19 +326,17 @@ $(document).on('submit', 'form#add_plan_form', function (e) {
         });
 });
 
-////
-///
-
-
-///////
-/// plan delete ajax
-///
+/**
+ *  
+ * plan delete ajax triggered by a button click
+ */
 
 $(document).on('click', '.delete-plan', function (e) {
     e.preventDefault();
 
     let planId = $(this).data('id');
 
+    //delete ajax is called after a confirm
     deleteConfirm().then(result => {
         if (result) {
             $.ajax(
@@ -374,14 +373,15 @@ $(document).on('click', '.delete-plan', function (e) {
 
 });
 
-//////
-///
+/** ==========================
+ * Dictionary management
+ * =========================
+ */
 
-
-////////////
-//// Dictionary create ajax
-///
-
+/**
+ * submit event based dictionary creation ajax
+ * 
+ */
 
 $(document).on('submit', 'form#add_dictionary_form', function (e) {
     e.preventDefault();
@@ -419,13 +419,10 @@ $(document).on('submit', 'form#add_dictionary_form', function (e) {
         });
 });
 
-////
-///
-
-
-///////
-/// dictionary deleted ajax
-///
+/**
+ * dictionary delete ajax triggered by a button click
+ * 
+ */
 
 $(document).on('click', '.delete-dictionary', function (e) {
     e.preventDefault();
@@ -468,13 +465,10 @@ $(document).on('click', '.delete-dictionary', function (e) {
 
 });
 
-//////
-///
-
-///////
-/// dictionary activation ajax
-///
-
+/**
+ * dictionary activation ajax triggered by a button click
+ * 
+ */
 $(document).on('click', '.activate-dictionary', function (e) {
     e.preventDefault();
 
@@ -516,13 +510,10 @@ $(document).on('click', '.activate-dictionary', function (e) {
 
 });
 
-//////
-///
-
-
-///////
-/// dictionary disactivation ajax
-///
+/**
+ * dictionary deactivation ajax triggered by a button click
+ * 
+ */
 
 $(document).on('click', '.disactivate-dictionary', function (e) {
     e.preventDefault();
@@ -552,7 +543,7 @@ $(document).on('click', '.disactivate-dictionary', function (e) {
 
                         }
                         else {
-                            notify("Disactivating the record is not possible ", "danger", 5);
+                            notify("Deactivating the record is not possible ", "danger", 5);
                         }
 
                     },
@@ -565,12 +556,15 @@ $(document).on('click', '.disactivate-dictionary', function (e) {
 
 });
 
-//////
-///
+/** ==========================
+ * Setting management
+ * =========================
+ */
 
-/////////////
-///  Get a setting
-//
+/**
+ * an ajax call that gets editing setting form triggered by a button click
+ * 
+ */
 $(document).on('click', '.edit-setting', function (e) {
     e.preventDefault();
 
@@ -597,13 +591,11 @@ $(document).on('click', '.edit-setting', function (e) {
         })
 });
 
-/////
-///
+/**
+ * submit event based ajax call for a setting update
+ * 
+ */
 
-
-/////////////
-///  Edit a setting
-//
 $(document).on('submit', 'form#edit_setting_form', function (e) {
     e.preventDefault();
 
@@ -637,16 +629,24 @@ $(document).on('submit', 'form#edit_setting_form', function (e) {
 
 });
 
-/////
-///
+/** ==========================
+ * User management
+ * =========================
+ */
 
-///////
-/// Manage -add a new user
-//
+
+/**
+ * initilizes inputs on showing user add modal
+ * 
+ */
+
 $('#add_user_modal').on('shown.bs.modal', function () {
     initializeInputs($(this));
 })
 
+/**
+ * submit event based ajax call for an user creation
+ */
 $(document).on('submit', 'form#add_user_form', function (e) {
     e.preventDefault();
 
@@ -683,13 +683,10 @@ $(document).on('submit', 'form#add_user_form', function (e) {
         });
 });
 
-///
-//
-
-
-/////////////
-///  Get an user
-//
+/**
+ * 
+ * An ajax call for getting an user update form triggered by a button click
+ */
 $(document).on('click', '.edit-user', function (e) {
     e.preventDefault();
 
@@ -716,13 +713,10 @@ $(document).on('click', '.edit-user', function (e) {
         })
 });
 
-/////
-///
-
-
-/////////////
-///  Edit an user
-//
+/**
+ * submit event based an user update ajax call
+ * 
+ */
 $(document).on('submit', 'form#edit_user_form', function (e) {
     e.preventDefault();
 
@@ -756,12 +750,10 @@ $(document).on('submit', 'form#edit_user_form', function (e) {
 
 });
 
-/////
-///
-
-//////
-/// Manage -  generate an user password
-//
+/**
+ * User new password geenration ajax call triggered by a button click
+ * 
+ */
 $(document).on('click', '.generate-user-password', function (e) {
     e.preventDefault();
 
@@ -794,15 +786,10 @@ $(document).on('click', '.generate-user-password', function (e) {
 
 });
 
-////
-//
-
-
-
-///////
-/// user delete ajax
-///
-
+/**
+ * User delete ajax call triggered by a button click
+ * 
+ */
 $(document).on('click', '.delete-user', function (e) {
     e.preventDefault();
 
@@ -844,13 +831,10 @@ $(document).on('click', '.delete-user', function (e) {
 
 });
 
-//////
-///
-
-///////
-/// dictionary activation ajax
-///
-
+/**
+ * User activating ajax call triggered by a button click
+ * 
+ */
 $(document).on('click', '.activate-user', function (e) {
     e.preventDefault();
 
@@ -892,13 +876,10 @@ $(document).on('click', '.activate-user', function (e) {
 
 });
 
-//////
-///
-
-
-///////
-/// dictionary disactivation ajax
-///
+/**
+ * User deactivating ajax call triggered by a button click
+ * 
+ */
 
 $(document).on('click', '.disactivate-user', function (e) {
     e.preventDefault();
@@ -921,14 +902,14 @@ $(document).on('click', '.disactivate-user', function (e) {
                         }
 
                         if (data.result) {
-                            notify("Successfully Diactivated", "success", 5);
+                            notify("Successfully deactivated", "success", 5);
                             setTimeout(function () {
                                 document.location.reload(false)
                             }, 2000);
 
                         }
                         else {
-                            notify("Disactivating the user is not possible ", "danger", 5);
+                            notify("Deactivating the user is not possible ", "danger", 5);
                         }
 
                     },
@@ -940,6 +921,3 @@ $(document).on('click', '.disactivate-user', function (e) {
     })
 
 });
-
-//////
-///

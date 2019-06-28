@@ -1,7 +1,13 @@
-﻿$(document).ready(function () {
+﻿/**
+ * calls a step initializer 
+ */
+$(document).ready(function () {
     initializeStep();
 });
 
+/**
+ * @description initilizes a step for all types of questions
+ **/
 function initializeStep() {
     $('.stakeholders-rating-table .m-select2').select2({
         minimumResultsForSearch: Infinity
@@ -9,27 +15,11 @@ function initializeStep() {
 
     $('.sp-tooltip').tooltip();
 
-    /////////////
-    //stakeholders analysis worksheet
-    //////////
-    // $('#stakeholders-rating-table').DataTable(
-    //     {
-    //         responsive: true,
-    //         paging: false,
-    //         serverSide: false,
-    //         searching: false,
-    //         info: false,
-    //         columnDefs:
-    //             [{ "orderDataType": "dom-select", targets: [1, 2, 3, 4, 5, 6, 7, 9] }],
-    //     }
-    // );
-
-    /////////////////////
-    ////////////
-
-    ////////////
-    // master list of issues
-    ///
+    /**
+     * Master list table initilized with JQuery datatable
+     * source: https://datatables.net/
+     * 
+     */
     $('#issues-master-list-table').dataTable(
         {
             // rowReorder:
@@ -50,21 +40,23 @@ function initializeStep() {
         }
     );
 
+    /**
+     * Issue master list ordering by a ranking column triggerred by a blur and an enter button press
+     */
     $('#issues-master-list-table tr td:nth-child(6) input').blur(function (e) {
         $('#issues-master-list-table').DataTable().column(6).order('desc').draw();
-    }).on('keyup', function (e) {
-        if (e.keyCode == 13)//enter button
-        {
-            $('#issues-master-list-table').DataTable().column(6).order('desc').draw();
-        }
-    });
-
-    $('#issues-master-list-table').on('row-reordered.dt', function (e, details, edit) {
-        details.map(function (el, ind) {
-            $(el.node).find("input.order").val(el.newPosition);
+    })
+        .on('keyup', function (e) {
+            if (e.keyCode == 13)//enter button
+            {
+                $('#issues-master-list-table').DataTable().column(6).order('desc').draw();
+            }
         });
-    });
 
+    /**
+     * Change event control for a select type question with an option of specific answer
+     * After attaching a handler it trigger a change event in order to show specific answer for received step form
+     */
     $('select.select-specify').on('change', function (e) {
         let value = $(this).val();
         let specifyInput = $(this).parent().find('input.select-specify-input');
@@ -77,12 +69,13 @@ function initializeStep() {
         }
     }).trigger('change');
 
-    //////////////////////
-    ///  Dropzone
-    ///
-
+    /**
+     * Initializes dropzone for file uplodings
+     * source: https://www.dropzonejs.com
+     */
     $('.dropzone-sp').each(function () {
         var element = $(this);
+        // initiliizes uploaded file url
         var initurl = element.data('initurl');
         var inputname = element.data('inputname');
 
@@ -92,6 +85,7 @@ function initializeStep() {
 
                 if (!initurl) return;
 
+                //fetchs file data
                 $.get(initurl, function (data) {
                     if (data === null) {
                         return;
@@ -104,21 +98,17 @@ function initializeStep() {
 
                         $(mockFile.previewElement).find(".sp-file-input").val(value.id);
                         $(mockFile.previewElement).find(".sp-file-link").attr('href', value.url);
-
-                        //thisDropzone.options.thumbnail.call(thisDropzone, mockFile, value.path);
-                        //// Make sure that there is no progress bar, etc...
-                        //thisDropzone.emit("complete", mockFile);
-                        //thisDropzone.emit("complete", $(mockFile._removeLink).html("<div ><span class='fa fa-trash text-danger' style='font-size: 1.5em'></span></div>"));
-                        //thisDropzone.emit("complete", $(mockFile._removeLink).click(function () { $.post("/Manage/Remove", { "id": value.id }, function (data) { console.log(data); }); }));
                     });
                 });
 
             },
             addRemoveLinks: true,
             removedfile: function (file) {
+                // file remove event
                 let currentPreviewElement = $(file.previewElement);
                 let id = $(currentPreviewElement).find(".sp-file-input").val();
 
+                //file remove confirm is display and after a confirmation processes an ajax call to delete file on a server
                 removeFilePreview(currentPreviewElement).then(function (result) {
                     if (result) {
                         if (!!id) {
@@ -144,10 +134,11 @@ function initializeStep() {
                 });
 
             },
-            url: "/Worksheet/UploadFile",
+            url: "/Worksheet/UploadFile", // On this url files are uploaded
             uploadMultiple: true,
             paramName: 'file',
             success: function (file, response) {
+                //The function is called after successfull upload
                 var index = 0;
                 var fileResponse = response.filter(function (data, i) {
                     if (data.name === file.name) {
@@ -161,6 +152,7 @@ function initializeStep() {
                 $(file.previewElement).find(".sp-file-link").attr('href', fileResponse.url);
             },
             error: function (file, response) {
+                //The function is called after unsuccessfull upload
                 $(file.previewElement).find(".dz-image").addClass('error-file');
                 $(file.previewElement).find(".dz-error-message").show();
                 if (typeof (response.message) !== 'undefined') {
@@ -192,10 +184,11 @@ function initializeStep() {
         }).addClass('dropzone');
     });
 
+    /**
+     * @description dropzone file previews remove relating functions
+     * @param {any} e
+     */
 
-    //////////
-    /// dropzone file previews remove relating functions
-    //
     function filePreviewRemoveHandler(e) {
         removeFilePreview($(e.target).parent());
     }
@@ -219,14 +212,19 @@ function initializeStep() {
         });
     }
 
-    //////
-    /// list-items events
-    ///
-
+    /**
+     * SWOT Table items delete handler
+     * 
+     */
     $(document).on('click', '.list-item-delete', function (e) {
         let listItem = $(this).closest('.list-item');
         listItem.remove();
     });
+
+    /**
+   * SWOT Table items add handler
+   * 
+   */
 
     $(document).on('click', '.list-add-button', function (e) {
         e.preventDefault();
@@ -245,17 +243,23 @@ function initializeStep() {
         }
     });
 
+    /**
+   * SWOT Table items add handler triggered by an enter button press
+   * 
+   */
     $(document).on('keyup', '.list-add-input', function (e) {
         if (e.which == 13) {
             e.preventDefault();
+            //this triggers item add button change event
             $(this).parents('.list-items-add-group').first().find('.list-add-button').click();
         }
     })
-    //////
-    ////
 }
 
-
+/**
+ * New user adding to plan - submit based
+ * 
+ */
 $(document).on('submit', "form#add_user_to_plan_new", function (e) {
     e.preventDefault();
 
@@ -295,7 +299,10 @@ $(document).on('submit', "form#add_user_to_plan_new", function (e) {
             }
         })
 });
-
+/**
+ * Existing user adding to plan - submit based
+ * 
+ */
 $(document).on('submit', "form#add_user_to_plan_existing", function (e) {
     e.preventDefault();
     let formData = new FormData(document.querySelector('form#add_user_to_plan_existing'));
@@ -332,6 +339,10 @@ $(document).on('submit', "form#add_user_to_plan_existing", function (e) {
         })
 });
 
+/**
+ *  User remove from a plan triggered by a button click
+ * 
+ */
 
 $(document).on('click', '.remove-user-from-plan', function (e) {
     e.preventDefault();
@@ -372,6 +383,11 @@ $(document).on('click', '.remove-user-from-plan', function (e) {
 
 });
 
+
+/**
+ *  @description updates planning team table - fetches through an ajax call
+ * 
+ */
 function updatePlanningTeam() {
     $.ajax(
         {
@@ -401,6 +417,12 @@ function updatePlanningTeam() {
         })
 }
 
+
+/**
+ *  Click event handler for a step save button
+ * 
+ */
+
 $(document).on('click', 'button#step_form_save_button', function (e) {
     if ($('#step_form').valid()) {
         updateStep(false);
@@ -408,9 +430,15 @@ $(document).on('click', 'button#step_form_save_button', function (e) {
 
 });
 
+/**
+ *  Click event handler for a step submit button
+ * 
+ */
+
 $(document).on('click', 'button#step_form_submit_button', function (e) {
 
     if ($('#step_form').valid()) {
+        //Submits through an update function after a confirmation
         submitConfirm().then(function (result) {
             if (result) {
                 updateStep(true);
@@ -419,9 +447,13 @@ $(document).on('click', 'button#step_form_submit_button', function (e) {
     }
 
 });
-
+/**
+ * @description blocks step form from an user and sends an update request, after unblocks ui
+ * @param {bool} isSubmitted - whether update a step with submition
+ */
 function updateStep(isSubmitted) {
 
+    // Metronic API for ui blocking that is based on BlockUI. source :http://jquery.malsup.com/block/
     mApp.block('#step_form', {
         overlayColor: '#000000',
         type: 'loader',
@@ -431,6 +463,7 @@ function updateStep(isSubmitted) {
     });
 
     let formData = new FormData(document.querySelector('form#step_form'));
+    //append a value indicating whether a reqest is submitting
     formData.append('IsSubmitted', isSubmitted);
     $.ajax(
         {
@@ -460,16 +493,20 @@ function updateStep(isSubmitted) {
         });
 }
 
-////////////////////////////////
-//// step tasks in predeparture step
-////////
 $(document).ready(function () {
+
+    /**
+     * Predeparture step - Steptasks responsible person add modal showing event
+     */
     $(document).on('show.bs.modal', '#edit_steptasks_modal', function (e) {
+        // Responsible add form step property is set based calling button
         let step = $(e.relatedTarget).data('step');
-        console.log('called bs modal show');
         $(this).find('input[name$="Step"]').val(step);
     });
 
+     /**
+     * Predeparture step - Steptasks new responsible person add handler triggered by form submit
+     */
     $(document).on('submit', 'form#add_responsible_user_to_step_new', function (e) {
         e.preventDefault();
         if (!$(this).valid()) {
@@ -478,11 +515,13 @@ $(document).ready(function () {
 
         let count = parseInt($('input#step_tasks_count').val());
 
+        //takes values from a form
         let email = $(this).find('input[name$="Email"]').val();
         let firstName = $(this).find('input[name$="FirstName"]').val();
         let lastName = $(this).find('input[name$="LastName"]').val();
         let step = $(this).find('input[name$="Step"]').val();
 
+        //composes html text from the give data and next is appended to a list
         let html = `<a class="m-list-badge__item m-list-badge__item--default list-item">
                                 <input type="hidden" name="StepTaskAnswers.Answer.StepTaskAnswers[${count}].Email" value="${email}" />
                                 <input type="hidden" name="StepTaskAnswers.Answer.StepTaskAnswers[${count}].FirstName" value="${firstName}" />
@@ -502,7 +541,9 @@ $(document).ready(function () {
         $('.modal-backdrop').remove();
     });
 
-
+      /**
+     * Predeparture step - Steptasks existing responsible person add handler triggered by form submit
+     */
     $(document).on('submit', 'form#add_responsible_user_to_step_existing', function (e) {
         e.preventDefault();
         if (!$(this).valid()) {
@@ -534,9 +575,10 @@ $(document).ready(function () {
 
 });
 
-/////////
-/////
-
+/**
+ * Resets inputs after hiding a modal
+ * 
+ */
 $(document).on('hidden.bs.modal', function (event) {
     var modal = $(event.target);
 
@@ -554,7 +596,11 @@ $(document).on('hidden.bs.modal', function (event) {
 
     modal.find('.field-validation-error').text("");
 });
-
+/**
+ * @description handles table record editing and a new record adding processes in steps
+ * @param {string} modalId - Editing modal Id
+ * @param {string} targetId - A List where these records are located
+ */
 function editRecord(modalId, targetId) {
     if (fieldOptions[targetId] === undefined) return;
 
@@ -581,7 +627,7 @@ function editRecord(modalId, targetId) {
     }
     else {
         index = guid();
-        var temp = options.template(data, index);
+        var temp = options.template(data, index); // takes templates that are defined in Questions razors
 
         if (temp) {
             list.append(temp);
@@ -599,6 +645,11 @@ function editRecord(modalId, targetId) {
     modal.find('.m-index').val("");
 }
 
+/**
+ * @description 
+ * @param {any} element
+ * @param {any} targetId
+ */
 function selectAnswer(element, targetId) {
     if (fieldOptions[targetId] === undefined) return;
 
@@ -638,6 +689,7 @@ function showRecordDetail(source, modalId) {
     modal.modal('show');
 }
 
+
 function deleteRecord(source, targetSelector = false) {
 
     deleteConfirm().then(function (result) {
@@ -675,9 +727,10 @@ function guid() {
 }
 
 
-/////////////////////////
-// steptask completion event
-//////
+/**
+ * Step completion handler triggered by a switch in steptasks tables from Predeparture step
+ * 
+ */
 $(document).on('click', '.step-complete-checkbox', function (e) {
     e.preventDefault();
     let checkbox = e.target;
@@ -694,7 +747,10 @@ $(document).on('click', '.step-complete-checkbox', function (e) {
     });
 });
 
-
+/**
+ * Step completion handler triggered by a Complete button
+ * 
+ */
 $(document).on('click', 'button#step_form_complete', function (e) {
     e.preventDefault();
 
@@ -707,6 +763,12 @@ $(document).on('click', 'button#step_form_complete', function (e) {
     })
 });
 
+/**
+ * @description completes a step
+ * @param {number} planId - Working plan's Id
+ * @param {string} stepIndex - Completing step index
+ * @param {function} callback - callback function that will be called after completion handler
+ */
 function completeStep(planId, stepIndex, callback) {
 
     submitConfirm("You won't be able to change it after").then(function (result) {
@@ -723,7 +785,7 @@ function completeStep(planId, stepIndex, callback) {
                     success: function (data, statusText, xhr) {
                         if (xhr.status == 200) {
                             notify("Successfully completed", "success", 5);
-                            callback();
+                            callback(); // here is called a callback
                         }
 
                         if (xhr.status == 202) {
@@ -739,12 +801,10 @@ function completeStep(planId, stepIndex, callback) {
     })
 
 }
-///////
-////
-
-/////////////////////////
-////// step form refresh
-////////
+/**
+ * @description refreshes step form
+ * @param {any} keepFilled - determines whether to keep already filled and unsaved data
+ */
 function refreshStepForm(keepFilled = false) {
     let formData = new FormData(document.querySelector('form#step_form'));
     formData.append('keepFilled', keepFilled);
@@ -773,6 +833,3 @@ function refreshStepForm(keepFilled = false) {
             }
         });
 }
-//////////
-//////
-////
