@@ -531,6 +531,11 @@ namespace Application.Repositories
 
         #region General methods
 
+        /// <summary>
+        /// Gets Steps with detailed information
+        /// </summary>
+        /// <param name="planId"></param>
+        /// <returns></returns>
         private IList<StepTaskDTO> GetStepTasks(int planId)
         {
             var orderedStepArray = GetStepList().ToArray();
@@ -575,6 +580,15 @@ namespace Application.Repositories
             }).OrderBy(x => Array.IndexOf(orderedStepArray, x.Step)).ToList();
         }
 
+        /// <summary>
+        /// Gets UserStepResult object that includes all answers, if a such record does not exist for a step, it is created.
+        /// It belongs to an invoker user unless it is definitive.
+        /// </summary>
+        /// <param name="planId"></param>
+        /// <param name="stepIndex"></param>
+        /// <param name="isDefinitive">Determines whether UserStepResult should be defintitive</param>
+        /// <param name="userId">User who invoked the method</param>
+        /// <returns></returns>
         private UserStepResult GetOrCreateUserStepResult(int planId, string stepIndex, bool isDefinitive, int userId)
         {
             UserStepResult userStepResult;
@@ -596,6 +610,14 @@ namespace Application.Repositories
             return userStepResult;
         }
 
+        /// <summary>
+        /// Creates UserStepResult record and returns it.
+        /// </summary>
+        /// <param name="planId"></param>
+        /// <param name="stepIndex"></param>
+        /// <param name="isDefinitive"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         private UserStepResult CreateUserStepResult(int planId, string stepIndex, bool isDefinitive, int userId)
         {
             var userStepResult = new UserStepResult
@@ -629,6 +651,11 @@ namespace Application.Repositories
             return userStepResult;
         }
 
+        /// <summary>
+        /// Gets UserStepResult record from database based on conditions
+        /// </summary>
+        /// <param name="expresion">Expression of conditions</param>
+        /// <returns></returns>
         private IList<UserStepResult> GetUserStepResultByCondition(Expression<Func<UserStepResult, bool>> expresion)
         {
             return Context.UserStepResults
@@ -651,22 +678,47 @@ namespace Application.Repositories
                     .Include(x => x.PreparingAnswers).ThenInclude(x => x.IssueOptionAnswer.Issue).ToList();
         }
 
+        /// <summary>
+        /// Get UserStepResult object. If not exists returns null
+        /// </summary>
+        /// <param name="planId"></param>
+        /// <param name="stepIndex"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         private UserStepResult GetUserStepResult(int planId, string stepIndex, int userId)
         {
             return GetUserStepResultByCondition(x => x.Step == stepIndex && x.UserToPlan.UserId == userId && x.UserToPlan.PlanId == planId).SingleOrDefault();
         }
 
+        /// <summary>
+        /// Gets submitted definitive answers for a step
+        /// </summary>
+        /// <param name="planId"></param>
+        /// <param name="stepIndex"></param>
+        /// <returns></returns>
         private UserStepResult GetSubmittedDefinitiveStepResult(int planId, string stepIndex)
         {
             return GetUserStepResultByCondition(x => x.Step == stepIndex && x.PlanId == planId && x.IsDefinitive && x.IsSubmitted).SingleOrDefault();
         }
 
+        /// <summary>
+        /// Gets final definitive answers for a step. A Definitive answer is final when it is from last time save
+        /// </summary>
+        /// <param name="planId"></param>
+        /// <param name="stepIndex"></param>
+        /// <returns></returns>
         private UserStepResult GetFinalDefinitiveStepResult(int planId, string stepIndex)
         {
             return GetUserStepResultByCondition(x => x.Step == stepIndex && x.PlanId == planId && x.IsDefinitive && x.IsFinal.HasValue && x.IsFinal.Value)
                     .SingleOrDefault();
         }
 
+        /// <summary>
+        /// Gets all UserStepResult objects for a step of specific plan
+        /// </summary>
+        /// <param name="planId"></param>
+        /// <param name="stepIndex"></param>
+        /// <returns></returns>
         private IList<UserStepResult> GetPlanStepResults(int planId, string stepIndex)
         {
             var userToPlans = Context.UsersToPlans
@@ -687,6 +739,11 @@ namespace Application.Repositories
             return userStepResults;
         }
 
+        /// <summary>
+        /// Deletes UserStepResult record from database with all answers
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         private bool DeleteUserStepResult(int id)
         {
             var userStepResult = GetUserStepResultByCondition(x => x.Id == id).SingleOrDefault();
@@ -715,6 +772,11 @@ namespace Application.Repositories
             return false;
         }
 
+        /// <summary>
+        /// Gets blocks with their questions for a step
+        /// </summary>
+        /// <param name="stepIndex"></param>
+        /// <returns></returns>
         private IList<StepBlockDTO> GetStepStructure(string stepIndex)
         {
             return Context.StepBlocks.Where(x => x.Step == stepIndex)
@@ -728,6 +790,13 @@ namespace Application.Repositories
                 .ToList();
         }
 
+        /// <summary>
+        /// Gets a StepTask record from database or creates if there is not such record
+        /// </summary>
+        /// <param name="planId"></param>
+        /// <param name="stepIndex"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         private StepTask GetOrCreateStepTask(int planId, string stepIndex, int userId)
         {
             var stepTask = GetStepTask(planId, stepIndex);
@@ -756,6 +825,13 @@ namespace Application.Repositories
             return Context.StepTasks.Where(x => x.PlanId == planId && x.Step == stepIndex).SingleOrDefault();
         }
 
+        /// <summary>
+        /// Gets a step with detailed information. The step object includes structure (blocks, questions) with answers, planning team with submitted and unsubmitted users.
+        /// </summary>
+        /// <param name="planId"></param>
+        /// <param name="stepIndex"></param>
+        /// <param name="isDefinitive"></param>
+        /// <returns></returns>
         private PlanStepDTO GetPlanStep(int planId, string stepIndex, bool isDefinitive)
         {
             var steptask = GetStepTask(planId, stepIndex);
@@ -779,6 +855,7 @@ namespace Application.Repositories
                 planStep.AdditionalQuestions = GetIssueDistinguishQuestions();
             }
 
+            //An definitive object includes lists for users who already submitted or who are stille awaited
             if (isDefinitive)
             {
                 var involvedUsers = Context.UsersToPlans
@@ -802,6 +879,10 @@ namespace Application.Repositories
             return planStep;
         }
 
+        /// <summary>
+        /// Questions for "Operational and strategic issues" step
+        /// </summary>
+        /// <returns></returns>
         private IList<QuestionDTO> GetIssueDistinguishQuestions()
         {
             return Context.Questions.Where(x => x.Type == QuestionTypes.IssueDistinguishMultiSelect || x.Type == QuestionTypes.IssueDistinguishSelect || x.Type == QuestionTypes.IssueDistinguishTypeSelect)
@@ -810,8 +891,19 @@ namespace Application.Repositories
 
         #endregion
 
+        /**
+         * Private methods that are supposed to write answers to a database.
+         * 
+         */
         #region Saving methods
 
+        /// <summary>
+        /// Saves answers specificly for an user on a step
+        /// </summary>
+        /// <param name="planStep"></param>
+        /// <param name="isSubmitted"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         private bool SaveOrdinaryAnswers(PlanStepDTO planStep, bool isSubmitted, int userId)
         {
             var userStepResult = GetOrCreateUserStepResult(planStep.PlanId, planStep.Step, false, userId);
@@ -850,6 +942,13 @@ namespace Application.Repositories
             return true;
         }
 
+        /// <summary>
+        /// Saves definitive answers on a step
+        /// </summary>
+        /// <param name="planStep"></param>
+        /// <param name="isSubmitted"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         private bool SaveDefinitiveAnswers(PlanStepDTO planStep, bool isSubmitted, int userId)
         {
             // definitive answer
@@ -921,6 +1020,11 @@ namespace Application.Repositories
             return true;
         }
 
+        /// <summary>
+        /// Saves step tasks 
+        /// </summary>
+        /// <param name="stepTasks"></param>
+        /// <param name="userId"></param>
         private void SaveStepTasks(IList<StepTaskDTO> stepTasks, int userId)
         {
             if (stepTasks == null)
@@ -942,6 +1046,12 @@ namespace Application.Repositories
             Context.SaveChanges();
         }
 
+        /// <summary>
+        /// Save all the answers from a step. It checks  type of a question and call a method accordingly.
+        /// </summary>
+        /// <param name="answerGroups"></param>
+        /// <param name="userStepResult"></param>
+        /// <param name="userId"></param>
         private void SaveAnswers(IList<AnswerGroupDTO> answerGroups, UserStepResult userStepResult, int userId)
         {
             foreach (var answerGroup in answerGroups)
@@ -1004,6 +1114,10 @@ namespace Application.Repositories
             }
         }
 
+        /**
+         * Saving methods for each type of question
+         * 
+         */
         private void SaveIssuePreparingAnswer(AnswerGroupDTO answerGroup, UserStepResult userStepResult, int userId)
         {
             IList<PreparingAnswer> dbAnswers = null;
@@ -1836,7 +1950,7 @@ namespace Application.Repositories
 
                     issueRes = new IssueOptionAnswerToResource
                     {
-                        Resource = res
+                        Resource = res                   
                     };
                 }
 
@@ -1988,6 +2102,16 @@ namespace Application.Repositories
 
         #region Reading methods
 
+        /**
+         * Private methods that are supposed to read only  answers from database
+         */
+
+        /// <summary>
+        /// Fills a step with answers according to type of questions.
+        /// </summary>
+        /// <param name="planStep">Step refining object</param>
+        /// <param name="currentUserStepResult">Current users's answers fro a step</param>
+        /// <param name="otherUserStepResults">Other users' answers including defintitive ones</param>
         private void FillWithAnswers(PlanStepDTO planStep, UserStepResult currentUserStepResult, IList<UserStepResult> otherUserStepResults)
         {
             planStep.AnswerGroups = new List<AnswerGroupDTO>();

@@ -385,7 +385,7 @@ $(document).on('click', '.remove-user-from-plan', function (e) {
 
 
 /**
- *  @description updates planning team table - fetches through an ajax call
+ *  @description updates planning team table - fetches using an ajax call
  * 
  */
 function updatePlanningTeam() {

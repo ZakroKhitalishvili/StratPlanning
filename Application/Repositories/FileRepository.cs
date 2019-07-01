@@ -40,7 +40,11 @@ namespace Application.Repositories
                 Path = fileEntity.Path
             };
         }
-
+        /// <summary>
+        /// This method deletes also related file answers if exists any
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public bool Delete(int id)
         {
             var file = Context.Files.Where(x => x.Id == id).Include(x => x.FileAnswers).SingleOrDefault(); ;

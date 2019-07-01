@@ -82,6 +82,13 @@ namespace Application.Repositories
             return true;
         }
 
+        /// <summary>
+        /// This methoud actually does not delete a record from database.
+        /// It sets IsDeleted property to true and deactivates a record to
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public bool Delete(int id, int userId)
         {
             var dictionary = Get(id);
