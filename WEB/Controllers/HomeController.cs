@@ -22,9 +22,15 @@ namespace Web.Controllers
             return View();
         }
 
+        /// <summary>
+        /// An uncaught exception handler redirects to this action.
+        /// </summary>
+        /// <returns></returns>
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
+            _loggerManager.Error("Error action was called");
+
             var feature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
 
             if (feature != null)

@@ -199,6 +199,11 @@ namespace Web.Controllers
             return View(); ;
         }
 
+        /// <summary>
+        /// Returns a view with a relevant message for denied access.
+        /// After detecting an unauthorired access, it should redirect to this action
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult AccessDenied()
         {
@@ -207,6 +212,10 @@ namespace Web.Controllers
             return View();
         }
 
+        /// <summary>
+        /// This action is called in order to refresh a session
+        /// </summary>
+        /// <returns>Remaining second before an expiration</returns>
         [HttpPost]
         [ResponseCache(NoStore = true)]
         public async Task<IActionResult> Ping()
