@@ -229,20 +229,21 @@ namespace Application.Repositories
 
         public bool RemoveUserFromPlan(int userId, int planId)
         {
-            var userToPlan = Context.UsersToPlans.Where(x => x.UserId == userId && x.PlanId == planId).FirstOrDefault();
+            var userToPlan = Context.UsersToPlans.Where(x => x.UserId == userId && x.PlanId == planId).Include(x=>x.UserStepResults).FirstOrDefault();
 
             if (userToPlan == null)
             {
                 return false;
             }
 
+            Context.UserStepResults.RemoveRange(userToPlan.UserStepResults);
             Context.UsersToPlans.Remove(userToPlan);
 
             try
             {
                 Save();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return false;
             }

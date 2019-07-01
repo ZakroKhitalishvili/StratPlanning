@@ -319,7 +319,7 @@ namespace Web.Controllers
         {
             _loggerManager.Info($"RemoveUserFromPlan({userId},${planId}) is requested");
 
-            if (userId <= 0 && planId <= 0)
+            if (userId <= 0 || planId <= 0)
             {
                 _loggerManager.Warn($"RemoveUserFromPlan({userId},${planId}) request is bad");
                 return new StatusCodeResult(StatusCodes.Status400BadRequest);

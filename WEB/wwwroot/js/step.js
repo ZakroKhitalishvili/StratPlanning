@@ -222,7 +222,7 @@ function initializeStep() {
     });
 
     /**
-   * SWOT Table items add handler
+   * SWOT Table items adding handler
    * 
    */
 
@@ -370,7 +370,7 @@ $(document).on('click', '.remove-user-from-plan', function (e) {
                             refreshStepForm(true);
                         }
                         else {
-                            notify("Removing the user failed", "danger", 5);
+                            notify("Removing the user is not possible due to existing answers", "danger", 5);
                         }
 
                     },
