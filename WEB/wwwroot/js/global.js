@@ -147,17 +147,6 @@ $(".collapser-text").click(function (e) {
     }
 })
 
-$(".collapse").on('shown.bs.collapse', function (e) {
-
-    console.log(e);
-    //if ($(this).hasClass('collapsed')) {
-    //    $(this).html('Show');
-    //}
-    //else {
-    //    $(this).html('Hide');
-    //}
-})
-
 
 $(document).ready(function () {
 
