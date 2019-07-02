@@ -54,8 +54,8 @@
                      style="">
                     <div class="m-accordion__item-content">
                         <video width="100%" controls>
-                            <source src="~/video/partiebi.mp4"/>
-                            @*@if (Model.IntroductionVideo != null)
+                            @*<source src="~/video/partiebi.mp4"/>*@
+                            @if (Model.IntroductionVideo != null)
                             {
                                 <source src="@Model.IntroductionVideo?.Path" />
                                 <span>Your browser does not support the video tag.</span>
@@ -63,7 +63,7 @@
                             else
                             {
                                 <span>No video</span>
-                            }*@
+                            }
                         </video>
                     </div>
                 </div>
