@@ -249,6 +249,7 @@ namespace Web.Controllers
                 return View("Introduction", introduction);
             }
 
+            //validates step's index
             if (!_planRepository.GetStepList().Contains(introduction.Step))
             {
                 _loggerManager.Warn($"UploadIntroduction : Step index is wrong");
@@ -268,22 +269,32 @@ namespace Web.Controllers
 
             var userId = HttpContext.GetUserId();
 
+            //upload a file in wwwroot directory
             var uploadRelPath = UploadHelper.Upload(files[0]);
 
+            //creates a new file record
             var fileDto = _fileRepository.CreateNewFile(Path.GetFileNameWithoutExtension(files[0].FileName), Path.GetExtension(files[0].FileName), uploadRelPath, userId);
 
+            //boolean that determines a result for updating of an introduction
             var result = false;
 
-            if (fileDto != null)
+            
+            if (fileDto != null)//A file record created, updates an introduction record
             {
                 _loggerManager.Info($"UploadIntroduction : A file was created");
 
+                //takes an older video version
                 var oldVideo = _planRepository.GetIntroduction(introduction.Step)?.Video;
+
+                //updaates an introduction for a step
                 result = _planRepository.UpdateIntroduction(introduction.Step, fileDto.Id, userId);
 
-                if (result && oldVideo != null)
+                if (result && oldVideo != null)//If a update was succeessful and the introduction had a video before, deletes an older video
                 {
-                    bool oldFileDelete = false;
+                    //a result boolean
+                    bool oldFileDelete;
+
+                    //Deletes corresponding record in a repository and corresponding file in a directory, If any fails a result boolean is false
                     oldFileDelete = UploadHelper.Delete(oldVideo.Path);
                     oldFileDelete = _fileRepository.Delete(oldVideo.Id) && oldFileDelete;
 
@@ -480,6 +491,7 @@ namespace Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                //check if an email of a new user is unique
                 if (_userRepository.FindByCondition(u => u.Email == newUser.Email).Any())
                 {
                     _loggerManager.Warn($"AddNewUser - an user with the email exists");
@@ -502,6 +514,7 @@ namespace Web.Controllers
                     return PartialView("~/Views/Manage/Partials/_AddNewUser.cshtml");
                 }
 
+                //send a password to a new user
                 if (!_emailService.SendPasswordToUser(newUser.Password, user))
                 {
                     _loggerManager.Error($"AddNewUser - Email was not sent to the user");
@@ -527,7 +540,6 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult UserEdit(int id)
         {
-
             _loggerManager.Info($"UserEdit:Get was requested");
 
             if (id <= 0)
@@ -651,10 +663,7 @@ namespace Web.Controllers
         {
             _loggerManager.Info($"DeleteUser({id}) was requested");
 
-            var result = false;
-
-
-            result = _userRepository.Delete(id, HttpContext.GetUserId());
+            var result = _userRepository.Delete(id, HttpContext.GetUserId());
 
             if (result)
             {
@@ -673,9 +682,7 @@ namespace Web.Controllers
         {
             _loggerManager.Info($"ActivateUser({id}) was requested");
 
-            var result = false;
-
-            result = _userRepository.Activate(id, HttpContext.GetUserId());
+            var result = _userRepository.Activate(id, HttpContext.GetUserId());
 
             if (result)
             {
@@ -694,9 +701,7 @@ namespace Web.Controllers
         {
             _loggerManager.Info($"DisactivateUser({id}) was requested");
 
-            var result = false;
-
-            result = _userRepository.Disactivate(id, HttpContext.GetUserId());
+            var result = _userRepository.Disactivate(id, HttpContext.GetUserId());
 
             if (result)
             {
