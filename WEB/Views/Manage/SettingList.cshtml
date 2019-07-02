@@ -32,14 +32,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var setting in Model.OrderBy(x=>x.Index))
+                        @foreach (var setting in Model.OrderBy(x => x.Index))
                         {
                             <tr>
                                 <td>
                                     @settings.ResourceManager.GetString(setting.Index)
                                 </td>
                                 <td>
-                                    @setting.Value
+                                    @if (setting.Index == Settings.SmtpPassword)
+                                    {
+                                        <a class="btn btn-sp collapser-text" data-toggle="collapse" href="#collapse_setting_@setting.Index" role="button" aria-expanded="false">
+                                            Show
+                                        </a>
+                                        <div class="collapse" id="collapse_setting_@setting.Index">
+                                            @setting.Value
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        @setting.Value
+                                    }
                                 </td>
                                 <td>
                                     <a href="" class="edit-setting sp-tooltip m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
@@ -68,7 +80,7 @@
                     <span aria-hidden="true" class="la la-remove"></span>
                 </button>
             </div>
-            <partial name="~/Views/Manage/Partials/_EditSetting.cshtml" view-data="ViewData" model="new SettingDTO()"/>
+            <partial name="~/Views/Manage/Partials/_EditSetting.cshtml" view-data="ViewData" model="new SettingDTO()" />
         </div>
     </div>
 </div>

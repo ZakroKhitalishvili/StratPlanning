@@ -134,13 +134,37 @@ $(document).ready(function () {
 
 });
 
+/*
+ *  show/hide button
+ */
+
+$(".collapser-text").click(function (e) {
+    if ($(this).html() == 'Hide') {
+        $(this).html('Show');
+    }
+    else {
+        $(this).html('Hide');
+    }
+})
+
+$(".collapse").on('shown.bs.collapse', function (e) {
+
+    console.log(e);
+    //if ($(this).hasClass('collapsed')) {
+    //    $(this).html('Show');
+    //}
+    //else {
+    //    $(this).html('Hide');
+    //}
+})
+
 
 $(document).ready(function () {
 
-    initializeInputs(document); 
+    initializeInputs(document);
 
     /**
-     * quickcSearch API from metronic
+     * quickSearch API from metronic
      * 
      */
     //var quickSearch = $('#m_quicksearch');
