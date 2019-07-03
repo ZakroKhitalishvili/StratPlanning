@@ -27,10 +27,19 @@
             </div>
         </div>
         <div class="m-portlet__body">
-            <div class="row col-12">
-                <form>
+            <div class="row">
+                <form class="col-12">
                     <div class="form-group m-form__group">
-                        <input name="searchText" type="text" class="form-control" placeholder="Search..." value="@Context.Request.Query["searchText"]"/>
+                        <div class="row">
+                            <div class="col-9 col-md-5">
+                                <input name="searchText" type="text" class="form-control" value="@Context.Request.Query["searchText"]" />
+                            </div>
+                            <div class="col-3 col-md-2">
+                                <button type="submit" class="btn btn-sp m-btn m-btn--pill">
+                                    Search
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
