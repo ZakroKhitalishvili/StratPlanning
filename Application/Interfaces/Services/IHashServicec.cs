@@ -10,7 +10,7 @@ namespace Application.Interfaces.Services
     public interface IHashService
     {
         /// <summary>
-        /// Hashes passed string
+        /// Hashes a passed string
         /// </summary>
         /// <param name="source">Initial string that needs to be hashed</param>
         /// <returns></returns>

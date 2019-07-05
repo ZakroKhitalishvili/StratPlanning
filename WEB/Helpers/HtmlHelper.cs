@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Web.Helpers
 {
     /// <summary>
-    /// Helper class for getting Razor Html tags friendly objects
+    /// Helper class for getting data in Razor objects
     /// </summary>
     public class HtmlHelper
     {

@@ -5,7 +5,7 @@ using System.Text;
 namespace Application.Interfaces
 {
     /// <summary>
-    /// Interface for logging of different type info
+    /// Interface for logging of different typed info
     /// </summary>
     public interface ILoggerManager
     {

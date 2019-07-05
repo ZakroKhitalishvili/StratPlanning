@@ -10,6 +10,9 @@ using System.Text;
 
 namespace Application.Services
 {
+    /// <summary>
+    /// Implementation for the email interface that is based on SMTP
+    /// </summary>
     public class EmailService : IEmailService
     {
         private readonly string _userName;
@@ -24,6 +27,7 @@ namespace Application.Services
 
         public EmailService(ISettingRepository settingRepository)
         {
+            //Reads required configurations from settings
             _userName = settingRepository.Get(Settings.SmtpUsername);
             _password = settingRepository.Get(Settings.SmtpPassword);
             _smtpServer = settingRepository.Get(Settings.SmtpServer);

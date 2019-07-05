@@ -1,6 +1,11 @@
 ﻿@model Application.DTOs.PlanStepDTO
 @using Core.Constants
 
+
+@*
+    Step view
+*@
+
 @{
     ViewData["Title"] = "Worksheet";
 }
@@ -36,6 +41,7 @@
 
     <div class="m-portlet__body">
 
+        <!--An introduction-->
         <div class="m-accordion m-accordion--default" id="m_accordion_1" role="tablist">
             <!--begin::Item-->
             <div class="m-accordion__item">
@@ -71,19 +77,19 @@
             <!--end::Item-->
         </div>
 
-        @if (Model.Step == Steps.Predeparture && Model.IsAdmin)
+        @if (Model.Step == Steps.Predeparture && Model.IsAdmin)//Renders planning team table for Predeparture step if an user is admin
         {
             <div id="planning_team_portlet">
                 <partial name="~/Views/Worksheet/Partials/_PlanningTeam.cshtml" model="Model.PlanningTeam" />
             </div>
         }
 
-        @if (Model.IsAdmin)
+        @if (Model.IsAdmin)//Show or not a view about a involving users's statuses (submitted or not)
         {
             <partial name="~/Views/Worksheet/Partials/_InfoAboutUsersStatus.cshtml" model="Model" />
         }
 
-
+        <!--A form for step-->
         <div id="step_form_container">
             <partial name="~/Views/Worksheet/Partials/_StepForm.cshtml" model="Model" />
         </div>

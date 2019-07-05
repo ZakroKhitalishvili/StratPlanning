@@ -81,6 +81,7 @@
                 </button>
             </div>
             @{
+                //ViewData has values for according keys to specify what type a dictiionary list is of.
                 var newDictionary = new DictionaryDTO
                 {
                     HasPosition = (bool?)ViewData["HasPosition"] ?? false,

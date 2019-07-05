@@ -10,12 +10,11 @@
 
     var blockList = Enumerable.Empty<BlockDTO>();
 
-    if (ViewData["Step"] != null)
+    if (ViewData["Step"] != null)//If a step is specified, we fetch all blocks
     {
         blockList = planRepository.GetBlocks((string)ViewData["Step"]);
     }
 
-    
 }
 
 <div class="m-grid__item m-grid__item--fluid m-wrapper">
@@ -31,6 +30,7 @@
         </div>
         <div class="m-portlet__body">
             <div class="row col-12">
+                <!-- Step droplist-->
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="stepDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         @(ViewData["Step"] != null ? steps.ResourceManager.GetString((string)ViewData["Step"]).ToString() : "Choose a step")
@@ -44,6 +44,7 @@
                         }
                     </div>
                 </div>
+                <!-- Blocks droplist-->
                 <div class="dropdown m--margin-left-10">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="blockDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         @(Model?.Title ?? "Choose a block")

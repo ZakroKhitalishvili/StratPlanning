@@ -63,7 +63,7 @@
                                     @user.Position?.Title
                                 </td>
                                 <td>
-                                    @if (user.Role != Roles.Admin)
+                                    @if (user.Role != Roles.Admin)//Only non-admin users can be activated or deactivated
                                     {
                                         @if (user.IsActive)
                                         {
@@ -92,10 +92,9 @@
                                        title="Generate password"
                                        data-toggle="tooltip" data-id="@user.Id">
                                         <i class="la la-key"></i>
-
                                     </a>
 
-                                    @if (user.Role != Roles.Admin)
+                                    @if (user.Role != Roles.Admin)//Only non-admin users can be deleted
                                     {
                                         <a href="" class="delete-user m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
                                            title="Delete"
@@ -119,7 +118,9 @@
         </div>
     </div>
 </div>
-
+<!--
+A modal for add of an user
+-->
 <div class="modal fade" id="add_user_modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -136,6 +137,10 @@
     </div>
 </div>
 
+
+<!--
+A modal for edit of an user
+-->
 <div class="modal fade" id="edit_user_modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
