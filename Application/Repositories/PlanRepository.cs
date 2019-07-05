@@ -229,7 +229,7 @@ namespace Application.Repositories
 
         public bool RemoveUserFromPlan(int userId, int planId)
         {
-            var userToPlan = Context.UsersToPlans.Where(x => x.UserId == userId && x.PlanId == planId).Include(x=>x.UserStepResults).FirstOrDefault();
+            var userToPlan = Context.UsersToPlans.Where(x => x.UserId == userId && x.PlanId == planId).Include(x => x.UserStepResults).FirstOrDefault();
 
             if (userToPlan == null)
             {
@@ -698,7 +698,7 @@ namespace Application.Repositories
         /// <returns></returns>
         private UserStepResult GetSubmittedDefinitiveStepResult(int planId, string stepIndex)
         {
-            return GetUserStepResultByCondition(x => x.Step == stepIndex && x.PlanId == planId && x.IsDefinitive && x.IsSubmitted).SingleOrDefault();
+            return GetUserStepResultByCondition(x => x.Step == stepIndex && x.PlanId == planId && x.IsDefinitive && x.IsSubmitted).OrderBy(x=>x.CreatedAt).LastOrDefault();
         }
 
         /// <summary>
@@ -952,55 +952,60 @@ namespace Application.Repositories
         private bool SaveDefinitiveAnswers(PlanStepDTO planStep, bool isSubmitted, int userId)
         {
             // definitive answer
-            // this code determines which stepResult should be handled (submitted one or final - only admin viewed one)
+            // Gets a last saved version of answers
             var finalDefinitiveStepResult = GetFinalDefinitiveStepResult(planStep.PlanId, planStep.Step);
-            if (finalDefinitiveStepResult == null)
-            {
-                finalDefinitiveStepResult = CreateUserStepResult(planStep.PlanId, planStep.Step, true, userId);
-                if (isSubmitted)
-                {
-                    finalDefinitiveStepResult.IsSubmitted = true;
-                }
-            }
-            else
-            {
-                var submittedDefinitiveResult = GetSubmittedDefinitiveStepResult(planStep.PlanId, planStep.Step);
 
-                if (isSubmitted)
-                {
-                    if (!finalDefinitiveStepResult.IsSubmitted)
-                    {
-                        finalDefinitiveStepResult.IsSubmitted = true;
-
-                        if (submittedDefinitiveResult != null)
-                        {
-                            submittedDefinitiveResult.IsSubmitted = false;
-                        }
-                    }
-                }
-                else
-                {
-                    if (submittedDefinitiveResult != null)
-                    {
-                        if (submittedDefinitiveResult.Id == finalDefinitiveStepResult.Id)
-                        {
-                            var newFinalDefinitiveStepResult = CreateUserStepResult(planStep.PlanId, planStep.Step, true, userId);
-                            submittedDefinitiveResult.IsFinal = false;
-                            finalDefinitiveStepResult = newFinalDefinitiveStepResult;
-                        }
-                    }
-                }
-            }
+            finalDefinitiveStepResult.IsSubmitted = isSubmitted;
 
             SaveAnswers(planStep.AnswerGroups, finalDefinitiveStepResult, userId);
 
-            //delete old stepResults that are neither submitted nor final
-            var otherDefinitiveResult = Context.UserStepResults.Where(x => x.PlanId == planStep.PlanId && x.Step == planStep.Step && x.IsFinal.HasValue && !x.IsFinal.Value && !x.IsSubmitted && x.IsDefinitive).SingleOrDefault();
+            //if (finalDefinitiveStepResult == null)
+            //{
+            //    finalDefinitiveStepResult = CreateUserStepResult(planStep.PlanId, planStep.Step, true, userId);
+            //    if (isSubmitted)
+            //    {
+            //        finalDefinitiveStepResult.IsSubmitted = true;
+            //    }
+            //}
+            //else
+            //{
+            //    var submittedDefinitiveResult = GetSubmittedDefinitiveStepResult(planStep.PlanId, planStep.Step);
 
-            if (otherDefinitiveResult != null)
-            {
-                DeleteUserStepResult(otherDefinitiveResult.Id);
-            }
+            //    if (isSubmitted)
+            //    {
+            //        if (!finalDefinitiveStepResult.IsSubmitted)
+            //        {
+            //            finalDefinitiveStepResult.IsSubmitted = true;
+
+            //            if (submittedDefinitiveResult != null)
+            //            {
+            //                submittedDefinitiveResult.IsSubmitted = false;
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        if (submittedDefinitiveResult != null)
+            //        {
+            //            if (submittedDefinitiveResult.Id == finalDefinitiveStepResult.Id)
+            //            {
+            //                var newFinalDefinitiveStepResult = CreateUserStepResult(planStep.PlanId, planStep.Step, true, userId);
+            //                submittedDefinitiveResult.IsFinal = false;
+            //                finalDefinitiveStepResult = newFinalDefinitiveStepResult;
+            //            }
+            //        }
+            //    }
+            //}
+
+            SaveAnswers(planStep.AnswerGroups, finalDefinitiveStepResult, userId);
+
+            ////delete old stepResults that are neither submitted nor final
+            //var otherDefinitiveResult = Context.UserStepResults.Where(x => x.PlanId == planStep.PlanId && x.Step == planStep.Step && x.IsFinal.HasValue && !x.IsFinal.Value && !x.IsSubmitted && x.IsDefinitive).SingleOrDefault();
+
+            //if (otherDefinitiveResult != null)
+            //{
+            //    DeleteUserStepResult(otherDefinitiveResult.Id);
+            //}
 
             if (planStep.Step == Steps.Predeparture)
             {
@@ -1950,7 +1955,7 @@ namespace Application.Repositories
 
                     issueRes = new IssueOptionAnswerToResource
                     {
-                        Resource = res                   
+                        Resource = res
                     };
                 }
 
