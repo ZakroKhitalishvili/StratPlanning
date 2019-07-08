@@ -1013,6 +1013,11 @@ namespace Application.Repositories
         /// <param name="userId"></param>
         private void SaveAnswers(IList<AnswerGroupDTO> answerGroups, UserStepResult userStepResult, int userId)
         {
+            if (answerGroups == null)//A step is empty
+            {
+                return;
+            }
+
             foreach (var answerGroup in answerGroups)
             {
                 var question = Context.Questions.Where(x => x.Id == answerGroup.QuestionId).FirstOrDefault();
