@@ -698,7 +698,9 @@ namespace Application.Repositories
         /// <returns></returns>
         private UserStepResult GetSubmittedDefinitiveStepResult(int planId, string stepIndex)
         {
-            return GetUserStepResultByCondition(x => x.Step == stepIndex && x.PlanId == planId && x.IsDefinitive && x.IsSubmitted).OrderBy(x=>x.CreatedAt).LastOrDefault();
+            var finalResult = GetFinalDefinitiveStepResult(planId, stepIndex);
+
+            return finalResult.IsSubmitted ? finalResult : null;
         }
 
         /// <summary>
@@ -958,54 +960,6 @@ namespace Application.Repositories
             finalDefinitiveStepResult.IsSubmitted = isSubmitted;
 
             SaveAnswers(planStep.AnswerGroups, finalDefinitiveStepResult, userId);
-
-            //if (finalDefinitiveStepResult == null)
-            //{
-            //    finalDefinitiveStepResult = CreateUserStepResult(planStep.PlanId, planStep.Step, true, userId);
-            //    if (isSubmitted)
-            //    {
-            //        finalDefinitiveStepResult.IsSubmitted = true;
-            //    }
-            //}
-            //else
-            //{
-            //    var submittedDefinitiveResult = GetSubmittedDefinitiveStepResult(planStep.PlanId, planStep.Step);
-
-            //    if (isSubmitted)
-            //    {
-            //        if (!finalDefinitiveStepResult.IsSubmitted)
-            //        {
-            //            finalDefinitiveStepResult.IsSubmitted = true;
-
-            //            if (submittedDefinitiveResult != null)
-            //            {
-            //                submittedDefinitiveResult.IsSubmitted = false;
-            //            }
-            //        }
-            //    }
-            //    else
-            //    {
-            //        if (submittedDefinitiveResult != null)
-            //        {
-            //            if (submittedDefinitiveResult.Id == finalDefinitiveStepResult.Id)
-            //            {
-            //                var newFinalDefinitiveStepResult = CreateUserStepResult(planStep.PlanId, planStep.Step, true, userId);
-            //                submittedDefinitiveResult.IsFinal = false;
-            //                finalDefinitiveStepResult = newFinalDefinitiveStepResult;
-            //            }
-            //        }
-            //    }
-            //}
-
-            SaveAnswers(planStep.AnswerGroups, finalDefinitiveStepResult, userId);
-
-            ////delete old stepResults that are neither submitted nor final
-            //var otherDefinitiveResult = Context.UserStepResults.Where(x => x.PlanId == planStep.PlanId && x.Step == planStep.Step && x.IsFinal.HasValue && !x.IsFinal.Value && !x.IsSubmitted && x.IsDefinitive).SingleOrDefault();
-
-            //if (otherDefinitiveResult != null)
-            //{
-            //    DeleteUserStepResult(otherDefinitiveResult.Id);
-            //}
 
             if (planStep.Step == Steps.Predeparture)
             {
