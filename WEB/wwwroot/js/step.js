@@ -646,11 +646,12 @@ function editRecord(modalId, targetId) {
 }
 
 /**
- * @description 
- * @param {any} element
- * @param {any} targetId
+ * @description Copies desired answer from other answers to current user answers' list
+ * @param {any} element An answer that to be copied
+ * @param {any} targetId Target list
  */
 function selectAnswer(element, targetId) {
+    //fieldOptions is a map that contains templates for different add of different answers
     if (fieldOptions[targetId] === undefined) return;
 
     var options = fieldOptions[targetId];
@@ -666,6 +667,11 @@ function selectAnswer(element, targetId) {
     }
 }
 
+/**
+ * @description Opens a modal filled with values from from according answer record (from table row for an instance)
+ * @param {any} source  An element that this methods is attached to (Edit button)
+ * @param {any} modalId Modal's id
+ */
 function showRecordDetail(source, modalId) {
     var modal = $(modalId);
 
@@ -689,7 +695,11 @@ function showRecordDetail(source, modalId) {
     modal.modal('show');
 }
 
-
+/**
+ * @description Deletes an record from a table or a list
+ * @param {any} source  An element that this methods is attached to (Edit button)
+ * @param {any} targetSelector a selector of an element that has to be deleted
+ */
 function deleteRecord(source, targetSelector = false) {
 
     deleteConfirm().then(function (result) {
@@ -706,6 +716,11 @@ function deleteRecord(source, targetSelector = false) {
 
 }
 
+/**
+ * @description Controls a single checkbox to be checked in a checkbox group
+ * @param {any} el 
+ */
+
 function checkLikeRadio(el) {
     if ($(el).is(':checked')) {
         $('.radio-checkbox[data-group="' + $(el).attr('data-group') + '"]').each(function () {
@@ -716,7 +731,14 @@ function checkLikeRadio(el) {
     }
 }
 
+/**
+ * @description Generates GUID string
+ */
 function guid() {
+
+    /**
+     * @description Generates a random 4 character length string
+     */
     function s4() {
         return Math.floor((1 + Math.random()) * 0x10000)
             .toString(16)
