@@ -597,7 +597,7 @@ $(document).on('hidden.bs.modal', function (event) {
     modal.find('.field-validation-error').text("");
 });
 /**
- * @description handles table record editing and a new record adding processes in steps
+ * @description Adds a new record or replaces an older one with new values from a modal
  * @param {string} modalId - Editing modal Id
  * @param {string} targetId - A List where these records are located
  */
@@ -612,6 +612,7 @@ function editRecord(modalId, targetId) {
 
     var data = {};
 
+    //collects values from a modal
     modal.find('.m-input').each(function (i, el) {
         data[$(el).attr('data-name')] = $(el).val();
     });
@@ -622,6 +623,7 @@ function editRecord(modalId, targetId) {
 
     var index = modal.find('.m-index').val();
 
+    //checks if it has to replace an oldeer record or append new one
     if (index) {
         $('#' + index).replaceWith(options.template(data, index));
     }
