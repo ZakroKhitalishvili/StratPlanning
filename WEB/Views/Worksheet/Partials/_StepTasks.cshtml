@@ -127,6 +127,7 @@
                                                         @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
                                                         {
                                                             <button type="button"
+                                                                    title="@otherAnswer.Author"
                                                                     class="m-list-badge__item m-list-badge__item--default sp-tooltip"
                                                                     data-val='@Json.Serialize(new {
                                                                            email = stepTaskAnswer.UserToPlanId == null ? stepTaskAnswer.Email : "",
@@ -143,7 +144,7 @@
                                                         else
                                                         {
                                                             <span title="@otherAnswer.Author"
-                                                                  data - toggle="tooltip"
+                                                                  data-toggle="tooltip"
                                                                   class="m-list-badge__item m-list-badge__item--default sp-tooltip">
                                                                 @stepTaskAnswer.FirstName @stepTaskAnswer.LastName @(stepTaskAnswer.UserToPlanId == null ? $"({stepTaskAnswer.Email})" : "")
                                                             </span>

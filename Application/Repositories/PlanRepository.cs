@@ -700,7 +700,7 @@ namespace Application.Repositories
         {
             var finalResult = GetFinalDefinitiveStepResult(planId, stepIndex);
 
-            return finalResult.IsSubmitted ? finalResult : null;
+            return (finalResult?.IsSubmitted ?? false) ? finalResult : null;
         }
 
         /// <summary>
