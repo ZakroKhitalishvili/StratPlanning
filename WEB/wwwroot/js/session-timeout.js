@@ -44,7 +44,7 @@ $.sessionTimeout({
     onStart: function (options) {
         if (canPing()) {
             // Once A ping was permitted, An ajax call is processed in order to renew session on a server
-            // A call returns expirationSeconds for remaining seconds of a session
+            // A call returns expirationSeconds that represents remaining seconds of a session
             $.ajax(
                 {
                     url: '/Auth/Ping',
@@ -53,7 +53,7 @@ $.sessionTimeout({
                         if (xhr.status == 200) {
                             options.redirAfter = data.expirationSeconds * 1000;
 
-                            // after a successfull call session timeout controller configs are updated
+                            // after a successfull call session timeout controller's configs are updated
                             if (data.expirationSeconds > 60) {
                                 options.warnAfter = (data.expirationSeconds - 60) * 1000;
                             }
