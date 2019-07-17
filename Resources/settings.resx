@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FileExtensionsForStep" xml:space="preserve">
-    <value>Allow file formats for step upload</value>
+    <value>Allowed  file formats for step upload</value>
   </data>
   <data name="FileUploadLimit" xml:space="preserve">
     <value>File upload limit (MB)</value>
