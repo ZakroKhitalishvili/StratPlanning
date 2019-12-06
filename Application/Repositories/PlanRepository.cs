@@ -1693,7 +1693,7 @@ namespace Application.Repositories
                     answer.UpdatedAt = DateTime.Now;
                     answer.CreatedBy = userStepResult.UpdatedBy;
                     answer.UpdatedBy = userStepResult.UpdatedBy;
-                    answer.IsIssue = answer.Type == SWOTTypes.Threat || answer.Type == SWOTTypes.Weakness ? true : false;
+                    answer.IsIssue = true;
                     userStepResult.SWOTAnswers.Add(answer);
                 }
             }

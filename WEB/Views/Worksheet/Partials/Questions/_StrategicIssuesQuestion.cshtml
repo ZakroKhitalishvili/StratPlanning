@@ -204,7 +204,7 @@
                         <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.StrategicIssueAnswers[count].Solution"></span>
                     </td>
                     <td>
-                        <input type="number" asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.StrategicIssueAnswers[count].Ranking" class="form-control m-input" autocomplete="off" />
+                        <input type="number" asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.StrategicIssueAnswers[count].Ranking" class="form-control m-input" autocomplete="off" min="0"/>
                         <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.StrategicIssueAnswers[count].Ranking"></span>
                     </td>
                     <td class="d-none">

@@ -35,6 +35,25 @@
             @foreach (var stepTask in Model.StepTasks)
             {
                 var statusClass = "";
+                var stepGroupClass = "";
+
+                switch(stepTask.Step)
+                {
+                    case Steps.Predeparture:
+                    case Steps.Mission:
+                    case Steps.Vision:
+                    case Steps.Values: stepGroupClass = "first-step-group";break;
+                    case Steps.StakeholdersIdentify:
+                    case Steps.SWOT:
+                    case Steps.StakeholdersAnalysis:
+                    case Steps.StrategicIssues:
+                    case Steps.IssuesDistinguish: stepGroupClass = "second-step-group"; break;
+                    case Steps.ActionPlanKeyQuestions:
+                    case Steps.ActionPlanDetailed:
+                    case Steps.Review: stepGroupClass = "third-step-group"; break;
+                    case Steps.Evalution: stepGroupClass = "fourth-step-group"; break;
+                    default: break;
+                }
 
                 switch (stepTask.Status)
                 {
@@ -48,18 +67,18 @@
                     @if (stepTask.IsAvailable)
                     {
 
-                        <a asp-controller="WorkSheet" asp-action="GetStep" asp-route-stepIndex="@stepTask.Step" asp-route-planId="@Model.PlanId" class="m-menu__link m--padding-left-5">
+                        <a asp-controller="WorkSheet" asp-action="GetStep" asp-route-stepIndex="@stepTask.Step" asp-route-planId="@Model.PlanId" class="m-menu__link m--padding-left-5 @stepGroupClass">
                             <i class="m-menu__link-bullet fa @statusClass">
                                 <span></span>
                             </i>
-                            <span class="m-menu__link-text m--padding-left-10">
+                            <span class="m-menu__link-text m--padding-left-10 ">
                                 @steps.ResourceManager.GetString(stepTask.Step)
                             </span>
                         </a>
                     }
                     else
                     {
-                        <span class="m-menu__link m--padding-left-5 disabled">
+                        <span class="m-menu__link m--padding-left-5 disabled @stepGroupClass">
                             <i class="m-menu__link-bullet fa @statusClass">
                                 <span></span>
                             </i>

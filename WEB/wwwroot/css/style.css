@@ -862,7 +862,7 @@ table td .m-list-badge {
 }
 
 .disabled *, .disabled :hover *, .disabled :focus * {
-    color: lightgrey !important;
+    filter:opacity(0.5) !important;
 }
 
 button.m-list-badge__item {
@@ -887,3 +887,21 @@ button.m-list-badge__item {
 .has-danger .form-control:focus {
     border-color: #2b70b8;
 }
+
+
+.m-menu__link.first-step-group .m-menu__link-text {
+    color: #f59956!important;
+}
+
+.m-menu__link.second-step-group .m-menu__link-text {
+    color: #25387b!important;
+}
+
+.m-menu__link.third-step-group .m-menu__link-text {
+    color: #4285c2!important;
+}
+
+.m-menu__link.fourth-step-group .m-menu__link-text {
+    color: #e1262e!important;
+}
+
