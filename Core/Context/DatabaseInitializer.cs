@@ -926,28 +926,28 @@ namespace Core.Context
                 new Setting
                 {
                     Index=Settings.SmtpFrom,
-                    Value="systemtestersender@gmail.com",
+                    Value="",
                     UpdatedBy=null,
                     UpdatedAt=null
                 },
                  new Setting
                 {
                     Index=Settings.SmtpPassword,
-                    Value="7d61d0aecc2292edc8a9e364a22446ae",
+                    Value="",
                     UpdatedBy=null,
                     UpdatedAt=null
                 },
                 new Setting
                 {
                     Index=Settings.SmtpPort,
-                    Value="587",
+                    Value="",
                     UpdatedBy=null,
                     UpdatedAt=null
                 },
                 new Setting
                 {
                     Index=Settings.SmtpServer,
-                    Value="in-v3.mailjet.com",
+                    Value="",
                     UpdatedBy=null,
                     UpdatedAt=null
                 },
@@ -955,7 +955,7 @@ namespace Core.Context
                  new Setting
                 {
                     Index=Settings.SmtpUsername,
-                    Value="7c48d30fab75f474c110f4b946638267",
+                    Value="",
                     UpdatedBy=null,
                     UpdatedAt=null
                 }
