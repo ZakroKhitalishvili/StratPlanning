@@ -31,7 +31,7 @@ namespace Application.Services
             _userName = settingRepository.Get(Settings.SmtpUsername);
             _password = settingRepository.Get(Settings.SmtpPassword);
             _smtpServer = settingRepository.Get(Settings.SmtpServer);
-            _port = int.Parse(settingRepository.Get(Settings.SmtpPort));
+            _port = int.Parse(settingRepository.Get(Settings.SmtpPort)??"0");
             _from = settingRepository.Get(Settings.SmtpFrom);
         }
 
