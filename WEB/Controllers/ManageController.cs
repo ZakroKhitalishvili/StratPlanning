@@ -15,6 +15,7 @@ using Web.Extensions;
 using Web.Helpers;
 using X.PagedList;
 using AutoMapper;
+using Resources;
 
 namespace Web.Controllers
 {
@@ -63,7 +64,7 @@ namespace Web.Controllers
 
             var positions = _dictionaryRepository.GetPositions(false);
 
-            ViewData["Title"] = "Positions";
+            ViewData["Title"] = sharedResource.sharedLayoutPositions;
             ViewData["HasPosition"] = true;
 
             return View("DictionaryList", positions);
@@ -76,7 +77,7 @@ namespace Web.Controllers
 
             var values = _dictionaryRepository.GetValues(false);
 
-            ViewData["Title"] = "Values";
+            ViewData["Title"] = sharedResource.sharedLayoutValues;
             ViewData["HasValue"] = true;
 
             return View("DictionaryList", values);
@@ -89,7 +90,7 @@ namespace Web.Controllers
 
             var stakeholderCategories = _dictionaryRepository.GetStakeholderCategories(false);
 
-            ViewData["Title"] = "Stakeholder Categories";
+            ViewData["Title"] = sharedResource.sharedLayoutStakeholderCategories;
             ViewData["HasStakeholderCategory"] = true;
 
             return View("DictionaryList", stakeholderCategories);
@@ -102,7 +103,7 @@ namespace Web.Controllers
 
             var stakeholderCriteria = _dictionaryRepository.GetStakeholderCriteria(false);
 
-            ViewData["Title"] = "Stakeholder Criteria";
+            ViewData["Title"] = sharedResource.sharedLayoutStakeholderCriteria;
             ViewData["HasStakeholderCriteria"] = true;
 
             return View("DictionaryList", stakeholderCriteria);
@@ -242,7 +243,7 @@ namespace Web.Controllers
 
             if (files == null || files.Count != 1)
             {
-                ModelState.AddModelError(string.Empty, "A file is invalid");
+                ModelState.AddModelError(string.Empty, sharedResource.manageIntroductionInvalidFile);
 
                 _loggerManager.Warn($"UploadIntroduction : A file is invalid");
 
@@ -260,7 +261,7 @@ namespace Web.Controllers
 
             if (!ValidationHelper.ValidateFileSize(files[0], uploadlimit))
             {
-                ModelState.AddModelError(string.Empty, "A file exceed a limit");
+                ModelState.AddModelError(string.Empty, sharedResource.manageIntroductionFileLimitError);
 
                 _loggerManager.Warn($"UploadIntroduction : A file exceed a limit");
 
@@ -311,7 +312,7 @@ namespace Web.Controllers
 
             if (!result)
             {
-                ModelState.AddModelError(string.Empty, "Something went wrong due to a server issue");
+                ModelState.AddModelError(string.Empty, sharedResource.manageServerError);
                 _loggerManager.Warn($"UploadIntroduction was unable to update");
 
                 return View("Introduction", introduction);
@@ -383,7 +384,7 @@ namespace Web.Controllers
 
                 if (!result)
                 {
-                    ModelState.AddModelError(string.Empty, "Something went wrong due to a server issue");
+                    ModelState.AddModelError(string.Empty, sharedResource.manageServerError);
 
                     _loggerManager.Warn($"BlockEdit() was unable to update a block");
                 }
@@ -496,7 +497,7 @@ namespace Web.Controllers
                 {
                     _loggerManager.Warn($"AddNewUser - an user with the email exists");
 
-                    ModelState.AddModelError("Email", "An user with the email exists");
+                    ModelState.AddModelError("Email", sharedResource.manageAddUserUserWithEmailAlreadyExists);
 
                     return PartialView("~/Views/Manage/Partials/_AddNewUser.cshtml");
                 }
@@ -509,7 +510,7 @@ namespace Web.Controllers
                 {
                     _loggerManager.Warn($"AddNewUser - Adding a new user failed");
 
-                    ModelState.AddModelError(string.Empty, "Adding a new user failed");
+                    ModelState.AddModelError(string.Empty, sharedResource.manageAddUserFailed);
 
                     return PartialView("~/Views/Manage/Partials/_AddNewUser.cshtml");
                 }
@@ -519,7 +520,7 @@ namespace Web.Controllers
                 {
                     _loggerManager.Error($"AddNewUser - Email was not sent to the user");
 
-                    ModelState.AddModelError(string.Empty, "Email was not sent to the user");
+                    ModelState.AddModelError(string.Empty, sharedResource.manageAddUserEmailNotSent);
 
                     return PartialView("~/Views/Manage/Partials/_AddNewUser.cshtml");
                 }
@@ -577,7 +578,7 @@ namespace Web.Controllers
                 {
                     _loggerManager.Warn($"UserEdit - an user with the email exists");
 
-                    ModelState.AddModelError("Email", "An user with the email exists");
+                    ModelState.AddModelError("Email", sharedResource.manageEditUserUserWithEmailAlreadyExists);
 
                     return PartialView("~/Views/Manage/Partials/_UserEdit.cshtml");
                 }
@@ -588,7 +589,7 @@ namespace Web.Controllers
                 {
                     _loggerManager.Warn($"UserEdit - updating an user failed");
 
-                    ModelState.AddModelError(string.Empty, "Updating an user failed");
+                    ModelState.AddModelError(string.Empty, sharedResource.manageEditUserFailed);
 
                     return PartialView("~/Views/Manage/Partials/_UserEdit.cshtml");
                 }
@@ -635,7 +636,7 @@ namespace Web.Controllers
                 }
                 else
                 {
-                    _loggerManager.Warn($"GeneratePassword({id}) successfully updated password");
+                    _loggerManager.Warn($"GeneratePassword({id}) did not update password");
                 }
 
                 var emailResult = _emailService.SendPasswordToUser(password, user);

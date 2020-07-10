@@ -1,12 +1,12 @@
 ﻿
 @{
-    ViewData["Title"] = "Error";
+    ViewData["Title"] = sharedResource.sharedErrorTitle;
 }
 
 
 <div class="m-4">
-    <h1 class="text-danger">An error occured.</h1>
+    <h1 class="text-danger">@sharedResource.sharedErrorHeader</h1>
     <div>
-        <h2 class="text-danger">An error occurred while processing your request.</h2>
+        <h2 class="text-danger">@sharedResource.sharedErrorDescription</h2>
     </div>
 </div>

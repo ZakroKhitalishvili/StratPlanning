@@ -7,7 +7,7 @@
 
 @using Resources
 @{
-    ViewData["Title"] = "Users";
+    ViewData["Title"] = sharedResource.manageUserListTitle;
 }
 
 <div class="m-grid__item m-grid__item--fluid m-wrapper">
@@ -21,7 +21,7 @@
 
                     <a href="" class="btn btn-sp m-btn m-btn--pill m--pull-right m--margin-bottom-10"
                        data-toggle="modal" data-target="#add_user_modal">
-                        Add new
+                       @sharedResource.manageUserListNewButton
                     </a>
                 </div>
             </div>
@@ -32,16 +32,16 @@
                     <thead>
                         <tr>
                             <th>
-                                Name
+                                @sharedResource.manageUserListNameAttribute
                             </th>
                             <th>
-                                Email
+                                @sharedResource.manageUserListEmailAttribute
                             </th>
                             <th>
-                                Role
+                                @sharedResource.manageUserListRoleAttribute
                             </th>
                             <th>
-                                Position
+                                @sharedResource.manageUserListPositionAtrribute
                             </th>
                             <th></th>
                         </tr>
@@ -68,7 +68,7 @@
                                         @if (user.IsActive)
                                         {
                                             <a href="" class="disactivate-user m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
-                                               title="Deactivate"
+                                               title="@sharedResource.actionDeactivate"
                                                data-toggle="tooltip" data-id="@user.Id">
                                                 <i class="fa fa-lock"></i>
                                             </a>
@@ -76,7 +76,7 @@
                                         else
                                         {
                                             <a href="" class="activate-user m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
-                                               title="Activate"
+                                               title="@sharedResource.actionActivate"
                                                data-toggle="tooltip" data-id="@user.Id">
                                                 <i class="fa fa-unlock"></i>
                                             </a>
@@ -84,12 +84,12 @@
                                     }
 
                                     <a href="" class="edit-user sp-tooltip m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
-                                       title="Edit"
+                                       title="@sharedResource.actionEdit"
                                        data-toggle="tooltip" data-id="@user.Id">
                                         <i class="la la-edit"></i>
                                     </a>
                                     <a href="" class="generate-user-password sp-tooltip m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
-                                       title="Generate password"
+                                       title="@sharedResource.manageUserListGeneratePassword"
                                        data-toggle="tooltip" data-id="@user.Id">
                                         <i class="la la-key"></i>
                                     </a>
@@ -97,7 +97,7 @@
                                     @if (user.Role != Roles.Admin)//Only non-admin users can be deleted
                                     {
                                         <a href="" class="delete-user m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
-                                           title="Delete"
+                                           title="@sharedResource.actionDelete"
                                            data-toggle="tooltip" data-id="@user.Id">
                                             <i class="la la-trash"></i>
                                         </a>
@@ -126,7 +126,7 @@ A modal for add of an user
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="">
-                    Add an user
+                    @sharedResource.manageUserListNewModalTitle
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true" class="la la-remove"></span>
@@ -146,7 +146,7 @@ A modal for edit of an user
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="">
-                    Edit an user
+                    @sharedResource.manageUserListEditModalTitle
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true" class="la la-remove"></span>

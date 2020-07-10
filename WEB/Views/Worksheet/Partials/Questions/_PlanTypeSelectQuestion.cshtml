@@ -40,11 +40,11 @@
                                                     <span class="m-list-timeline__text">
                                                         @if (otherAnswer.BooleanAnswer)
                                                         {
-                                                            <span>Strategic plan with action plan(s)</span>
+                                                            <span>@sharedResource.worksheetQuestionStrategicPlanWithActionsTitle</span>
                                                         }
                                                         else
                                                         {
-                                                            <span>Strategic plan without action plan(s)</span>
+                                                            <span>@sharedResource.worksheetQuestionStrategicPlanWithoutActionsTitle</span>
                                                         }
                                                     </span>
                                                 </div>
@@ -54,16 +54,16 @@
                                                 <div class="m-list-timeline__item">
                                                     <span class="m-list-timeline__badge"></span>
                                                     <span class="m-list-timeline__text">
-                                                        <b>Definitive answer</b>
+                                                        <b>@sharedResource.worksheetQuestionsDefinitiveAnswer</b>
                                                     </span>
                                                     <span class="m-list-timeline__text">
                                                         @if (answerGroup.DefinitiveAnswer.BooleanAnswer)
                                                         {
-                                                            <span>Strategic plan with action plan(s)</span>
+                                                            <span>@sharedResource.worksheetQuestionStrategicPlanWithActionsTitle</span>
                                                         }
                                                         else
                                                         {
-                                                            <span>Strategic plan without action plan(s)</span>
+                                                            <span>@sharedResource.worksheetQuestionStrategicPlanWithoutActionsTitle</span>
                                                         }
                                                     </span>
                                                 </div>
@@ -94,13 +94,11 @@
                         <span class="m-option__label">
                             <span class="m-option__head">
                                 <span class="m-option__title">
-                                    Strategic plan with action plan(s)
+                                    @sharedResource.worksheetQuestionStrategicPlanWithActionsTitle
                                 </span>
                             </span>
                             <span class="m-option__body">
-                                This is a longer version where besides the strategic direction
-                                the party should adhere to several action plans are elaborated
-                                that aim at achieving specific objectives.
+                                @sharedResource.worksheetQuestionStrategicPlanWithActionsDescription
                             </span>
                         </span>
                     </label>
@@ -118,12 +116,11 @@
                         <span class="m-option__label">
                             <span class="m-option__head">
                                 <span class="m-option__title">
-                                    Strategic plan without action plan(s)
+                                    @sharedResource.worksheetQuestionStrategicPlanWithoutActionsTitle
                                 </span>
                             </span>
                             <span class="m-option__body">
-                                This is a shorter version that could serve as a general guide
-                                for strategic development
+                                @sharedResource.worksheetQuestionStrategicPlanWithoutActionsDescription
                             </span>
                         </span>
                     </label>

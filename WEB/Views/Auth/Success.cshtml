@@ -1,7 +1,7 @@
 ﻿@model Web.ViewModels.ResultVM
 
 @{
-    ViewData["Title"] = "Success";
+    ViewData["Title"] = sharedResource.authSuccessTitle;
     Layout = "_LoginLayout";
 }
 
@@ -15,12 +15,12 @@
             <br><br> <h2 class="text-success">@Model.Title</h2>
             <p>
                 @Model.Text
-            </p> 
+            </p>
             <a asp-controller="Auth" asp-action="Login"
-                     class="btn m-btn m-btn--pill m-btn--custom m-login__btn btn-sp--secondary btn-large-sp">
-                Back to Login
+               class="btn m-btn m-btn--pill m-btn--custom m-login__btn btn-sp--secondary btn-large-sp">
+                @sharedResource.authSuccessCancelButton
             </a>
-        </div> 
+        </div>
     </div>
 </div>
 

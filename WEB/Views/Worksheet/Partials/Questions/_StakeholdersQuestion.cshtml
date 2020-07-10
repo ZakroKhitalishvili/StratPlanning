@@ -1,6 +1,6 @@
 ﻿@model Application.DTOs.PlanStepDTO
 
-@inject  Web.Helpers.HtmlHelper htmlHelper
+@inject Web.Helpers.HtmlHelper htmlHelper
 @{
     var blockIndex = (int)ViewData["BlockIndex"];
     var questionIndex = (int)ViewData["QuestionIndex"];
@@ -36,7 +36,7 @@
         stakeholderAnswers.AddRange(answerGroup.DefinitiveAnswer.StakeholderAnswers.Select(x => new
         {
             id = x.Id,
-            author = "Definitive Answer",
+            author = sharedResource.worksheetQuestionsDefinitiveAnswer,
             firstName = x.FirstName,
             lastName = x.LastName,
             isDefinitive = true,
@@ -56,13 +56,13 @@
         <div class="m-demo__preview">
             <div class="form-group m-form__group">
                 <label>
-                    Combined result
+                    @sharedResource.worksheetQuestionsStakeholderCombinedResult
                 </label>
                 <div>
                     <div class="row">
                         <div class="col-xs-12 col-md-6">
                             <div class="bg-color-gray p-3">
-                                <h5>Internal</h5>
+                                <h5>@sharedResource.worksheetQuestionsStakeholderInternal</h5>
                             </div>
                             <div class="bg-color-lightgray p-3">
                                 <div class="m-list-badge m-list-badge--light-bg">
@@ -100,7 +100,7 @@
                         </div>
                         <div class="col-sx-12  col-md-6">
                             <div class="bg-color-gray p-3">
-                                <h5>External</h5>
+                                <h5>@sharedResource.worksheetQuestionsStakeholderExternal</h5>
                             </div>
                             <div class="bg-color-lightgray p-3">
                                 <div class="m-list-badge m-list-badge--light-bg">
@@ -151,13 +151,13 @@
 }
 <div class="form-group m-form__group">
     <label>
-        Your answer
+        @sharedResource.worksheetQuestionsYourAnswer
     </label>
     <div>
         <div class="row  ">
             <div class="col-xs-12 col-md-6">
                 <div class="bg-color-gray p-3">
-                    <h5>Internal</h5>
+                    <h5>@sharedResource.worksheetQuestionsStakeholderInternal</h5>
                     @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
                     {
                         <div id="s_@(question.Id)_form" class="input-group m--margin-bottom-10">
@@ -165,7 +165,7 @@
                             <input type="hidden" class="m-input" data-name="stakeholderId">
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-sp m-btn m-btn--icon" onclick="editRecord('#s_@(question.Id)_form', '#s_@(question.Id)_list');">
-                                    add
+                                    @sharedResource.worksheetQuestionsStakeholderAddButton
                                 </button>
                             </div>
                         </div>
@@ -201,12 +201,12 @@
             <div class="col-sx-12  col-md-6">
                 <div class="bg-color-gray p-3">
                     <div class="col-xs-12">
-                        <h5 class="d-inline-block my-2">External</h5>
+                        <h5 class="d-inline-block my-2">@sharedResource.worksheetQuestionsStakeholderExternal</h5>
                         @*<input type="text" class="form-control m-input  m-input--air form-control-danger">*@
                         @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
                         {
                             <button type="button" class="btn btn-sp m-btn m-btn--icon pull-right" data-toggle="modal" data-target="#s_@(question.Id)_externalsModal">
-                                add
+                                @sharedResource.worksheetQuestionsStakeholderAddButton
                             </button>
                         }
                     </div>
@@ -253,7 +253,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="">
-                            Add the external stakeholder
+                            @sharedResource.worksheetQuestionsStakeholderAddExternallModalTitle
                         </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true" class="la la-remove"></span>
@@ -263,28 +263,28 @@
                         <div class="modal-body">
                             <div class="form-group m-form__group">
                                 <label for="stakeholderAnswerDTO.FirstName">
-                                    First name
+                                    @sharedResource.worksheetQuestionsStakeholderExternalFirstame
                                 </label>
                                 @Html.TextBoxFor(x => stakeholderAnswerDTO.FirstName, new { @class = "form-control m-input", data_name = "firstName" })
                                 @Html.ValidationMessageFor(x => stakeholderAnswerDTO.FirstName, "", new { @class = "text-danger" })
                             </div>
                             <div class="form-group m-form__group">
                                 <label for="stakeholderAnswerDTO.LastName">
-                                    Last name
+                                    @sharedResource.worksheetQuestionsStakeholderExternalLastname
                                 </label>
                                 @Html.TextBoxFor(x => stakeholderAnswerDTO.LastName, new { @class = "form-control m-input", data_name = "lastName" })
                                 @Html.ValidationMessageFor(x => stakeholderAnswerDTO.LastName, "", new { @class = "text-danger" })
                             </div>
                             <div class="form-group m-form__group">
                                 <label for="stakeholderAnswerDTO.Email">
-                                    Email
+                                    @sharedResource.worksheetQuestionsStakeholderExternalEmail
                                 </label>
                                 @Html.TextBoxFor(x => stakeholderAnswerDTO.Email, new { @class = "form-control m-input", data_name = "email" })
                                 @Html.ValidationMessageFor(x => stakeholderAnswerDTO.Email, "", new { @class = "text-danger" })
                             </div>
                             <div class="form-group m-form__group">
                                 <label for="stakeholderAnswerDTO.CategoryId">
-                                    Category
+                                    @sharedResource.worksheetQuestionsStakeholderExternalCategory
                                 </label>
                                 @Html.DropDownListFor(x => stakeholderAnswerDTO.CategoryId, new SelectList(categories, "Value", "Text"), null, new { @class = "form-control m-select2 m-input", style = "width:100%", data_name = "category" })
                                 @Html.ValidationMessageFor(x => stakeholderAnswerDTO.CategoryId, "", new { @class = "text-danger" })
@@ -292,10 +292,10 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-sp m-btn submit-btn" onclick="editRecord('#s_@(question.Id)_externalsModal', '#s_@(question.Id)_externals');">
-                                Submit
+                                @sharedResource.worksheetQuestionsStakeholderExternalSubmit
                             </button>
                             <button type="button" class="btn btn-secondary m-btn" data-dismiss="modal">
-                                Close
+                                @sharedResource.worksheetQuestionsStakeholderExternalCancel
                             </button>
                         </div>
                     </div>

@@ -17,7 +17,7 @@
     <div class="m-content">
         <div class="row">
             <div class="col-lg-4">
-                <partial name="~/Views/User/Partials/_UserView.cshtml" model="new UserProfileDTO()"/>
+                <partial name="~/Views/User/Partials/_UserView.cshtml" model="new UserProfileDTO()" />
             </div>
             <div class="col-lg-8">
                 <div class="m-portlet m-portlet--full-height m-portlet--tabs  ">
@@ -30,6 +30,9 @@
                             </div>
                         </div>
                     </div>
+                    @*
+                        This is not implemented, just a worksheet steps
+                    *@
                     <div class="m-portlet__body">
                         <div class="col">
                             <div class="m-widget15__item">
@@ -37,13 +40,12 @@
                                     100%
                                 </span>
                                 <span class="m-widget15__text">
-                                    completed
+                                    @sharedResource.homeIndexCompleted
                                 </span>
                                 <div class="m--space-10"></div>
                                 <div class="progress m-progress--sm">
-                                    <div class="progress-bar bg-warning" role="progressbar"
-                                         style="width: 100%;" aria-valuenow="50" aria-valuemin="0"
-                                         aria-valuemax="100"></div>
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 100%;"
+                                         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             </div>
                         </div>
@@ -53,8 +55,8 @@
                                     <span class="fa fa-check m--font-success">
                                     </span>
                                     <span class="m--padding-left-30 m-list-timeline__text">
-                                        <h4>Step 1 - Pre-departure checklist </h4>
-                                        Creating a pre-departure checklist is to generate internal readiness and create a relevant working group which will lead the strategic planning process of the organization.
+                                        <h4>@sharedResource.homeIndexStep1Title </h4>
+                                        @sharedResource.homeIndexStep1Description
                                     </span>
                                     <span class="m-list-timeline__time">
                                     </span>
@@ -63,8 +65,8 @@
                                     <span class="fa fa-check m--font-success">
                                     </span>
                                     <span class="m--padding-left-30 m-list-timeline__text">
-                                        <h4>Step 2 - Mission statement </h4>
-                                        Mission statements reflect the most important goals of the organizations as well as their institutional identity and working approach.
+                                        <h4>@sharedResource.homeIndexStep2Title</h4>
+                                        @sharedResource.homeIndexStep2Description
                                     </span>
                                     <span class="m-list-timeline__time">
                                     </span>
@@ -73,19 +75,8 @@
                                     <span class="fa fa-check m--font-success">
                                     </span>
                                     <span class="m--padding-left-30 m-list-timeline__text">
-                                        <h4>Step 3 - Understanding the present state and sketching a vision</h4>
-                                        Understanding the present & sketching future vision phase guides organization in reflecting on the current environment that affects them and sketches an agreed vision towards which the organization shall advance in the future.
-                                    </span>
-                                    <span class="m-list-timeline__time">
-
-                                    </span>
-                                </div>
-                                <div class="m-list-timeline__item  m--margin-top-30">
-                                    <span class="fa fa-check m--font-success">
-                                    </span>
-                                    <span class="m--padding-left-30 m-list-timeline__text">
-                                        <h4>Step 4 - Value statement </h4>
-                                        Values statement reflect both what the organization stands for and also how it works and acts in its everyday work. Values are important for organizing a whole range of issues within the organizations, ranging from managing daily tasks and responsibilities of the employees to acting on the national political scene.
+                                        <h4>@sharedResource.homeIndexStep3Title</h4>
+                                        @sharedResource.homeIndexStep3Description
                                     </span>
                                     <span class="m-list-timeline__time">
 
@@ -95,8 +86,8 @@
                                     <span class="fa fa-check m--font-success">
                                     </span>
                                     <span class="m--padding-left-30 m-list-timeline__text">
-                                        <h4>Step 5 - Identifying the party’s stakeholders</h4>
-                                        Many organizations often fail to see who their real stakeholders are. Most organizations often aggregate their stakeholders in rather vague and broad categories (such as “Youth” for example, without clear understanding of a multitude of identities and groupings within this broad category) that hinders them from identifying actionable strategies with regards to various groups.
+                                        <h4>@sharedResource.homeIndexStep4Title </h4>
+                                        @sharedResource.homeIndexStep4Description
                                     </span>
                                     <span class="m-list-timeline__time">
 
@@ -106,9 +97,8 @@
                                     <span class="fa fa-check m--font-success">
                                     </span>
                                     <span class="m--padding-left-30 m-list-timeline__text">
-                                        <h4>Step 6 - Strengths, weaknesses, opportunities and threats (SWOT)</h4>
-                                        SWOT analysis is a key basic element in strategic planning. Here, organizations work on creating thematic and unit level, as well as overall institutional SWOT analysis; mapping and identification of key risks and threats helps an organization to avoid them or reduce damages. Better understanding of internal capacities/strengths and external opportunities helps them capitalize on these and become stronger organizations.
-
+                                        <h4>@sharedResource.homeIndexStep5Title</h4>
+                                        @sharedResource.homeIndexStep5Description
                                     </span>
                                     <span class="m-list-timeline__time">
 
@@ -118,8 +108,8 @@
                                     <span class="fa fa-check m--font-success">
                                     </span>
                                     <span class="m--padding-left-30 m-list-timeline__text">
-                                        <h4>Step 7 - Stakeholders analysis </h4>
-                                        A thorough stakeholder analysis employs stakeholder mapping and power vs. interest measurements to identify most important stakeholders and create organizational strategies on how best to interact and work with these groups.
+                                        <h4>@sharedResource.homeIndexStep6Title</h4>
+                                        @sharedResource.homeIndexStep6Description
                                     </span>
                                     <span class="m-list-timeline__time">
 
@@ -129,8 +119,8 @@
                                     <span class="fa fa-check m--font-success">
                                     </span>
                                     <span class="m--padding-left-30 m-list-timeline__text">
-                                        <h4>Step 8 - Master list of strategic issues </h4>
-                                        Not everything is strategic for the organizations. The essence of good planning also lies in better distinguishing between the issues of critical and long-term importance and the issues of the transient and low impact nature. The creation of a master list of strategic issues helps organizations to allocate their resources towards those goals and dangers where it matters most.
+                                        <h4>@sharedResource.homeIndexStep7Title </h4>
+                                        @sharedResource.homeIndexStep7Description
                                     </span>
                                     <span class="m-list-timeline__time">
 
@@ -140,8 +130,8 @@
                                     <span class="fa fa-check m--font-success">
                                     </span>
                                     <span class="m--padding-left-30 m-list-timeline__text">
-                                        <h4>Step 9 - Distinguishing between operational and strategic issues </h4>
-                                        Clear allocation of resources between strategic and operational ones helps organizations in creating more efficient workflows and making more informed resource allocation decisions.
+                                        <h4>@sharedResource.homeIndexStep8Title </h4>
+                                        @sharedResource.homeIndexStep8Description
                                     </span>
                                     <span class="m-list-timeline__time">
 
@@ -151,8 +141,8 @@
                                     <span class="fa fa-check m--font-success">
                                     </span>
                                     <span class="m--padding-left-30 m-list-timeline__text">
-                                        <h4>Step 10 - Key questions for drafting the action plan </h4>
-                                        This crucial step of strategic planning helps organizations to move from the analysis to action. Creating key objectives for every goal that is identified as strategic helps organizations better plan their next steps.
+                                        <h4>@sharedResource.homeIndexStep9Title </h4>
+                                        @sharedResource.homeIndexStep9Description
                                     </span>
                                     <span class="m-list-timeline__time">
 
@@ -162,8 +152,8 @@
                                     <span class="fa fa-check m--font-success">
                                     </span>
                                     <span class="m--padding-left-30 m-list-timeline__text">
-                                        <h4>Step 11 - Making the detailed action plan </h4>
-                                        Smaller teams are assigned with clear responsibilities. Realistic and verifiable workplans, which include monitoring and evaluation mechanisms are developed and agreed.
+                                        <h4>@sharedResource.homeIndexStep10Title </h4>
+                                        @sharedResource.homeIndexStep10Description
                                     </span>
                                     <span class="m-list-timeline__time">
 
@@ -173,8 +163,8 @@
                                     <span class="fa fa-check m--font-success">
                                     </span>
                                     <span class="m--padding-left-30 m-list-timeline__text">
-                                        <h4>Step 12 - Review of the strategies and implementation readiness</h4>
-                                        Every plan requires adaptation and modification when it encounters the reality. Some changes stem from the actions and issues not foreseen during the planning; some external events, beyond the control of any one organization create a demand for change.
+                                        <h4>@sharedResource.homeIndexStep11Title</h4>
+                                        @sharedResource.homeIndexStep11Description
                                     </span>
                                     <span class="m-list-timeline__time">
 
@@ -184,8 +174,19 @@
                                     <span class="fa fa-check m--font-success">
                                     </span>
                                     <span class="m--padding-left-30 m-list-timeline__text">
-                                        <h4>Step 13 - Evaluation </h4>
-                                        The strategic planning working group will evaluate the planning process and draw necessary lessons and experiences. Process evaluation helps to improve the effectiveness of the flow of strategic planning and to better organize it for the next time.
+                                        <h4>@sharedResource.homeIndexStep12Title</h4>
+                                        @sharedResource.homeIndexStep12Description
+                                    </span>
+                                    <span class="m-list-timeline__time">
+
+                                    </span>
+                                </div>
+                                <div class="m-list-timeline__item  m--margin-top-30">
+                                    <span class="fa fa-check m--font-success">
+                                    </span>
+                                    <span class="m--padding-left-30 m-list-timeline__text">
+                                        <h4>@sharedResource.homeIndexStep13Title</h4>
+                                        @sharedResource.homeIndexStep13Description
                                     </span>
                                     <span class="m-list-timeline__time">
 

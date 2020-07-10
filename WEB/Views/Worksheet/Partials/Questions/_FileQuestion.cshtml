@@ -58,7 +58,7 @@
                                                         <div class="m-list-timeline__item">
                                                             <span class="m-list-timeline__badge"></span>
                                                             <span class="m-list-timeline__text">
-                                                                <b>Definitive answer</b>
+                                                                <b>@sharedResource.worksheetQuestionsDefinitiveAnswer</b>
                                                             </span>
                                                             <span class="m-list-timeline__text">
                                                                 <div class="m-list-badge__items">
@@ -96,7 +96,7 @@
                      data-inputname="@Html.NameFor(x => x.AnswerGroups[questionIndexOffset + questionIndex].Answer.InputFileAnswer)">
                     <div class="m-dropzone__msg dz-message needsclick">
                         <h3 class="m-dropzone__msg-title">
-                            Drop files here or click to upload.
+                          @sharedResource.worksheetQuestionsFilesUpload
                         </h3>
                         <span class="m-dropzone__msg-desc">
                         </span>
@@ -123,7 +123,7 @@
                     else
                     {
                         <h3 class="m-dropzone__msg-title">
-                            No attached files.
+                            @sharedResource.worksheetQuestionsNoFIle
                         </h3>
                     }
                 </div>

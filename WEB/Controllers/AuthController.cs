@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Routing;
 using Web.Extensions;
 using System;
 using System.Threading.Tasks;
+using Resources;
 
 namespace Web.Controllers
 {
@@ -72,7 +73,7 @@ namespace Web.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Email or password is wrong");
+                    ModelState.AddModelError(string.Empty, sharedResource.authLoginEmailOrPasswordWrong);
                     _loggerManager.Warn("Authentication attempt failed");
                 }
             }
@@ -114,7 +115,7 @@ namespace Web.Controllers
                 {
                     _loggerManager.Warn("ForgotPassword - an user does not exist");
 
-                    ModelState.AddModelError(string.Empty, "An user with the email does not exist");
+                    ModelState.AddModelError(string.Empty, sharedResource.authForgetPasswordUserWithEmailAlreadyExists);
 
                     return View();
                 }
@@ -126,15 +127,15 @@ namespace Web.Controllers
                 {
                     _loggerManager.Warn("ForgotPassword - It was unable to send a recovery email to the address");
 
-                    ModelState.AddModelError(nameof(forgotPassword.Email), "It was unable to send a recovery email to the address");
+                    ModelState.AddModelError(nameof(forgotPassword.Email), sharedResource.authForgetPasswordUserRecoveryEmailNotSent);
 
                     return View();
                 }
 
                 var result = new ResultVM
                 {
-                    Title = "Successfully sent",
-                    Text = $"Recovery link was sent to {forgotPassword.Email}. It will be valid within next 24 hours"
+                    Title = sharedResource.authForgetPasswordUserRecoverySuccessTitle,
+                    Text = string.Format(sharedResource.authForgetPasswordUserRecoverySuccessTitle,forgotPassword.Email)
                 };
 
                 _loggerManager.Info("ForgotPassword - successfully sent password recovery info");
@@ -176,8 +177,8 @@ namespace Web.Controllers
                 {
                     var result = new ResultVM
                     {
-                        Title = "Successfully recovered",
-                        Text = "New password was set. You can log in now."
+                        Title = sharedResource.authRecoverPasswordSuccessTitle,
+                        Text = sharedResource.authRecoverPasswordSuccessDeccription
                     };
 
                     _loggerManager.Info("Password recovered successfully");
@@ -188,7 +189,7 @@ namespace Web.Controllers
                 {
                     _loggerManager.Error("Password recovery failed");
 
-                    ModelState.AddModelError(string.Empty, "An error occured during updating password");
+                    ModelState.AddModelError(string.Empty, sharedResource.authRecoverPasswordNewPasswordPlaceholder);
                 }
             }
             else

@@ -2,7 +2,7 @@
 
 @using Resources
 @{
-    ViewData["Title"] = "Settings";
+    ViewData["Title"] = sharedResource.manageSettingListTitle;
 }
 
 <div class="m-grid__item m-grid__item--fluid m-wrapper">
@@ -23,10 +23,10 @@
                     <thead>
                         <tr>
                             <th>
-                                Name
+                                @sharedResource.manageSettingListNameAttribute
                             </th>
                             <th>
-                                Value
+                                @sharedResource.manageSettingListValueAttribute
                             </th>
                             <th></th>
                         </tr>
@@ -42,7 +42,7 @@
                                     @if (setting.Index == Settings.SmtpPassword)
                                     {
                                         <a class="btn btn-sp collapser-text" data-toggle="collapse" href="#collapse_setting_@setting.Index" role="button" aria-expanded="false">
-                                            Show
+                                            @sharedResource.manageSettingListShow
                                         </a>
                                         <div class="collapse" id="collapse_setting_@setting.Index">
                                             @setting.Value
@@ -55,7 +55,7 @@
                                 </td>
                                 <td>
                                     <a href="" class="edit-setting sp-tooltip m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
-                                       title="Edit"
+                                       title="@sharedResource.actionEdit"
                                        data-toggle="tooltip" data-index="@setting.Index">
                                         <i class="la la-edit"></i>
                                     </a>
@@ -75,7 +75,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="">
-                    Edit a setting
+                  @sharedResource.manageSettingListNewModelTitle
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true" class="la la-remove"></span>

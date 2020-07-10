@@ -7,21 +7,21 @@
         </div>
         <div class="form-group m-form__group">
             <label asp-for="FirstName">
-                First name
+                @sharedResource.manageUserListFirstnameAttribute
             </label>
             <input asp-for="FirstName" class="form-control m-input" type="text">
             <span class="text-danger" asp-validation-for="FirstName"></span>
         </div>
         <div class="form-group m-form__group">
             <label asp-for="LastName">
-                Last name
+                @sharedResource.manageUserListLastnameAttribute
             </label>
             <input asp-for="LastName" class="form-control m-input" type="text">
             <span class="text-danger" asp-validation-for="LastName"></span>
         </div>
         <div class="form-group m-form__group">
             <label asp-for="Email">
-                Email
+                @sharedResource.manageUserListEmailAttribute
             </label>
             <input asp-for="Email" class="form-control m-input" type="text">
             <span class="text-danger" asp-validation-for="Email"></span>
@@ -36,7 +36,7 @@
                         <span>
                             <i class="fa fa-save"></i>
                             <span>
-                                Save changes
+                                @sharedResource.userUserProfileDetailsSubmit
                             </span>
                         </span>
                     </button>

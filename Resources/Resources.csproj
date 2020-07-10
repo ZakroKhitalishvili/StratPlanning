@@ -15,6 +15,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>settings.resx</DependentUpon>
     </Compile>
+    <Compile Update="sharedResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>sharedResource.resx</DependentUpon>
+    </Compile>
     <Compile Update="steps.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -30,6 +35,10 @@
     <EmbeddedResource Update="settings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>settings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="sharedResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>sharedResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="steps.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

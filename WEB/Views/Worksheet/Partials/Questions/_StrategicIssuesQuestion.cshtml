@@ -14,7 +14,7 @@
 
     var filledAnswer = Model.AnswerGroups[questionIndexOffset + questionIndex];
 
-    var issues = planRepository.GetIssues( Model.PlanId);
+    var issues = planRepository.GetIssues(Model.PlanId);
 
     var count = 0;
 }
@@ -28,29 +28,26 @@
                     <thead>
                         <tr>
                             <th title="Issue">
-                                Issue
+                                @sharedResource.worksheetQuestionsStrategicIssueName
                             </th>
                             <th title="IssueValue1">
-                                Why is this an issue or why would you consider it to be
-                                problematic /challenging?
+                                @sharedResource.worksheetQuestionsStrategicIssueAttribute1
                             </th>
                             <th title="IssueValue2">
-                                What will be the consequences of not addressing this
-                                issue
-                                or in other words, how damaging it is for the party not
-                                to
-                                address the issue?
+
+                                @sharedResource.worksheetQuestionsStrategicIssueAttribute2
                             </th>
                             <th title="IssueValue3">
-                                What should the goals of the party be in addressing this
-                                issue?
+
+                                @sharedResource.worksheetQuestionsStrategicIssueAttribute3
                             </th>
                             <th title="IssueValue4">
-                                What are the ways and means of achieving the goals
-                                surrounding the strategic issue?
+
+                                @sharedResource.worksheetQuestionsStrategicIssueAttribute4
                             </th>
                             <th title="Ranking">
-                                Ranking
+
+                                @sharedResource.worksheetQuestionsStrategicIssueRanking
                             </th>
                         </tr>
                     </thead>
@@ -58,7 +55,7 @@
                         @if (answerGroup.DefinitiveAnswer?.StrategicIssueAnswers != null)
                         {
                             <tr class="author">
-                                <td colspan="6">Definitive answer</td>
+                                <td colspan="6">@sharedResource.worksheetQuestionsDefinitiveAnswer</td>
                             </tr>
                             foreach (var issueAnswer in answerGroup.DefinitiveAnswer.StrategicIssueAnswers)
                             {
@@ -143,27 +140,26 @@
                     #
                 </th>
                 <th title="Issue">
-                    Issue
+                    @sharedResource.worksheetQuestionsStrategicIssueName
                 </th>
                 <th title="IssueValue1">
-                    Why is this an issue or why would you consider it to be
-                    problematic /challenging?
+                    @sharedResource.worksheetQuestionsStrategicIssueAttribute1
                 </th>
                 <th title="IssueValue2">
-                    What will be the consequences of not addressing this issue
-                    or in other words, how damaging it is for the party not to
-                    address the issue?
+
+                    @sharedResource.worksheetQuestionsStrategicIssueAttribute2
                 </th>
                 <th title="IssueValue3">
-                    What should the goals of the party be in addressing this
-                    issue?
+
+                    @sharedResource.worksheetQuestionsStrategicIssueAttribute3
                 </th>
                 <th title="IssueValue4">
-                    What are the ways and means of achieving the goals
-                    surrounding the strategic issue?
+
+                    @sharedResource.worksheetQuestionsStrategicIssueAttribute4
                 </th>
                 <th title="Ranking">
-                    Ranking
+
+                    @sharedResource.worksheetQuestionsStrategicIssueRanking
                 </th>
                 <th class="d-none">
                 </th>
@@ -204,7 +200,7 @@
                         <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.StrategicIssueAnswers[count].Solution"></span>
                     </td>
                     <td>
-                        <input type="number" asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.StrategicIssueAnswers[count].Ranking" class="form-control m-input" autocomplete="off" min="0"/>
+                        <input type="number" asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.StrategicIssueAnswers[count].Ranking" class="form-control m-input" autocomplete="off" min="0" />
                         <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.StrategicIssueAnswers[count].Ranking"></span>
                     </td>
                     <td class="d-none">

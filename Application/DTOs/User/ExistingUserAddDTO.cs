@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Resources;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -10,10 +11,10 @@ namespace Application.DTOs
         [Required]
         public int? Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(sharedResource), ErrorMessageResourceName = "validateRequired")]
         public int? PositionId { get; set; }
 
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(sharedResource), ErrorMessageResourceName = "validateRequired")]
         public int PlanId { get; set; }
     }
 }

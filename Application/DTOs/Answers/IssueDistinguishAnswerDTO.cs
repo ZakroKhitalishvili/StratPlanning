@@ -1,4 +1,5 @@
 ﻿using Core.Constants;
+using Resources;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,7 +17,8 @@ namespace Application.DTOs
 
         public int QuestionId { get; set; }
 
-        [MaxLength(EntityConfigs.TextAreaMaxLength)]
+        [MaxLength(EntityConfigs.TextAreaMaxLength, ErrorMessageResourceType = typeof(sharedResource), ErrorMessageResourceName = "validateMaxStringLength")]
+
         public string Issue { get; set; }
 
         public IList<int> SelectAnswers { get; set; }

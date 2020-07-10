@@ -49,16 +49,16 @@
                                         <thead>
                                             <tr>
                                                 <th title="Option">
-                                                    Option
+                                                    @sharedResource.worksheetQuestionIssueOptionName
                                                 </th>
                                                 <th title="ResponsiblePeople">
-                                                    Actor responsible
+                                                    @sharedResource.worksheetQuestionIssueOptionResponsibleActor
                                                 </th>
                                                 <th title="IssueValue2">
-                                                    Required resources
+                                                    @sharedResource.worksheetQuestionIssueOptionRequiredResources
                                                 </th>
                                                 <th title="IssueValue3">
-                                                    Best option
+                                                    @sharedResource.worksheetQuestionIssueOptionBestOption
                                                 </th>
                                             </tr>
                                         </thead>
@@ -68,7 +68,7 @@
                                                 var definitiveAnswers = filledAnswer.DefinitiveAnswer.IssueOptionAnswers.Where(x => x.IssueId == issues[i].Id).ToList();
 
                                                 <tr class="author">
-                                                    <td colspan="4">Definitive answer</td>
+                                                    <td colspan="4">@sharedResource.worksheetQuestionsDefinitiveAnswer</td>
                                                 </tr>
 
                                                 @foreach (var answer in definitiveAnswers.OrderByDescending(x => x.IsBestOption))
@@ -188,16 +188,16 @@
                                         <thead>
                                             <tr>
                                                 <th title="Option">
-                                                    Option
+                                                    @sharedResource.worksheetQuestionIssueOptionName
                                                 </th>
                                                 <th title="ResponsiblePeople">
-                                                    Actor responsible
+                                                    @sharedResource.worksheetQuestionIssueOptionResponsibleActor
                                                 </th>
                                                 <th title="IssueValue2">
-                                                    Required resources
+                                                    @sharedResource.worksheetQuestionIssueOptionRequiredResources
                                                 </th>
                                                 <th title="IssueValue3">
-                                                    Best option
+                                                    @sharedResource.worksheetQuestionIssueOptionBestOption
                                                 </th>
                                                 <th>
                                                 </th>
@@ -260,12 +260,13 @@
                                                                 <span class="table-row-actions">
                                                                     <button type="button"
                                                                             class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill"
-                                                                            title="Delete" onclick="deleteRecord(this, 'tr')">
+                                                                            title="@sharedResource.actionDelete" onclick="deleteRecord(this, 'tr')">
                                                                         <i class="la la-trash"></i>
                                                                     </button>
 
                                                                     <button type="button"
                                                                             class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill"
+                                                                            title="@sharedResource.actionEdit"
                                                                             onclick="showRecordDetail(this, '#m_@(question.Id)_@(issues[i].Id)_issueOptionModal')">
                                                                         <i class="la la-edit"></i>
                                                                     </button>
@@ -300,7 +301,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="">
-                                    Add an option
+                                   @sharedResource.worksheetQuestionsIssueOptionNewModalTitle
                                 </h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true" class="la la-remove"></span>
@@ -313,21 +314,21 @@
                                     <input type="hidden" class="m-input" data-name="isBestOption" />
                                     <div class="form-group m-form__group">
                                         <label for="issueOptionAnswerDTOs[@i].Option">
-                                            Option
+                                            @sharedResource.worksheetQuestionIssueOptionName
                                         </label>
                                         @Html.TextBoxFor(x => issueOptionAnswerDTOs[i].Option, new { @class = "form-control m-input", data_name = "option" })
                                         @Html.ValidationMessageFor(x => issueOptionAnswerDTOs[i].Option, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group m-form__group">
                                         <label for="issueOptionAnswerDTOs[@i].Actors">
-                                            Actor Responsible
+                                            @sharedResource.worksheetQuestionIssueOptionResponsibleActor
                                         </label>
                                         @Html.TextAreaFor(x => issueOptionAnswerDTOs[i].Actors, new { @class = "form-control m-input", rows = "3", data_name = "actors" })
                                         @Html.ValidationMessageFor(x => issueOptionAnswerDTOs[i].Actors, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group m-form__group">
                                         <label for="issueOptionAnswerDTOs[@i].Resources">
-                                            Required resources
+                                            @sharedResource.worksheetQuestionIssueOptionRequiredResources
                                         </label>
 
                                         @Html.DropDownListFor(x => issueOptionAnswerDTOs[i].Resources, new SelectList(resources, "Title", "Title"), null, new { @class = "form-control m-select2 tag-select m-input", style = "width:100%", data_name = "resources", multiple = true })
@@ -336,10 +337,10 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-sp m-btn submit-btn" onclick="editRecord('#m_@(question.Id)_@(issues[i].Id)_issueOptionModal','#o_@(question.Id)_@(issues[i].Id)_list');">
-                                        Submit
+                                        @sharedResource.worksheetQuestionsIssueOptionAddSubmit
                                     </button>
                                     <button type="button" class="btn btn-secondary m-btn" data-dismiss="modal">
-                                        Close
+                                        @sharedResource.worksheetQuestionsIssueOptionAddCancel
                                     </button>
                                 </div>
                             </div>

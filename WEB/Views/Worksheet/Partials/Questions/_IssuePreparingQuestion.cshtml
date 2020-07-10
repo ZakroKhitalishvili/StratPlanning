@@ -26,14 +26,13 @@
                     <thead>
                         <tr>
                             <th>
-                                Issue
-                            </th>
-
-                            <th>
-                                When will it be done
+                                @sharedResource.worksheetQuestionsIssuePreparingName
                             </th>
                             <th>
-                                How will it be done
+                                @sharedResource.worksheetQuestionsIssuePreparingWhen
+                            </th>
+                            <th>
+                                @sharedResource.worksheetQuestionsIssuePreparingHow
                             </th>
                         </tr>
                     </thead>
@@ -41,7 +40,7 @@
                         @if (filledAnswer.DefinitiveAnswer != null)
                         {
                             <tr class="author">
-                                <td colspan="3">Definitive Answer</td>
+                                <td colspan="3">@sharedResource.worksheetQuestionsDefinitiveAnswer</td>
                             </tr>
                             @foreach (var answer in filledAnswer.DefinitiveAnswer.IssuePreparingAnswers)
                             {
@@ -87,29 +86,29 @@
                     <thead>
                         <tr>
                             <th>
-                                Issue
+                                @sharedResource.worksheetQuestionsIssuePreparingName
                             </th>
                             <th>
-                                What will be done
+                                @sharedResource.worksheetQuestionsIssuePreparingWhat
                             </th>
                             <th>
-                                Who will do to
+                                @sharedResource.worksheetQuestionsIssuePreparingWho
                             </th>
 
                             <th>
-                                When will it be done
+                                @sharedResource.worksheetQuestionsIssuePreparingWhen
                             </th>
                             <th>
-                                How will it be done
+                                @sharedResource.worksheetQuestionsIssuePreparingHow
                             </th>
                             <th>
-                                Resources
+                                @sharedResource.worksheetQuestionsIssuePreparingResources
                             </th>
                             <th>
-                                Completed
+                                @sharedResource.worksheetQuestionsIssuePreparingCompleted
                             </th>
                             <th>
-                                Status
+                                @sharedResource.worksheetQuestionsIssuePreparingStatus
                             </th>
                         </tr>
                     </thead>

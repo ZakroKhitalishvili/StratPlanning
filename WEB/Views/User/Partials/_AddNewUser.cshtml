@@ -11,31 +11,31 @@
         </div>
         <div class="form-group m-form__group">
             <label asp-for="NewUser.FirstName">
-                Firstname
+                @sharedResource.manageUserListFirstnameAttribute
             </label>
             <input asp-for="NewUser.FirstName" class="form-control m-input" />
             <span class="text-danger" asp-validation-for="NewUser.FirstName"></span>
         </div>
         <div class="form-group m-form__group">
             <label asp-for="NewUser.LastName">
-                Lastname
+                @sharedResource.manageUserListLastnameAttribute
             </label>
             <input asp-for="NewUser.LastName" class="form-control m-input" />
             <span class="text-danger" asp-validation-for="NewUser.LastName"></span>
         </div>
         <div class="form-group m-form__group ">
             <label asp-for="NewUser.Email">
-                Email
+                @sharedResource.manageUserListEmailAttribute
             </label>
             <input asp-for="NewUser.Email" class="form-control m-input" />
             <span class="text-danger" asp-validation-for="NewUser.Email"></span>
         </div>
         <div class="form-group m-form__group">
             <label asp-for="NewUser.PositionId">
-                Position
+                @sharedResource.manageUserListPositionAtrribute
             </label>
             <select asp-items="htmlHelper.GetPositionsSelectList()" asp-for="NewUser.PositionId" class="form-control m-select2" style="width:100%">
-                <option value="">-- Specify --</option>
+                <option value="">@sharedResource.manageUserListPosiitonPlaceholder</option>
             </select>
             <span class="text-danger" asp-validation-for="NewUser.PositionId"></span>
         </div>
@@ -43,7 +43,7 @@
     <div class="m-portlet__foot m-portlet__foot--fit">
         <div class="m-form__actions pull-right">
             <button type="submit" class="btn btn-sp m-btn m-btn--icon">
-                Add
+                @sharedResource.manageUserListNewButton
             </button>
         </div>
     </div>

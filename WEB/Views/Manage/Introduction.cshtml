@@ -3,7 +3,7 @@
 @inject Application.Interfaces.Repositories.IPlanRepository planRepository
 
 @{
-    ViewData["Title"] = "Introductions";
+    ViewData["Title"] = sharedResource.manageIntroductionTitle;
     var stepList = planRepository.GetStepList();
 }
 
@@ -23,7 +23,7 @@
                 <!--Step dropdown-->
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Choose a step
+                        @sharedResource.manageIntroductionChooseStep
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         @foreach (var step in stepList)
@@ -57,7 +57,7 @@
 
                                 }
                                 <div class="form-group m-form__group">
-                                    <label for="introductionVideo">Video upload</label>
+                                    <label for="introductionVideo">@sharedResource.manageIntroductionVideoUpload</label>
                                     <input type="file" class="form-control" name="introductionVideo" accept="video/*">
                                 </div>
                                 <div class="form-group m-form__group">
@@ -65,7 +65,7 @@
                                 </div>
                                 <div class="form-group m-form__group">
                                     <button type="submit" class="btn btn-sp m-btn m-btn--icon">
-                                        Upload
+                                        @sharedResource.manageIntroductionSubmit
                                     </button>
                                 </div>
                             </form>

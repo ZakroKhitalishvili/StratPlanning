@@ -11,7 +11,7 @@
 
                     <a href="" class="btn btn-sp m-btn m-btn--pill m--pull-right m--margin-bottom-10"
                        data-toggle="modal" data-target="#add_dictionary_modal">
-                        Add new
+                        @sharedResource.manageDictionaryListNewButton
                     </a>
 
                 </div>
@@ -23,7 +23,7 @@
                     <thead>
                         <tr>
                             <th>
-                                Title
+                                @sharedResource.manageDictionaryListTitleAttribute
                             </th>
                             <th>
 
@@ -41,7 +41,7 @@
                                     @if (dictionary.IsActive)
                                     {
                                         <a href="" class="disactivate-dictionary m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
-                                           title="Deactivate"
+                                           title="@sharedResource.actionDeactivate"
                                            data-toggle="tooltip" data-id="@dictionary.Id">
                                             <i class="fa fa-lock"></i>
                                         </a>
@@ -49,13 +49,13 @@
                                     else
                                     {
                                         <a href="" class="activate-dictionary m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
-                                           title="Activate"
+                                           title="@sharedResource.actionDeactivate"
                                            data-toggle="tooltip" data-id="@dictionary.Id">
                                             <i class="fa fa-unlock"></i>
                                         </a>
                                     }
                                     <a href="" class="delete-dictionary m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
-                                       title="Delete"
+                                       title="@sharedResource.actionDelete"
                                        data-toggle="tooltip" data-id="@dictionary.Id">
                                         <i class="la la-trash"></i>
                                     </a>
@@ -74,7 +74,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="">
-                    Add new
+                    @sharedResource.manageDictionaryListNewModalTitle
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true" class="la la-remove"></span>

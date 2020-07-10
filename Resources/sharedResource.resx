@@ -1,0 +1,1074 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="actionActivate" xml:space="preserve">
+    <value>Activate</value>
+  </data>
+  <data name="actionDeactivate" xml:space="preserve">
+    <value>Deactivate</value>
+  </data>
+  <data name="actionDelete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="actionEdit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="actionView" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="authForgetPassword" xml:space="preserve">
+    <value>Forgotten Password ?</value>
+  </data>
+  <data name="authForgetPasswordCancelButton" xml:space="preserve">
+    <value>Back to Login</value>
+  </data>
+  <data name="authForgetPasswordDescription" xml:space="preserve">
+    <value>Enter your email to reset your password:</value>
+  </data>
+  <data name="authForgetPasswordEmailPlaceholder" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="authForgetPasswordSubmitButton" xml:space="preserve">
+    <value>Request</value>
+  </data>
+  <data name="authForgetPasswordTitle" xml:space="preserve">
+    <value>Forgot Password?</value>
+  </data>
+  <data name="authForgetPasswordUserRecoveryEmailNotSent" xml:space="preserve">
+    <value>It was unable to send a recovery email to the address</value>
+  </data>
+  <data name="authForgetPasswordUserRecoverySuccessDescription" xml:space="preserve">
+    <value>Recovery link was sent to {0}. It will be valid within next 24 hours</value>
+  </data>
+  <data name="authForgetPasswordUserRecoverySuccessTitle" xml:space="preserve">
+    <value>Successfully sent</value>
+  </data>
+  <data name="authForgetPasswordUserWithEmailAlreadyExists" xml:space="preserve">
+    <value>"An user with the email does not exist</value>
+  </data>
+  <data name="authLoginEmailOrPasswordWrong" xml:space="preserve">
+    <value>Email or password is wrong</value>
+  </data>
+  <data name="authLoginEmailPlaceholder" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="authLoginForgetPassword" xml:space="preserve">
+    <value>Forgot Password ?</value>
+  </data>
+  <data name="authLoginPasswordPlaceholder" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="authLoginRememberMe" xml:space="preserve">
+    <value>Remember me</value>
+  </data>
+  <data name="authLoginSubmit" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="authLoginTitle" xml:space="preserve">
+    <value>Sign In</value>
+  </data>
+  <data name="authRecoverPasswordConfirmNewPasswordPlaceholder" xml:space="preserve">
+    <value>Confirm new password</value>
+  </data>
+  <data name="authRecoverPasswordError" xml:space="preserve">
+    <value>An error occured during updating password</value>
+  </data>
+  <data name="authRecoverPasswordNewPasswordPlaceholder" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="authRecoverPasswordSubmitButton" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="authRecoverPasswordSuccessDeccription" xml:space="preserve">
+    <value>New password was set. You can log in now.</value>
+  </data>
+  <data name="authRecoverPasswordSuccessTitle" xml:space="preserve">
+    <value>Successfully recovered</value>
+  </data>
+  <data name="authRecoverPasswordTitle" xml:space="preserve">
+    <value>Recover password</value>
+  </data>
+  <data name="authSuccessCancelButton" xml:space="preserve">
+    <value>Back to Login</value>
+  </data>
+  <data name="authSuccessTitle" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="frontActivateImpossible" xml:space="preserve">
+    <value>Activating the record is not possible</value>
+  </data>
+  <data name="frontActivateSuccess" xml:space="preserve">
+    <value>Successfully activated</value>
+  </data>
+  <data name="frontAddSuccess" xml:space="preserve">
+    <value>Successfully added</value>
+  </data>
+  <data name="frontCompleteImpossible" xml:space="preserve">
+    <value>The step can not be completed</value>
+  </data>
+  <data name="frontCompleteSucccess" xml:space="preserve">
+    <value>Successfully completed</value>
+  </data>
+  <data name="frontCreateSuccess" xml:space="preserve">
+    <value>Successfully created</value>
+  </data>
+  <data name="frontDeactivateImpossible" xml:space="preserve">
+    <value>Deactivating the record is not possible</value>
+  </data>
+  <data name="frontDeactivateSuccess" xml:space="preserve">
+    <value>Successfully Deactivated</value>
+  </data>
+  <data name="frontDeleteConfirm" xml:space="preserve">
+    <value>Are you sure?</value>
+  </data>
+  <data name="frontDeleteImpossible" xml:space="preserve">
+    <value>Deleting the record is not possible</value>
+  </data>
+  <data name="frontDeleteSuccess" xml:space="preserve">
+    <value>Successfully deleted</value>
+  </data>
+  <data name="frontInvalidInputData" xml:space="preserve">
+    <value>Input data are not valid</value>
+  </data>
+  <data name="frontNo" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="frontPasswordGenerateFailed" xml:space="preserve">
+    <value>Password was not generated</value>
+  </data>
+  <data name="frontPasswordGenerateSuccess" xml:space="preserve">
+    <value>Successfully generated new password</value>
+  </data>
+  <data name="frontPingError" xml:space="preserve">
+    <value>An error occured during pinging</value>
+  </data>
+  <data name="frontPingFailed" xml:space="preserve">
+    <value>Pinging failed</value>
+  </data>
+  <data name="frontPlanDeleteError" xml:space="preserve">
+    <value>Deleting the plan is not possible due to existing answers</value>
+  </data>
+  <data name="frontPlanningTeamUpdateError" xml:space="preserve">
+    <value>An Error occured during updating the planning plan's view</value>
+  </data>
+  <data name="frontPlanningTeamUpdateFailed" xml:space="preserve">
+    <value>Planning team update failed</value>
+  </data>
+  <data name="frontRemoveFile" xml:space="preserve">
+    <value>Remove file</value>
+  </data>
+  <data name="frontRemovingUsersImpossibleDueToAnswers" xml:space="preserve">
+    <value>Removing the user is not possible due to existing answers</value>
+  </data>
+  <data name="frontRequestError" xml:space="preserve">
+    <value>An Error occured on the request</value>
+  </data>
+  <data name="frontSaveSuccess" xml:space="preserve">
+    <value>Successfully saved</value>
+  </data>
+  <data name="frontServerError" xml:space="preserve">
+    <value>An error occured on the server</value>
+  </data>
+  <data name="frontSessionExpirationMinute" xml:space="preserve">
+    <value>Your session will be expired in a minute.</value>
+  </data>
+  <data name="frontStepCompleteConfirm" xml:space="preserve">
+    <value>You won't be able to change it after</value>
+  </data>
+  <data name="frontStepNotRefreshed" xml:space="preserve">
+    <value>Step was not refreshed</value>
+  </data>
+  <data name="frontSubmitConfirm" xml:space="preserve">
+    <value>Are you sure?</value>
+  </data>
+  <data name="frontUpdateSuccess" xml:space="preserve">
+    <value>Successfully updated</value>
+  </data>
+  <data name="frontUserPasswordGenerateConfirm" xml:space="preserve">
+    <value>This will generate a new password for the user</value>
+  </data>
+  <data name="frontYes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="homeIndexCompleted" xml:space="preserve">
+    <value>completed</value>
+  </data>
+  <data name="homeIndexStep10Description" xml:space="preserve">
+    <value>This crucial step of strategic planning helps organizations to move from the analysis to action. Creating key objectives for every goal that is identified as strategic helps organizations better plan their next steps.</value>
+  </data>
+  <data name="homeIndexStep10Title" xml:space="preserve">
+    <value>Step 10 - Key questions for drafting the action plan</value>
+  </data>
+  <data name="homeIndexStep11Description" xml:space="preserve">
+    <value>Smaller teams are assigned with clear responsibilities. Realistic and verifiable workplans, which include monitoring and evaluation mechanisms are developed and agreed.</value>
+  </data>
+  <data name="homeIndexStep11Title" xml:space="preserve">
+    <value>Step 11 - Making the detailed action plan</value>
+  </data>
+  <data name="homeIndexStep12Description" xml:space="preserve">
+    <value>Every plan requires adaptation and modification when it encounters the reality. Some changes stem from the actions and issues not foreseen during the planning; some external events, beyond the control of any one organization create a demand for change.</value>
+  </data>
+  <data name="homeIndexStep12Title" xml:space="preserve">
+    <value>Step 12 - Review of the strategies and implementation readiness</value>
+  </data>
+  <data name="homeIndexStep13Description" xml:space="preserve">
+    <value>The strategic planning working group will evaluate the planning process and draw necessary lessons and experiences. Process evaluation helps to improve the effectiveness of the flow of strategic planning and to better organize it for the next time.</value>
+  </data>
+  <data name="homeIndexStep13Title" xml:space="preserve">
+    <value>Step 13 - Evaluation</value>
+  </data>
+  <data name="homeIndexStep1Description" xml:space="preserve">
+    <value>Creating a pre-departure checklist is to generate internal readiness and create a relevant working group which will lead the strategic planning process of the organization.</value>
+  </data>
+  <data name="homeIndexStep1Title" xml:space="preserve">
+    <value>Step 1 - Pre-departure checklist</value>
+  </data>
+  <data name="homeIndexStep2Description" xml:space="preserve">
+    <value>Mission statements reflect the most important goals of the organizations as well as their institutional identity and working approach.</value>
+  </data>
+  <data name="homeIndexStep2Title" xml:space="preserve">
+    <value>Step 2 - Mission statement</value>
+  </data>
+  <data name="homeIndexStep3Description" xml:space="preserve">
+    <value>Understanding the present &amp; sketching future vision phase guides organization in reflecting on the current environment that affects them and sketches an agreed vision towards which the organization shall advance in the future.</value>
+  </data>
+  <data name="homeIndexStep3Title" xml:space="preserve">
+    <value>Step 3 - Understanding the present state and sketching a vision</value>
+  </data>
+  <data name="homeIndexStep4Description" xml:space="preserve">
+    <value>Values statement reflect both what the organization stands for and also how it works and acts in its everyday work. Values are important for organizing a whole range of issues within the organizations, ranging from managing daily tasks and responsibilities of the employees to acting on the national political scene.</value>
+  </data>
+  <data name="homeIndexStep4Title" xml:space="preserve">
+    <value>Step 4 - Value statement</value>
+  </data>
+  <data name="homeIndexStep5Description" xml:space="preserve">
+    <value>Many organizations often fail to see who their real stakeholders are. Most organizations often aggregate their stakeholders in rather vague and broad categories (such as “Youth” for example, without clear understanding of a multitude of identities and groupings within this broad category) that hinders them from identifying actionable strategies with regards to various groups.</value>
+  </data>
+  <data name="homeIndexStep5Title" xml:space="preserve">
+    <value>Step 5 - Identifying the party’s stakeholders</value>
+  </data>
+  <data name="homeIndexStep6Description" xml:space="preserve">
+    <value>SWOT analysis is a key basic element in strategic planning. Here, organizations work on creating thematic and unit level, as well as overall institutional SWOT analysis; mapping and identification of key risks and threats helps an organization to avoid them or reduce damages. Better understanding of internal capacities/strengths and external opportunities helps them capitalize on these and become stronger organizations.</value>
+  </data>
+  <data name="homeIndexStep6Title" xml:space="preserve">
+    <value>Step 6 - Strengths, weaknesses, opportunities and threats (SWOT)</value>
+  </data>
+  <data name="homeIndexStep7Description" xml:space="preserve">
+    <value>A thorough stakeholder analysis employs stakeholder mapping and power vs. interest measurements to identify most important stakeholders and create organizational strategies on how best to interact and work with these groups.</value>
+  </data>
+  <data name="homeIndexStep7Title" xml:space="preserve">
+    <value>Step 7 - Stakeholders analysis</value>
+  </data>
+  <data name="homeIndexStep8Description" xml:space="preserve">
+    <value>Not everything is strategic for the organizations. The essence of good planning also lies in better distinguishing between the issues of critical and long-term importance and the issues of the transient and low impact nature. The creation of a master list of strategic issues helps organizations to allocate their resources towards those goals and dangers where it matters most.</value>
+  </data>
+  <data name="homeIndexStep8Title" xml:space="preserve">
+    <value>Step 8 - Master list of strategic issues</value>
+  </data>
+  <data name="homeIndexStep9Description" xml:space="preserve">
+    <value>Clear allocation of resources between strategic and operational ones helps organizations in creating more efficient workflows and making more informed resource allocation decisions.</value>
+  </data>
+  <data name="homeIndexStep9Title" xml:space="preserve">
+    <value>Step 9 - Distinguishing between operational and strategic issues</value>
+  </data>
+  <data name="homeIndexTitle" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="manageAddUserEmailNotSent" xml:space="preserve">
+    <value>Email was not sent to the user</value>
+  </data>
+  <data name="manageAddUserFailed" xml:space="preserve">
+    <value>Adding a new user failed</value>
+  </data>
+  <data name="manageAddUserUserWithEmailAlreadyExists" xml:space="preserve">
+    <value>An user with the email exists</value>
+  </data>
+  <data name="manageBlockEditChooseBlock" xml:space="preserve">
+    <value>Choose a block</value>
+  </data>
+  <data name="manageBlockEditChooseStep" xml:space="preserve">
+    <value>Choose a step</value>
+  </data>
+  <data name="manageBlockEditDescriptionAttribute" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="manageBlockEditInstructionAttribute" xml:space="preserve">
+    <value>Instruction</value>
+  </data>
+  <data name="manageBlockEditSubmit" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="manageBlockEditTitle" xml:space="preserve">
+    <value>Blocks</value>
+  </data>
+  <data name="manageBlockEditTitleAttribute" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="manageDictionaryListAddSubmit" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="manageDictionaryListNewButton" xml:space="preserve">
+    <value>Add new</value>
+  </data>
+  <data name="manageDictionaryListNewModalTitle" xml:space="preserve">
+    <value>Add new</value>
+  </data>
+  <data name="manageDictionaryListTitleAttribute" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="manageEditUserFailed" xml:space="preserve">
+    <value>Updating an user failed</value>
+  </data>
+  <data name="manageEditUserUserWithEmailAlreadyExists" xml:space="preserve">
+    <value>An user with the email exists</value>
+  </data>
+  <data name="manageIntroductionChooseStep" xml:space="preserve">
+    <value>Choose a step</value>
+  </data>
+  <data name="manageIntroductionFileLimitError" xml:space="preserve">
+    <value>A file exceed a limit</value>
+  </data>
+  <data name="manageIntroductionInvalidFile" xml:space="preserve">
+    <value>A file is invalid</value>
+  </data>
+  <data name="manageIntroductionSubmit" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="manageIntroductionTitle" xml:space="preserve">
+    <value>Introductions</value>
+  </data>
+  <data name="manageIntroductionVideoUpload" xml:space="preserve">
+    <value>Video upload</value>
+  </data>
+  <data name="manageServerError" xml:space="preserve">
+    <value>Something went wrong due to a server issue</value>
+  </data>
+  <data name="manageSettingListEditSubmit" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="manageSettingListNameAttribute" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="manageSettingListNewModelTitle" xml:space="preserve">
+    <value>Edit a setting</value>
+  </data>
+  <data name="manageSettingListShow" xml:space="preserve">
+    <value>Show</value>
+  </data>
+  <data name="manageSettingListTitle" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="manageSettingListValueAttribute" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="manageUserListAddSubmit" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="manageUserListEditModalTitle" xml:space="preserve">
+    <value>Edit an user</value>
+  </data>
+  <data name="manageUserListEditSubmit" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="manageUserListEmailAttribute" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="manageUserListFirstnameAttribute" xml:space="preserve">
+    <value>Firstname</value>
+  </data>
+  <data name="manageUserListGeneratePassword" xml:space="preserve">
+    <value>Generate password</value>
+  </data>
+  <data name="manageUserListLastnameAttribute" xml:space="preserve">
+    <value>Lastname</value>
+  </data>
+  <data name="manageUserListNameAttribute" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="manageUserListNewButton" xml:space="preserve">
+    <value>Add new</value>
+  </data>
+  <data name="manageUserListNewModalTitle" xml:space="preserve">
+    <value>Add an user</value>
+  </data>
+  <data name="manageUserListPosiitonPlaceholder" xml:space="preserve">
+    <value>-- Specify --</value>
+  </data>
+  <data name="manageUserListPositionAtrribute" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="manageUserListRoleAttribute" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="manageUserListTitle" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="sharedAccessDeniedDescription" xml:space="preserve">
+    <value>You don't have a permission to access.</value>
+  </data>
+  <data name="sharedAccessDeniedTitle" xml:space="preserve">
+    <value>Access Denied</value>
+  </data>
+  <data name="sharedErrorDescription" xml:space="preserve">
+    <value>An error occurred while processing your request.</value>
+  </data>
+  <data name="sharedErrorHeader" xml:space="preserve">
+    <value>An error occured</value>
+  </data>
+  <data name="sharedErrorTitle" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="sharedLayoutAllSettings" xml:space="preserve">
+    <value>All Settingss</value>
+  </data>
+  <data name="sharedLayoutAllUsers" xml:space="preserve">
+    <value>All Users</value>
+  </data>
+  <data name="sharedLayoutBlocks" xml:space="preserve">
+    <value>Blocks</value>
+  </data>
+  <data name="sharedLayoutDirectory" xml:space="preserve">
+    <value>Directory</value>
+  </data>
+  <data name="sharedLayoutHome" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="sharedLayoutIntroductions" xml:space="preserve">
+    <value>Introductions</value>
+  </data>
+  <data name="sharedLayoutLogout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="sharedLayoutManage" xml:space="preserve">
+    <value>Manage</value>
+  </data>
+  <data name="sharedLayoutMyAccount" xml:space="preserve">
+    <value>My Account</value>
+  </data>
+  <data name="sharedLayoutMyProfile" xml:space="preserve">
+    <value>My Profile</value>
+  </data>
+  <data name="sharedLayoutPositions" xml:space="preserve">
+    <value>Positions</value>
+  </data>
+  <data name="sharedLayoutSearch" xml:space="preserve">
+    <value>Search...</value>
+  </data>
+  <data name="sharedLayoutSiteSettings" xml:space="preserve">
+    <value>Site Settings</value>
+  </data>
+  <data name="sharedLayoutStakeholderCategories" xml:space="preserve">
+    <value>Stakeholder Categories</value>
+  </data>
+  <data name="sharedLayoutStakeholderCriteria" xml:space="preserve">
+    <value>Stakeholder Criteria</value>
+  </data>
+  <data name="sharedLayoutSteps" xml:space="preserve">
+    <value>Steps</value>
+  </data>
+  <data name="sharedLayoutUserActivity" xml:space="preserve">
+    <value>Activity</value>
+  </data>
+  <data name="sharedLayoutUserHello" xml:space="preserve">
+    <value>Hello,</value>
+  </data>
+  <data name="sharedLayoutUsers" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="sharedLayoutUserSection" xml:space="preserve">
+    <value>Section</value>
+  </data>
+  <data name="sharedLayoutValues" xml:space="preserve">
+    <value>Values</value>
+  </data>
+  <data name="sharedLayoutWorksheets" xml:space="preserve">
+    <value>Worksheets</value>
+  </data>
+  <data name="userAddExistingExternalUserToStepProblem" xml:space="preserve">
+    <value>User is already added to the planning or something went wrong</value>
+  </data>
+  <data name="userAddExistingResponsibleUser" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="userAddExistingResponsibleUserPlaceholder" xml:space="preserve">
+    <value>-- Specify --</value>
+  </data>
+  <data name="userAddExistingResponsibleUserSubmit" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="userAddExistingUserAttribute" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="userAddExistingUserPositionAttribute" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="userAddExistingUserPositionPlaceholder" xml:space="preserve">
+    <value>-- Specify --</value>
+  </data>
+  <data name="userAddExistingUserSubmit" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="userAddExistingUserToPlanProblem" xml:space="preserve">
+    <value>User is already added to the planning or something went wrong</value>
+  </data>
+  <data name="userAddNewExternalUserToStepEmailAlreadyExist" xml:space="preserve">
+    <value>An user with the email exists</value>
+  </data>
+  <data name="userAddNewExternalUserToStepEmailNotSent" xml:space="preserve">
+    <value>Email was not sent to the user</value>
+  </data>
+  <data name="userAddNewExternalUserToStepFailed" xml:space="preserve">
+    <value>Adding a new user failed</value>
+  </data>
+  <data name="userAddNewExternalUserToStepNotAddedToteam" xml:space="preserve">
+    <value>User was not added to the planning team</value>
+  </data>
+  <data name="userAddNewResponsibleUserEmail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="userAddNewResponsibleUserFirstname" xml:space="preserve">
+    <value>Firstname</value>
+  </data>
+  <data name="userAddNewResponsibleUserLastname" xml:space="preserve">
+    <value>Lastname</value>
+  </data>
+  <data name="userAddNewResponsibleUserSubmit" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="userAddNewUserToPlanEmailNotSent" xml:space="preserve">
+    <value>Email was not sent to the user</value>
+  </data>
+  <data name="userAddNewUserToPlanFailed" xml:space="preserve">
+    <value>Adding a new user failed</value>
+  </data>
+  <data name="userAddNewUserToPlanNotAddedToTeam" xml:space="preserve">
+    <value>User was not added to the planning team</value>
+  </data>
+  <data name="userAddNewUserToPlanProblemEmailAlreadyExist" xml:space="preserve">
+    <value>An user with the email exists</value>
+  </data>
+  <data name="userAddResponsibleUserToStepExistingUser" xml:space="preserve">
+    <value>Existing user</value>
+  </data>
+  <data name="userAddResponsibleUserToStepNewUser" xml:space="preserve">
+    <value>New user</value>
+  </data>
+  <data name="userAddUserToPlanExistingUser" xml:space="preserve">
+    <value>Existing user</value>
+  </data>
+  <data name="userAddUserToPlanNewUser" xml:space="preserve">
+    <value>New user</value>
+  </data>
+  <data name="userChangePasswordAuthFailed" xml:space="preserve">
+    <value>Authentication failed: password is wrong</value>
+  </data>
+  <data name="userChangePasswordConfirmNewPasswordAttribute" xml:space="preserve">
+    <value>Confirm new password</value>
+  </data>
+  <data name="userChangePasswordFailed" xml:space="preserve">
+    <value>Password was not updated</value>
+  </data>
+  <data name="userChangePasswordNewPasswordAttribute" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="userChangePasswordPasswordAttribute" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="userChangePasswordSubmit" xml:space="preserve">
+    <value>Save Changes</value>
+  </data>
+  <data name="userProfileDetailsTab" xml:space="preserve">
+    <value>Personal Details</value>
+  </data>
+  <data name="userProfileHeader" xml:space="preserve">
+    <value>My profile</value>
+  </data>
+  <data name="userProfilePasswordTab" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="userProfileTitle" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+  <data name="userUpdateUserEmailAlreadyExists" xml:space="preserve">
+    <value>An user with the email existes</value>
+  </data>
+  <data name="userUpdateUserFailed" xml:space="preserve">
+    <value>Profile is not updated</value>
+  </data>
+  <data name="userUserProfileDetailsSubmit" xml:space="preserve">
+    <value>Save Changes</value>
+  </data>
+  <data name="userUserViewActivity" xml:space="preserve">
+    <value>Activity</value>
+  </data>
+  <data name="userUserViewMyProfile" xml:space="preserve">
+    <value>My profile</value>
+  </data>
+  <data name="userUserViewSection" xml:space="preserve">
+    <value>Section</value>
+  </data>
+  <data name="validateEmail" xml:space="preserve">
+    <value>Invalid email</value>
+  </data>
+  <data name="validateMaxStringLength" xml:space="preserve">
+    <value>Value's length should not exceeed {1}</value>
+  </data>
+  <data name="validatePasswordConfirm" xml:space="preserve">
+    <value>Passwords are not same</value>
+  </data>
+  <data name="validateRequired" xml:space="preserve">
+    <value>The field is required</value>
+  </data>
+  <data name="worksheetCreatePlanProblem" xml:space="preserve">
+    <value>Something went wrong during creating plan</value>
+  </data>
+  <data name="worksheetExtenalUserAddModalTitle" xml:space="preserve">
+    <value>Add an external user</value>
+  </data>
+  <data name="worksheetPlanListAddButton" xml:space="preserve">
+    <value>Add new</value>
+  </data>
+  <data name="worksheetPlanListAddSubmit" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="worksheetPlanListCompleted" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="worksheetPlanListInProgress" xml:space="preserve">
+    <value>In Progress</value>
+  </data>
+  <data name="worksheetPlanListNewModalTitle" xml:space="preserve">
+    <value>Add a plan</value>
+  </data>
+  <data name="worksheetPlanListNoPlans" xml:space="preserve">
+    <value>No plans</value>
+  </data>
+  <data name="worksheetPlanListPlanDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="worksheetPlanListPlanTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="worksheetPlanListReadMore" xml:space="preserve">
+    <value>Read more</value>
+  </data>
+  <data name="worksheetPlanListSearchButton" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="worksheetPlanListTitle" xml:space="preserve">
+    <value>Plans</value>
+  </data>
+  <data name="worksheetQuestionIssueOptionBestOption" xml:space="preserve">
+    <value>Best option</value>
+  </data>
+  <data name="worksheetQuestionIssueOptionName" xml:space="preserve">
+    <value>Option</value>
+  </data>
+  <data name="worksheetQuestionIssueOptionRequiredResources" xml:space="preserve">
+    <value>Required resources</value>
+  </data>
+  <data name="worksheetQuestionIssueOptionResponsibleActor" xml:space="preserve">
+    <value>Actor responsible</value>
+  </data>
+  <data name="worksheetQuestionsCombinedResult" xml:space="preserve">
+    <value>Combined result</value>
+  </data>
+  <data name="worksheetQuestionsDefinitiveAnswer" xml:space="preserve">
+    <value>Definitive answer</value>
+  </data>
+  <data name="worksheetQuestionsFilesUpload" xml:space="preserve">
+    <value>Drop files here or click to upload.</value>
+  </data>
+  <data name="worksheetQuestionsIssueOptionAddCancel" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="worksheetQuestionsIssueOptionAddSubmit" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="worksheetQuestionsIssueOptionNewModalTitle" xml:space="preserve">
+    <value>Add an option</value>
+  </data>
+  <data name="worksheetQuestionsIssuePreparingCompleted" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="worksheetQuestionsIssuePreparingHow" xml:space="preserve">
+    <value>How will it be done</value>
+  </data>
+  <data name="worksheetQuestionsIssuePreparingName" xml:space="preserve">
+    <value>Issue</value>
+  </data>
+  <data name="worksheetQuestionsIssuePreparingResources" xml:space="preserve">
+    <value>Resources</value>
+  </data>
+  <data name="worksheetQuestionsIssuePreparingStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="worksheetQuestionsIssuePreparingWhat" xml:space="preserve">
+    <value>What will be done</value>
+  </data>
+  <data name="worksheetQuestionsIssuePreparingWhen" xml:space="preserve">
+    <value>When will it be done</value>
+  </data>
+  <data name="worksheetQuestionsIssuePreparingWho" xml:space="preserve">
+    <value>Who will do to</value>
+  </data>
+  <data name="worksheetQuestionsNoFIle" xml:space="preserve">
+    <value>No attached files.</value>
+  </data>
+  <data name="worksheetQuestionsRateSliderVeryNegative" xml:space="preserve">
+    <value>Very negative</value>
+  </data>
+  <data name="worksheetQuestionsRateSliderVeryPositive" xml:space="preserve">
+    <value>Very positive</value>
+  </data>
+  <data name="worksheetQuestionsSelectOther" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="worksheetQuestionsSelectOtherPlaceholder" xml:space="preserve">
+    <value>Specify...</value>
+  </data>
+  <data name="worksheetQuestionsSelectPlaceholder" xml:space="preserve">
+    <value>-- Specify --</value>
+  </data>
+  <data name="worksheetQuestionsStakeholderAddButton" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="worksheetQuestionsStakeholderAddExternallModalTitle" xml:space="preserve">
+    <value>Add the external stakeholder</value>
+  </data>
+  <data name="worksheetQuestionsStakeholderCombinedResult" xml:space="preserve">
+    <value>Combined result</value>
+  </data>
+  <data name="worksheetQuestionsStakeholderExternal" xml:space="preserve">
+    <value>External</value>
+  </data>
+  <data name="worksheetQuestionsStakeholderExternalCancel" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="worksheetQuestionsStakeholderExternalCategory" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="worksheetQuestionsStakeholderExternalEmail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="worksheetQuestionsStakeholderExternalFirstame" xml:space="preserve">
+    <value>First name</value>
+  </data>
+  <data name="worksheetQuestionsStakeholderExternalLastname" xml:space="preserve">
+    <value>Last name</value>
+  </data>
+  <data name="worksheetQuestionsStakeholderExternalSubmit" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="worksheetQuestionsStakeholderGrade" xml:space="preserve">
+    <value>Grade</value>
+  </data>
+  <data name="worksheetQuestionsStakeholderInternal" xml:space="preserve">
+    <value>Internal</value>
+  </data>
+  <data name="worksheetQuestionsStakeholderName" xml:space="preserve">
+    <value>Stakeholder name</value>
+  </data>
+  <data name="worksheetQuestionsStrategicIssueAttribute1" xml:space="preserve">
+    <value>Why is this an issue or why would you consider it to be problematic /challenging?</value>
+  </data>
+  <data name="worksheetQuestionsStrategicIssueAttribute2" xml:space="preserve">
+    <value>What will be the consequences of not addressing this issue or in other words, how damaging it is for the party not address the issue?</value>
+  </data>
+  <data name="worksheetQuestionsStrategicIssueAttribute3" xml:space="preserve">
+    <value>What should the goals of the party be in addressing this issue?</value>
+  </data>
+  <data name="worksheetQuestionsStrategicIssueAttribute4" xml:space="preserve">
+    <value>What are the ways and means of achieving the goals surrounding the strategic issue?</value>
+  </data>
+  <data name="worksheetQuestionsStrategicIssueName" xml:space="preserve">
+    <value>Issue</value>
+  </data>
+  <data name="worksheetQuestionsStrategicIssueRanking" xml:space="preserve">
+    <value>Ranking</value>
+  </data>
+  <data name="worksheetQuestionsSWOTAddButton" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="worksheetQuestionsSWOTExternalOrigin" xml:space="preserve">
+    <value>External origin</value>
+  </data>
+  <data name="worksheetQuestionsSWOTExternalOriginDescription" xml:space="preserve">
+    <value>attributes of the environment</value>
+  </data>
+  <data name="worksheetQuestionsSWOTHarmful" xml:space="preserve">
+    <value>Harmful</value>
+  </data>
+  <data name="worksheetQuestionsSWOTHarmfulDescription" xml:space="preserve">
+    <value>to achieving the objective</value>
+  </data>
+  <data name="worksheetQuestionsSWOTHelpful" xml:space="preserve">
+    <value>Helpful</value>
+  </data>
+  <data name="worksheetQuestionsSWOTHelpfulDescription" xml:space="preserve">
+    <value>to achieving the objective</value>
+  </data>
+  <data name="worksheetQuestionsSWOTInternalOrigin" xml:space="preserve">
+    <value>Internal origin</value>
+  </data>
+  <data name="worksheetQuestionsSWOTInternalOriginDescription" xml:space="preserve">
+    <value>attributes of the system</value>
+  </data>
+  <data name="worksheetQuestionsSWOTOpportunities" xml:space="preserve">
+    <value>Opportunities</value>
+  </data>
+  <data name="worksheetQuestionsSWOTStrengths" xml:space="preserve">
+    <value>Strengths</value>
+  </data>
+  <data name="worksheetQuestionsSWOTThreats" xml:space="preserve">
+    <value>Threats</value>
+  </data>
+  <data name="worksheetQuestionsSWOTWeaknesses" xml:space="preserve">
+    <value>Weaknesses</value>
+  </data>
+  <data name="worksheetQuestionStrategicPlanWithActionsDescription" xml:space="preserve">
+    <value>This is a longer version where besides the strategic direction the party should adhere to several action plans are elaborated that aim at achieving specific objectives.</value>
+  </data>
+  <data name="worksheetQuestionStrategicPlanWithActionsTitle" xml:space="preserve">
+    <value>Strategic plan with action plan(s)</value>
+  </data>
+  <data name="worksheetQuestionStrategicPlanWithoutActionsDescription" xml:space="preserve">
+    <value>This is a shorter version that could serve as a general guide for strategic development</value>
+  </data>
+  <data name="worksheetQuestionStrategicPlanWithoutActionsTitle" xml:space="preserve">
+    <value>Strategic plan without action plan(s)</value>
+  </data>
+  <data name="worksheetQuestionsValueAddButton" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="worksheetQuestionsValueAddClose" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="worksheetQuestionsValueAddSubmit" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="worksheetQuestionsValueDefinition" xml:space="preserve">
+    <value>Definition</value>
+  </data>
+  <data name="worksheetQuestionsValueExpression" xml:space="preserve">
+    <value>How is this value expressed in our party life?</value>
+  </data>
+  <data name="worksheetQuestionsValueName" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="worksheetQuestionsValueNewModalTitle" xml:space="preserve">
+    <value>Add value statement</value>
+  </data>
+  <data name="worksheetQuestionsYourAnswer" xml:space="preserve">
+    <value>Your answer</value>
+  </data>
+  <data name="worksheetSideMenuHeader" xml:space="preserve">
+    <value>Worksheets</value>
+  </data>
+  <data name="worksheetSideMenuPlanListButton" xml:space="preserve">
+    <value>Plan list</value>
+  </data>
+  <data name="worksheetStepBlockClose" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="worksheetStepBlockHelp" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="worksheetStepFormCompleteButton" xml:space="preserve">
+    <value>Complete</value>
+  </data>
+  <data name="worksheetStepFormSaveButton" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="worksheetStepFormSubmitButton" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="worksheetStepInfoAwaitingfFeedback" xml:space="preserve">
+    <value>Still awaiting feedback from</value>
+  </data>
+  <data name="worksheetStepInfoReceivedFrom" xml:space="preserve">
+    <value>Input received from</value>
+  </data>
+  <data name="worksheetStepIntroduction" xml:space="preserve">
+    <value>Introduction</value>
+  </data>
+  <data name="worksheetStepIntroductionNoVideo" xml:space="preserve">
+    <value>No video</value>
+  </data>
+  <data name="worksheetStepIntroductionNoVideoSupport" xml:space="preserve">
+    <value>Your browser does not support the video tag.</value>
+  </data>
+  <data name="worksheetSteptasksCompleted" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="worksheetSteptasksHeader" xml:space="preserve">
+    <value>Steps</value>
+  </data>
+  <data name="worksheetStepTasksNoOtherAsnwers" xml:space="preserve">
+    <value>No other answers</value>
+  </data>
+  <data name="worksheetSteptasksQuestion" xml:space="preserve">
+    <value>What steps will you use in your planning process?</value>
+  </data>
+  <data name="worksheetSteptasksQuestionDescription" xml:space="preserve">
+    <value>Review these steps with the people who are involved, and refine them as needed.</value>
+  </data>
+  <data name="worksheetSteptasksRemind" xml:space="preserve">
+    <value>Remind before ( days )</value>
+  </data>
+  <data name="worksheetSteptasksResponsiblePeople" xml:space="preserve">
+    <value>Responsible person</value>
+  </data>
+  <data name="worksheetSteptasksSchedule" xml:space="preserve">
+    <value>Schedule</value>
+  </data>
+  <data name="worksheetSteptasksStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="worksheetSteptasksTitle" xml:space="preserve">
+    <value>Steps / tasks</value>
+  </data>
+  <data name="worksheetStepWorksheet" xml:space="preserve">
+    <value>Worksheet</value>
+  </data>
+  <data name="worksheetStrategicPlanningTeamMemberName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="worksheetStrategicPlanningTeamMemberPosition" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="worksheetStrategicPlanningTeamNewModalTitle" xml:space="preserve">
+    <value>Add Team Member</value>
+  </data>
+  <data name="worksheetStrategicPlanningTeamQuestion" xml:space="preserve">
+    <value>What is the size of the strategic Strategic planning team?</value>
+  </data>
+  <data name="worksheetStrategicPlanningTeamQuestionAddButton" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="worksheetStrategicPlanningTeamQuestionDescription" xml:space="preserve">
+    <value>Please, enter their names and positions within the organization.</value>
+  </data>
+  <data name="worksheetStrategicPlanningTeamTitle" xml:space="preserve">
+    <value>Strategic Planning team</value>
+  </data>
+  <data name="worksheetUploadFileInvalidExtensionOrSize" xml:space="preserve">
+    <value>{0} is not valid due to wrong extension or size</value>
+  </data>
+</root>

@@ -1,0 +1,17 @@
+﻿@using System.Resources
+@using System.Collections
+@using System.Globalization
+@using System.Linq
+@{
+    ResourceSet resourceSet =
+    sharedResource.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true);
+    var frontResources = resourceSet.Cast<DictionaryEntry>().Where(x => x.Key.ToString().StartsWith("front"));
+    var entries = frontResources.Select(d =>
+        string.Format("\"{0}\": \"{1}\" ", d.Key, string.Join(",", d.Value)));
+    var json = "{" + string.Join(",", entries) + "}";
+
+}
+<script>
+    var resource = @Html.Raw(json);
+
+</script>

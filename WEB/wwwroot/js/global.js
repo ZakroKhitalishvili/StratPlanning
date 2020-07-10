@@ -210,12 +210,12 @@ $(document).ready(function () {
 function deleteConfirm() {
     return swal({
         icon: "warning",
-        title: "Are you sure?",
+        title: resource.frontDeleteConfirm,
         buttons:
         {
             confirm:
             {
-                text: "Yes",
+                text: resource.frontYes,
                 value: true,
                 visible: true,
                 className: "btn btn-sp m-btn",
@@ -223,7 +223,7 @@ function deleteConfirm() {
             },
             cancel:
             {
-                text: "No",
+                text: resource.frontNo,
                 value: false,
                 visible: true,
                 className: "btn btn-secondary m-btn",
@@ -242,13 +242,13 @@ function deleteConfirm() {
 function submitConfirm(text) {
     return swal({
         icon: "warning",
-        title: "Are you sure?",
+        title: resource.frontSubmitConfirm,
         text: text,
         buttons:
         {
             confirm:
             {
-                text: "Yes",
+                text: resource.frontYes,
                 value: true,
                 visible: true,
                 className: "btn btn-sp m-btn",
@@ -256,7 +256,7 @@ function submitConfirm(text) {
             },
             cancel:
             {
-                text: "No",
+                text: resource.frontNo,
                 value: false,
                 visible: true,
                 className: "btn btn-secondary m-btn",
@@ -321,20 +321,20 @@ $(document).on('submit', 'form#add_plan_form', function (e) {
             contentType: false,
             success: function (data, statusText, xhr) {
                 if (xhr.status == 201) {
-                    notify("Successfully created", "success", 5);
+                    notify(resource.frontCreateSuccess, "success", 5);
                     setTimeout(function () {
                         document.location.reload(false)
                     }, 2000);
                 }
                 if (xhr.status == 202 || xhr.status == 400) {
-                    notify("Input data are not valid ", "danger", 5);
+                    notify(resource.frontInvalidInputData, "danger", 5);
                 }
 
                 $('#add_plan_form').html(data);
                 initializeInputs('#add_plan_form');
             },
             error: function (xhr, statusText, error) {
-                notify("An Error occured on the request", "danger", 5);
+                notify(resource.frontRequestError, "danger", 5);
             }
         });
 });
@@ -361,24 +361,24 @@ $(document).on('click', '.delete-plan', function (e) {
                     },
                     success: function (data, statusText, xhr) {
                         if (xhr.status == 400) {
-                            notify("An Error occured during sending a request", "danger", 5);
+                            notify(resource.frontRequestError, "danger", 5);
 
                         }
 
                         if (data.result) {
-                            notify("Successfully deleted", "success", 5);
+                            notify(resource.frontDeleteSuccess, "success", 5);
                             setTimeout(function () {
                                 document.location.reload(false)
                             }, 2000);
 
                         }
                         else {
-                            notify("Deleting the plan is not possible due to existing answers", "danger", 5);
+                            notify(resource.frontPlanDeleteError, "danger", 5);
                         }
 
                     },
                     error: function (xhr, statusText, error) {
-                        notify("An Error occured during sending a request", "danger", 5);
+                        notify(resource.frontRequestError, "danger", 5);
                     }
                 })
         }
@@ -414,20 +414,20 @@ $(document).on('submit', 'form#add_dictionary_form', function (e) {
             contentType: false,
             success: function (data, statusText, xhr) {
                 if (xhr.status == 201) {
-                    notify("Successfully created", "success", 5);
+                    notify(resource.frontCreateSuccess, "success", 5);
                     setTimeout(function () {
                         document.location.reload(false)
                     }, 2000);
                 }
                 if (xhr.status == 202 || xhr.status == 400) {
-                    notify("Input data are not valid ", "danger", 5);
+                    notify(resource.frontInvalidInputData, "danger", 5);
                 }
 
                 $('#add_dictionary_form').html(data);
                 initializeInputs('#add_dictionary_form');
             },
             error: function (xhr, statusText, error) {
-                notify("An Error occured on the request", "danger", 5);
+                notify(resource.frontRequestError, "danger", 5);
             }
         });
 });
@@ -453,24 +453,24 @@ $(document).on('click', '.delete-dictionary', function (e) {
                     },
                     success: function (data, statusText, xhr) {
                         if (xhr.status == 400) {
-                            notify("An Error occured during sending a request", "danger", 5);
+                            notify(resource.frontRequestError, "danger", 5);
 
                         }
 
                         if (data.result) {
-                            notify("Successfully deleted", "success", 5);
+                            notify(resource.frontDeleteSuccess, "success", 5);
                             setTimeout(function () {
                                 document.location.reload(false)
                             }, 2000);
 
                         }
                         else {
-                            notify("Deleting the record is not possible ", "danger", 5);
+                            notify(resource.frontDeleteImpossible, "danger", 5);
                         }
 
                     },
                     error: function (xhr, statusText, error) {
-                        notify("An Error occured during sending a request", "danger", 5);
+                        notify(resource.frontRequestError, "danger", 5);
                     }
                 })
         }
@@ -498,24 +498,24 @@ $(document).on('click', '.activate-dictionary', function (e) {
                     },
                     success: function (data, statusText, xhr) {
                         if (xhr.status == 400) {
-                            notify("An Error occured during sending a request", "danger", 5);
+                            notify(resource.frontRequestError, "danger", 5);
 
                         }
 
                         if (data.result) {
-                            notify("Successfully activated", "success", 5);
+                            notify(resource.frontActivateSuccess, "success", 5);
                             setTimeout(function () {
                                 document.location.reload(false)
                             }, 2000);
 
                         }
                         else {
-                            notify("Activating the record is not possible ", "danger", 5);
+                            notify(resource.frontActivateImpossible, "danger", 5);
                         }
 
                     },
                     error: function (xhr, statusText, error) {
-                        notify("An Error occured during sending a request", "danger", 5);
+                        notify(resource.frontRequestError, "danger", 5);
                     }
                 })
         }
@@ -544,24 +544,24 @@ $(document).on('click', '.disactivate-dictionary', function (e) {
                     },
                     success: function (data, statusText, xhr) {
                         if (xhr.status == 400) {
-                            notify("An Error occured during sending a request", "danger", 5);
+                            notify(resource.frontRequestError, "danger", 5);
 
                         }
 
                         if (data.result) {
-                            notify("Successfully Diactivated", "success", 5);
+                            notify(resource.frontDeactivateSuccess, "success", 5);
                             setTimeout(function () {
                                 document.location.reload(false)
                             }, 2000);
 
                         }
                         else {
-                            notify("Deactivating the record is not possible ", "danger", 5);
+                            notify(resource.frontDeactivateImpossible, "danger", 5);
                         }
 
                     },
                     error: function (xhr, statusText, error) {
-                        notify("An Error occured during sending a request", "danger", 5);
+                        notify(resource.frontRequestError, "danger", 5);
                     }
                 })
         }
@@ -599,7 +599,7 @@ $(document).on('click', '.edit-setting', function (e) {
 
             },
             error: function (xhr, statusText, error) {
-                notify("An Error occured during sending a request", "danger", 5);
+                notify(resource.frontRequestError, "danger", 5);
             }
         })
 });
@@ -623,7 +623,7 @@ $(document).on('submit', 'form#edit_setting_form', function (e) {
             contentType: false,
             success: function (data, statusText, xhr) {
                 if (xhr.status == 200) {
-                    notify("Successfully updated", "success", 5);
+                    notify(resource.frontUpdateSuccess, "success", 5);
 
                     setTimeout(function () {
                         document.location.reload(false)
@@ -636,7 +636,7 @@ $(document).on('submit', 'form#edit_setting_form', function (e) {
 
             },
             error: function (xhr, statusText, error) {
-                notify("An Error occured during sending a request", "danger", 5);
+                notify(resource.frontRequestError, "danger", 5);
             }
         })
 
@@ -678,20 +678,20 @@ $(document).on('submit', 'form#add_user_form', function (e) {
             contentType: false,
             success: function (data, statusText, xhr) {
                 if (xhr.status == 201) {
-                    notify("Successfully created", "success", 5);
+                    notify(resource.frontCreateSuccess, "success", 5);
                     setTimeout(function () {
                         document.location.reload(false)
                     }, 2000);
                 }
                 if (xhr.status == 202 || xhr.status == 400) {
-                    notify("Input data are not valid ", "danger", 5);
+                    notify(resource.frontInvalidInputData, "danger", 5);
                 }
 
                 $('#add_user_form').html(data);
                 initializeInputs('#add_user_form');
             },
             error: function (xhr, statusText, error) {
-                notify("An Error occured on the request", "danger", 5);
+                notify(resource.frontRequestError, "danger", 5);
             }
         });
 });
@@ -721,7 +721,7 @@ $(document).on('click', '.edit-user', function (e) {
 
             },
             error: function (xhr, statusText, error) {
-                notify("An Error occured during sending a request", "danger", 5);
+                notify(resource.frontRequestError, "danger", 5);
             }
         })
 });
@@ -744,7 +744,7 @@ $(document).on('submit', 'form#edit_user_form', function (e) {
             contentType: false,
             success: function (data, statusText, xhr) {
                 if (xhr.status == 200) {
-                    notify("Successfully updated", "success", 5);
+                    notify(resource.frontUpdateSuccess, "success", 5);
 
                     setTimeout(function () {
                         document.location.reload(false)
@@ -757,7 +757,7 @@ $(document).on('submit', 'form#edit_user_form', function (e) {
 
             },
             error: function (xhr, statusText, error) {
-                notify("An Error occured during sending a request", "danger", 5);
+                notify(resource.frontRequestError, "danger", 5);
             }
         })
 
@@ -772,7 +772,7 @@ $(document).on('click', '.generate-user-password', function (e) {
 
     let id = $(this).data('id');
 
-    submitConfirm("This will generate a new password for the user").then(function (result) {
+    submitConfirm(resource.frontUserPasswordGenerateConfirm).then(function (result) {
         if (result) {
             $.ajax(
                 {
@@ -783,15 +783,15 @@ $(document).on('click', '.generate-user-password', function (e) {
                     },
                     success: function (data, statusText, xhr) {
                         if (data.result) {
-                            notify("Successfully generated new password", "success", 5);
+                            notify(resource.frontPasswordGenerateSuccess, "success", 5);
                         }
                         else {
-                            notify("Password was not generated", "danger", 5);
+                            notify(resource.frontPasswordGenerateFailed, "danger", 5);
                         }
 
                     },
                     error: function (xhr, statusText, error) {
-                        notify("An Error occured during sending a request", "danger", 5);
+                        notify(resource.frontRequestError, "danger", 5);
                     }
                 });
         }
@@ -819,24 +819,24 @@ $(document).on('click', '.delete-user', function (e) {
                     },
                     success: function (data, statusText, xhr) {
                         if (xhr.status == 400) {
-                            notify("An Error occured during sending a request", "danger", 5);
+                            notify(resource.frontRequestError, "danger", 5);
 
                         }
 
                         if (data.result) {
-                            notify("Successfully deleted", "success", 5);
+                            notify(front.frontDeleteSuccess, "success", 5);
                             setTimeout(function () {
                                 document.location.reload(false)
                             }, 2000);
 
                         }
                         else {
-                            notify("Deleting the user is not possible ", "danger", 5);
+                            notify(front.frontDeleteImpossible, "danger", 5);
                         }
 
                     },
                     error: function (xhr, statusText, error) {
-                        notify("An Error occured during sending a request", "danger", 5);
+                        notify(resource.frontRequestError, "danger", 5);
                     }
                 })
         }
@@ -864,24 +864,24 @@ $(document).on('click', '.activate-user', function (e) {
                     },
                     success: function (data, statusText, xhr) {
                         if (xhr.status == 400) {
-                            notify("An Error occured during sending a request", "danger", 5);
+                            notify(resource.frontRequestError, "danger", 5);
 
                         }
 
                         if (data.result) {
-                            notify("Successfully activated", "success", 5);
+                            notify(resource.frontActivateSuccess, "success", 5);
                             setTimeout(function () {
                                 document.location.reload(false)
                             }, 2000);
 
                         }
                         else {
-                            notify("Activating the user is not possible ", "danger", 5);
+                            notify(resource.frontActivateImpossible, "danger", 5);
                         }
 
                     },
                     error: function (xhr, statusText, error) {
-                        notify("An Error occured during sending a request", "danger", 5);
+                        notify(resource.frontRequestError, "danger", 5);
                     }
                 })
         }
@@ -910,24 +910,24 @@ $(document).on('click', '.disactivate-user', function (e) {
                     },
                     success: function (data, statusText, xhr) {
                         if (xhr.status == 400) {
-                            notify("An Error occured during sending a request", "danger", 5);
+                            notify(resource.frontRequestError, "danger", 5);
 
                         }
 
                         if (data.result) {
-                            notify("Successfully deactivated", "success", 5);
+                            notify(resource.frontDeactivateSuccess, "success", 5);
                             setTimeout(function () {
                                 document.location.reload(false)
                             }, 2000);
 
                         }
                         else {
-                            notify("Deactivating the user is not possible ", "danger", 5);
+                            notify(resource.frontDeactivateImpossible, "danger", 5);
                         }
 
                     },
                     error: function (xhr, statusText, error) {
-                        notify("An Error occured during sending a request", "danger", 5);
+                        notify(resource.frontRequestError, "danger", 5);
                     }
                 })
         }

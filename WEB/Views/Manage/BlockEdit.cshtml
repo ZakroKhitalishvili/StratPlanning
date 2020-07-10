@@ -4,7 +4,7 @@
 @inject Application.Interfaces.Repositories.IPlanRepository planRepository
 
 @{
-    ViewData["Title"] = "Blocks";
+    ViewData["Title"] = sharedResource.manageBlockEditTitle;
 
     var stepList = planRepository.GetStepList();
 
@@ -33,7 +33,7 @@
                 <!-- Step droplist-->
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="stepDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        @(ViewData["Step"] != null ? steps.ResourceManager.GetString((string)ViewData["Step"]).ToString() : "Choose a step")
+                        @(ViewData["Step"] != null ? steps.ResourceManager.GetString((string)ViewData["Step"]).ToString() : sharedResource.manageBlockEditChooseStep)
                     </button>
                     <div class="dropdown-menu" aria-labelledby="stepDropdownMenuButton">
                         @foreach (var step in stepList)
@@ -47,7 +47,7 @@
                 <!-- Blocks droplist-->
                 <div class="dropdown m--margin-left-10">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="blockDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        @(Model?.Title ?? "Choose a block")
+                        @(Model?.Title ?? sharedResource.manageBlockEditChooseBlock)
                     </button>
                     <div class="dropdown-menu" aria-labelledby="blockDropdownMenuButton">
                         @foreach (var block in blockList)
@@ -69,17 +69,17 @@
                                     <input type="hidden" asp-for="Id" />
                                     <input type="hidden" asp-for="Step"/>
                                     <div class="form-group m-form__group">
-                                        <label asp-for="Title">Title</label>
+                                        <label asp-for="Title">@sharedResource.manageBlockEditTitleAttribute</label>
                                         <input type="text" class="form-control" asp-for="Title" />
                                         <span class="text-danger" asp-validation-for="Title"></span>
                                     </div>
                                     <div class="form-group m-form__group">
-                                        <label asp-for="Description">Description</label>
+                                        <label asp-for="Description">@sharedResource.manageBlockEditDescriptionAttribute</label>
                                         <textarea type="text" class="form-control text-editor" asp-for="Description"></textarea>
                                         <span class="text-danger" asp-validation-for="Description"></span>
                                     </div>
                                     <div class="form-group m-form__group">
-                                        <label asp-for="Instruction">Instruction</label>
+                                        <label asp-for="Instruction">@sharedResource.manageBlockEditInstructionAttribute</label>
                                         <textarea type="text" class="form-control text-editor" asp-for="Instruction"></textarea>
                                         <span class="text-danger" asp-validation-for="Instruction"></span>
                                     </div>
@@ -94,7 +94,7 @@
                                     }
                                     <div class="form-group m-form__group">
                                         <button type="submit" class="btn btn-sp m-btn m-btn--icon">
-                                            Save
+                                            @sharedResource.manageBlockEditSubmit
                                         </button>
                                     </div>
                                 </form>

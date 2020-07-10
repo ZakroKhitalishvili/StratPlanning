@@ -122,11 +122,11 @@ function initializeStep() {
 
                                         }
                                         if (xhr.status == 202 || xhr.status == 400) {
-                                            notify("Input data are not valid ", "danger", 5);
+                                            notify(resource.frontInvalidInputData, "danger", 5);
                                         }
                                     },
                                     error: function (xhr, statusText, error) {
-                                        notify("An Error occured on the request", "danger", 5);
+                                        notify(resource.frontRequestError, "danger", 5);
                                     }
                                 });
                         }
@@ -179,7 +179,7 @@ function initializeStep() {
                         <span class="dz-upload" data-dz-errormessage=""></span>
                     </div>
                     </div>
-                    <a class="dz-remove" href="javascript:undefined;" data-dz-remove="">Remove file</a>
+                    <a class="dz-remove" href="javascript:undefined;" data-dz-remove="">${resource.frontRemoveFile}</a>
                 </div>`
         }).addClass('dropzone');
     });
@@ -276,7 +276,7 @@ $(document).on('submit', "form#add_user_to_plan_new", function (e) {
             contentType: false,
             success: function (data, statusText, xhr) {
                 if (xhr.status == 201) {
-                    notify("Successfully added", "success", 5);
+                    notify(resource.frontAddSuccess, "success", 5);
                     $('#planning_team_add_modal').modal('hide');
                     $('body').removeClass('modal-open');
                     $('.modal-backdrop').remove();
@@ -285,7 +285,7 @@ $(document).on('submit', "form#add_user_to_plan_new", function (e) {
 
                 }
                 if (xhr.status == 400) {
-                    notify("An Error occured during sending a request", "danger", 5);
+                    notify(resource.frontRequestError, "danger", 5);
                 }
 
                 $('form#add_user_to_plan_new').html(data);
@@ -295,7 +295,7 @@ $(document).on('submit', "form#add_user_to_plan_new", function (e) {
                 $.validator.unobtrusive.parse('form#add_user_to_plan_new');
             },
             error: function (xhr, statusText, error) {
-                notify("An Error occured during sending a request", "danger", 5);
+                notify(resource.frontRequestError, "danger", 5);
             }
         })
 });
@@ -317,7 +317,7 @@ $(document).on('submit', "form#add_user_to_plan_existing", function (e) {
             contentType: false,
             success: function (data, statusText, xhr) {
                 if (xhr.status == 201) {
-                    notify("Successfully added", "success", 5);
+                    notify(resource.frontAddSuccess, "success", 5);
                     $('#planning_team_add_modal').modal('hide');
                     $('body').removeClass('modal-open');
                     $('.modal-backdrop').remove();
@@ -326,7 +326,7 @@ $(document).on('submit', "form#add_user_to_plan_existing", function (e) {
                 }
 
                 if (xhr.status == 400) {
-                    notify("An Error occured during sending a request", "danger", 5);
+                    notify(resource.frontRequestError, "danger", 5);
                 }
 
                 $('form#add_user_to_plan_existing').html(data);
@@ -334,7 +334,7 @@ $(document).on('submit', "form#add_user_to_plan_existing", function (e) {
                 $.validator.unobtrusive.parse('form#add_user_to_plan_existing');
             },
             error: function (xhr, statusText, error) {
-                notify("An Error occured during sending a request", "danger", 5);
+                notify(resource.frontRequestError, "danger", 5);
             }
         })
 });
@@ -361,21 +361,21 @@ $(document).on('click', '.remove-user-from-plan', function (e) {
                     },
                     success: function (data, statusText, xhr) {
                         if (xhr.status == 400) {
-                            notify("An Error occured during sending a request", "danger", 5);
+                            notify(resource.frontRequestError, "danger", 5);
                         }
 
                         if (data.result) {
-                            notify("Successfully deleted", "success", 5);
+                            notify(resource.frontDeleteSuccess, "success", 5);
                             updatePlanningTeam();
                             refreshStepForm(true);
                         }
                         else {
-                            notify("Removing the user is not possible due to existing answers", "danger", 5);
+                            notify(resource.frontRemovingUsersImpossibleDueToAnswers, "danger", 5);
                         }
 
                     },
                     error: function (xhr, statusText, error) {
-                        notify("An Error occured during sending a request", "danger", 5);
+                        notify(resource.frontRequestError, "danger", 5);
                     }
                 })
         }
@@ -398,11 +398,11 @@ function updatePlanningTeam() {
             },
             success: function (data, statusText, xhr) {
                 if (xhr.status == 400) {
-                    notify("Planning team update failed", "danger", 5);
+                    notify(resource.frontPlanningTeamUpdateFailed, "danger", 5);
                 }
 
                 if (xhr.status > 500) {
-                    notify("An error occured on the server", "danger", 5);
+                    notify(resource.frontServerError, "danger", 5);
                 }
 
                 $('#planning_team_portlet').html(data);
@@ -412,7 +412,7 @@ function updatePlanningTeam() {
                 $.validator.unobtrusive.parse('#planning_team_portlet form');
             },
             error: function (xhr, statusText, error) {
-                notify("An Error occured during updating the planning plan's view", "danger", 5);
+                notify(resource.frontPlanningTeamUpdateError, "danger", 5);
             }
         })
 }
@@ -474,10 +474,10 @@ function updateStep(isSubmitted) {
             contentType: false,
             success: function (data, statusText, xhr) {
                 if (xhr.status == 200) {
-                    notify("Successfully saved", "success", 5);
+                    notify(resource.frontSaveSuccess, "success", 5);
                 }
                 if (xhr.status == 202 || xhr.status == 400) {
-                    notify("Input data are not valid ", "danger", 5);
+                    notify(resource.frontInvalidInputData, "danger", 5);
                 }
 
                 $('#step_form_container').html(data);
@@ -487,7 +487,7 @@ function updateStep(isSubmitted) {
                 mApp.unblock('#step_form');
             },
             error: function (xhr, statusText, error) {
-                notify("An Error occured on the request", "danger", 5);
+                notify(resource.frontRequestError, "danger", 5);
                 mApp.unblock('#step_form');
             }
         });
@@ -504,9 +504,9 @@ $(document).ready(function () {
         $(this).find('input[name$="Step"]').val(step);
     });
 
-     /**
-     * Predeparture step - Steptasks new responsible person add handler triggered by form submit
-     */
+    /**
+    * Predeparture step - Steptasks new responsible person add handler triggered by form submit
+    */
     $(document).on('submit', 'form#add_responsible_user_to_step_new', function (e) {
         e.preventDefault();
         if (!$(this).valid()) {
@@ -541,9 +541,9 @@ $(document).ready(function () {
         $('.modal-backdrop').remove();
     });
 
-      /**
-     * Predeparture step - Steptasks existing responsible person add handler triggered by form submit
-     */
+    /**
+   * Predeparture step - Steptasks existing responsible person add handler triggered by form submit
+   */
     $(document).on('submit', 'form#add_responsible_user_to_step_existing', function (e) {
         e.preventDefault();
         if (!$(this).valid()) {
@@ -795,7 +795,7 @@ $(document).on('click', 'button#step_form_complete', function (e) {
  */
 function completeStep(planId, stepIndex, callback) {
 
-    submitConfirm("You won't be able to change it after").then(function (result) {
+    submitConfirm(resource.frontStepCompleteConfirm).then(function (result) {
         if (result) {
             return $.ajax(
                 {
@@ -808,17 +808,17 @@ function completeStep(planId, stepIndex, callback) {
                     processData: true,
                     success: function (data, statusText, xhr) {
                         if (xhr.status == 200) {
-                            notify("Successfully completed", "success", 5);
+                            notify(resource.frontCompleteSucccess, "success", 5);
                             callback(); // here is called a callback
                         }
 
                         if (xhr.status == 202) {
-                            notify("The step can not be completed", "warning", 5);
+                            notify(resource.frontCompleteImpossible, "warning", 5);
                         }
                     },
                     error: function (xhr, statusText, error) {
 
-                        notify("An Error occured on the request", "danger", 5);
+                        notify(resource.frontRequestError, "danger", 5);
                     }
                 });
         }
@@ -845,7 +845,7 @@ function refreshStepForm(keepFilled = false) {
                 }
 
                 if (xhr.status >= 400) {
-                    notify("Step was not refreshed", "danger", 5);
+                    notify(resource.frontStepNotRefreshed, "danger", 5);
                 }
 
                 $('#step_form_container').html(data);
@@ -853,7 +853,7 @@ function refreshStepForm(keepFilled = false) {
                 initializeStep();
             },
             error: function (xhr, statusText, error) {
-                notify("An Error occured on the request", "danger", 5);
+                notify(resource.frontRequestError, "danger", 5);
             }
         });
 }

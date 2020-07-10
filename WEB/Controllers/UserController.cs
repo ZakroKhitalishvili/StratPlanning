@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Web.Extensions;
-
+using Resources;
 namespace Web.Controllers
 {
     public class UserController : AbstractController
@@ -125,7 +125,7 @@ namespace Web.Controllers
                 {
                     _loggerManager.Warn($"AddExistingUserToPlan was unable to add user to a plan");
 
-                    ModelState.AddModelError(string.Empty, "User is already added to the planning or something went wrong");
+                    ModelState.AddModelError(string.Empty, sharedResource.userAddExistingUserToPlanProblem);
                 }
             }
             else
@@ -161,7 +161,7 @@ namespace Web.Controllers
                 {
                     _loggerManager.Warn($"AddNewUserToPlan - an user with the email exists");
 
-                    ModelState.AddModelError("NewUser.Email", "An user with the email exists");
+                    ModelState.AddModelError("NewUser.Email", sharedResource.userAddNewUserToPlanProblemEmailAlreadyExist);
 
                     return PartialView("~/Views/User/Partials/_AddNewUser.cshtml");
                 }
@@ -182,7 +182,7 @@ namespace Web.Controllers
                 {
                     _loggerManager.Warn($"AddNewUserToPlan - Adding a new user failed");
 
-                    ModelState.AddModelError(string.Empty, "Adding a new user failed");
+                    ModelState.AddModelError(string.Empty, sharedResource.userAddNewUserToPlanFailed);
 
                     return PartialView("~/Views/User/Partials/_AddNewUser.cshtml");
                 }
@@ -191,7 +191,7 @@ namespace Web.Controllers
                 {
                     _loggerManager.Error($"AddNewUserToPlan - Email was not sent to the user");
 
-                    ModelState.AddModelError(string.Empty, "Email was not sent to the user");
+                    ModelState.AddModelError(string.Empty, sharedResource.userAddNewUserToPlanEmailNotSent);
 
                     return PartialView("~/Views/User/Partials/_AddNewUser.cshtml");
                 }
@@ -200,7 +200,7 @@ namespace Web.Controllers
                 {
                     _loggerManager.Error($"AddNewUserToPlan - User was not added to the planning team");
 
-                    ModelState.AddModelError(string.Empty, "User was not added to the planning team");
+                    ModelState.AddModelError(string.Empty, sharedResource.userAddNewUserToPlanNotAddedToTeam);
 
                     return PartialView("~/Views/User/Partials/_AddNewUser.cshtml");
                 }
@@ -244,7 +244,7 @@ namespace Web.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "User is already added to the planning or something went wrong");
+                    ModelState.AddModelError(string.Empty, sharedResource.userAddExistingExternalUserToStepProblem);
                 }
             }
 
@@ -271,7 +271,7 @@ namespace Web.Controllers
 
                 if (_userRepository.FindByCondition(u => u.Email == newExternaluser.Email).Any())
                 {
-                    ModelState.AddModelError("NewUser.Email", "An user with the email exists");
+                    ModelState.AddModelError("NewUser.Email", sharedResource.userAddNewExternalUserToStepEmailAlreadyExist);
 
                     return PartialView("~/Views/User/Partials/_AddNewUser.cshtml");
                 }
@@ -288,21 +288,21 @@ namespace Web.Controllers
 
                 if (user == null)
                 {
-                    ModelState.AddModelError(string.Empty, "Adding a new user failed");
+                    ModelState.AddModelError(string.Empty, sharedResource.userAddNewExternalUserToStepFailed);
 
                     return PartialView("~/Views/User/Partials/_AddNewUser.cshtml");
                 }
 
                 if (!_emailService.SendPasswordToUser(newUser.Password, user))
                 {
-                    ModelState.AddModelError(string.Empty, "Email was not sent to the user");
+                    ModelState.AddModelError(string.Empty, sharedResource.userAddNewExternalUserToStepEmailNotSent);
 
                     return PartialView("~/Views/User/Partials/_AddNewUser.cshtml");
                 }
 
                 if (!_planRepository.AddUserToPlanStep(user.Id, addExternalUserToStep.PlanId, addExternalUserToStep.Step))
                 {
-                    ModelState.AddModelError(string.Empty, "User was not added to the planning team due ");
+                    ModelState.AddModelError(string.Empty, sharedResource.userAddNewExternalUserToStepNotAddedToteam);
 
                     return PartialView("~/Views/User/Partials/_AddNewUser.cshtml");
                 }
@@ -353,9 +353,9 @@ namespace Web.Controllers
 
                 if (_userRepository.FindByCondition(u => u.Email == userProfile.Email && u.Id != userProfile.Id).Any())
                 {
-                    _loggerManager.Warn($"UpdateProfile() - An user with the email existes");
+                    _loggerManager.Warn($"UpdateProfile() - An user with the email exists");
 
-                    ModelState.AddModelError(nameof(userProfile.Email), "An user with the email existes");
+                    ModelState.AddModelError(nameof(userProfile.Email), sharedResource.userUpdateUserEmailAlreadyExists);
 
                     return PartialView("~/Views/User/Partials/_UserProfileDetails.cshtml");
                 }
@@ -364,7 +364,7 @@ namespace Web.Controllers
                 {
                     _loggerManager.Error($"UpdateProfile() - Profile is not updated");
 
-                    ModelState.AddModelError(string.Empty, "Profile is not updated");
+                    ModelState.AddModelError(string.Empty, sharedResource.userUpdateUserFailed);
 
                     return PartialView("~/Views/User/Partials/_UserProfileDetails.cshtml");
                 }
@@ -402,7 +402,7 @@ namespace Web.Controllers
                 {
                     _loggerManager.Warn($"ChangePassword() - Authentication failed");
 
-                    ModelState.AddModelError(nameof(changePassword.Password), "Authentication failed: password is wrong");
+                    ModelState.AddModelError(nameof(changePassword.Password), sharedResource.userChangePasswordAuthFailed);
 
                     return PartialView("~/Views/User/Partials/_ChangePassword.cshtml");
                 }
@@ -413,7 +413,7 @@ namespace Web.Controllers
                 {
                     _loggerManager.Error($"ChangePassword() - Password was not updated");
 
-                    ModelState.AddModelError(string.Empty, "Password was not updated");
+                    ModelState.AddModelError(string.Empty, sharedResource.userChangePasswordFailed);
 
                     return PartialView("~/Views/User/Partials/_ChangePassword.cshtml");
                 }

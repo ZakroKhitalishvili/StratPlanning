@@ -16,7 +16,7 @@
         </div>
         <div class="form-group m-form__group">
             <label asp-for="ExistingUser.Id">
-                User
+                @sharedResource.userAddExistingUserAttribute
             </label>
             <select asp-items="htmlHelper.GetUsersSelectListByRole(Roles.Employee)" asp-for="ExistingUser.Id" class="form-control m-select2" style="width:100%">
                 <option value="">-- Specify --</option>
@@ -25,10 +25,10 @@
         </div>
         <div class="form-group m-form__group">
             <label asp-for="ExistingUser.PositionId">
-                Position
+                @sharedResource.userAddExistingUserPositionAttribute
             </label>
             <select asp-items="htmlHelper.GetPositionsSelectList()" asp-for="ExistingUser.PositionId" class="form-control m-select2" style="width:100%">
-                <option value="">-- Specify --</option>
+                <option value="">@sharedResource.userAddExistingUserPositionAttribute</option>
             </select>
             <span class="text-danger" asp-validation-for="ExistingUser.PositionId"></span>
         </div>
@@ -36,7 +36,7 @@
     <div class="m-portlet__foot m-portlet__foot--fit">
         <div class="m-form__actions pull-right">
             <button type="submit" class="btn btn-sp m-btn m-btn--icon">
-                Add
+                @sharedResource.userAddExistingUserSubmit
             </button>
         </div>
     </div>

@@ -19,7 +19,7 @@
             <div class="row no-gutters justify-content-md-center">
                 <div class="col col-lg-12">
                     <h3 class="m-portlet__head-text">
-                        Steps
+                        @sharedResource.worksheetSteptasksHeader
                     </h3>
                 </div>
             </div>
@@ -30,7 +30,7 @@
         <div class="form-group m-form__group">
             <div class="row">
                 <label class="col-form-label col-sm-12">
-                    What steps will you use in your planning process?
+                   @sharedResource.worksheetSteptasksQuestion
                 </label>
             </div>
             <div class="m-scrollable " data-scrollable="true" data-axis="xy">
@@ -38,24 +38,24 @@
                     <thead>
                         <tr>
                             <th>
-                                Steps / tasks
+                                @sharedResource.worksheetSteptasksTitle
                             </th>
                             <th>
-                                Responsible persons
+                                @sharedResource.worksheetSteptasksResponsiblePeople
                             </th>
                             @if (Model.IsAdmin)
                             {
                                 <th>
-                                    Schedule
+                                    @sharedResource.worksheetSteptasksSchedule
                                 </th>
                                 <th>
-                                    Remind before (days)
+                                    @sharedResource.worksheetSteptasksRemind
                                 </th>
                                 <th>
-                                    Completed
+                                    @sharedResource.worksheetSteptasksCompleted
                                 </th>
                                 <th>
-                                    Status
+                                    @sharedResource.worksheetSteptasksStatus
                                 </th>
                             }
                         </tr>
@@ -154,7 +154,7 @@
 
                                                 if (definitiveAnswers.Count() == 0 && otherStepTaskAnswers.Count() == 0)
                                                 {
-                                                    <span>no other answers</span>
+                                                    <span>@sharedResource.worksheetStepTasksNoOtherAsnwers</span>
                                                 }
                                             }
                                         </div>
@@ -244,8 +244,7 @@
                 <input type="hidden" name="count" id="step_tasks_count" value="@count" />
             </div>
             <span class="m-form__help">
-                Review these steps with the people who are involved, and refine them as
-                needed.
+                @sharedResource.worksheetSteptasksQuestionDescription
             </span>
         </div>
     </div>

@@ -57,7 +57,7 @@
                                                 <div class="m-list-timeline__item">
                                                     <span class="m-list-timeline__badge"></span>
                                                     <span class="m-list-timeline__text">
-                                                        <b>Definitive answer</b>
+                                                        <b>@sharedResource.worksheetQuestionsDefinitiveAnswer</b>
                                                     </span>
                                                     <span class="m-list-timeline__text">
 
@@ -91,7 +91,7 @@
 
                 if (question.CanSpecifyOther)
                 {
-                    var otherItem = new SelectListItem { Text = "Other", Value = "-1" };
+                    var otherItem = new SelectListItem { Text = sharedResource.worksheetQuestionsSelectOther, Value = "-1" };
                     if (answerGroup.Answer?.SelectAnswer.AltOption != null)
                     {
                         otherItem.Selected = true;
@@ -103,11 +103,11 @@
             <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].QuestionId" value="@question.Id" />
             <select asp-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.SelectAnswer.OptionId"
                     asp-items="items" class="form-control m-select2 @(question.CanSpecifyOther?"select-specify":"")">
-                <option value="">-- Specify --</option>
+                <option value="">@sharedResource.worksheetQuestionsSelectPlaceholder</option>
             </select>
             @if (question.CanSpecifyOther)
             {
-                <input asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.SelectAnswer.AltOption" type="text" class="select-specify-input form-control m--margin-top-10" placeholder="specify..." />
+                <input asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.SelectAnswer.AltOption" type="text" class="select-specify-input form-control m--margin-top-10" placeholder="@sharedResource.worksheetQuestionsSelectOtherPlaceholder" />
             }
             <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer"></span>
             <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset+questionIndex].Answer.SelectAnswer"></span>

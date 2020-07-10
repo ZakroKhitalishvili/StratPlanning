@@ -14,7 +14,7 @@
 
     var filledAnswer = Model.AnswerGroups[questionIndexOffset + questionIndex];
 
-    var valuesDictionary = dictionaryRepository.GetValues(false).Where(x=>x.IsActive);
+    var valuesDictionary = dictionaryRepository.GetValues(false).Where(x => x.IsActive);
 }
 
 @if (answerGroup.DefinitiveAnswer != null || (answerGroup.OtherAnswers != null && answerGroup.OtherAnswers.Count() > 0))
@@ -30,13 +30,13 @@
                                     <thead>
                                         <tr>
                                             <th>
-                                                Value
+                                                @sharedResource.worksheetQuestionsValueName
                                             </th>
                                             <th>
-                                                Definition
+                                                @sharedResource.worksheetQuestionsValueDefinition
                                             </th>
                                             <th>
-                                                How is this value expressed in our party life?
+                                                @sharedResource.worksheetQuestionsValueExpression
                                             </th>
                                         </tr>
                                     </thead>
@@ -44,7 +44,7 @@
                                         @if (answerGroup.DefinitiveAnswer != null)
                                         {
                                             <tr class="author">
-                                                <td colspan="3">Definitive answer</td>
+                                                <td colspan="3">@sharedResource.worksheetQuestionsDefinitiveAnswer</td>
                                             </tr>
                                             @foreach (var valueAnswer in answerGroup.DefinitiveAnswer.ValueAnswer)
                                             {
@@ -88,73 +88,73 @@
             @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
             {
                 <a href="" class="btn btn-sp m-btn m-btn--pill m--pull-right" data-toggle="modal" data-target="#v_@(question.Id)_modal">
-                    Add
+                    @sharedResource.worksheetQuestionsValueAddButton
                 </a>
             }
         </div>
     </div>
     <div class="m-scrollable" data-scrollable="true" data-axis="xy">
-                <table class="table m-table  table-bordered m--margin-top-10" width="100%">
-                    <thead>
-                        <tr>
-                            <th>
-                                Value
-                            </th>
-                            <th>
-                                Definition
-                            </th>
-                            <th>
-                                How is this value expressed in our party life?
-                            </th>
+        <table class="table m-table  table-bordered m--margin-top-10" width="100%">
+            <thead>
+                <tr>
+                    <th>
+                        @sharedResource.worksheetQuestionsValueName
+                    </th>
+                    <th>
+                        @sharedResource.worksheetQuestionsValueDefinition
+                    </th>
+                    <th>
+                        @sharedResource.worksheetQuestionsValueExpression
+                    </th>
+                    @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
+                    {
+                        <th></th>
+                    }
+                </tr>
+            </thead>
+            <tbody id="v_@(question.Id)_list">
+                @if (answerGroup.Answer != null)
+                {
+                    string guid = "";
+                    foreach (var valueAnswer in answerGroup.Answer.ValueAnswer)
+                    {
+                        {
+                            guid = Guid.NewGuid().ToString();
+                        }
+                        <tr id="@guid" data-val='@Json.Serialize(valueAnswer)'>
+                            <td>
+                                @valueAnswer.Value
+                            </td>
+                            <td>
+                                @valueAnswer.Definition
+                            </td>
+                            <td>
+                                @valueAnswer.Description
+                            </td>
                             @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
                             {
-                                <th></th>
+                                <td>
+                                    <span class="table-row-actions">
+                                        <button type="button" class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="@sharedResource.actionDelete" onclick="deleteRecord(this, 'tr')">
+                                            <i class="la la-trash"></i>
+                                        </button>
+                                        <button type="button" class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill" title="@sharedResource.actionEdit" onclick="showRecordDetail(this, '#v_@(question.Id)_modal')">
+                                            <i class="la la-edit"></i>
+                                        </button>
+                                    </span>
+                                </td>
+                                <input type="hidden" value="@guid" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer.index" />
+                                <input type="hidden" value="@valueAnswer.Id" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[@guid].Id" />
+                                <input type="hidden" value="@valueAnswer.Value" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[@guid].Value" />
+                                <input type="hidden" value="@valueAnswer.Definition" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[@guid].Definition" />
+                                <input type="hidden" value="@valueAnswer.Description" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[@guid].Description" />
                             }
                         </tr>
-                    </thead>
-                    <tbody id="v_@(question.Id)_list">
-                        @if (answerGroup.Answer != null)
-                        {
-                            string guid = "";
-                            foreach (var valueAnswer in answerGroup.Answer.ValueAnswer)
-                            {
-                                {
-                                    guid = Guid.NewGuid().ToString();
-                                }
-                                <tr id="@guid" data-val='@Json.Serialize(valueAnswer)'>
-                                    <td>
-                                        @valueAnswer.Value
-                                    </td>
-                                    <td>
-                                        @valueAnswer.Definition
-                                    </td>
-                                    <td>
-                                        @valueAnswer.Description
-                                    </td>
-                                    @if ((Model.IsAdmin || !Model.IsSubmitted) && !Model.IsCompleted)
-                                    {
-                                        <td>
-                                            <span class="table-row-actions">
-                                                <button type="button" class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete" onclick="deleteRecord(this, 'tr')">
-                                                    <i class="la la-trash"></i>
-                                                </button>
-                                                <button type="button" class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill" title="Edit" onclick="showRecordDetail(this, '#v_@(question.Id)_modal')">
-                                                    <i class="la la-edit"></i>
-                                                </button>
-                                            </span>
-                                        </td>
-                                        <input type="hidden" value="@guid" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer.index" />
-                                        <input type="hidden" value="@valueAnswer.Id" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[@guid].Id" />
-                                        <input type="hidden" value="@valueAnswer.Value" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[@guid].Value" />
-                                        <input type="hidden" value="@valueAnswer.Definition" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[@guid].Definition" />
-                                        <input type="hidden" value="@valueAnswer.Description" name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.ValueAnswer[@guid].Description" />
-                                    }
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-     </div>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
     <span class="m-form__help">
         @question.Description
     </span>
@@ -170,7 +170,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="">
-                            Add value statement
+                            @sharedResource.worksheetQuestionsValueNewModalTitle
                         </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true" class="la la-remove"></span>
@@ -182,21 +182,21 @@
                             <input type="hidden" class="m-input" data-name="id" />
                             <div class="form-group m-form__group">
                                 <label for="valueAnswerDTO.Value">
-                                    Value
+                                    @sharedResource.worksheetQuestionsValueName
                                 </label>
                                 @Html.TextBoxFor(x => valueAnswerDTO.Value, new { @class = "form-control m-input m-values-autocomplete", data_name = "value" })
                                 @Html.ValidationMessageFor(x => valueAnswerDTO.Value, "", new { @class = "text-danger" })
                             </div>
                             <div class="form-group m-form__group">
                                 <label for="valueAnswerDTO.Definition">
-                                    Definition
+                                    @sharedResource.worksheetQuestionsValueDefinition
                                 </label>
                                 @Html.TextAreaFor(x => valueAnswerDTO.Definition, new { @class = "form-control m-input", rows = "3", data_name = "definition" })
                                 @Html.ValidationMessageFor(x => valueAnswerDTO.Definition, "", new { @class = "text-danger" })
                             </div>
                             <div class="form-group m-form__group">
                                 <label for="valueAnswerDTO.Description">
-                                    How is this value expressed in our party life?
+                                   @sharedResource.worksheetQuestionsValueExpression
                                 </label>
                                 @Html.TextAreaFor(x => valueAnswerDTO.Description, new { @class = "form-control m-input", rows = "3", data_name = "description" })
                                 @Html.ValidationMessageFor(x => valueAnswerDTO.Description, "", new { @class = "text-danger" })
@@ -204,10 +204,10 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-sp m-btn submit-btn" onclick="editRecord('#v_@(question.Id)_modal', '#v_@(question.Id)_list');">
-                                Submit
+                                @sharedResource.worksheetQuestionsValueAddSubmit
                             </button>
                             <button type="button" class="btn btn-secondary m-btn" data-dismiss="modal">
-                                Close
+                                @sharedResource.worksheetQuestionsValueAddClose
                             </button>
                         </div>
                     </div>
@@ -239,10 +239,10 @@
                         </td>
                         <td>
                             <span class="table-row-actions">
-                                <button type="button" class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Delete" onclick="deleteRecord(this, 'tr')">
+                                <button type="button" class="table-row-delete m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="@(sharedResource.actionDelete)" onclick="deleteRecord(this, 'tr')">
                                     <i class="la la-trash"></i>
                                 </button>
-                                <button type="button" class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill" title="Edit" onclick="showRecordDetail(this, '#v_@(question.Id)_modal')">
+                                <button type="button" class="table-row-edit m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill" title="@(sharedResource.actionEdit)" onclick="showRecordDetail(this, '#v_@(question.Id)_modal')">
                                     <i class="la la-edit"></i>
                                 </button>
                             </span>

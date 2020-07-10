@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using Resources;
 
 namespace Application.DTOs
 {
@@ -11,10 +12,10 @@ namespace Application.DTOs
 
         public NewResponsibleUserDTO NewResponsibleUser { get; set; }
 
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(sharedResource), ErrorMessageResourceName = "validateRequired")]
         public int PlanId { get; set; }
 
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(sharedResource), ErrorMessageResourceName = "validateRequired")]
         public string Step { get; set; }
 
     }

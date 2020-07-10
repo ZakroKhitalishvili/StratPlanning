@@ -12,6 +12,7 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using X.PagedList;
 using Web.Helpers;
+using Resources;
 
 namespace Web.Controllers
 {
@@ -248,7 +249,7 @@ namespace Web.Controllers
 
                     Response.StatusCode = StatusCodes.Status400BadRequest;
 
-                    return new JsonResult(new { message = $"{file.FileName} is not valid due to wrong extension or size" });
+                    return new JsonResult(new { message = string.Format(sharedResource.worksheetUploadFileInvalidExtensionOrSize, file.FileName) });
                 }
             }
 
@@ -367,7 +368,7 @@ namespace Web.Controllers
                 else
                 {
                     _loggerManager.Warn($"CreatePlan was unable to create a plan");
-                    ModelState.AddModelError(string.Empty, "Something went wrong during creating plan");
+                    ModelState.AddModelError(string.Empty, sharedResource.worksheetCreatePlanProblem);
                 }
             }
             else

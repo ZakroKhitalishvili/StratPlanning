@@ -1,4 +1,5 @@
 ﻿using Core.Constants;
+using Resources;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,7 +13,8 @@ namespace Application.DTOs
 
         public DateTime? Date { get; set; }
 
-        [MaxLength(EntityConfigs.TextAreaMaxLength)]
+        [MaxLength(EntityConfigs.TextAreaMaxLength, ErrorMessageResourceType = typeof(sharedResource), ErrorMessageResourceName = "validateMaxStringLength")]
+
         public string HowItWillBeDone { get; set; }
 
         public bool IsCompleted { get; set; }

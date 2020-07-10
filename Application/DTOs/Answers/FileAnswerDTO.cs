@@ -1,4 +1,5 @@
 ﻿using Core.Constants;
+using Resources;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,13 +11,16 @@ namespace Application.DTOs
     {
         public int FileId { get; set; }
 
-        [MaxLength(EntityConfigs.TextAreaMaxLength)]
+        [MaxLength(EntityConfigs.TextAreaMaxLength, ErrorMessageResourceType = typeof(sharedResource), ErrorMessageResourceName = "validateMaxStringLength")]
+
         public string Name { get; set; }
 
-        [MaxLength(EntityConfigs.TextAreaMaxLength)]
+        [MaxLength(EntityConfigs.TextAreaMaxLength, ErrorMessageResourceType = typeof(sharedResource), ErrorMessageResourceName = "validateMaxStringLength")]
+
         public string Ext { get; set; }
 
-        [MaxLength(EntityConfigs.TextAreaMaxLength)]
+        [MaxLength(EntityConfigs.TextAreaMaxLength, ErrorMessageResourceType = typeof(sharedResource), ErrorMessageResourceName = "validateMaxStringLength")]
+
         public string Path { get; set; }
     }
 }

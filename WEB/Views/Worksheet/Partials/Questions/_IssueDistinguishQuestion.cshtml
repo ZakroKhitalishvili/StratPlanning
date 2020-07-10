@@ -114,7 +114,7 @@
                                         <input type="hidden" asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount].IssueId" value="@issue.Id" />
                                         <select asp-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount].SelectAnswer"
                                                 asp-items="items" class="form-control m-select2" style="width:100%">
-                                            <option value="">-- Specify --</option>
+                                            <option value="">@sharedResource.worksheetQuestionsSelectPlaceholder</option>
                                         </select>
                                         <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset + questionIndex].Answer"></span>
                                         <span class="text-danger" asp-validation-for="AnswerGroups[questionIndexOffset + questionIndex].Answer.IssueDistinguishAnswers[answerCount].SelectAnswer"></span>

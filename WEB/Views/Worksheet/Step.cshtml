@@ -7,7 +7,7 @@
 *@
 
 @{
-    ViewData["Title"] = "Worksheet";
+    ViewData["Title"] = sharedResource.worksheetStepWorksheet;
 }
 
 <partial name="~/Views/Worksheet/Partials/_SideMenu.cshtml" model="Model" />
@@ -51,7 +51,7 @@
                         <i class="fa fa-film"></i>
                     </span>
                     <span class="m-accordion__item-title">
-                        Introduction
+                        @sharedResource.worksheetStepIntroduction
                     </span>
                     <span class="m-accordion__item-mode"></span>
                 </div>
@@ -64,11 +64,11 @@
                             @if (Model.IntroductionVideo != null)
                             {
                                 <source src="@Model.IntroductionVideo?.Path" />
-                                <span>Your browser does not support the video tag.</span>
+                                <span>@sharedResource.worksheetStepIntroductionNoVideoSupport</span>
                             }
                             else
                             {
-                                <span>No video</span>
+                                <span>@sharedResource.worksheetStepIntroductionNoVideo</span>
                             }
                         </video>
                     </div>

@@ -1,4 +1,5 @@
 ﻿using Core.Constants;
+using Resources;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,16 +11,19 @@ namespace Application.DTOs
     {
         public int Id { get; set; }
 
-        [Required]
-        [MaxLength(EntityConfigs.TextMaxLength)]
+        [Required(ErrorMessageResourceType = typeof(sharedResource), ErrorMessageResourceName = "validateRequired")]
+        [MaxLength(EntityConfigs.TextMaxLength, ErrorMessageResourceType = typeof(sharedResource), ErrorMessageResourceName = "validateMaxStringLength")]
+
         public string Value { get; set; }
 
-        [Required]
-        [MaxLength(EntityConfigs.TextAreaMaxLength)]
+        [Required(ErrorMessageResourceType = typeof(sharedResource), ErrorMessageResourceName = "validateRequired")]
+        [MaxLength(EntityConfigs.TextAreaMaxLength, ErrorMessageResourceType = typeof(sharedResource), ErrorMessageResourceName = "validateMaxStringLength")]
+
         public string Definition { get; set; }
 
-        [Required]
-        [MaxLength(EntityConfigs.TextAreaMaxLength)]
+        [Required(ErrorMessageResourceType = typeof(sharedResource), ErrorMessageResourceName = "validateRequired")]
+        [MaxLength(EntityConfigs.TextAreaMaxLength, ErrorMessageResourceType = typeof(sharedResource), ErrorMessageResourceName = "validateMaxStringLength")]
+
         public string Description { get; set; }
     }
 }

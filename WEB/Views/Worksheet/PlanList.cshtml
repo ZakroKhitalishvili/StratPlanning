@@ -5,7 +5,7 @@
 @using X.PagedList;
 
 @{
-    ViewData["Title"] = "Plans";
+    ViewData["Title"] = sharedResource.worksheetPlanListTitle;
 }
 
 <div class="m-grid__item m-grid__item--fluid m-wrapper">
@@ -14,13 +14,13 @@
             <div class="m-subheader">
                 <div class="d-flex align-items-center">
                     <div class="mr-auto">
-                        <h2>Plans</h2>
+                        <h2>@sharedResource.worksheetPlanListTitle</h2>
                     </div>
                     @if (User.IsInRole(Roles.Admin))
                     {
                         <a href="" class="btn btn-sp m-btn m-btn--pill m--pull-right m--margin-bottom-10"
                            data-toggle="modal" data-target="#add_plan_modal">
-                            Add new
+                            @sharedResource.worksheetPlanListAddButton
                         </a>
                     }
                 </div>
@@ -36,7 +36,7 @@
                             </div>
                             <div class="col-3 col-md-2">
                                 <button type="submit" class="btn btn-sp m-btn m-btn--pill">
-                                    Search
+                                    @sharedResource.worksheetPlanListSearchButton
                                 </button>
                             </div>
                         </div>
@@ -47,7 +47,7 @@
 
                 @if (Model.Count() == 0)
                 {
-                    <span class="m-align--center">No plans</span>
+                    <span class="m-align--center">@sharedResource.worksheetPlanListNoPlans</span>
                 }
                 @foreach (var plan in Model)
                 {
@@ -69,7 +69,7 @@
                                                 <p>@(new String(plan.Description.Skip(100).ToArray()))</p>
                                             </div>
 
-                                            <a href="#collapse_@plan.Id" class="nav-toggle m--margin-left-10">Read More</a>
+                                            <a href="#collapse_@plan.Id" class="nav-toggle m--margin-left-10">@sharedResource.worksheetPlanListReadMore</a>
                                         }
                                         else
                                         {
@@ -81,14 +81,14 @@
                             <div class="col-2 text-right">
                                 <a asp-controller="Worksheet" asp-action="GetPlan" asp-route-id="@plan.Id"
                                    class="m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
-                                   title="View"
+                                   title="@sharedResource.actionView"
                                    data-toggle="tooltip">
                                     <i class="la la-eye"></i>
                                 </a>
                                 @if (User.IsInRole(Roles.Admin))
                                 {
                                     <a href="" class="delete-plan m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill sp-tooltip"
-                                       title="Delete"
+                                       title="@sharedResource.actionDelete"
                                        data-toggle="tooltip" data-id="@plan.Id">
                                         <i class="la la-trash"></i>
                                     </a>
@@ -98,12 +98,12 @@
                         <small>
                             @if (plan.IsCompleted)
                             {
-                                <span>Completed</span>
+                                <span>@sharedResource.homeIndexCompleted</span>
                                 <span>@plan.EndDate?.ToString("dd/MM/yyyy")</span>
                             }
                             else
                             {
-                                <span>In Progress</span>
+                                <span>@sharedResource.worksheetPlanListInProgress</span>
                             }
                         </small>
                     </div>
@@ -126,7 +126,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="">
-                    Add a plan
+                  @sharedResource.worksheetPlanListNewModalTitle
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true" class="la la-remove"></span>

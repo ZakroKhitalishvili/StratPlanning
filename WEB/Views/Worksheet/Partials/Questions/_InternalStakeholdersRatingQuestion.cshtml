@@ -31,7 +31,7 @@
                 <tbody>
                     <tr>
                         <th title="Name">
-                            Stakeholder name
+                            @sharedResource.worksheetQuestionsStakeholderName
                         </th>
                         @for (var i = 0; i < stakeholders.Count(); i++)
                         {
@@ -84,7 +84,7 @@
                                                                                     <div class="m-list-timeline__item">
                                                                                         <span class="m-list-timeline__badge"></span>
                                                                                         <span class="m-list-timeline__text">
-                                                                                            <b>Definitive answer</b>
+                                                                                            <b>@sharedResource.worksheetQuestionsDefinitiveAnswer</b>
                                                                                         </span>
                                                                                         <span class="m-list-timeline__text">
                                                                                             @answerGroup.DefinitiveAnswer.StakeholderRatingAnswers.FirstOrDefault().CriterionsRates.FirstOrDefault(x => x.CriterionId == criteria[i].Id).Rate
@@ -121,7 +121,7 @@
                     }
                     <tr>
                         <th title="Grade">
-                            Grade
+                            @sharedResource.worksheetQuestionsStakeholderGrade
                         </th>
                         @foreach (var stakeholder in stakeholders)
                         {

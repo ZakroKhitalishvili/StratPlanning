@@ -11,7 +11,7 @@
         </div>
         <div class="form-group m-form__group">
             <label asp-for="Title">
-                Title
+                @sharedResource.manageDictionaryListTitleAttribute
             </label>
             <input type="text" asp-for="Title" class="form-control m-input" />
             <span class="text-danger" asp-validation-for="Title"></span>
@@ -20,7 +20,7 @@
     <div class="m-portlet__foot m-portlet__foot--fit">
         <div class="m-form__actions pull-right">
             <button type="submit" class="btn btn-sp m-btn m-btn--icon">
-                Add
+                @sharedResource.manageDictionaryListAddSubmit
             </button>
         </div>
     </div>

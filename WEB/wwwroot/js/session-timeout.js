@@ -32,7 +32,7 @@ var canPing = (function () {
  */
 
 $.sessionTimeout({
-    message: 'Your session will be expired in a minute.',
+    message: resource.frontSessionExpirationMinute,
     ignoreUserActivity: false,
     //ajaxType: 'post',
     //keepAliveUrl: '/Auth/Ping',
@@ -65,10 +65,10 @@ $.sessionTimeout({
                     },
                     error: function (xhr, statustext, error) {
                         if (xhr.status == 401) {
-                            notify("Pinging failed", "danger", 5);
+                            notify(resource.frontPingFailed, "danger", 5);
                         }
                         else {
-                            notify("An error occured during pinging", "danger", 5);
+                            notify(resource.frontPingError, "danger", 5);
                         }
                     }
                 });

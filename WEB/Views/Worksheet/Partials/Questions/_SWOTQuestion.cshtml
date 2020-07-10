@@ -45,28 +45,28 @@
     {
         swotAnswers.AddRange(answerGroup.DefinitiveAnswer.SwotAnswer.Strengths.Select(x => new
         {
-            author = "Definitive Answer",
+            author = sharedResource.worksheetQuestionsDefinitiveAnswer,
             value = x,
             isDefinitive = true,
             type = SWOTTypes.Strength
         })
         .Concat(answerGroup.DefinitiveAnswer.SwotAnswer.Weaknesses.Select(x => new
         {
-            author = "Definitive Answer",
+            author = sharedResource.worksheetQuestionsDefinitiveAnswer,
             value = x,
             isDefinitive = true,
             type = SWOTTypes.Weakness
         }))
         .Concat(answerGroup.DefinitiveAnswer.SwotAnswer.Opportunities.Select(x => new
         {
-            author = "Definitive Answer",
+            author = sharedResource.worksheetQuestionsDefinitiveAnswer,
             value = x,
             isDefinitive = true,
             type = SWOTTypes.Opportunity
         }))
         .Concat(answerGroup.DefinitiveAnswer.SwotAnswer.Threats.Select(x => new
         {
-            author = "Definitive Answer",
+            author = sharedResource.worksheetQuestionsDefinitiveAnswer,
             value = x,
             isDefinitive = true,
             type = SWOTTypes.Threat
@@ -84,7 +84,7 @@
                 <div class="m-demo__preview">
                     <div class="form-group m-form__group">
                         <label>
-                            Combined result
+                            @sharedResource.worksheetQuestionsCombinedResult
                         </label>
                         <div class="swot col-sm-12 m--margin-bottom-20">
                             <div class="row">
@@ -92,23 +92,23 @@
 
                                 </div>
                                 <div class="d-none d-md-block col-md-5  swot-cell bg-color-lightgreen">
-                                    <h5>Helpful</h5>
-                                    <span>to achieving the objective</span>
+                                    <h5>@sharedResource.worksheetQuestionsSWOTHelpful</h5>
+                                    <span>@sharedResource.worksheetQuestionsSWOTHelpfulDescription</span>
                                 </div>
                                 <div class="d-none d-md-block col-md-5 swot-cell bg-color-lightred">
-                                    <h5>Harmful</h5>
-                                    <span>to achieving the objective</span>
+                                    <h5>@sharedResource.worksheetQuestionsSWOTHarmful</h5>
+                                    <span>@sharedResource.worksheetQuestionsSWOTHarmfulDescription</span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="d-none d-md-block col-md-2 swot-cell bg-color-lightyellow">
-                                    <h5>Internal origin</h5>
-                                    <span>attributes of the system</span>
+                                    <h5>@sharedResource.worksheetQuestionsSWOTInternalOrigin</h5>
+                                    <span>@sharedResource.worksheetQuestionsSWOTInternalOriginDescription</span>
                                 </div>
                                 <div class="col-sm-12 col-md-5 swot-cell bg-color-greenyellow">
                                     <div class="row swot-add ">
                                         <div class="col-12">
-                                            <h5 class="pull-left"> Strengths</h5>
+                                            <h5 class="pull-left"> @sharedResource.worksheetQuestionsSWOTStrengths</h5>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -120,11 +120,11 @@
                                                         if (Model.IsAdmin && !Model.IsCompleted)
                                                         {
                                                             <button type="button" title=""
-                                                                  data-toggle="tooltip"
-                                                                  class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")"
-                                                                  data-original-title="@String.Join(',', answer.Select(x => x.author))"
-                                                                  data-val='@(Json.Serialize(new { swotName = answer.Key }))'
-                                                                  onclick='selectAnswer(this, "#l_@(question.Id)_strengths")'>
+                                                                    data-toggle="tooltip"
+                                                                    class="m-list-badge__item sp-tooltip @(answer.Any(x => x.isDefinitive) ? "m-list-badge__item--warning" : "m-list-badge__item--default")"
+                                                                    data-original-title="@String.Join(',', answer.Select(x => x.author))"
+                                                                    data-val='@(Json.Serialize(new { swotName = answer.Key }))'
+                                                                    onclick='selectAnswer(this, "#l_@(question.Id)_strengths")'>
                                                                 @(answer.Key)
                                                             </button>
                                                         }
@@ -147,7 +147,7 @@
                                 <div class="col-sm-12 col-md-5  swot-cell  bg-color-redyellow">
                                     <div class="row swot-add">
                                         <div class="col-12">
-                                            <h5 class="pull-left"> Weaknesses</h5>
+                                            <h5 class="pull-left">@sharedResource.worksheetQuestionsSWOTWeaknesses</h5>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -185,13 +185,13 @@
                             </div>
                             <div class="row">
                                 <div class="d-none d-md-block col-md-2 swot-cell  bg-color-lightblue">
-                                    <h5>External origin</h5>
-                                    <span>attributes of the environment</span>
+                                    <h5>@sharedResource.worksheetQuestionsSWOTExternalOrigin</h5>
+                                    <span>@sharedResource.worksheetQuestionsSWOTExternalOriginDescription</span>
                                 </div>
                                 <div class="col-sm-12 col-md-5  swot-cell  bg-color-greenblue">
                                     <div class="row swot-add">
                                         <div class="col-12">
-                                            <h5 class="pull-left"> Opportunities</h5>
+                                            <h5 class="pull-left"> @sharedResource.worksheetQuestionsSWOTOpportunities</h5>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -230,7 +230,7 @@
                                 <div class="col-sm-12 col-md-5  swot-cell  bg-color-redblue">
                                     <div class="row swot-add">
                                         <div class="col-12">
-                                            <h5 class="pull-left"> Threats</h5>
+                                            <h5 class="pull-left"> @sharedResource.worksheetQuestionsSWOTThreats</h5>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -275,7 +275,7 @@
 
         <div class="form-group m-form__group">
             <label>
-                Your answer
+                @sharedResource.worksheetQuestionsYourAnswer
             </label>
             <div>
                 <input type="hidden" asp-for="AnswerGroups[questionIndexOffset+questionIndex].QuestionId" value="@answerGroup.QuestionId" />
@@ -286,23 +286,23 @@
 
                         </div>
                         <div class="d-none d-md-block col-md-5  swot-cell bg-color-lightgreen">
-                            <h5>Helpful</h5>
-                            <span>to achieving the objective</span>
+                            <h5>@sharedResource.worksheetQuestionsSWOTHelpful</h5>
+                            <span>@sharedResource.worksheetQuestionsSWOTHelpfulDescription</span>
                         </div>
                         <div class="d-none d-md-block col-md-5 swot-cell bg-color-lightred">
-                            <h5>Harmful</h5>
-                            <span>to achieving the objective</span>
+                            <h5>@sharedResource.worksheetQuestionsSWOTHarmful</h5>
+                            <span>@sharedResource.worksheetQuestionsSWOTHarmfulDescription</span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="d-none d-md-block col-md-2 swot-cell bg-color-lightyellow">
-                            <h5>Internal origin</h5>
-                            <span>attributes of the system</span>
+                            <h5>@sharedResource.worksheetQuestionsSWOTInternalOrigin</h5>
+                            <span>@sharedResource.worksheetQuestionsSWOTInternalOriginDescription</span>
                         </div>
                         <div class="col-sm-12 col-md-5 swot-cell bg-color-greenyellow">
                             <div class="row swot-add ">
                                 <div class="col-12">
-                                    <h5 class="pull-left"> Strengths</h5>
+                                    <h5 class="pull-left"> @sharedResource.worksheetQuestionsSWOTStrengths</h5>
                                 </div>
                             </div>
                             <div class="row list-items-add-group">
@@ -315,7 +315,7 @@
                                                    class="form-control m-input m-input--air form-control-danger list-add-input">
                                             <div class="input-group-append">
                                                 <button class="btn btn-sp m-btn m-btn--icon list-add-button" data-input-name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.SwotAnswer.Strengths">
-                                                    add
+                                                    @sharedResource.worksheetQuestionsSWOTAddButton
                                                 </button>
                                             </div>
                                         </div>
@@ -346,7 +346,7 @@
                         <div class="col-sm-12 col-md-5  swot-cell  bg-color-redyellow">
                             <div class="row swot-add">
                                 <div class="col-12">
-                                    <h5 class="pull-left"> Weaknesses</h5>
+                                    <h5 class="pull-left"> @sharedResource.worksheetQuestionsSWOTWeaknesses</h5>
                                 </div>
                             </div>
                             <div class="row list-items-add-group">
@@ -358,7 +358,7 @@
                                                    class="form-control m-input m-input--air form-control-danger list-add-input">
                                             <div class="input-group-append">
                                                 <button class="btn btn-sp m-btn m-btn--icon list-add-button" data-input-name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.SwotAnswer.Weaknesses">
-                                                    add
+                                                    @sharedResource.worksheetQuestionsSWOTAddButton
                                                 </button>
                                             </div>
                                         </div>
@@ -389,13 +389,13 @@
                     </div>
                     <div class="row">
                         <div class="d-none d-md-block col-md-2 swot-cell  bg-color-lightblue">
-                            <h5>External origin</h5>
-                            <span>attributes of the environment</span>
+                            <h5>@sharedResource.worksheetQuestionsSWOTExternalOrigin</h5>
+                            <span>@sharedResource.worksheetQuestionsSWOTExternalOriginDescription</span>
                         </div>
                         <div class="col-sm-12 col-md-5  swot-cell  bg-color-greenblue">
                             <div class="row swot-add">
                                 <div class="col-12">
-                                    <h5 class="pull-left"> Opportunities</h5>
+                                    <h5 class="pull-left"> @sharedResource.worksheetQuestionsSWOTOpportunities</h5>
                                 </div>
                             </div>
                             <div class="row list-items-add-group">
@@ -407,7 +407,7 @@
                                                    class="form-control m-input m-input--air form-control-danger list-add-input">
                                             <div class="input-group-append">
                                                 <button class="btn btn-sp m-btn m-btn--icon list-add-button" data-input-name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.SwotAnswer.Opportunities">
-                                                    add
+                                                    @sharedResource.worksheetQuestionsSWOTAddButton
                                                 </button>
                                             </div>
                                         </div>
@@ -439,7 +439,7 @@
                         <div class="col-sm-12 col-md-5  swot-cell  bg-color-redblue">
                             <div class="row swot-add">
                                 <div class="col-12">
-                                    <h5 class="pull-left">Threats</h5>
+                                    <h5 class="pull-left">@sharedResource.worksheetQuestionsSWOTThreats</h5>
                                 </div>
                             </div>
                             <div class="row list-items-add-group">
@@ -451,7 +451,7 @@
                                                    class="form-control m-input m-input--air form-control-danger list-add-input">
                                             <div class="input-group-append">
                                                 <button class="btn btn-sp m-btn m-btn--icon list-add-button" data-input-name="AnswerGroups[@(questionIndexOffset + questionIndex)].Answer.SwotAnswer.Threats">
-                                                    add
+                                                    @sharedResource.worksheetQuestionsSWOTAddButton
                                                 </button>
                                             </div>
                                         </div>

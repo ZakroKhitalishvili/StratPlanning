@@ -10,14 +10,14 @@
         </div>
         <div class="form-group m-form__group">
             <label asp-for="Name">
-                Title
+                @sharedResource.worksheetPlanListPlanTitle
             </label>
             <input type="text" asp-for="Name" class="form-control m-input" />
             <span class="text-danger" asp-validation-for="Name"></span>
         </div>
         <div class="form-group m-form__group">
             <label asp-for="Description">
-                Description
+                @sharedResource.worksheetPlanListPlanDescription
             </label>
             <textarea asp-for="Description" class="form-control m-input"></textarea>
             <span class="text-danger" asp-validation-for="Description"></span>
@@ -26,7 +26,7 @@
     <div class="m-portlet__foot m-portlet__foot--fit">
         <div class="m-form__actions pull-right">
             <button type="submit" class="btn btn-sp m-btn m-btn--icon">
-                Add
+                @sharedResource.worksheetPlanListAddSubmit
             </button>
         </div>
     </div>

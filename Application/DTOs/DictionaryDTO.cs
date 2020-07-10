@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using Resources;
 
 namespace Application.DTOs
 {
@@ -10,8 +11,8 @@ namespace Application.DTOs
     {
         public int Id { get; set; }
 
-        [MaxLength(EntityConfigs.TextMaxLength)]
-        [Required]
+        [MaxLength(EntityConfigs.TextMaxLength, ErrorMessageResourceType = typeof(sharedResource), ErrorMessageResourceName = "validateMaxStringLength")]
+        [Required(ErrorMessageResourceType = typeof(sharedResource), ErrorMessageResourceName = "validateRequired")]
         public string Title { get; set; }
 
         public bool HasPosition { get; set; }

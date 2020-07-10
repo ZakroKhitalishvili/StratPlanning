@@ -1,6 +1,6 @@
 ﻿@model Application.DTOs.UserProfileDTO
 @{
-    ViewData["Title"] = "Profile";
+    ViewData["Title"] = sharedResource.userProfileTitle;
 }
 <button class="m-aside-left-close m-aside-left-close--skin-light" id="m_aside_left_close_btn">
     <i class="la la-close"></i>
@@ -11,7 +11,7 @@
         <div class="d-flex align-items-center">
             <div class="mr-auto">
                 <h3 class="m-subheader__title ">
-                    My Profile
+                    @sharedResource.userProfileHeader
                 </h3>
             </div>
         </div>
@@ -20,7 +20,7 @@
     <div class="m-content">
         <div class="row">
             <div class="col-lg-4">
-                <partial name="~/Views/User/Partials/_UserView.cshtml" model="Model"/>
+                <partial name="~/Views/User/Partials/_UserView.cshtml" model="Model" />
             </div>
             <div class="col-lg-8">
                 <div class="m-portlet m-portlet--full-height m-portlet--tabs  ">
@@ -32,13 +32,13 @@
                                     <a class="nav-link m-tabs__link active" data-toggle="tab"
                                        href="#m_user_profile_tab_1" role="tab">
                                         <i class="flaticon-share m--hide"></i>
-                                        Personal Details
+                                        @sharedResource.userProfileDetailsTab
                                     </a>
                                 </li>
                                 <li class="nav-item m-tabs__item">
                                     <a class="nav-link m-tabs__link" data-toggle="tab"
                                        href="#m_user_profile_tab_2" role="tab">
-                                        Password
+                                        @sharedResource.userProfilePasswordTab
                                     </a>
                                 </li>
                                 @*<li class="nav-item m-tabs__item">

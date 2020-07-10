@@ -68,7 +68,7 @@
 
                                             <a href="#" class="m-nav__link m-dropdown__toggle">
                                                 <span class="m-topbar__welcome">
-                                                    Hello,&nbsp;
+                                                    @sharedResource.sharedLayoutUserHello &nbsp;
                                                 </span>
                                                 <span class="m-topbar__username">
                                                     @User.Identity.Name
@@ -99,7 +99,7 @@
                                                             <ul class="m-nav m-nav--skin-light">
                                                                 <li class="m-nav__section m--hide">
                                                                     <span class="m-nav__section-text">
-                                                                        Section
+                                                                        @sharedResource.sharedLayoutUserSection
                                                                     </span>
                                                                 </li>
                                                                 <li class="m-nav__item">
@@ -108,7 +108,7 @@
                                                                         <span class="m-nav__link-title">
                                                                             <span class="m-nav__link-wrap">
                                                                                 <span class="m-nav__link-text">
-                                                                                    My Profile
+                                                                                    @sharedResource.sharedLayoutMyProfile
                                                                                 </span>
                                                                             </span>
                                                                         </span>
@@ -118,7 +118,7 @@
                                                                     <a asp-controller="User" asp-action="GetActivity" class="m-nav__link">
                                                                         <i class="m-nav__link-icon flaticon-share"></i>
                                                                         <span class="m-nav__link-text">
-                                                                            Activity
+                                                                            @sharedResource.sharedLayoutUserActivity
                                                                         </span>
                                                                     </a>
                                                                 </li>
@@ -127,7 +127,7 @@
                                                                 <li class="m-nav__item">
                                                                     <a asp-controller="Auth" asp-action="Logout"
                                                                        class="btn m-btn--pill m-btn m-btn--custom  m-btn--bolder btn-sp--secondary">
-                                                                        Logout
+                                                                        @sharedResource.sharedLayoutLogout
                                                                     </a>
                                                                 </li>
                                                             </ul>
@@ -161,7 +161,7 @@
                                         <a asp-controller="Home" asp-action="Index" class="m-menu__link ">
                                             <span class="m-menu__item-here"></span>
                                             <span class="m-menu__link-text">
-                                                Home
+                                                @sharedResource.sharedLayoutHome
                                             </span>
                                         </a>
                                     </li>
@@ -169,7 +169,7 @@
                                         <a asp-controller="Worksheet" asp-action="Index" class="m-menu__link ">
                                             <span class="m-menu__item-here"></span>
                                             <span class="m-menu__link-text">
-                                                Work Sheets
+                                                @sharedResource.sharedLayoutWorksheets
                                             </span>
                                         </a>
                                     </li>
@@ -178,7 +178,7 @@
                                         <a asp-controller="User" asp-action="GetMyProfile" class="m-menu__link ">
                                             <span class="m-menu__item-here"></span>
                                             <span class="m-menu__link-text">
-                                                My Account
+                                                @sharedResource.sharedLayoutMyAccount
                                             </span>
                                         </a>
                                     </li>
@@ -188,7 +188,7 @@
                                             <a class="m-menu__link m-menu__toggle">
                                                 <span class="m-menu__item-here"></span>
                                                 <span class="m-menu__link-text">
-                                                    Manage
+                                                    @sharedResource.sharedLayoutManage
                                                 </span>
                                                 <i class="m-menu__hor-arrow la la-angle-down"></i>
                                                 <i class="m-menu__ver-arrow la la-angle-right"></i>
@@ -200,7 +200,7 @@
                                                         <li class="m-menu__item">
                                                             <h3 class="m-menu__heading m-menu__toggle">
                                                                 <span class="m-menu__link-text">
-                                                                    Directory
+                                                                    @sharedResource.sharedLayoutDirectory
                                                                 </span>
                                                                 <i class="m-menu__ver-arrow la la-angle-right"></i>
                                                             </h3>
@@ -208,28 +208,28 @@
                                                                 <li class="m-menu__item " data-redirect="true" aria-haspopup="true">
                                                                     <a asp-controller="Manage" asp-action="GetPositionList" class="m-menu__link ">
                                                                         <span class="m-menu__link-text">
-                                                                            Positions
+                                                                            @sharedResource.sharedLayoutPositions
                                                                         </span>
                                                                     </a>
                                                                 </li>
                                                                 <li class="m-menu__item " data-redirect="true" aria-haspopup="true">
                                                                     <a asp-controller="Manage" asp-action="GetValueList" class="m-menu__link ">
                                                                         <span class="m-menu__link-text">
-                                                                            Values
+                                                                            @sharedResource.sharedLayoutValues
                                                                         </span>
                                                                     </a>
                                                                 </li>
                                                                 <li class="m-menu__item " data-redirect="true" aria-haspopup="true">
                                                                     <a asp-controller="Manage" asp-action="GetStakeholderCategoryList" class="m-menu__link ">
                                                                         <span class="m-menu__link-text">
-                                                                            Stakeholder Categories
+                                                                            @sharedResource.sharedLayoutStakeholderCategories
                                                                         </span>
                                                                     </a>
                                                                 </li>
                                                                 <li class="m-menu__item " data-redirect="true" aria-haspopup="true">
                                                                     <a asp-controller="Manage" asp-action="GetStakeholderCriterionList" class="m-menu__link ">
                                                                         <span class="m-menu__link-text">
-                                                                            Stakeholder Criteria
+                                                                            @sharedResource.sharedLayoutStakeholderCriteria
                                                                         </span>
                                                                     </a>
                                                                 </li>
@@ -238,7 +238,7 @@
                                                         <li class="m-menu__item">
                                                             <h3 class="m-menu__heading m-menu__toggle">
                                                                 <span class="m-menu__link-text">
-                                                                    Steps
+                                                                    @sharedResource.sharedLayoutSteps
                                                                 </span>
                                                                 <i class="m-menu__ver-arrow la la-angle-right"></i>
                                                             </h3>
@@ -246,14 +246,14 @@
                                                                 <li class="m-menu__item" data-redirect="true" aria-haspopup="true">
                                                                     <a asp-controller="Manage" asp-action="GetIntroductionList" class="m-menu__link ">
                                                                         <span class="m-menu__link-text">
-                                                                            Introductions
+                                                                            @sharedResource.sharedLayoutIntroductions
                                                                         </span>
                                                                     </a>
                                                                 </li>
                                                                 <li class="m-menu__item " data-redirect="true" aria-haspopup="true">
                                                                     <a asp-controller="Manage" asp-action="GetBlockList" class="m-menu__link ">
                                                                         <span class="m-menu__link-text">
-                                                                            Blocks
+                                                                            @sharedResource.sharedLayoutBlocks
                                                                         </span>
                                                                     </a>
                                                                 </li>
@@ -262,7 +262,7 @@
                                                         <li class="m-menu__item">
                                                             <h3 class="m-menu__heading m-menu__toggle">
                                                                 <span class="m-menu__link-text">
-                                                                    Site settings
+                                                                    @sharedResource.sharedLayoutSiteSettings
                                                                 </span>
                                                                 <i class="m-menu__ver-arrow la la-angle-right"></i>
                                                             </h3>
@@ -270,7 +270,7 @@
                                                                 <li class="m-menu__item" data-redirect="true" aria-haspopup="true">
                                                                     <a asp-controller="Manage" asp-action="GetSettingList" class="m-menu__link ">
                                                                         <span class="m-menu__link-text">
-                                                                            All settings
+                                                                            @sharedResource.sharedLayoutAllSettings
                                                                         </span>
                                                                     </a>
                                                                 </li>
@@ -279,7 +279,7 @@
                                                         <li class="m-menu__item">
                                                             <h3 class="m-menu__heading m-menu__toggle">
                                                                 <span class="m-menu__link-text">
-                                                                    Users
+                                                                    @sharedResource.sharedLayoutUsers
                                                                 </span>
                                                                 <i class="m-menu__ver-arrow la la-angle-right"></i>
                                                             </h3>
@@ -287,7 +287,7 @@
                                                                 <li class="m-menu__item" data-redirect="true" aria-haspopup="true">
                                                                     <a asp-controller="Manage" asp-action="GetUserList" class="m-menu__link ">
                                                                         <span class="m-menu__link-text">
-                                                                            All Users
+                                                                            @sharedResource.sharedLayoutAllUsers
                                                                         </span>
                                                                     </a>
                                                                 </li>
@@ -314,7 +314,7 @@
                                     </span>
                                     <span class="m-header-search__input-wrapper">
                                         <input autocomplete="off" type="text" name="q" class="m-header-search__input"
-                                               value="" placeholder="Search..." id="m_quicksearch_input">
+                                               value="" placeholder="@sharedResource.sharedLayoutSearch" id="m_quicksearch_input">
                                     </span>
                                     <span class="m-header-search__icon-close" id="m_quicksearch_close">
                                         <i class="la la-remove"></i>
@@ -371,20 +371,20 @@
                             </div>*@
                         <div class="m-stack__item m-stack__item--right m-stack__item--middle m-stack__item--first">
                             <ul class="m-footer__nav m-nav m-nav--inline m--pull-right">
-                                <li class="m-nav__item">
-                                    <a href="#" class="m-nav__link">
-                                        <span class="m-nav__link-text">
-                                            About
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="m-nav__item">
-                                    <a href="#" class="m-nav__link">
-                                        <span class="m-nav__link-text">
-                                            Privacy
-                                        </span>
-                                    </a>
-                                </li>
+                                @*<li class="m-nav__item">
+                                        <a href="#" class="m-nav__link">
+                                            <span class="m-nav__link-text">
+                                                About
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="m-nav__item">
+                                        <a href="#" class="m-nav__link">
+                                            <span class="m-nav__link-text">
+                                                Privacy
+                                            </span>
+                                        </a>
+                                    </li>*@
                             </ul>
                         </div>
                     </div>
@@ -399,6 +399,8 @@
          data-scroll-speed="300">
         <i class="la la-arrow-up"></i>
     </div>
+
+    <partial name="~/Views/Shared/_LoadResources.cshtml" />
 
     <!-- begin::Quick Nav -->
     <!--begin::Base Scripts -->

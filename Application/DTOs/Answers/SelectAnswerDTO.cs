@@ -1,4 +1,5 @@
 ﻿using Core.Constants;
+using Resources;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,7 +13,8 @@ namespace Application.DTOs
 
         public int? IssueId { get; set; }
 
-        [MaxLength(EntityConfigs.TextMaxLength)]
+        [MaxLength(EntityConfigs.TextMaxLength, ErrorMessageResourceType = typeof(sharedResource), ErrorMessageResourceName = "validateMaxStringLength")]
+
         public string AltOption { get; set; }
     }
 }
